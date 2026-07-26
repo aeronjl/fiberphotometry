@@ -58,3 +58,7 @@ assumptions. See [`feedback-analysis.toml`](../examples/feedback-analysis.toml).
 
 The complete public-data path is documented in the
 [IBL import-to-report tutorial](tutorials/ibl-feedback-report.md).
+
+Robustness results use a separate
+[grouped multiverse report](grouped-multiverse-report-v0.1.md). Its parallel
+evidence lanes make unit boundaries executable and visually explicit.

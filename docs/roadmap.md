@@ -84,7 +84,7 @@
 - [x] First scientist-facing event-analysis workflow
 - [x] Self-contained HTML evidence report with animal/QC/provenance views
 - [x] Declarative TOML configuration for no-code-rewrite analysis choices
-- [ ] Report support for complete multiverse robustness results
+- [x] Unit-safe grouped report for complete multiverse robustness results
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [ ] Usability review with practicing photometry scientists
 - [ ] External reproduction by two laboratories

@@ -1,5 +1,6 @@
 from dataclasses import replace
 
+import pytest
 from test_pipeline import _inputs, _spec
 
 from fiberphotometry import (
@@ -9,6 +10,7 @@ from fiberphotometry import (
     DecisionNode,
     EventSummarySpec,
     LowpassFilterOperation,
+    MultiverseReportGroup,
     MultiverseSpec,
     ReferenceDFFOperation,
     materialize_multiverse,
@@ -128,3 +130,51 @@ def test_multiverse_retains_qc_blocked_universes() -> None:
     assert [item.status for item in result.universes] == ["success", "blocked"]
     assert result.summary.blocked_universes == 1
     assert result.summary.fraction_meeting_practical_effect is None
+
+
+def test_grouped_report_separates_complete_unit_families(tmp_path) -> None:
+    result = run_multiverse(_multiverse(), _inputs())
+    groups = (
+        MultiverseReportGroup.from_choice(
+            result,
+            name="Reference-corrected",
+            units="ΔF/F",
+            node="correction",
+            alternatives=("ols",),
+        ),
+        MultiverseReportGroup.from_choice(
+            result,
+            name="Failure fixture",
+            units="diagnostic units",
+            node="correction",
+            alternatives=("invalid_cutoff",),
+        ),
+    )
+
+    destination = result.write_grouped_html(
+        tmp_path / "robustness.html", groups, title="Robustness audit"
+    )
+    html = destination.read_text()
+
+    assert "Parallel evidence lanes preserve unit" in html
+    assert "Reference-corrected" in html
+    assert "Failure fixture" in html
+    assert "No successful workflows in this evidence lane" in html
+    assert "fixture combination is declared scientifically incoherent" in html
+    assert "pooled median" not in html.lower()
+
+
+def test_grouped_report_rejects_missing_and_overlapping_universes() -> None:
+    result = run_multiverse(_multiverse(), _inputs())
+    ols = MultiverseReportGroup.from_choice(
+        result,
+        name="OLS",
+        units="ΔF/F",
+        node="correction",
+        alternatives=("ols",),
+    )
+
+    with pytest.raises(ValueError, match="every compatible universe"):
+        result.to_grouped_html((ols,))
+    with pytest.raises(ValueError, match="multiple groups"):
+        result.to_grouped_html((ols, replace(ols, name="Duplicate")))

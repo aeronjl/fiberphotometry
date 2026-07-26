@@ -83,6 +83,11 @@ For configuration-first reruns, use the versioned
 [public IBL tutorial](docs/tutorials/ibl-feedback-report.md) takes that contract
 through public-data import to fingerprinted JSON and HTML artifacts.
 
+Complete multiverse results can be rendered through
+`MultiverseResult.write_grouped_html`. The
+[grouped-report contract](docs/grouped-multiverse-report-v0.1.md) requires every
+compatible universe to occupy exactly one unit-compatible evidence lane.
+
 ## Lower-level API
 
 ```python

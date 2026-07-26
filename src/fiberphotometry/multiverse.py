@@ -7,6 +7,7 @@ from collections.abc import Sequence
 from dataclasses import asdict, dataclass, replace
 from hashlib import sha256
 from itertools import product
+from pathlib import Path
 from statistics import median
 from typing import Literal, TypeAlias
 
@@ -145,6 +146,65 @@ class MultiverseResult:
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
+
+    def to_grouped_html(
+        self,
+        groups: Sequence[MultiverseReportGroup],
+        *,
+        title: str = "Fiber photometry robustness report",
+    ) -> str:
+        """Render unit-compatible universes in explicitly separate evidence lanes."""
+        from fiberphotometry.report import render_multiverse_report
+
+        return render_multiverse_report(self, groups, title=title)
+
+    def write_grouped_html(
+        self,
+        path: str | Path,
+        groups: Sequence[MultiverseReportGroup],
+        *,
+        title: str = "Fiber photometry robustness report",
+    ) -> Path:
+        """Write a self-contained grouped report and return its resolved path."""
+        destination = Path(path)
+        destination.write_text(
+            self.to_grouped_html(groups, title=title), encoding="utf-8"
+        )
+        return destination.resolve()
+
+
+@dataclass(frozen=True)
+class MultiverseReportGroup:
+    """A unit-compatible set of universes that may share a visual evidence lane."""
+
+    name: str
+    units: str
+    universe_ids: tuple[str, ...]
+
+    @classmethod
+    def from_choice(
+        cls,
+        result: MultiverseResult,
+        *,
+        name: str,
+        units: str,
+        node: str,
+        alternatives: Sequence[str],
+    ) -> MultiverseReportGroup:
+        """Select every compatible universe matching alternatives at one node."""
+        allowed = set(alternatives)
+        identifiers = tuple(
+            universe.universe_id
+            for universe in result.universes
+            if universe.status != "incompatible"
+            and any(
+                choice.node == node and choice.alternative in allowed
+                for choice in universe.choices
+            )
+        )
+        if not identifiers:
+            raise ValueError("multiverse report group selects no compatible universes")
+        return cls(name, units, identifiers)
 
 
 def materialize_multiverse(spec: MultiverseSpec) -> tuple[MaterializedUniverse, ...]:
