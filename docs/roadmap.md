@@ -55,6 +55,9 @@
 - [x] Seeded Monte Carlo plan execution
 - [x] First frozen descriptive IBL analysis plan and result
 - [x] Typed preprocessing-to-inference pipeline with non-destructive QC gates
+- [x] Typed multiverse expansion with stable IDs and compatibility rules
+- [x] Failure-retaining robustness and decision summaries
+- [x] Reference-pipeline leave-one-animal-out diagnostics
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures

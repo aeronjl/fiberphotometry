@@ -106,6 +106,9 @@ documented in [`docs/pipeline-v0.1.md`](docs/pipeline-v0.1.md).
 The first resampling/filtering implementation benchmark, including explicit gap
 and edge behavior, is in
 [`benchmarks/results-v0.8.md`](benchmarks/results-v0.8.md).
+The typed multiverse contract and its first adversarial engine benchmark are in
+[`docs/multiverse-contract-v0.1.md`](docs/multiverse-contract-v0.1.md) and
+[`benchmarks/results-v0.9.md`](benchmarks/results-v0.9.md).
 
 ## Development
 
