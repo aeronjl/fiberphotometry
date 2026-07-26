@@ -98,6 +98,9 @@ Experimental control-free bleaching correction is available through
 `fiberphotometry.baseline_dff`. Its limitations and frozen simulation results are
 reported in [`docs/control-free-benchmark-v0.1.md`](docs/control-free-benchmark-v0.1.md);
 it is not yet part of the recommended typed pipeline.
+The first frozen independent-control pilot on published DANDI:000971 data produced
+a mixed, non-promotional result; see
+[`docs/dandi-000971-control-v0.1.md`](docs/dandi-000971-control-v0.1.md).
 The follow-up baseline-fidelity and normalization study is in
 [`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
 

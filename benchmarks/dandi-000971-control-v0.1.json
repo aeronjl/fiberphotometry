@@ -1,0 +1,277 @@
+{
+  "assets": [
+    {
+      "asset_id": "c9b1c94b-7b36-4042-b458-f7ffd2245885",
+      "family": "FP-PR",
+      "path": "sub-028-392/sub-028-392_ses-FP-PR-2020-07-24T12-31-24.nwb",
+      "sha256": "dfcf9c1e55bbf7f1c0f3819d9a3d85626eaa947ecdd517fd9ac7de14a9bf33df",
+      "size_bytes": 105276759,
+      "subject": "028-392",
+      "verified": true
+    },
+    {
+      "asset_id": "ba92380c-4308-439e-810e-5e2470472eef",
+      "family": "FP-DPR",
+      "path": "sub-346-394/sub-346-394_ses-FP-DPR-2020-07-22T13-14-32.nwb",
+      "sha256": "b0c4846fb00e2dec1aa42d1de5fff84ceb4a03836a41fce6a8571f82cfa9dc01",
+      "size_bytes": 292945475,
+      "subject": "346-394",
+      "verified": true
+    },
+    {
+      "asset_id": "f1ab7f4e-29f2-461f-b6f7-26a64bb884ae",
+      "family": "FP-PS",
+      "path": "sub-332-393/sub-332-393_ses-FP-PS-2020-07-28T12-04-01.nwb",
+      "sha256": "b3334423eb383b4297d30d91a9994c9d6a00b93a642a64d6370d4c6aa176c6d0",
+      "size_bytes": 232923996,
+      "subject": "332-393",
+      "verified": true
+    },
+    {
+      "asset_id": "c8ba063d-b681-47fc-9cf5-b2c32f3c053a",
+      "family": "FP-RR20",
+      "path": "sub-100-258/sub-100-258_ses-FP-RR20-2019-04-23T12-25-00_behavior.nwb",
+      "sha256": "f358b3ba8851e9eaadbc411d211e5dc78742a61258299b710b4ed2d3f3aebbe7",
+      "size_bytes": 349509382,
+      "subject": "100-258",
+      "verified": true
+    }
+  ],
+  "cases": [
+    {
+      "asset_id": "c9b1c94b-7b36-4042-b458-f7ffd2245885",
+      "baseline_fractional_change": -0.04012250910249876,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.02635661547252931,
+      "corrected_reference_correlation": 0.7867140263027282,
+      "family": "FP-PR",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.04604522488190617,
+      "slow_trend_correlation": 0.05865080857923221,
+      "subject": "028-392"
+    },
+    {
+      "asset_id": "c9b1c94b-7b36-4042-b458-f7ffd2245885",
+      "baseline_fractional_change": -0.12267266141020863,
+      "channel": "DLS",
+      "comparator_fractional_change": -0.11291749462061659,
+      "corrected_reference_correlation": 0.6098906407565928,
+      "family": "FP-PR",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.07524748090566392,
+      "slow_trend_correlation": 0.11606032431227288,
+      "subject": "028-392"
+    },
+    {
+      "asset_id": "c9b1c94b-7b36-4042-b458-f7ffd2245885",
+      "baseline_fractional_change": 0.04276101993040905,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.02635661547252931,
+      "corrected_reference_correlation": 0.30764769951323134,
+      "family": "FP-PR",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.05301650092923328,
+      "slow_trend_correlation": 0.468458528888663,
+      "subject": "028-392"
+    },
+    {
+      "asset_id": "c9b1c94b-7b36-4042-b458-f7ffd2245885",
+      "baseline_fractional_change": 0.060629702266979016,
+      "channel": "DLS",
+      "comparator_fractional_change": -0.11291749462061659,
+      "corrected_reference_correlation": -0.17355032332868153,
+      "family": "FP-PR",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.0541496973352728,
+      "slow_trend_correlation": 0.7564804118919822,
+      "subject": "028-392"
+    },
+    {
+      "asset_id": "ba92380c-4308-439e-810e-5e2470472eef",
+      "baseline_fractional_change": -0.34765166829052774,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.3356964139844922,
+      "corrected_reference_correlation": 0.48623781239080066,
+      "family": "FP-DPR",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.07981653046515617,
+      "slow_trend_correlation": 0.8040100127806061,
+      "subject": "346-394"
+    },
+    {
+      "asset_id": "ba92380c-4308-439e-810e-5e2470472eef",
+      "baseline_fractional_change": -2.195620606156449e-12,
+      "channel": "DLS",
+      "comparator_fractional_change": 0.21562961781753648,
+      "corrected_reference_correlation": 0.9795079142729212,
+      "family": "FP-DPR",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.07624842006735322,
+      "slow_trend_correlation": -0.4818076250923591,
+      "subject": "346-394"
+    },
+    {
+      "asset_id": "ba92380c-4308-439e-810e-5e2470472eef",
+      "baseline_fractional_change": -0.287111525095248,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.3356964139844922,
+      "corrected_reference_correlation": 0.008731229745629537,
+      "family": "FP-DPR",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.07833071312566481,
+      "slow_trend_correlation": 0.8445692192759771,
+      "subject": "346-394"
+    },
+    {
+      "asset_id": "ba92380c-4308-439e-810e-5e2470472eef",
+      "baseline_fractional_change": 0.2571784579355696,
+      "channel": "DLS",
+      "comparator_fractional_change": 0.21562961781753648,
+      "corrected_reference_correlation": -0.31537864734404714,
+      "family": "FP-DPR",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.07091010418048398,
+      "slow_trend_correlation": 0.7923691940381552,
+      "subject": "346-394"
+    },
+    {
+      "asset_id": "f1ab7f4e-29f2-461f-b6f7-26a64bb884ae",
+      "baseline_fractional_change": -0.09262300765622965,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.06732059733323253,
+      "corrected_reference_correlation": 0.22424998610912175,
+      "family": "FP-PS",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.04636094855840309,
+      "slow_trend_correlation": 0.31804451092941594,
+      "subject": "332-393"
+    },
+    {
+      "asset_id": "f1ab7f4e-29f2-461f-b6f7-26a64bb884ae",
+      "baseline_fractional_change": -0.030832719681674937,
+      "channel": "DLS",
+      "comparator_fractional_change": -0.014660015885575294,
+      "corrected_reference_correlation": 0.6505858427501405,
+      "family": "FP-PS",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.01349329845488023,
+      "slow_trend_correlation": 0.19967798317739902,
+      "subject": "332-393"
+    },
+    {
+      "asset_id": "f1ab7f4e-29f2-461f-b6f7-26a64bb884ae",
+      "baseline_fractional_change": 0.0822335985402622,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.06732059733323253,
+      "corrected_reference_correlation": 0.2981824498562288,
+      "family": "FP-PS",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.06581177827190567,
+      "slow_trend_correlation": 0.42724300470130144,
+      "subject": "332-393"
+    },
+    {
+      "asset_id": "f1ab7f4e-29f2-461f-b6f7-26a64bb884ae",
+      "baseline_fractional_change": 0.19876523521275297,
+      "channel": "DLS",
+      "comparator_fractional_change": -0.014660015885575294,
+      "corrected_reference_correlation": 0.29604135026984835,
+      "family": "FP-PS",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.04906274473726593,
+      "slow_trend_correlation": 0.27761922835765834,
+      "subject": "332-393"
+    },
+    {
+      "asset_id": "c8ba063d-b681-47fc-9cf5-b2c32f3c053a",
+      "baseline_fractional_change": -0.07572679996609465,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.07233423916408441,
+      "corrected_reference_correlation": 0.26915337117176313,
+      "family": "FP-RR20",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.021233537242058738,
+      "slow_trend_correlation": 0.6968941932571969,
+      "subject": "100-258"
+    },
+    {
+      "asset_id": "c8ba063d-b681-47fc-9cf5-b2c32f3c053a",
+      "baseline_fractional_change": -0.12434534816859276,
+      "channel": "DLS",
+      "comparator_fractional_change": -0.1168584571274943,
+      "corrected_reference_correlation": 0.059175509197955584,
+      "family": "FP-RR20",
+      "finite_fraction": 1.0,
+      "method": "double_exponential",
+      "relative_rmse": 0.033310268603680526,
+      "slow_trend_correlation": 0.7114644109593805,
+      "subject": "100-258"
+    },
+    {
+      "asset_id": "c8ba063d-b681-47fc-9cf5-b2c32f3c053a",
+      "baseline_fractional_change": -0.07172947319374964,
+      "channel": "DMS",
+      "comparator_fractional_change": -0.07233423916408441,
+      "corrected_reference_correlation": 0.19944454726140773,
+      "family": "FP-RR20",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.026209317666816126,
+      "slow_trend_correlation": 0.6703673005834371,
+      "subject": "100-258"
+    },
+    {
+      "asset_id": "c8ba063d-b681-47fc-9cf5-b2c32f3c053a",
+      "baseline_fractional_change": -0.11410110404166122,
+      "channel": "DLS",
+      "comparator_fractional_change": -0.1168584571274943,
+      "corrected_reference_correlation": 0.19897621233830082,
+      "family": "FP-RR20",
+      "finite_fraction": 1.0,
+      "method": "asls",
+      "relative_rmse": 0.040076679553414735,
+      "slow_trend_correlation": 0.7636187518196739,
+      "subject": "100-258"
+    }
+  ],
+  "dandiset": "000971",
+  "engineering_gates": {
+    "all_assets_digest_verified": true,
+    "all_assets_schema_valid": true,
+    "all_baselines_at_least_99pct_finite": true
+  },
+  "failures": [],
+  "interpretation": "Engineering and assumption audit only; the fitted isosbestic trend is an independent comparator, not ground-truth bleaching.",
+  "manifest": "benchmarks/dandi-000971-pilot-manifest-v0.1.json",
+  "published_version": "0.260213.1851",
+  "schema_version": "dandi-000971-control-pilot-v0.1",
+  "summary": {
+    "asls": {
+      "case_count": 8,
+      "descriptive_correlation_gate": false,
+      "descriptive_relative_rmse_gate": true,
+      "median_relative_rmse": 0.05358309913225304,
+      "median_slow_trend_correlation": 0.7134238562377097
+    },
+    "double_exponential": {
+      "case_count": 8,
+      "descriptive_correlation_gate": false,
+      "descriptive_relative_rmse_gate": true,
+      "median_relative_rmse": 0.04620308672015463,
+      "median_slow_trend_correlation": 0.25886124705340746
+    }
+  }
+}

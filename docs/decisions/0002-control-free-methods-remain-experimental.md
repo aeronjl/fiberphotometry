@@ -58,3 +58,11 @@ normalization gates. Double exponential passed exponential scenarios; AsLS also
 passed slow drift after rate-aware penalty scaling. SDR-0002 still requires
 real-data validation with an independent control before typed-pipeline promotion.
 See the [v0.2 report](../control-free-benchmark-v0.2.md).
+
+The subsequently frozen DANDI:000971 independent-control pilot passed all
+engineering gates and the median relative-RMSE gate for both methods, but failed
+the slow-trend-correlation gate (double exponential 0.259; AsLS 0.713, against a
+0.90 threshold). Four animals and eight region-level cases are an assumption audit,
+not population validation; the isosbestic comparator is not ground truth. The
+mixed result therefore satisfies the real-data revisit trigger but does not justify
+promotion. See the [pilot report](../dandi-000971-control-v0.1.md).

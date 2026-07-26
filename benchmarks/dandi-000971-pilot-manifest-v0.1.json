@@ -1,0 +1,39 @@
+{
+  "dandiset": "000971",
+  "published_version": "0.260213.1851",
+  "selection": "smallest photometry-bearing NWB from a distinct subject in each frozen session family",
+  "assets": [
+    {
+      "asset_id": "c9b1c94b-7b36-4042-b458-f7ffd2245885",
+      "family": "FP-PR",
+      "subject": "028-392",
+      "path": "sub-028-392/sub-028-392_ses-FP-PR-2020-07-24T12-31-24.nwb",
+      "size_bytes": 105276759,
+      "sha256": "dfcf9c1e55bbf7f1c0f3819d9a3d85626eaa947ecdd517fd9ac7de14a9bf33df"
+    },
+    {
+      "asset_id": "ba92380c-4308-439e-810e-5e2470472eef",
+      "family": "FP-DPR",
+      "subject": "346-394",
+      "path": "sub-346-394/sub-346-394_ses-FP-DPR-2020-07-22T13-14-32.nwb",
+      "size_bytes": 292945475,
+      "sha256": "b0c4846fb00e2dec1aa42d1de5fff84ceb4a03836a41fce6a8571f82cfa9dc01"
+    },
+    {
+      "asset_id": "f1ab7f4e-29f2-461f-b6f7-26a64bb884ae",
+      "family": "FP-PS",
+      "subject": "332-393",
+      "path": "sub-332-393/sub-332-393_ses-FP-PS-2020-07-28T12-04-01.nwb",
+      "size_bytes": 232923996,
+      "sha256": "b3334423eb383b4297d30d91a9994c9d6a00b93a642a64d6370d4c6aa176c6d0"
+    },
+    {
+      "asset_id": "c8ba063d-b681-47fc-9cf5-b2c32f3c053a",
+      "family": "FP-RR20",
+      "subject": "100-258",
+      "path": "sub-100-258/sub-100-258_ses-FP-RR20-2019-04-23T12-25-00_behavior.nwb",
+      "size_bytes": 349509382,
+      "sha256": "f358b3ba8851e9eaadbc411d211e5dc78742a61258299b710b4ed2d3f3aebbe7"
+    }
+  ]
+}

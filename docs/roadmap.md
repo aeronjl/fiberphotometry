@@ -20,7 +20,8 @@
   - [x] Experimental double-exponential and AsLS signal-only APIs
   - [x] Frozen v0.1 benchmark with retained partial failure
   - [x] v0.2 baseline-fidelity, normalization, and sampling-rate benchmark
-  - [ ] Independent real-data control before typed-pipeline promotion
+  - [x] First independent real-data-control pilot (mixed; no promotion)
+  - [ ] Broader independent-control validation before typed-pipeline promotion
 - [x] Event-correlated reference diagnostic benchmarked against confounds
 - [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)
 - [x] Initial three-scenario benchmark report with retained failure
@@ -34,6 +35,8 @@
 - [x] DANDI 001084 bounded remote-stream integration fixture
 - [x] DANDI archived dF/F numerical reproduction and provenance discrepancy report
 - [x] DANDI 001084 API metadata contract and bounded-streaming plan
+- [x] Pinned DANDI 000971 raw calcium/isobestic adapter and frozen pilot
+- [ ] DANDI 000351 raw-to-processed parity audit
 - [x] IBL table adapter with alternating-wavelength interpolation and masks
 - [x] Real IBL session reproduction against archived analysis outputs
 - [ ] TDT and generic tabular adapters
@@ -65,7 +68,7 @@
 - [x] First frozen descriptive public-data multiverse
 - [x] Specification-curve plot API and frozen IBL figure
 - [x] Prospective, new-animal-gated IBL expansion protocol
-- [ ] Execute held-out IBL expansion when at least 12 new animals are public
+- [ ] Refresh manifest and execute held-out IBL expansion (public gate now met)
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
