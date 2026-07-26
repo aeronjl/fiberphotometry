@@ -12,12 +12,15 @@
 
 ## Phase 1 — trustworthy preprocessing
 
-- [ ] Validity, dropout, discontinuity, and saturation masks
-- [ ] Sampling-rate diagnostics and resampling
+- [x] Channel-level validity, dropout, repeated-extreme, and flat-step QC
+- [x] Sampling-rate and gap diagnostics
+- [ ] Resampling with explicit interpolation provenance
 - [ ] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators
 - [ ] Reference contamination and lag diagnostics
 - [x] Initial three-scenario benchmark report with retained failure
+- [x] Seven-scenario v0.2 benchmark with retained failures
+- [x] Twelve-session, four-animal IBL channel-QC audit
 - [ ] Diagnostic plots that expose rather than conceal failures
 
 ## Phase 2 — interoperability

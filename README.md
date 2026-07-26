@@ -38,6 +38,9 @@ in DANDI 001084 without downloading the asset. See
 [`docs/dandi-001084-integration.md`](docs/dandi-001084-integration.md).
 The first DANDI and IBL numerical findings are in
 [`docs/validation-report-v0.1.md`](docs/validation-report-v0.1.md).
+The expanded channel-QC audit and frozen seven-scenario preprocessing benchmark
+are reported in [`docs/ibl-qc-cohort-v0.1.md`](docs/ibl-qc-cohort-v0.1.md) and
+[`benchmarks/results-v0.2.md`](benchmarks/results-v0.2.md).
 
 The scientific scope and competing methods are documented in
 [`docs/scientific-design.md`](docs/scientific-design.md). The existing-tool audit is
@@ -50,6 +53,7 @@ author's earlier work is in [`docs/extraction-audit.md`](docs/extraction-audit.m
 import numpy as np
 
 from fiberphotometry import (
+    assess_recording,
     align_events,
     make_recording,
     reference_dff,
@@ -65,6 +69,7 @@ recording = make_recording(
 )
 
 corrected = reference_dff(recording)
+qc = assess_recording(recording)
 epochs = align_events(corrected, [10, 20, 30], window=(-2, 5), rate=10)
 ```
 

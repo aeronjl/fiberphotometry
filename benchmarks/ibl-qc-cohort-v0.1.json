@@ -1,0 +1,18 @@
+{
+  "channels": 36,
+  "cohort": "ibl-qc-v0.1",
+  "selection": "four subjects x early/middle/late sessions",
+  "sessions": 12,
+  "summary": {
+    "absolute_signal_reference_correlation_median": 0.39216295725750544,
+    "finite_paired_fraction_median": 0.9905177971880305,
+    "finite_paired_fraction_range": [0.9511951768352227, 0.9999890264243702],
+    "relative_slope_difference_median": 0.026469420446539202,
+    "warning_channels": 12,
+    "warning_counts": {
+      "fit_method_sensitive": 2,
+      "flat_steps": 12,
+      "weak_signal_reference_correlation": 3
+    }
+  }
+}
