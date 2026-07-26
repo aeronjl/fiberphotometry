@@ -6,6 +6,7 @@ import hashlib
 import json
 import tomllib
 from dataclasses import asdict, dataclass, replace
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,7 @@ from fiberphotometry.io.tabular import (
     inspect_loaded_tabular_input,
     load_tabular_input,
 )
+from fiberphotometry.pipeline import RecordingInput
 from fiberphotometry.workflow import EventAnalysis, EventSession
 
 
@@ -28,12 +30,22 @@ class TabularSessionSource:
     session: str
     recording: Path
     events: Path
+    session_start_time: datetime | None = None
+
+
+@dataclass(frozen=True)
+class NWBExportConfig:
+    """Metadata required to create valid per-session NWB files."""
+
+    session_description: str
+    identifier_prefix: str = "fiberphotometry"
 
 
 @dataclass(frozen=True)
 class LoadedTabularProject:
     sessions: tuple[EventSession, ...]
     inspections: tuple[TabularInputInspection, ...]
+    inputs: tuple[RecordingInput, ...]
 
 
 @dataclass(frozen=True)
@@ -47,6 +59,7 @@ class TabularProjectConfig:
     recording_schema: TabularRecordingSchema
     event_schema: TabularEventSchema
     analysis: EventAnalysisConfig
+    nwb: NWBExportConfig | None = None
     schema_version: str = "1"
 
     @classmethod
@@ -66,6 +79,7 @@ class TabularProjectConfig:
                 "recording",
                 "events",
                 "analysis",
+                "nwb",
             },
             "project root",
         )
@@ -76,6 +90,7 @@ class TabularProjectConfig:
         recording_schema = _recording_schema(_table(payload, "recording"))
         event_schema = _event_schema(_table(payload, "events"))
         analysis = EventAnalysisConfig.from_mapping(_table(payload, "analysis"))
+        nwb = _nwb_config(payload.get("nwb"), sources)
         output_raw = payload.get("output_directory", "artifacts")
         if not isinstance(output_raw, str) or not output_raw.strip():
             raise ValueError("output_directory must be a non-empty path string")
@@ -87,6 +102,7 @@ class TabularProjectConfig:
             recording_schema=recording_schema,
             event_schema=event_schema,
             analysis=analysis,
+            nwb=nwb,
         )
 
     @property
@@ -97,6 +113,7 @@ class TabularProjectConfig:
         """Load every source and retain its preflight diagnostics."""
         sessions = []
         inspections = []
+        inputs = []
         factor = self.analysis.factor_name
         for source in self.sources:
             item = load_tabular_input(
@@ -121,7 +138,8 @@ class TabularProjectConfig:
                 )
             )
             inspections.append(inspect_loaded_tabular_input(item))
-        return LoadedTabularProject(tuple(sessions), tuple(inspections))
+            inputs.append(item)
+        return LoadedTabularProject(tuple(sessions), tuple(inspections), tuple(inputs))
 
     def build_analysis(self, sessions: tuple[EventSession, ...]) -> EventAnalysis:
         """Build an analysis carrying the full project-file fingerprint."""
@@ -142,12 +160,18 @@ class TabularProjectConfig:
                     "session": source.session,
                     "recording": source.recording.name,
                     "events": source.events.name,
+                    "session_start_time": (
+                        source.session_start_time.isoformat()
+                        if source.session_start_time is not None
+                        else None
+                    ),
                 }
                 for source in self.sources
             ],
             "recording": asdict(self.recording_schema),
             "events": asdict(self.event_schema),
             "analysis": json.loads(self.analysis.to_json()),
+            "nwb": asdict(self.nwb) if self.nwb is not None else None,
         }
         return json.dumps(payload, indent=2, sort_keys=True)
 
@@ -161,7 +185,9 @@ def _session_sources(value: object, base: Path) -> tuple[TabularSessionSource, .
         if not isinstance(item, dict):
             raise ValueError("every sessions entry must be a TOML table")
         _reject_unknown(
-            item, {"subject", "session", "recording", "events"}, f"sessions[{index}]"
+            item,
+            {"subject", "session", "recording", "events", "session_start_time"},
+            f"sessions[{index}]",
         )
         subject = _nonempty_string(item, "subject", f"sessions[{index}]")
         session = _nonempty_string(item, "session", f"sessions[{index}]")
@@ -169,6 +195,11 @@ def _session_sources(value: object, base: Path) -> tuple[TabularSessionSource, .
         if identity in identities:
             raise ValueError("subject/session pairs must be unique")
         identities.add(identity)
+        start_time = item.get("session_start_time")
+        if start_time is not None and not isinstance(start_time, datetime):
+            raise ValueError(
+                f"sessions[{index}].session_start_time must be a TOML datetime"
+            )
         sources.append(
             TabularSessionSource(
                 subject,
@@ -179,9 +210,35 @@ def _session_sources(value: object, base: Path) -> tuple[TabularSessionSource, .
                 (
                     base / _nonempty_string(item, "events", f"sessions[{index}]")
                 ).resolve(),
+                start_time,
             )
         )
     return tuple(sources)
+
+
+def _nwb_config(
+    value: object, sources: tuple[TabularSessionSource, ...]
+) -> NWBExportConfig | None:
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise ValueError("nwb must be a TOML table")
+    _reject_unknown(value, {"session_description", "identifier_prefix"}, "nwb")
+    for index, source in enumerate(sources):
+        start = source.session_start_time
+        if start is None:
+            raise ValueError(
+                f"sessions[{index}].session_start_time is required for NWB export"
+            )
+        if start.tzinfo is None or start.utcoffset() is None:
+            raise ValueError("NWB session_start_time must include a timezone offset")
+    identifier_prefix = value.get("identifier_prefix", "fiberphotometry")
+    if not isinstance(identifier_prefix, str) or not identifier_prefix.strip():
+        raise ValueError("nwb.identifier_prefix must be a non-empty string")
+    return NWBExportConfig(
+        session_description=_nonempty_string(value, "session_description", "nwb"),
+        identifier_prefix=identifier_prefix,
+    )
 
 
 def _recording_schema(payload: dict[str, Any]) -> TabularRecordingSchema:

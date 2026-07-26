@@ -12,6 +12,7 @@ from collections.abc import Sequence
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
+from fiberphotometry.io.nwb_project import export_project_nwb
 from fiberphotometry.project import LoadedTabularProject, TabularProjectConfig
 
 
@@ -55,7 +56,11 @@ def run_project(
     _atomic_write(output_directory / "preflight.json", preflight)
     _atomic_write(
         output_directory / "manifest.json",
-        _manifest(project, "running", {"preflight.json": preflight}),
+        _manifest(
+            project,
+            "running",
+            {"preflight.json": _text_sha256(preflight)},
+        ),
     )
     study = project.build_analysis(loaded.sessions)
     try:
@@ -68,7 +73,7 @@ def run_project(
         failure_manifest = _manifest(
             project,
             "failed",
-            {"preflight.json": preflight},
+            {"preflight.json": _text_sha256(preflight)},
             error=str(error),
         )
         _atomic_write(output_directory / "manifest.json", failure_manifest)
@@ -82,10 +87,35 @@ def run_project(
         if name == "preflight.json":
             continue
         _atomic_write(output_directory / name, content)
+    artifact_hashes = {
+        name: _text_sha256(content) for name, content in artifacts.items()
+    }
+    if project.nwb is not None:
+        nwb_directory = output_directory / "nwb"
+        if nwb_directory.is_dir():
+            for stale in nwb_directory.glob("*.nwb"):
+                stale.unlink()
+    try:
+        nwb_paths = export_project_nwb(project, loaded, result, output_directory)
+    except ValueError as error:
+        nwb_directory = output_directory / "nwb"
+        if nwb_directory.is_dir():
+            for incomplete in nwb_directory.glob("*.nwb"):
+                incomplete.unlink()
+        failure_manifest = _manifest(
+            project,
+            "failed",
+            artifact_hashes,
+            error=str(error),
+        )
+        _atomic_write(output_directory / "manifest.json", failure_manifest)
+        raise
+    for path in nwb_paths:
+        artifact_hashes[str(path.relative_to(output_directory))] = _file_sha256(path)
     manifest = _manifest(
         project,
         "complete" if result.pipeline.analysis is not None else "blocked",
-        artifacts,
+        artifact_hashes,
     )
     _atomic_write(output_directory / "manifest.json", manifest)
     return output_directory.resolve()
@@ -94,7 +124,7 @@ def run_project(
 def _manifest(
     project: TabularProjectConfig,
     status: str,
-    artifacts: dict[str, str],
+    artifact_hashes: dict[str, str],
     *,
     error: str | None = None,
 ) -> str:
@@ -107,8 +137,8 @@ def _manifest(
         },
         "status": status,
         "artifacts": {
-            name: {"sha256": _text_sha256(content)}
-            for name, content in artifacts.items()
+            name: {"sha256": fingerprint}
+            for name, fingerprint in artifact_hashes.items()
         },
     }
     if error is not None:
@@ -156,6 +186,14 @@ def _atomic_write(path: Path, content: str) -> None:
 
 def _text_sha256(content: str) -> str:
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _package_version() -> str:

@@ -87,7 +87,7 @@
 - [x] Self-contained HTML evidence report with animal/QC/provenance views
 - [x] Declarative TOML configuration for no-code-rewrite analysis choices
 - [x] CLI from tabular project configuration to preflight, JSON, and HTML artifacts
-- [ ] CLI export of processed signals and provenance to NWB
+- [x] CLI export of raw/processed signals, events, QC, and provenance to NWB
 - [x] Unit-safe grouped report for complete multiverse robustness results
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [ ] Usability review with practicing photometry scientists

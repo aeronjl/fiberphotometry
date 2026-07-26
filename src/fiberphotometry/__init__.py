@@ -23,6 +23,7 @@ from fiberphotometry.inference import (
     recommend_inference,
     unit_t_interval,
 )
+from fiberphotometry.io.nwb_project import export_project_nwb
 from fiberphotometry.io.tabular import (
     TabularChannel,
     TabularChannelInspection,
@@ -86,6 +87,7 @@ from fiberphotometry.preprocess import (
 )
 from fiberphotometry.project import (
     LoadedTabularProject,
+    NWBExportConfig,
     TabularProjectConfig,
     TabularSessionSource,
 )
@@ -122,6 +124,7 @@ __all__ = [
     "MultiverseReportGroup",
     "MultiverseResult",
     "MultiverseSpec",
+    "NWBExportConfig",
     "ObservationTable",
     "PermutationPlan",
     "PipelineResult",
@@ -158,6 +161,7 @@ __all__ = [
     "create_analysis_plan",
     "exact_sign_flip_test",
     "execute_analysis_plan",
+    "export_project_nwb",
     "hierarchical_bootstrap",
     "inspect_loaded_tabular_input",
     "inspect_tabular_input",

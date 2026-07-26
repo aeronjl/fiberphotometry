@@ -6,24 +6,32 @@ subject = "mouse-01"
 session = "session-01"
 recording = "data/recording-1.csv"
 events = "data/events-1.csv"
+session_start_time = 2026-01-01T12:00:00Z
 
 [[sessions]]
 subject = "mouse-02"
 session = "session-02"
 recording = "data/recording-2.csv"
 events = "data/events-2.csv"
+session_start_time = 2026-01-02T12:00:00Z
 
 [[sessions]]
 subject = "mouse-03"
 session = "session-03"
 recording = "data/recording-3.csv"
 events = "data/events-3.csv"
+session_start_time = 2026-01-03T12:00:00Z
 
 [[sessions]]
 subject = "mouse-04"
 session = "session-04"
 recording = "data/recording-4.csv"
 events = "data/events-4.csv"
+session_start_time = 2026-01-04T12:00:00Z
+
+[nwb]
+session_description = "Synthetic CLI fiber-photometry session"
+identifier_prefix = "fiberphotometry-example"
 
 [recording]
 time_column = "time"

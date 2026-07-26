@@ -93,6 +93,9 @@ fiberphotometry inspect project.toml
 fiberphotometry run project.toml
 ```
 
+Projects with explicit session timing metadata may also emit validated per-session
+NWB files containing raw and processed signals, events, QC, and analysis provenance.
+
 For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The
 [public IBL tutorial](docs/tutorials/ibl-feedback-report.md) takes that contract

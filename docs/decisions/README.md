@@ -33,6 +33,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0003](0003-separate-subtraction-and-division.md) | Accepted | Represent subtraction and division as different transformations |
 | [SDR-0004](0004-require-explicit-derived-data-alignment.md) | Accepted | Require explicit alignment for externally derived data |
 | [SDR-0005](0005-do-not-infer-photometry-channel-identity.md) | Accepted | Do not infer photometry channel identity from row position |
+| [SDR-0006](0006-require-explicit-nwb-session-metadata.md) | Accepted | Require explicit NWB session metadata and avoid invented hardware |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

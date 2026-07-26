@@ -3,12 +3,13 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from fiberphotometry.cli import main
 from fiberphotometry.project import TabularProjectConfig
 
 
-def _project(tmp_path: Path, *, acknowledge: bool = True) -> Path:
+def _project(tmp_path: Path, *, acknowledge: bool = True, nwb: bool = False) -> Path:
     data = tmp_path / "data"
     data.mkdir()
     sessions = []
@@ -49,6 +50,7 @@ subject = "mouse-{animal_index + 1:02d}"
 session = "session-{animal_index + 1:02d}"
 recording = "data/{recording.name}"
 events = "data/{events.name}"
+{f"session_start_time = 2026-01-{animal_index + 1:02d}T12:00:00Z" if nwb else ""}
 
 """
         )
@@ -67,6 +69,15 @@ output_directory = "artifacts"
 
 """
         + "".join(sessions)
+        + (
+            """[nwb]
+session_description = "Synthetic CLI photometry session"
+identifier_prefix = "cli-fixture"
+
+"""
+            if nwb
+            else ""
+        )
         + f"""[recording]
 time_column = "time"
 time_unit = "seconds"
@@ -169,5 +180,56 @@ def test_project_config_rejects_unknown_input_keys(tmp_path) -> None:
             'output_directory = "artifacts"\nmagic = true',
         )
     )
+
+    assert main(["inspect", str(project_path)]) == 2
+
+
+def test_cli_exports_valid_provenance_complete_nwb(tmp_path) -> None:
+    pynwb = pytest.importorskip("pynwb")
+    project_path = _project(tmp_path, nwb=True)
+    output = tmp_path / "results"
+
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+
+    paths = sorted((output / "nwb").glob("*.nwb"))
+    assert len(paths) == 4
+    assert not pynwb.validate(path=str(paths[0]))
+    with pynwb.NWBHDF5IO(paths[0], "r") as io:
+        nwbfile = io.read()
+        assert nwbfile.subject.subject_id == "mouse-01"
+        assert set(nwbfile.acquisition) == {
+            "RawFiberPhotometryReference",
+            "RawFiberPhotometrySignal",
+        }
+        assert (
+            "ProcessedFiberPhotometrySignal"
+            in nwbfile.processing["fiberphotometry"].data_interfaces
+        )
+        assert len(nwbfile.trials) == 4
+        assert set(nwbfile.trials.colnames) >= {"event_id", "condition"}
+        assert set(nwbfile.scratch) == {
+            "fiberphotometry_analysis",
+            "fiberphotometry_project",
+            "fiberphotometry_session_preflight",
+            "fiberphotometry_session_qc",
+        }
+        comments = (
+            nwbfile.processing["fiberphotometry"]
+            .data_interfaces["ProcessedFiberPhotometrySignal"]
+            .comments
+        )
+        assert "fiberphotometry_operations" in comments
+    manifest = json.loads((output / "manifest.json").read_text())
+    for path in paths:
+        name = f"nwb/{path.name}"
+        assert (
+            manifest["artifacts"][name]["sha256"]
+            == hashlib.sha256(path.read_bytes()).hexdigest()
+        )
+
+
+def test_nwb_export_rejects_timezone_free_session_metadata(tmp_path) -> None:
+    project_path = _project(tmp_path, nwb=True)
+    project_path.write_text(project_path.read_text().replace("T12:00:00Z", "T12:00:00"))
 
     assert main(["inspect", str(project_path)]) == 2

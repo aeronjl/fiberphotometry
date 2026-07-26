@@ -19,6 +19,7 @@ def add_recording_to_nwb(
     variable: str = "signal",
     name: str = "FiberPhotometrySignal",
     unit: str = "a.u.",
+    processing_module: Any | None = None,
 ) -> Any:
     """Add a recording as a standard NWB ``TimeSeries`` acquisition.
 
@@ -47,7 +48,10 @@ def add_recording_to_nwb(
         description="Fiber photometry signal exported by fiberphotometry",
         comments=json.dumps(metadata, sort_keys=True),
     )
-    nwbfile.add_acquisition(series)
+    if processing_module is None:
+        nwbfile.add_acquisition(series)
+    else:
+        processing_module.add(series)
     return series
 
 
