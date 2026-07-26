@@ -1,0 +1,88 @@
+{
+  "dandiset": "000971",
+  "doi": "10.48324/dandi.000971/0.260213.1851",
+  "failures": [],
+  "published_version": "0.260213.1851",
+  "replacement_policy": "none after protocol freeze",
+  "schema_version": "dandi-000971-tutorial-preflight-v0.1",
+  "sessions": [
+    {
+      "analysis_rate_hz": 19.946129892386644,
+      "asset_id": "68e165c7-6f20-4ac1-b981-c5172e9eddfb",
+      "boundary_complete_events": 87,
+      "excluded_at_boundary": 0,
+      "family": "FP-PR",
+      "rewarded_events": 32,
+      "source_events": 87,
+      "source_rate_hz": 1017.2526245117188,
+      "subject": "028-392",
+      "unrewarded_events": 55,
+      "verified_sha256": "e8f144ef5d1f0e7e67c34a20907c71e0f19136d013cd396a17778d3a577020b8"
+    },
+    {
+      "analysis_rate_hz": 19.946129892386644,
+      "asset_id": "1b652815-9f6c-4946-92a9-7c8d68edba6a",
+      "boundary_complete_events": 124,
+      "excluded_at_boundary": 0,
+      "family": "FP-PR",
+      "rewarded_events": 25,
+      "source_events": 124,
+      "source_rate_hz": 1017.2526245117188,
+      "subject": "048-392",
+      "unrewarded_events": 99,
+      "verified_sha256": "12d8d3a5168b21ac9a0b9b35818f6f0fd07c4a0b24dde5bd36c97dbdd1155296"
+    },
+    {
+      "analysis_rate_hz": 19.946129892386644,
+      "asset_id": "75e5b66e-5f83-48ab-9d0e-ca33da7c78e6",
+      "boundary_complete_events": 149,
+      "excluded_at_boundary": 0,
+      "family": "FP-DPR",
+      "rewarded_events": 39,
+      "source_events": 149,
+      "source_rate_hz": 1017.2526245117188,
+      "subject": "272-396",
+      "unrewarded_events": 110,
+      "verified_sha256": "679bffe692348b136a774702e9759498212d87a863be4bb33a7ac903ce02e784"
+    },
+    {
+      "analysis_rate_hz": 19.946129892386644,
+      "asset_id": "77f00211-7d9f-4932-a5fd-0faef2ad8d26",
+      "boundary_complete_events": 246,
+      "excluded_at_boundary": 0,
+      "family": "FP-DPR",
+      "rewarded_events": 49,
+      "source_events": 246,
+      "source_rate_hz": 1017.2526245117188,
+      "subject": "333-393",
+      "unrewarded_events": 197,
+      "verified_sha256": "26c0ca2c836906629aebb9d3ba1b34b3e4aaeaf94295523ca4d8d11548c17514"
+    },
+    {
+      "analysis_rate_hz": 19.946129892386644,
+      "asset_id": "466747eb-ff43-40bb-86f4-140ecc5f427a",
+      "boundary_complete_events": 42,
+      "excluded_at_boundary": 0,
+      "family": "FP-PS",
+      "rewarded_events": 7,
+      "source_events": 42,
+      "source_rate_hz": 1017.2526245117188,
+      "subject": "112-283",
+      "unrewarded_events": 35,
+      "verified_sha256": "f2d54c3c51631e922534ffaeb06d808d2a0076cf7890d220ca3c1bf144440ce5"
+    },
+    {
+      "analysis_rate_hz": 19.946129892386644,
+      "asset_id": "3052c104-0407-45ea-9acc-8b51d3be7e23",
+      "boundary_complete_events": 311,
+      "excluded_at_boundary": 0,
+      "family": "FP-PS",
+      "rewarded_events": 48,
+      "source_events": 311,
+      "source_rate_hz": 1017.2526245117188,
+      "subject": "113-283",
+      "unrewarded_events": 263,
+      "verified_sha256": "906b9a95cfa5c513f6ce396d85a041c7419b19b4759f259bc5d10899aafbde21"
+    }
+  ]
+}

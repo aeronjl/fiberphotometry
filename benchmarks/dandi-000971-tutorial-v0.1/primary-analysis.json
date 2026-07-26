@@ -1,0 +1,43 @@
+{
+  "confidence_interval": [
+    -0.0073149929801975865,
+    0.021180488282859806
+  ],
+  "engine": "scipy",
+  "estimate": 0.006932747651331109,
+  "executed_at_utc": "2026-07-26T23:55:14.722761+00:00",
+  "input_fingerprint": "8f16cee0de3cafa45a3125b4b684a5fc408b64c9afd13ed9d0989ecc42cc95d5",
+  "p_value": 0.2663448610334782,
+  "package_version": "0.1.0.dev0",
+  "plan": {
+    "acknowledged_assumptions": [
+      "approximately_gaussian_unit_differences",
+      "complete_pairs",
+      "estimand_matches_question",
+      "independent_aggregation_units"
+    ],
+    "estimand": {
+      "aggregation_unit": "animal",
+      "contrast": {
+        "denominator": "unrewarded",
+        "factor": "condition",
+        "numerator": "rewarded"
+      },
+      "contrast_unit": null,
+      "outcome": "dms_delta"
+    },
+    "executable": true,
+    "intent": "descriptive",
+    "method": "paired_t",
+    "required_assumptions": [
+      "independent_aggregation_units",
+      "estimand_matches_question",
+      "approximately_gaussian_unit_differences",
+      "complete_pairs"
+    ],
+    "schema_version": "1",
+    "seed": null
+  },
+  "random_seed": null,
+  "schema_version": "1"
+}

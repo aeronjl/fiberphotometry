@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewarded minus unrewarded DMS response robustness</title><style>
+:root{--paper:#f6f7f3;--sheet:#fff;--ink:#18211d;--secondary:#4f5e57;
+--muted:#7b8982;--line:rgba(24,33,29,.13);--soft:rgba(24,33,29,.055);
+--gcamp:#167a50;--gcamp-soft:#e4f1e9;--amber:#9a6416;--amber-soft:#f7eddc}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);
+font-family:"Avenir Next","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+main{width:calc(100vw - 32px);max-width:960px;min-width:0;margin:48px auto 80px}.report-head{display:flex;
+justify-content:space-between;gap:32px;align-items:flex-start;padding-bottom:32px}
+h1,h2,h3,p{margin-top:0}h1{font-family:Charter,"Iowan Old Style",Georgia,serif;
+font-size:42px;line-height:1.08;letter-spacing:-.025em;margin-bottom:12px;text-wrap:balance}
+h2{font:600 22px/1.25 Charter,"Iowan Old Style",Georgia,serif;letter-spacing:-.01em;
+margin-bottom:8px}h3{font-size:14px;margin:0 0 4px}.dek,.section-head>p{color:var(--secondary);
+line-height:1.55;max-width:620px}.eyebrow{font:600 11px/1.2 ui-monospace,SFMono-Regular,monospace;
+letter-spacing:.1em;color:var(--muted);margin-bottom:10px}.status{font-size:12px;font-weight:650;
+padding:7px 10px;border-radius:6px;white-space:nowrap}.status-ok{color:var(--gcamp);
+background:var(--gcamp-soft)}.status-warn{color:var(--amber);background:var(--amber-soft)}
+section{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:24px;
+margin-top:16px}.finding{display:grid;grid-template-columns:1fr auto;align-items:end;
+border-top:3px solid var(--gcamp);padding-top:21px}.estimate{font:600 52px/1 Charter,
+"Iowan Old Style",Georgia,serif;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.estimate span{font:500 13px/1.2 "Avenir Next","Segoe UI",sans-serif;color:var(--muted);
+letter-spacing:0;margin-left:10px}.interval{color:var(--secondary);margin:10px 0 0;
+font-variant-numeric:tabular-nums}.study-counts{display:flex;margin:0}.study-counts div{padding:0 20px;
+border-left:1px solid var(--line)}dt{color:var(--muted);font-size:11px;text-transform:uppercase;
+letter-spacing:.08em}dd{margin:5px 0 0;font:600 24px/1 Charter,Georgia,serif;
+font-variant-numeric:tabular-nums}.evidence-trace{display:flex;justify-content:space-between;
+align-items:center;border-left:3px solid var(--gcamp);padding-left:21px}.evidence-trace p:last-child{
+color:var(--secondary);margin-bottom:0}.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.warning-chip,.quiet-chip{padding:5px 8px;border-radius:5px;font:600 11px/1.2 ui-monospace,
+monospace}.warning-chip{background:var(--amber-soft);color:var(--amber)}.quiet-chip{background:
+var(--gcamp-soft);color:var(--gcamp)}.section-head{display:flex;justify-content:space-between;
+gap:32px;align-items:end;margin-bottom:20px}.section-head>p{font-size:12px;max-width:300px;
+margin-bottom:0}.effect-plot{max-width:100%;overflow-x:auto}.effect-plot svg{display:block;width:100%;min-width:560px}
+.zero-line{stroke:var(--line);stroke-width:1.5;stroke-dasharray:3 3}.effect-stem{stroke:#9aaba2;
+stroke-width:2}.effect-dot{fill:var(--gcamp)}.animal-label,.effect-value{fill:var(--secondary);
+font:11px ui-monospace,SFMono-Regular,monospace}.effect-value{font-variant-numeric:tabular-nums}
+.lane-stack{display:grid;min-width:0;gap:16px;margin-top:16px}.evidence-lane{min-width:0;margin-top:0;
+border-left:3px solid var(--gcamp);padding-left:21px}.lane-head{display:flex;
+justify-content:space-between;gap:32px;align-items:end;margin-bottom:16px}.evidence-lane.lane-warning{
+border-left-color:var(--amber)}.lane-head p{
+color:var(--secondary);margin-bottom:0}.lane-counts{display:flex;margin:0}.lane-counts div{
+padding:0 14px;border-left:1px solid var(--line)}.lane-counts dd{font-size:18px}
+.interval-stem{stroke:#9aaba2;stroke-width:2}.robustness-summary .estimate{font-size:46px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:12px}th{text-align:left;
+color:var(--muted);font:600 10px/1.2 ui-monospace,monospace;letter-spacing:.08em;
+text-transform:uppercase;padding:9px 10px;border-bottom:1px solid var(--line)}td{padding:10px;
+border-bottom:1px solid var(--soft);font-variant-numeric:tabular-nums}tr:last-child td{border:0}
+.coverage-chain{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.coverage-chain>div{display:grid;gap:3px;background:var(--paper);border-radius:7px;padding:14px}
+.coverage-chain span,.coverage-chain small{color:var(--muted);font-size:11px}.coverage-chain strong{
+font:600 28px/1 Charter,Georgia,serif;font-variant-numeric:tabular-nums}.coverage-warnings{
+justify-content:flex-start;margin-bottom:12px}.coverage-dispositions{color:var(--secondary);font-size:12px;
+margin-bottom:20px}.coverage-detail{margin-top:14px}.coverage-detail summary{
+color:var(--secondary);font-size:12px;font-weight:600;padding-top:6px}
+.timecourse-plot{max-width:100%;overflow-x:auto}.timecourse-plot svg{display:block;width:100%;
+min-width:560px}.simultaneous-band polygon{fill:rgba(22,122,80,.10)}.pointwise-band polygon{
+fill:rgba(22,122,80,.20)}.timecourse-estimate polyline{fill:none;stroke:var(--gcamp);
+stroke-width:2}.event-line{stroke:var(--secondary);stroke-width:1;stroke-dasharray:5 4}
+.axis-label{fill:var(--muted);font:11px ui-monospace,SFMono-Regular,monospace}
+.timecourse-legend{display:flex;gap:16px;margin-bottom:8px;color:var(--secondary);font-size:11px}
+.timecourse-legend span:before{content:"";display:inline-block;width:18px;height:8px;margin-right:6px;
+border-radius:2px}.legend-estimate:before{background:var(--gcamp);height:2px!important;
+vertical-align:middle}.legend-pointwise:before{background:rgba(22,122,80,.20)}
+.legend-simultaneous:before{background:rgba(22,122,80,.10)}
+.operation-grid{display:grid;gap:8px}.operation{display:grid;grid-template-columns:32px 1fr auto;
+align-items:start;background:var(--paper);border-radius:7px;padding:12px}.operation>span{font:600 11px
+ui-monospace,monospace;color:var(--gcamp)}.operation p{font-size:12px;color:var(--secondary);
+margin:0}.operation details{font-size:11px;color:var(--muted)}summary{cursor:pointer;min-height:28px}
+pre{white-space:pre-wrap;max-width:540px;background:var(--ink);color:#e8eee9;padding:12px;
+border-radius:6px;overflow:auto}.assumptions{display:grid;grid-template-columns:1fr 1.4fr;gap:32px}
+.evidence-list{margin:0;padding-left:18px;color:var(--secondary);font-size:13px;line-height:1.6}
+.empty{padding:32px;text-align:center;background:var(--paper);color:var(--muted);border-radius:7px}
+footer{color:var(--muted);font-size:11px;margin-top:24px;display:flex;justify-content:space-between;
+gap:16px}code{font-family:ui-monospace,SFMono-Regular,monospace;overflow-wrap:anywhere}
+@media(max-width:680px){main{margin-top:24px}.report-head,.section-head,.evidence-trace{display:block}
+.status{display:inline-block;margin-top:12px}.finding{grid-template-columns:1fr}.study-counts{margin-top:24px}
+.study-counts div:first-child{border-left:0;padding-left:0}.estimate{font-size:42px}.chips{justify-content:flex-start;
+margin-top:16px}.assumptions{grid-template-columns:1fr}.coverage-chain{grid-template-columns:1fr}
+h1{font-size:34px}section{padding:18px}}
+@media(max-width:680px){.lane-head{display:block}.lane-counts{margin-top:16px}
+.lane-counts div:first-child{border-left:0;padding-left:0}}
+@media print{body{background:#fff}main{width:100%;margin:0}section{break-inside:avoid}.status{border:1px solid currentColor}}
+</style></head><body><main>
+  <header class="report-head"><div>
+  <p class="eyebrow">FIBER PHOTOMETRY · ROBUSTNESS REPORT</p>
+  <h1>Rewarded minus unrewarded DMS response robustness</h1><p class="dek">Parallel evidence lanes preserve unit
+  boundaries. No estimate, median, or direction fraction is pooled across lanes.</p>
+  </div><span class="status status-ok">All declared workflows completed</span></header>
+
+  <section class="finding robustness-summary"><div>
+  <p class="eyebrow">DECLARED UNIVERSES</p>
+  <div class="estimate">8<span>compatible workflows</span></div>
+  <p class="interval">descriptive intent · 1
+  unit-compatible evidence lanes</p></div><dl class="study-counts">
+  <div><dt>Successful</dt><dd>8</dd></div>
+  <div><dt>Failed</dt><dd>0</dd></div>
+  <div><dt>Blocked</dt><dd>0</dd></div></dl></section>
+
+  <div class="lane-stack"><section class="evidence-lane"><div class="lane-head"><div>
+    <p class="eyebrow">UNIT-COMPATIBLE EVIDENCE LANE</p>
+    <h2>Fitted-reference dF/F</h2><p>ΔF/F · estimate range
+    0.00676 to 0.006939</p></div><dl class="lane-counts">
+    <div><dt>Success</dt><dd>8</dd></div>
+    <div><dt>Failed</dt><dd>0</dd></div>
+    <div><dt>Blocked</dt><dd>0</dd></div></dl></div>
+    <div class="effect-plot"><svg viewBox="0 0 760 270" role="img" aria-label="Specification estimates in ΔF/F for 8 workflows"><line x1="315.49" y1="4" x2="315.49" y2="260" class="zero-line"/><text x="0" y="26" class="animal-label">4401289511</text><line x1="191.43" y1="22" x2="670.66" y2="22" class="interval-stem"/><circle cx="431.04" cy="22" r="4.5" class="effect-dot"/><text x="759" y="26" text-anchor="end" class="effect-value">0.00676</text><text x="0" y="56" class="animal-label">114111c2f8</text><line x1="191.89" y1="52" x2="670.39" y2="52" class="interval-stem"/><circle cx="431.14" cy="52" r="4.5" class="effect-dot"/><text x="759" y="56" text-anchor="end" class="effect-value">0.006765</text><text x="0" y="86" class="animal-label">cfca0d4a83</text><line x1="190.95" y1="82" x2="672.23" y2="82" class="interval-stem"/><circle cx="431.59" cy="82" r="4.5" class="effect-dot"/><text x="759" y="86" text-anchor="end" class="effect-value">0.006792</text><text x="0" y="116" class="animal-label">5807a7a83c</text><line x1="191.45" y1="112" x2="671.97" y2="112" class="interval-stem"/><circle cx="431.71" cy="112" r="4.5" class="effect-dot"/><text x="759" y="116" text-anchor="end" class="effect-value">0.006799</text><text x="0" y="146" class="animal-label">68c112cfa5</text><line x1="191.23" y1="142" x2="676.37" y2="142" class="interval-stem"/><circle cx="433.80" cy="142" r="4.5" class="effect-dot"/><text x="759" y="146" text-anchor="end" class="effect-value">0.006921</text><text x="0" y="176" class="animal-label">e9bc8ef368</text><line x1="191.56" y1="172" x2="676.22" y2="172" class="interval-stem"/><circle cx="433.89" cy="172" r="4.5" class="effect-dot"/><text x="759" y="176" text-anchor="end" class="effect-value">0.006926</text><text x="0" y="206" class="animal-label">835adbb589</text><line x1="190.45" y1="202" x2="677.55" y2="202" class="interval-stem"/><circle cx="434.00" cy="202" r="4.5" class="effect-dot"/><text x="759" y="206" text-anchor="end" class="effect-value">0.006933</text><text x="0" y="236" class="animal-label">cfa8703ccd</text><line x1="190.81" y1="232" x2="677.40" y2="232" class="interval-stem"/><circle cx="434.11" cy="232" r="4.5" class="effect-dot"/><text x="759" y="236" text-anchor="end" class="effect-value">0.006939</text></svg></div></section></div>
+
+  <section><div class="section-head"><div><p class="eyebrow">COMPLETE LEDGER</p>
+  <h2>Every compatible workflow</h2></div>
+  <p>Failure and blocking reasons remain first-class results.</p></div>
+  <div class="table-wrap"><table><thead><tr><th>Lane</th><th>Universe</th>
+  <th>Choices</th><th>Status</th><th>Estimate</th><th>Interval or reason</th>
+  </tr></thead><tbody><tr><td>Fitted-reference dF/F</td><td><code>114111c2f8131a76</code></td><td>preprocessing: unfiltered_ols · response_window: 500ms</td><td>success</td><td>0.006765</td><td>95% CI -0.007231 to 0.02076</td></tr><tr><td>Fitted-reference dF/F</td><td><code>e9bc8ef368e5f8f8</code></td><td>preprocessing: unfiltered_ols · response_window: 1500ms</td><td>success</td><td>0.006926</td><td>95% CI -0.00725 to 0.0211</td></tr><tr><td>Fitted-reference dF/F</td><td><code>440128951194a950</code></td><td>preprocessing: unfiltered_irls · response_window: 500ms</td><td>success</td><td>0.00676</td><td>95% CI -0.007258 to 0.02078</td></tr><tr><td>Fitted-reference dF/F</td><td><code>68c112cfa5aa2262</code></td><td>preprocessing: unfiltered_irls · response_window: 1500ms</td><td>success</td><td>0.006921</td><td>95% CI -0.007269 to 0.02111</td></tr><tr><td>Fitted-reference dF/F</td><td><code>5807a7a83c71f0f3</code></td><td>preprocessing: filtered_ols · response_window: 500ms</td><td>success</td><td>0.006799</td><td>95% CI -0.007257 to 0.02085</td></tr><tr><td>Fitted-reference dF/F</td><td><code>cfa8703ccd056d1f</code></td><td>preprocessing: filtered_ols · response_window: 1500ms</td><td>success</td><td>0.006939</td><td>95% CI -0.007294 to 0.02117</td></tr><tr><td>Fitted-reference dF/F</td><td><code>cfca0d4a83ad73df</code></td><td>preprocessing: filtered_irls · response_window: 500ms</td><td>success</td><td>0.006792</td><td>95% CI -0.007286 to 0.02087</td></tr><tr><td>Fitted-reference dF/F</td><td><code>835adbb589fccf89</code></td><td>preprocessing: filtered_irls · response_window: 1500ms</td><td>success</td><td>0.006933</td><td>95% CI -0.007315 to 0.02118</td></tr></tbody></table></div></section>
+
+  <footer>Generated by FiberPhotometry · grouped summaries are unit-local by
+  contract.</footer>
+</main></body></html>

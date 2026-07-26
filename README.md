@@ -122,6 +122,13 @@ For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The
 [public IBL tutorial](docs/tutorials/ibl-feedback-report.md) takes that contract
 through public-data import to fingerprinted JSON and HTML artifacts.
+The canonical
+[raw-NWB robustness tutorial](docs/tutorials/dandi-000971-reward-multiverse.md)
+then takes six checksum-pinned DANDI recordings through event preflight, a declared
+animal-level analysis, an eight-universe preprocessing multiverse, and a
+checksummed evidence report. Its frozen
+[result](docs/dandi-000971-tutorial-results-v0.1.md) keeps population uncertainty
+separate from preprocessing robustness.
 
 Complete multiverse results can be rendered through
 `MultiverseResult.write_grouped_html`. The

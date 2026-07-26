@@ -1,0 +1,20 @@
+{
+  "artifacts": {
+    "multiverse.json": {
+      "sha256": "f58c0fd44d7cb7847e041ae61ce320875663714c3d1e19dd5d02deb138d1d7a8"
+    },
+    "preflight.json": {
+      "sha256": "b9eb4b9a86c0970bfcb4009bf1b4c3196bd9de1ac3aab7155d3a1b742cc185e2"
+    },
+    "primary-analysis.json": {
+      "sha256": "1e8bc6253a0bf8e8c58c91cb2a4e7a49a5aff4df0837be0e6c2c3aebda087781"
+    },
+    "report.html": {
+      "sha256": "c547e5556d8cba903db10a6ff9fbff1e41e16dd635691e2df0e79a5e08d8cafb"
+    }
+  },
+  "fiberphotometry_version": "0.1.0.dev0",
+  "schema_version": "dandi-000971-tutorial-artifacts-v0.1",
+  "scientific_protocol": "protocol-dandi-000971-tutorial-v0.1",
+  "status": "complete"
+}

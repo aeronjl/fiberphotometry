@@ -1,0 +1,1243 @@
+{
+  "leave_one_out": [
+    {
+      "error": null,
+      "estimate": 0.00832918741805399,
+      "omitted_unit": "028-392",
+      "status": "success"
+    },
+    {
+      "error": null,
+      "estimate": 0.006567402173855717,
+      "omitted_unit": "048-392",
+      "status": "success"
+    },
+    {
+      "error": null,
+      "estimate": 0.0016753465586251438,
+      "omitted_unit": "112-283",
+      "status": "success"
+    },
+    {
+      "error": null,
+      "estimate": 0.007833383575777514,
+      "omitted_unit": "113-283",
+      "status": "success"
+    },
+    {
+      "error": null,
+      "estimate": 0.009227918564463781,
+      "omitted_unit": "272-396",
+      "status": "success"
+    },
+    {
+      "error": null,
+      "estimate": 0.007963247617210512,
+      "omitted_unit": "333-393",
+      "status": "success"
+    }
+  ],
+  "spec": {
+    "base_pipeline": {
+      "analysis_plan": {
+        "acknowledged_assumptions": [
+          "approximately_gaussian_unit_differences",
+          "complete_pairs",
+          "estimand_matches_question",
+          "independent_aggregation_units"
+        ],
+        "estimand": {
+          "aggregation_unit": "animal",
+          "contrast": {
+            "denominator": "unrewarded",
+            "factor": "condition",
+            "numerator": "rewarded"
+          },
+          "contrast_unit": null,
+          "outcome": "dms_delta"
+        },
+        "executable": true,
+        "intent": "descriptive",
+        "method": "paired_t",
+        "required_assumptions": [
+          "independent_aggregation_units",
+          "estimand_matches_question",
+          "approximately_gaussian_unit_differences",
+          "complete_pairs"
+        ],
+        "schema_version": "1",
+        "seed": null
+      },
+      "design": {
+        "factors": [
+          {
+            "assignment_unit": "event",
+            "column": "condition",
+            "kind": "categorical",
+            "name": "condition"
+          }
+        ],
+        "observation_id": "event_id",
+        "schema_version": "1",
+        "units": [
+          {
+            "column": "animal",
+            "name": "animal",
+            "nested_within": null
+          },
+          {
+            "column": "session",
+            "name": "session",
+            "nested_within": "animal"
+          },
+          {
+            "column": "event_id",
+            "name": "event",
+            "nested_within": "session"
+          }
+        ]
+      },
+      "event_summary": {
+        "baseline": [
+          -5.0,
+          0.0
+        ],
+        "channel": "DMS",
+        "output_column": "dms_delta",
+        "response": [
+          0.0,
+          1.5
+        ],
+        "statistic": "delta",
+        "variable": "dff"
+      },
+      "preprocessing": [
+        {
+          "cutoff_hz": 3.0,
+          "kind": "lowpass_filter",
+          "order": 4,
+          "variables": [
+            "signal",
+            "reference"
+          ]
+        },
+        {
+          "kind": "reference_dff",
+          "max_iterations": 50,
+          "method": "irls",
+          "tolerance": 1e-08
+        }
+      ],
+      "quality_gate": {
+        "blocking_warnings": [],
+        "scope": "selected_channel"
+      },
+      "schema_version": "2"
+    },
+    "compatibility_rules": [],
+    "decision_nodes": [
+      {
+        "alternatives": [
+          {
+            "label": "unfiltered_ols",
+            "rationale": "source-study least-squares reference fit without tutorial filtering",
+            "value": [
+              {
+                "kind": "reference_dff",
+                "max_iterations": 50,
+                "method": "ols",
+                "tolerance": 1e-08
+              }
+            ]
+          },
+          {
+            "label": "unfiltered_irls",
+            "rationale": "robust reference fit without tutorial filtering",
+            "value": [
+              {
+                "kind": "reference_dff",
+                "max_iterations": 50,
+                "method": "irls",
+                "tolerance": 1e-08
+              }
+            ]
+          },
+          {
+            "label": "filtered_ols",
+            "rationale": "3 Hz zero-phase filter then source-study least-squares fit",
+            "value": [
+              {
+                "cutoff_hz": 3.0,
+                "kind": "lowpass_filter",
+                "order": 4,
+                "variables": [
+                  "signal",
+                  "reference"
+                ]
+              },
+              {
+                "kind": "reference_dff",
+                "max_iterations": 50,
+                "method": "ols",
+                "tolerance": 1e-08
+              }
+            ]
+          },
+          {
+            "label": "filtered_irls",
+            "rationale": "3 Hz zero-phase filter then robust reference fit",
+            "value": [
+              {
+                "cutoff_hz": 3.0,
+                "kind": "lowpass_filter",
+                "order": 4,
+                "variables": [
+                  "signal",
+                  "reference"
+                ]
+              },
+              {
+                "kind": "reference_dff",
+                "max_iterations": 50,
+                "method": "irls",
+                "tolerance": 1e-08
+              }
+            ]
+          }
+        ],
+        "name": "preprocessing",
+        "target": "preprocessing"
+      },
+      {
+        "alternatives": [
+          {
+            "label": "500ms",
+            "rationale": "early phasic response sensitivity window",
+            "value": {
+              "baseline": [
+                -5.0,
+                0.0
+              ],
+              "channel": "DMS",
+              "output_column": "dms_delta",
+              "response": [
+                0.0,
+                0.5
+              ],
+              "statistic": "delta",
+              "variable": "dff"
+            }
+          },
+          {
+            "label": "1500ms",
+            "rationale": "frozen source-aligned primary response window",
+            "value": {
+              "baseline": [
+                -5.0,
+                0.0
+              ],
+              "channel": "DMS",
+              "output_column": "dms_delta",
+              "response": [
+                0.0,
+                1.5
+              ],
+              "statistic": "delta",
+              "variable": "dff"
+            }
+          }
+        ],
+        "name": "response_window",
+        "target": "event_summary"
+      }
+    ],
+    "direction": "either",
+    "intent": "descriptive",
+    "leave_one_unit_out": true,
+    "reference_selection": [
+      {
+        "alternative": "filtered_irls",
+        "node": "preprocessing"
+      },
+      {
+        "alternative": "1500ms",
+        "node": "response_window"
+      }
+    ],
+    "schema_version": "1",
+    "smallest_effect": null
+  },
+  "summary": {
+    "blocked_universes": 0,
+    "decision_summaries": [
+      {
+        "alternative": "unfiltered_ols",
+        "median_estimate": 0.006845942936642207,
+        "node": "preprocessing",
+        "successful_universes": 2
+      },
+      {
+        "alternative": "unfiltered_irls",
+        "median_estimate": 0.006840485016915129,
+        "node": "preprocessing",
+        "successful_universes": 2
+      },
+      {
+        "alternative": "filtered_ols",
+        "median_estimate": 0.006868876117391431,
+        "node": "preprocessing",
+        "successful_universes": 2
+      },
+      {
+        "alternative": "filtered_irls",
+        "median_estimate": 0.006862238698781509,
+        "node": "preprocessing",
+        "successful_universes": 2
+      },
+      {
+        "alternative": "500ms",
+        "median_estimate": 0.006778603914631921,
+        "node": "response_window",
+        "successful_universes": 4
+      },
+      {
+        "alternative": "1500ms",
+        "median_estimate": 0.006929577720791795,
+        "node": "response_window",
+        "successful_universes": 4
+      }
+    ],
+    "estimate_range": [
+      0.006759823361961868,
+      0.006938905461993862
+    ],
+    "failed_universes": 0,
+    "fraction_meeting_practical_effect": null,
+    "fraction_negative": 0.0,
+    "fraction_positive": 1.0,
+    "incompatible_universes": 0,
+    "median_estimate": 0.006859996722328695,
+    "reference_estimate": 0.006932747651331109,
+    "successful_universes": 8,
+    "total_universes": 8,
+    "valid_universes": 8
+  },
+  "universes": [
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "unfiltered_ols",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.007230587767374889,
+        0.020761543933438754
+      ],
+      "error": null,
+      "estimate": 0.006765478083031933,
+      "is_reference": false,
+      "p_value": 0.26911875488928455,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            0.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "ols",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "114111c2f8131a76"
+    },
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "unfiltered_ols",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "1500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.007249865239278977,
+        0.02110268081978394
+      ],
+      "error": null,
+      "estimate": 0.006926407790252481,
+      "is_reference": false,
+      "p_value": 0.26462017220902795,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            1.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "ols",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "e9bc8ef368e5f8f8"
+    },
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "unfiltered_irls",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.007257667124544568,
+        0.020777313848468305
+      ],
+      "error": null,
+      "estimate": 0.006759823361961868,
+      "is_reference": false,
+      "p_value": 0.2701147355772945,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            0.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "irls",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "440128951194a950"
+    },
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "unfiltered_irls",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "1500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.007269421450922836,
+        0.021111714794659616
+      ],
+      "error": null,
+      "estimate": 0.0069211466718683895,
+      "is_reference": false,
+      "p_value": 0.26536091016726077,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            1.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "irls",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "68c112cfa5aa2262"
+    },
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "filtered_ols",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.007256592609587185,
+        0.020854286155165186
+      ],
+      "error": null,
+      "estimate": 0.006798846772789001,
+      "is_reference": false,
+      "p_value": 0.2688297582269011,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            0.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "cutoff_hz": 3.0,
+            "kind": "lowpass_filter",
+            "order": 4,
+            "variables": [
+              "signal",
+              "reference"
+            ]
+          },
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "ols",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "5807a7a83c71f0f3"
+    },
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "filtered_ols",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "1500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.007293864926721629,
+        0.02117167585070935
+      ],
+      "error": null,
+      "estimate": 0.006938905461993862,
+      "is_reference": false,
+      "p_value": 0.2655315222684588,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            1.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "cutoff_hz": 3.0,
+            "kind": "lowpass_filter",
+            "order": 4,
+            "variables": [
+              "signal",
+              "reference"
+            ]
+          },
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "ols",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "cfa8703ccd056d1f"
+    },
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "filtered_irls",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.007285847165842082,
+        0.0208693066583059
+      ],
+      "error": null,
+      "estimate": 0.0067917297462319086,
+      "is_reference": false,
+      "p_value": 0.2699329909755439,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            0.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "cutoff_hz": 3.0,
+            "kind": "lowpass_filter",
+            "order": 4,
+            "variables": [
+              "signal",
+              "reference"
+            ]
+          },
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "irls",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "cfca0d4a83ad73df"
+    },
+    {
+      "blocked_by": [],
+      "choices": [
+        {
+          "alternative": "filtered_irls",
+          "node": "preprocessing"
+        },
+        {
+          "alternative": "1500ms",
+          "node": "response_window"
+        }
+      ],
+      "confidence_interval": [
+        -0.0073149929801975865,
+        0.021180488282859806
+      ],
+      "error": null,
+      "estimate": 0.006932747651331109,
+      "is_reference": true,
+      "p_value": 0.2663448610334782,
+      "pipeline": {
+        "analysis_plan": {
+          "acknowledged_assumptions": [
+            "approximately_gaussian_unit_differences",
+            "complete_pairs",
+            "estimand_matches_question",
+            "independent_aggregation_units"
+          ],
+          "estimand": {
+            "aggregation_unit": "animal",
+            "contrast": {
+              "denominator": "unrewarded",
+              "factor": "condition",
+              "numerator": "rewarded"
+            },
+            "contrast_unit": null,
+            "outcome": "dms_delta"
+          },
+          "executable": true,
+          "intent": "descriptive",
+          "method": "paired_t",
+          "required_assumptions": [
+            "independent_aggregation_units",
+            "estimand_matches_question",
+            "approximately_gaussian_unit_differences",
+            "complete_pairs"
+          ],
+          "schema_version": "1",
+          "seed": null
+        },
+        "design": {
+          "factors": [
+            {
+              "assignment_unit": "event",
+              "column": "condition",
+              "kind": "categorical",
+              "name": "condition"
+            }
+          ],
+          "observation_id": "event_id",
+          "schema_version": "1",
+          "units": [
+            {
+              "column": "animal",
+              "name": "animal",
+              "nested_within": null
+            },
+            {
+              "column": "session",
+              "name": "session",
+              "nested_within": "animal"
+            },
+            {
+              "column": "event_id",
+              "name": "event",
+              "nested_within": "session"
+            }
+          ]
+        },
+        "event_summary": {
+          "baseline": [
+            -5.0,
+            0.0
+          ],
+          "channel": "DMS",
+          "output_column": "dms_delta",
+          "response": [
+            0.0,
+            1.5
+          ],
+          "statistic": "delta",
+          "variable": "dff"
+        },
+        "preprocessing": [
+          {
+            "cutoff_hz": 3.0,
+            "kind": "lowpass_filter",
+            "order": 4,
+            "variables": [
+              "signal",
+              "reference"
+            ]
+          },
+          {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "irls",
+            "tolerance": 1e-08
+          }
+        ],
+        "quality_gate": {
+          "blocking_warnings": [],
+          "scope": "selected_channel"
+        },
+        "schema_version": "2"
+      },
+      "status": "success",
+      "universe_id": "835adbb589fccf89"
+    }
+  ]
+}

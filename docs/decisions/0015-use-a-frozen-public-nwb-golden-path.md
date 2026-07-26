@@ -59,4 +59,6 @@ testing shows the 2.20 GB full run blocks adoption.
 
 ## Evidence added later
 
-None.
+The frozen six-animal execution completed without source or workflow failures. See
+the [v0.1 result](../dandi-000971-tutorial-results-v0.1.md) and committed
+[evidence bundle](../../benchmarks/dandi-000971-tutorial-v0.1/).

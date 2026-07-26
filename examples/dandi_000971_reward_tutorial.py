@@ -9,7 +9,7 @@ from dataclasses import asdict
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 import numpy as np
 
@@ -305,18 +305,26 @@ def _download_verified(asset: dict[str, Any], destination: Path) -> None:
     if destination.exists() and _digest(destination) == expected:
         return
     partial = destination.with_suffix(".nwb.partial")
-    digest = hashlib.sha256()
-    size = 0
+    if partial.exists() and _digest(partial) == expected:
+        partial.replace(destination)
+        return
+    size = partial.stat().st_size if partial.exists() else 0
+    if size > expected[0]:
+        raise ValueError(f"partial asset exceeds frozen size: {asset['asset_id']}")
+    request = Request(
+        resolve_dandi_download_url(asset["asset_id"]),
+        headers={"Range": f"bytes={size}-"} if size else {},
+    )
     with (
-        urlopen(resolve_dandi_download_url(asset["asset_id"]), timeout=120) as source,
-        partial.open("wb") as output,
+        urlopen(request, timeout=120) as source,
+        partial.open("ab" if size else "wb") as output,
     ):
+        if size and getattr(source, "status", None) != 206:
+            raise ValueError("DANDI server did not honor the partial-download range")
         while chunk := source.read(1024 * 1024):
             output.write(chunk)
-            digest.update(chunk)
             size += len(chunk)
-    if (size, digest.hexdigest()) != expected:
-        partial.unlink(missing_ok=True)
+    if _digest(partial) != expected:
         raise ValueError(f"asset integrity mismatch: {asset['asset_id']}")
     partial.replace(destination)
 

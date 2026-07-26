@@ -162,6 +162,7 @@ def test_grouped_report_separates_complete_unit_families(tmp_path) -> None:
     assert "No successful workflows in this evidence lane" in html
     assert "fixture combination is declared scientifically incoherent" in html
     assert "pooled median" not in html.lower()
+    assert all(line == line.rstrip() for line in html.splitlines())
 
 
 def test_grouped_report_rejects_missing_and_overlapping_universes() -> None:

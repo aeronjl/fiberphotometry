@@ -108,6 +108,12 @@ same command against the same immutable source assets and compare those machine-
 readable objects. Execution timestamps may differ; scientific specifications,
 input fingerprints, estimates, and deterministic inferential results should not.
 
+The frozen reference execution is committed under
+[`benchmarks/dandi-000971-tutorial-v0.1`](../../benchmarks/dandi-000971-tutorial-v0.1/),
+and its scientific interpretation is reported in the
+[v0.1 results](../dandi-000971-tutorial-results-v0.1.md). Read those artifacts
+before downloading the cohort if you only want to inspect the product output.
+
 ## What to change for your own study
 
 Replace only the acquisition adapter and event loader at first. Preserve the
