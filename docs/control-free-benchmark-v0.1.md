@@ -55,3 +55,7 @@ with full provenance and signal retention. They are not yet added to the typed
 multiverse pipeline. A v0.2 benchmark should separate baseline error from residual
 high-frequency noise, test subtraction and division as distinct estimands, and
 vary sampling rate before either method is promoted.
+
+The governing judgment and its alternatives are recorded separately in
+[`SDR-0002`](decisions/0002-control-free-methods-remain-experimental.md), so a future
+promotion or reversal cannot silently replace the reasoning available at v0.1.

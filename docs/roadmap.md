@@ -19,7 +19,8 @@
 - [ ] Bleaching models and control-free baseline comparators
   - [x] Experimental double-exponential and AsLS signal-only APIs
   - [x] Frozen v0.1 benchmark with retained partial failure
-  - [ ] v0.2 baseline-fidelity, normalization, and sampling-rate benchmark
+  - [x] v0.2 baseline-fidelity, normalization, and sampling-rate benchmark
+  - [ ] Independent real-data control before typed-pipeline promotion
 - [x] Event-correlated reference diagnostic benchmarked against confounds
 - [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)
 - [x] Initial three-scenario benchmark report with retained failure
@@ -75,5 +76,6 @@
 - [ ] External reproduction by two laboratories
 - [ ] Stable schema and deprecation policy
 - [x] First versioned public benchmark protocol and results
-- [ ] Contributor governance and method review template
+- [x] Scientific decision records and method review guidance
+- [ ] External contributor governance
 - [ ] 1.0 release and archival DOI

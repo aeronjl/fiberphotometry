@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from itertools import pairwise
+from typing import Literal
 
 import numpy as np
 import xarray as xr
@@ -25,13 +26,16 @@ def baseline_dff(
     asls_smoothness: float = 1e8,
     asls_asymmetry: float = 0.01,
     max_iterations: int = 20,
+    normalization: Literal["divide", "subtract"] = "divide",
+    asls_reference_rate_hz: float = 20.0,
 ) -> xr.Dataset:
-    """Estimate a signal-only baseline and calculate dF/F with provenance.
+    """Estimate a signal-only baseline and divide or subtract with provenance.
 
     ``double_exponential`` fits a non-negative offset plus two non-negative
     exponential decays using robust nonlinear least squares. ``asls`` estimates a
     smooth lower envelope with asymmetric least squares. Neither method can identify
-    motion or event-locked artefact from a single fluorescence channel.
+    motion or event-locked artefact from a single fluorescence channel. Division
+    creates ``dff``; subtraction creates ``baseline_subtracted`` in acquired units.
     """
     validate_recording(recording)
     if method not in {"double_exponential", "asls"}:
@@ -48,8 +52,19 @@ def baseline_dff(
         raise ValueError("asls_asymmetry must lie between zero and one")
     if max_iterations < 1:
         raise ValueError("max_iterations must be positive")
+    if normalization not in {"divide", "subtract"}:
+        raise ValueError("normalization must be 'divide' or 'subtract'")
+    if asls_reference_rate_hz <= 0:
+        raise ValueError("asls_reference_rate_hz must be positive")
 
     time = np.asarray(recording.time.values, dtype=float)
+    intervals = np.diff(time)
+    sampling_rate_hz = 1 / float(np.median(intervals))
+    if method == "asls" and float(np.std(intervals) / np.mean(intervals)) > 1e-6:
+        raise ValueError("AsLS baseline fitting requires regularly sampled data")
+    effective_smoothness = (
+        asls_smoothness * (sampling_rate_hz / asls_reference_rate_hz) ** 4
+    )
     source = np.asarray(recording[variable].values, dtype=float)
     baseline = np.full_like(source, np.nan)
     parameters = np.full((source.shape[1], 5), np.nan)
@@ -70,18 +85,22 @@ def baseline_dff(
             else:
                 fitted = _fit_asls(
                     run_values,
-                    smoothness=asls_smoothness,
+                    smoothness=effective_smoothness,
                     asymmetry=asls_asymmetry,
                     max_iterations=max_iterations,
                 )
             baseline[start:stop, channel] = fitted
 
-    corrected = np.full_like(source, np.nan)
-    safe = np.isfinite(baseline) & (np.abs(baseline) > np.finfo(float).eps)
-    corrected[safe] = (source[safe] - baseline[safe]) / baseline[safe]
+    corrected = source - baseline
     output = recording.copy(deep=True)
     output["fitted_baseline"] = (("time", "channel"), baseline)
-    output["dff"] = (("time", "channel"), corrected)
+    if normalization == "divide":
+        divided = np.full_like(source, np.nan)
+        safe = np.isfinite(baseline) & (np.abs(baseline) > np.finfo(float).eps)
+        divided[safe] = corrected[safe] / baseline[safe]
+        output["dff"] = (("time", "channel"), divided)
+    else:
+        output["baseline_subtracted"] = (("time", "channel"), corrected)
     if method == "double_exponential":
         output["baseline_fit_parameter"] = (
             ("channel", "baseline_parameter"),
@@ -100,7 +119,12 @@ def baseline_dff(
         "kind": "baseline_dff",
         "method": method,
         "variable": variable,
-        "formula": "(variable - fitted_baseline) / fitted_baseline",
+        "normalization": normalization,
+        "formula": (
+            "(variable - fitted_baseline) / fitted_baseline"
+            if normalization == "divide"
+            else "variable - fitted_baseline"
+        ),
         "finite_run_policy": "independent",
         "failed_short_runs": failed_runs,
     }
@@ -116,6 +140,9 @@ def baseline_dff(
         operation.update(
             {
                 "smoothness": asls_smoothness,
+                "effective_smoothness": effective_smoothness,
+                "reference_rate_hz": asls_reference_rate_hz,
+                "sampling_rate_hz": sampling_rate_hz,
                 "asymmetry": asls_asymmetry,
                 "max_iterations": max_iterations,
             }

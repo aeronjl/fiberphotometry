@@ -50,6 +50,40 @@ def test_asls_baseline_dff_recovers_smooth_lower_envelope() -> None:
     assert np.max(result.dff.values[:, 0]) > 0.04
 
 
+def test_subtractive_baseline_output_retains_fluorescence_units() -> None:
+    time = np.arange(0, 100, 0.1)
+    baseline = 1 + 0.5 * np.exp(-time / 30)
+    signal = baseline.copy()
+    signal[500:510] += 0.1
+    recording = make_recording(time=time, signal=signal, subject="m", session="s")
+
+    result = baseline_dff(
+        recording, method="double_exponential", normalization="subtract"
+    )
+
+    assert "baseline_subtracted" in result
+    assert "dff" not in result
+    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    assert operation["normalization"] == "subtract"
+    assert "/ fitted_baseline" not in operation["formula"]
+
+
+def test_asls_smoothness_scales_with_sampling_rate() -> None:
+    time = np.arange(0, 30, 0.025)
+    recording = make_recording(
+        time=time,
+        signal=1 + 0.1 * np.sin(time / 10),
+        subject="m",
+        session="s",
+    )
+
+    result = baseline_dff(recording, method="asls")
+
+    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    assert operation["sampling_rate_hz"] == pytest.approx(40)
+    assert operation["effective_smoothness"] == pytest.approx(1.6e9)
+
+
 def test_reference_dff_recovers_known_linear_baseline() -> None:
     time = np.arange(100, dtype=float)
     reference = 1 + 0.01 * time

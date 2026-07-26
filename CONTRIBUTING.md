@@ -17,6 +17,15 @@ A proposed method should include:
 Methods with unresolved evidence can be included behind an experimental label,
 but they should not become defaults.
 
+## Decision transparency
+
+Consequential choices about recommended methods, defaults, estimands, benchmark
+interpretation and deprecation require a scientific decision record. See
+[`docs/decisions/README.md`](docs/decisions/README.md) and start from its template.
+Working proposals belong in `docs/drafts/`; they are not normative. Freeze benchmark
+protocols separately before aggregate execution, then retain complete results even
+when acceptance criteria fail.
+
 ## Local checks
 
 ```bash
@@ -26,4 +35,3 @@ uv run ruff check .
 uv run ruff format --check .
 uv run mypy
 ```
-

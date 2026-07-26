@@ -48,6 +48,9 @@ The scientific scope and competing methods are documented in
 [`docs/scientific-design.md`](docs/scientific-design.md). The existing-tool audit is
 in [`docs/landscape.md`](docs/landscape.md), and the extraction assessment of the
 author's earlier work is in [`docs/extraction-audit.md`](docs/extraction-audit.md).
+Consequential project judgments are indexed in
+[`docs/decisions/README.md`](docs/decisions/README.md), with non-normative work in
+progress kept separately under [`docs/drafts/`](docs/drafts/).
 
 ## Prototype API
 
@@ -95,6 +98,8 @@ Experimental control-free bleaching correction is available through
 `fiberphotometry.baseline_dff`. Its limitations and frozen simulation results are
 reported in [`docs/control-free-benchmark-v0.1.md`](docs/control-free-benchmark-v0.1.md);
 it is not yet part of the recommended typed pipeline.
+The follow-up baseline-fidelity and normalization study is in
+[`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
 
 The experimental inference schema keeps arbitrary observation metadata open
 while explicitly declaring units, nesting, factor assignment, estimands, and

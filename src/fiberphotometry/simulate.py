@@ -118,3 +118,40 @@ def simulate_bleaching_recording(
     recording["ground_truth_baseline"] = (("time", "channel"), baseline[:, None])
     recording["ground_truth_dff"] = (("time", "channel"), ground_truth_dff[:, None])
     return recording, event_times
+
+
+def simulate_normalization_recording(
+    *,
+    mechanism: str,
+    seed: int = 0,
+    duration: float = 300.0,
+    rate: float = 20.0,
+) -> tuple[xr.Dataset, np.ndarray]:
+    """Simulate indicator or autofluorescence bleaching with stable neural dF/F."""
+    if mechanism not in {"indicator_bleaching", "autofluorescence_bleaching"}:
+        raise ValueError(f"unknown bleaching mechanism {mechanism!r}")
+    rng = np.random.default_rng(seed)
+    time = np.arange(0, duration, 1 / rate)
+    event_times = np.arange(15, duration - 5, 15)
+    neural_dff = np.zeros_like(time)
+    for event in event_times:
+        after = time >= event
+        neural_dff[after] += 0.03 * np.exp(-(time[after] - event) / 0.8)
+    decay = 0.8 * np.exp(-time / 70)
+    if mechanism == "indicator_bleaching":
+        baseline = 1.0 + decay
+        signal = baseline * (1 + neural_dff)
+    else:
+        indicator_baseline = 1.0
+        baseline = indicator_baseline + decay
+        signal = baseline + indicator_baseline * neural_dff
+    signal += rng.normal(0, 0.002, len(time))
+    recording = make_recording(
+        time=time,
+        signal=signal,
+        subject="synthetic-subject",
+        session=f"normalization-{mechanism}-{seed}",
+    )
+    recording["ground_truth_baseline"] = (("time", "channel"), baseline[:, None])
+    recording["ground_truth_dff"] = (("time", "channel"), neural_dff[:, None])
+    return recording, event_times
