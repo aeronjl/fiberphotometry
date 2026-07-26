@@ -34,6 +34,10 @@ The imported source fingerprint covers the declared schema and the selected
 stream-channel and epoc arrays. It does not claim to fingerprint unselected
 stores in the block.
 
+Configuration retains the original acquisition StoreID. The adapter handles the
+SDK's conversion of non-identifier StoreIDs into Python field names internally.
+It also retains the SDK's `+inf` sentinel for an open-ended onset epoc.
+
 ## Alternatives considered
 
 - **Infer conventional stores such as 465/405.** Rejected because conventions
@@ -46,8 +50,9 @@ stores in the block.
 ## Consequences
 
 Configuration is more verbose, but it is reviewable and reproducible. Unsupported
-or ambiguous blocks fail before analysis. A real-block integration fixture is
-still required before claiming broad compatibility with TDT acquisitions.
+or ambiguous blocks fail before analysis. The checksum-pinned official TDT demo
+fixture validates one real photometry block without implying compatibility with
+every acquisition configuration.
 
 ## Revisit trigger
 

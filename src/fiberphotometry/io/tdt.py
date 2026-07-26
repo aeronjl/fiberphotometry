@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Callable, Mapping
 from dataclasses import asdict, dataclass
 from hashlib import sha256
@@ -79,6 +80,7 @@ def load_tdt_input(
             for store in (channel.signal_store, channel.reference_store)
             if store is not None
         }
+        | {schema.events.store}
     )
     data = selected_reader(
         str(block), evtype=["streams", "epocs"], store=stores, verbose=0
@@ -92,7 +94,9 @@ def load_tdt_input(
     structure_stores = []
     for channel in schema.channels:
         signal_stream = _field(
-            stream_container, channel.signal_store, "TDT stream stores"
+            stream_container,
+            _sdk_field_name(channel.signal_store),
+            "TDT stream stores",
         )
         signal, signal_fs, signal_start = _stream_channel(
             signal_stream, channel.signal_channel, store=channel.signal_store
@@ -115,7 +119,9 @@ def load_tdt_input(
             if reference_channel is None:
                 raise ValueError("TDT reference channel is missing")
             reference_stream = _field(
-                stream_container, channel.reference_store, "TDT stream stores"
+                stream_container,
+                _sdk_field_name(channel.reference_store),
+                "TDT stream stores",
             )
             reference, reference_fs, reference_start = _stream_channel(
                 reference_stream,
@@ -142,7 +148,9 @@ def load_tdt_input(
     time = start_time + np.arange(sample_count, dtype=float) / sampling_rate
 
     epoc_container = _field(data, "epocs", "TDT block")
-    epoc = _field(epoc_container, schema.events.store, "TDT epoc stores")
+    epoc = _field(
+        epoc_container, _sdk_field_name(schema.events.store), "TDT epoc stores"
+    )
     onsets = _one_dimensional(epoc, "onset", schema.events.store)
     offsets = _one_dimensional(epoc, "offset", schema.events.store)
     values = _one_dimensional(epoc, "data", schema.events.store)
@@ -150,9 +158,11 @@ def load_tdt_input(
         raise ValueError("TDT epoc onset, offset, and data arrays must align")
     if not len(onsets):
         raise ValueError("TDT epoc store contains no events")
-    if not np.all(np.isfinite(onsets)) or not np.all(np.isfinite(offsets)):
-        raise ValueError("TDT epoc onset and offset times must be finite")
-    if np.any(offsets < onsets):
+    if not np.all(np.isfinite(onsets)):
+        raise ValueError("TDT epoc onset times must be finite")
+    if np.any(np.isnan(offsets)) or np.any(np.isneginf(offsets)):
+        raise ValueError("TDT epoc offsets cannot contain NaN or negative infinity")
+    if np.any(offsets[np.isfinite(offsets)] < onsets[np.isfinite(offsets)]):
         raise ValueError("TDT epoc offsets cannot precede onsets")
     labels = _event_labels(values, schema.events.values)
     structure = {
@@ -245,6 +255,14 @@ def _validate_schema(schema: TDTBlockSchema) -> None:
         raise ValueError("TDT epoc values and labels must be unique")
     if any(not label.strip() for label in labels):
         raise ValueError("TDT epoc labels must be non-empty")
+
+
+def _sdk_field_name(store: str) -> str:
+    """Mirror the official SDK's conversion from StoreID to Python field name."""
+    candidate = store
+    if not (candidate[0].isalnum() or candidate[0] == "_"):
+        candidate = f"x{candidate}"
+    return re.sub(r"\W|^(?=\d)", "_", candidate)
 
 
 def _stream_channel(

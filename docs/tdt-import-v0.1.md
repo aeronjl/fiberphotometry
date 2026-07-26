@@ -59,14 +59,17 @@ Import fails when a declared store or channel is absent, reference mappings are
 partial, epoc values are undeclared, or mapped streams differ in sampling rate,
 start time, or sample count. The adapter deliberately does not interpolate or
 resample at import. Time is reconstructed from the SDK's `start_time` and `fs`.
+An SDK `+inf` offset is retained as the open-ended sentinel used by onset epocs;
+onsets must be finite, and finite offsets cannot precede their onsets.
 
 Each imported session records its block name, SDK version, schema, timing, and a
 SHA-256 fingerprint of the declared schema plus the selected stream-channel and
 epoc arrays. Unselected stores are outside that fingerprint's stated scope.
 
-The implementation is covered by SDK-shaped fixtures. It has not yet been
-validated against a bounded, redistributable real TDT block; that remains an
-explicit roadmap gate rather than an implied compatibility claim.
+The implementation is covered by SDK-shaped fixtures and an opt-in,
+checksum-pinned integration against TDT's official `FiPho-180416` block. See the
+[validation record](tdt-official-demo-validation.md). This validates a real SDK
+path, not every rig configuration or scientific store mapping.
 
 ## References
 

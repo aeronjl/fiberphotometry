@@ -43,7 +43,7 @@
 - [ ] TDT and generic tabular adapters
   - [x] Schema-first wide CSV/TSV recording and event adapter
   - [x] Explicit TDT stream/epoc adapter through the same canonical boundary
-  - [ ] Bounded real-block TDT integration and parity fixture
+  - [x] Checksum-pinned official real-block TDT integration fixture
 - [ ] Metadata completeness report
 
 ## Phase 3 — inference

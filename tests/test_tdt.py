@@ -83,7 +83,7 @@ def test_tdt_adapter_maps_sdk_streams_epocs_and_provenance(tmp_path) -> None:
 
     assert calls[0][1] == {
         "evtype": ["streams", "epocs"],
-        "store": ["x405A", "x465A"],
+        "store": ["Trl_", "x405A", "x465A"],
         "verbose": 0,
     }
     assert first.recording.channel.values.tolist() == ["DMS", "NAc"]
