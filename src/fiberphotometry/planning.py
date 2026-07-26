@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
+from hashlib import sha256
+from importlib.metadata import version
 from typing import Literal
 
 from scipy.stats import nct, t
@@ -12,7 +15,9 @@ from fiberphotometry.design import ObservationTable, StudyDesign
 from fiberphotometry.inference import (
     Contrast,
     Estimand,
+    PermutationPlan,
     exact_sign_flip_test,
+    permutation_test,
     recommend_inference,
     unit_t_interval,
 )
@@ -26,6 +31,7 @@ class AnalysisPlan:
     acknowledged_assumptions: tuple[str, ...]
     executable: bool
     intent: Literal["confirmatory", "exploratory", "descriptive"]
+    seed: int | None = None
     schema_version: str = "1"
 
     def to_json(self) -> str:
@@ -50,6 +56,10 @@ class AnalysisResult:
     confidence_interval: tuple[float, float] | None
     p_value: float
     engine: str
+    package_version: str
+    executed_at_utc: str
+    input_fingerprint: str
+    random_seed: int | None
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -72,6 +82,7 @@ def create_analysis_plan(
     randomized: bool | None,
     intent: Literal["confirmatory", "exploratory", "descriptive"],
     acknowledged_assumptions: tuple[str, ...] = (),
+    seed: int | None = None,
 ) -> AnalysisPlan:
     """Create a non-executable plan until every method assumption is acknowledged."""
     recommendation = recommend_inference(table, design, estimand, randomized=randomized)
@@ -84,6 +95,7 @@ def create_analysis_plan(
         acknowledged_assumptions=acknowledged,
         executable=set(required) <= set(acknowledged),
         intent=intent,
+        seed=seed,
     )
 
 
@@ -93,6 +105,12 @@ def execute_analysis_plan(
     """Execute only acknowledged, currently supported scalar plans."""
     if not plan.executable:
         raise ValueError("analysis plan is not executable; acknowledge all assumptions")
+    provenance = (
+        version("fiberphotometry"),
+        datetime.now(UTC).isoformat(),
+        _fingerprint(table, design),
+        plan.seed,
+    )
     if plan.method in {"welch_t", "paired_t"}:
         result = unit_t_interval(
             table,
@@ -101,7 +119,12 @@ def execute_analysis_plan(
             mode="welch" if plan.method == "welch_t" else "paired",
         )
         return AnalysisResult(
-            plan, result.estimate, result.confidence_interval, result.p_value, "scipy"
+            plan,
+            result.estimate,
+            result.confidence_interval,
+            result.p_value,
+            "scipy",
+            *provenance,
         )
     if plan.method == "exact_sign_flip":
         exact_result = exact_sign_flip_test(
@@ -111,7 +134,40 @@ def execute_analysis_plan(
             exchangeability_unit=plan.estimand.aggregation_unit,
         )
         return AnalysisResult(
-            plan, exact_result.estimate, None, exact_result.p_value, "exact"
+            plan,
+            exact_result.estimate,
+            None,
+            exact_result.p_value,
+            "exact",
+            *provenance,
+        )
+    if plan.method in {"monte_carlo_sign_flip", "assignment_unit_permutation"}:
+        if plan.seed is None:
+            raise ValueError("Monte Carlo execution requires a recorded seed")
+        assignment = next(
+            factor.assignment_unit
+            for factor in design.factors
+            if factor.name == plan.estimand.contrast.factor
+        )
+        permutation = permutation_test(
+            table,
+            design,
+            plan.estimand,
+            PermutationPlan(
+                "sign_flip" if plan.method == "monte_carlo_sign_flip" else "shuffle",
+                plan.estimand.aggregation_unit
+                if plan.method == "monte_carlo_sign_flip"
+                else assignment,
+            ),
+            seed=plan.seed,
+        )
+        return AnalysisResult(
+            plan,
+            permutation.estimate,
+            None,
+            permutation.p_value,
+            "numpy-monte-carlo",
+            *provenance,
         )
     raise ValueError(f"execution is not implemented for method {plan.method!r}")
 
@@ -171,3 +227,12 @@ def _assumptions(method: str) -> tuple[str, ...]:
     if method == "paired_t":
         return (*common, "approximately_gaussian_unit_differences", "complete_pairs")
     return (*common, "bootstrap_scheme_matches_sampling_process")
+
+
+def _fingerprint(table: ObservationTable, design: StudyDesign) -> str:
+    payload = json.dumps(
+        {"columns": table.columns, "design": json.loads(design.to_json())},
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return sha256(payload.encode()).hexdigest()

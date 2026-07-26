@@ -1,0 +1,50 @@
+{
+  "analysis": {
+    "confidence_interval": [
+      -0.00002675240747905487,
+      0.00021882462333097763
+    ],
+    "engine": "scipy",
+    "estimate": 0.00009603610792596138,
+    "executed_at_utc": "2026-07-26T16:31:40.440294+00:00",
+    "input_fingerprint": "d3d28469dbf451670d6dc396c70a8217b7ed96990d5213a49f9f24ba526db8bc",
+    "p_value": 0.08855645413528215,
+    "package_version": "0.1.0.dev0",
+    "plan": {
+      "acknowledged_assumptions": [
+        "approximately_gaussian_unit_differences",
+        "complete_pairs",
+        "estimand_matches_question",
+        "independent_aggregation_units"
+      ],
+      "estimand": {
+        "aggregation_unit": "animal",
+        "contrast": {
+          "denominator": "incorrect",
+          "factor": "feedback",
+          "numerator": "correct"
+        },
+        "outcome": "dms_delta"
+      },
+      "executable": true,
+      "intent": "descriptive",
+      "method": "paired_t",
+      "required_assumptions": [
+        "independent_aggregation_units",
+        "estimand_matches_question",
+        "approximately_gaussian_unit_differences",
+        "complete_pairs"
+      ],
+      "schema_version": "1",
+      "seed": null
+    },
+    "random_seed": null
+  },
+  "animals": 4,
+  "feedback_counts": {
+    "correct": 1850,
+    "incorrect": 657
+  },
+  "observations": 2507,
+  "sessions": 4
+}

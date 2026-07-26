@@ -51,6 +51,9 @@
 - [x] Conservative design-aware scalar inference recommender
 - [x] Independent SciPy parity for Welch and paired intervals
 - [x] Versioned analysis plans with explicit assumption acknowledgement
+- [x] Result provenance with package version, timestamp, input fingerprint, and seed
+- [x] Seeded Monte Carlo plan execution
+- [x] First frozen descriptive IBL analysis plan and result
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures

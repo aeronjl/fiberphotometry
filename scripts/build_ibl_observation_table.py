@@ -9,7 +9,17 @@ from pathlib import Path
 import numpy as np
 from one.api import ONE
 
-from fiberphotometry import Factor, ObservationTable, StudyDesign, Unit, validate_design
+from fiberphotometry import (
+    Contrast,
+    Estimand,
+    Factor,
+    ObservationTable,
+    StudyDesign,
+    Unit,
+    create_analysis_plan,
+    execute_analysis_plan,
+    validate_design,
+)
 from fiberphotometry.events import summarize_event_windows
 from fiberphotometry.io.ibl import from_ibl_tables
 
@@ -72,6 +82,21 @@ def main() -> None:
         factors=(Factor("feedback", "feedback", "categorical", "event"),),
     )
     report = validate_design(table, design)
+    estimand = Estimand(
+        "dms_delta", Contrast("feedback", "correct", "incorrect"), "animal"
+    )
+    draft = create_analysis_plan(
+        table, design, estimand, randomized=False, intent="descriptive"
+    )
+    plan = create_analysis_plan(
+        table,
+        design,
+        estimand,
+        randomized=False,
+        intent="descriptive",
+        acknowledged_assumptions=draft.required_assumptions,
+    )
+    result = execute_analysis_plan(plan, table, design)
     print(
         json.dumps(
             {
@@ -84,6 +109,7 @@ def main() -> None:
                 },
                 "design_valid": report.valid,
                 "design": json.loads(design.to_json()),
+                "analysis": json.loads(result.to_json()),
             },
             indent=2,
             sort_keys=True,
