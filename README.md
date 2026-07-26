@@ -101,6 +101,9 @@ it is not yet part of the recommended typed pipeline.
 The first frozen independent-control pilot on published DANDI:000971 data produced
 a mixed, non-promotional result; see
 [`docs/dandi-000971-control-v0.1.md`](docs/dandi-000971-control-v0.1.md).
+The DANDI:000351 raw-to-archived audit retained both a structural alignment failure
+and a failed timestamp-aligned reconstruction; see
+[`docs/dandi-000351-parity-v0.2.md`](docs/dandi-000351-parity-v0.2.md).
 The follow-up baseline-fidelity and normalization study is in
 [`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
 

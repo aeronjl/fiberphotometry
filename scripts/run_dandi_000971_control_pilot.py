@@ -174,12 +174,8 @@ def _metrics(
         "slow_trend_correlation": _correlation(baseline, comparator),
         "relative_rmse": float(np.sqrt(np.mean(np.square(difference))) / denominator),
         "baseline_fractional_change": _fractional_change(baseline[valid], window),
-        "comparator_fractional_change": _fractional_change(
-            comparator[valid], window
-        ),
-        "corrected_reference_correlation": _correlation(
-            corrected, acquired_reference
-        ),
+        "comparator_fractional_change": _fractional_change(comparator[valid], window),
+        "corrected_reference_correlation": _correlation(corrected, acquired_reference),
     }
 
 
@@ -205,10 +201,8 @@ def _summary(cases: list[dict[str, object]]) -> dict[str, object]:
         "case_count": len(cases),
         "median_slow_trend_correlation": median_correlation,
         "median_relative_rmse": median_relative_rmse,
-        "descriptive_correlation_gate": bool(cases)
-        and median_correlation >= 0.90,
-        "descriptive_relative_rmse_gate": bool(cases)
-        and median_relative_rmse <= 0.10,
+        "descriptive_correlation_gate": bool(cases) and median_correlation >= 0.90,
+        "descriptive_relative_rmse_gate": bool(cases) and median_relative_rmse <= 0.10,
     }
 
 

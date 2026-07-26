@@ -89,9 +89,7 @@ def _column_mapping(nwb: Any, table: Any) -> dict[tuple[str, str], int]:
         if kind is not None and location in REGIONS:
             mapping[(location, kind)] = index
     expected = {
-        (region, kind)
-        for region in REGIONS
-        for kind in ("calcium", "isosbestic")
+        (region, kind) for region in REGIONS for kind in ("calcium", "isosbestic")
     }
     if set(mapping) != expected:
         missing = sorted(expected - set(mapping))

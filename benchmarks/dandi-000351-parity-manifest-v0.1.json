@@ -1,0 +1,43 @@
+{
+  "dandiset": "000351",
+  "version": "draft",
+  "draft_observed_at": "2026-07-26",
+  "draft_asset_count": 428,
+  "draft_size_bytes": 98548166664,
+  "draft_active_uploads": 1,
+  "selection": "small untouched asset from four subjects spanning standard, WT-stGtACR, and datHT-stGtACR cohorts; exploratory asset 43a5e55c-cb29-4c74-98b1-524f8a6e91da excluded",
+  "assets": [
+    {
+      "asset_id": "a84b5b56-abcd-4555-8164-9331b0f67cf7",
+      "cohort": "standard-FP",
+      "subject": "HJ-FP-M6",
+      "path": "sub-HJ-FP-M6/sub-HJ-FP-M6_ses-Day26.nwb",
+      "size_bytes": 10337032,
+      "sha256": "1aac4d35f3d43afc3182c176a1478521da0bd95ba96ddc21d4725a8fd010ebed"
+    },
+    {
+      "asset_id": "5cd3169d-61b7-43eb-a881-532fa42c1b35",
+      "cohort": "standard-FP",
+      "subject": "HJ-FP-F1",
+      "path": "sub-HJ-FP-F1/sub-HJ-FP-F1_ses-Day27.nwb",
+      "size_bytes": 10454904,
+      "sha256": "d8515c6669338fdc3e9133f2d395d166512012bd975f3bd3d963f4e0e6b73b47"
+    },
+    {
+      "asset_id": "2ccebdbd-ef7e-4cbe-8fd1-180ae7ff0c49",
+      "cohort": "WT-stGtACR",
+      "subject": "HJ-FP-WT-stGtACR-F3",
+      "path": "sub-HJ-FP-WT-stGtACR-F3/sub-HJ-FP-WT-stGtACR-F3_ses-Day7-Pavlovian.nwb",
+      "size_bytes": 16702872,
+      "sha256": "e375666012ab08cca3bb3de1ca6fb563705e643dfad1c80dd630b1af76f8d45d"
+    },
+    {
+      "asset_id": "8f3d5e29-abfe-4602-b8bd-cdfd472cfe5b",
+      "cohort": "datHT-stGtACR",
+      "subject": "HJ-FP-datHT-stGtACR-M7",
+      "path": "sub-HJ-FP-datHT-stGtACR-M7/sub-HJ-FP-datHT-stGtACR-M7_ses-Day12.nwb",
+      "size_bytes": 15649784,
+      "sha256": "a2cd741c699466d2639c723526283c06d3aabf9077f1138f3e854c5a80b0fc31"
+    }
+  ]
+}

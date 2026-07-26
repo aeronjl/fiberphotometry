@@ -36,7 +36,8 @@
 - [x] DANDI archived dF/F numerical reproduction and provenance discrepancy report
 - [x] DANDI 001084 API metadata contract and bounded-streaming plan
 - [x] Pinned DANDI 000971 raw calcium/isobestic adapter and frozen pilot
-- [ ] DANDI 000351 raw-to-processed parity audit
+- [x] DANDI 000351 raw-to-processed parity audit (retained failure)
+- [ ] Recover DANDI 000351 raw-to-dF/F transformation provenance
 - [x] IBL table adapter with alternating-wavelength interpolation and masks
 - [x] Real IBL session reproduction against archived analysis outputs
 - [ ] TDT and generic tabular adapters

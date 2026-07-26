@@ -1,0 +1,144 @@
+{
+  "alignment": "linear interpolation to archived timestamps; no extrapolation",
+  "cases": [
+    {
+      "asset_id": "a84b5b56-abcd-4555-8164-9331b0f67cf7",
+      "cohort": "standard-FP",
+      "compared_sample_count": 207659,
+      "correlation": 0.7195572569394568,
+      "mean_signed_difference_percentage_points": -0.07490316067753448,
+      "method": "ols",
+      "outside_shared_domain_count": 49,
+      "outside_shared_domain_fraction": 0.00023557239283859927,
+      "p99_absolute_difference_percentage_points": 1.4535923927941226,
+      "rmse_percentage_points": 0.4834866700160391,
+      "subject": "HJ-FP-M6"
+    },
+    {
+      "asset_id": "a84b5b56-abcd-4555-8164-9331b0f67cf7",
+      "cohort": "standard-FP",
+      "compared_sample_count": 207659,
+      "correlation": 0.719532028906628,
+      "mean_signed_difference_percentage_points": -0.02685513602500733,
+      "method": "irls",
+      "outside_shared_domain_count": 49,
+      "outside_shared_domain_fraction": 0.00023557239283859927,
+      "p99_absolute_difference_percentage_points": 1.444764078422318,
+      "rmse_percentage_points": 0.4785484058972672,
+      "subject": "HJ-FP-M6"
+    },
+    {
+      "asset_id": "5cd3169d-61b7-43eb-a881-532fa42c1b35",
+      "cohort": "standard-FP",
+      "compared_sample_count": 211704,
+      "correlation": 0.560007606581871,
+      "mean_signed_difference_percentage_points": -0.10155563771740524,
+      "method": "ols",
+      "outside_shared_domain_count": 53,
+      "outside_shared_domain_fraction": 0.0002499457664846307,
+      "p99_absolute_difference_percentage_points": 2.210026545614433,
+      "rmse_percentage_points": 0.7914155460078488,
+      "subject": "HJ-FP-F1"
+    },
+    {
+      "asset_id": "5cd3169d-61b7-43eb-a881-532fa42c1b35",
+      "cohort": "standard-FP",
+      "compared_sample_count": 211704,
+      "correlation": 0.5609979272354437,
+      "mean_signed_difference_percentage_points": -0.04093599807805399,
+      "method": "irls",
+      "outside_shared_domain_count": 53,
+      "outside_shared_domain_fraction": 0.0002499457664846307,
+      "p99_absolute_difference_percentage_points": 2.214501067975791,
+      "rmse_percentage_points": 0.7851800902607976,
+      "subject": "HJ-FP-F1"
+    },
+    {
+      "asset_id": "2ccebdbd-ef7e-4cbe-8fd1-180ae7ff0c49",
+      "cohort": "WT-stGtACR",
+      "compared_sample_count": 283824,
+      "correlation": 0.12759906222377412,
+      "mean_signed_difference_percentage_points": -0.003268627478636265,
+      "method": "ols",
+      "outside_shared_domain_count": 1398,
+      "outside_shared_domain_fraction": 0.004901445190062478,
+      "p99_absolute_difference_percentage_points": 11.997702785146819,
+      "rmse_percentage_points": 3.2664777952913684,
+      "subject": "HJ-FP-WT-stGtACR-F3"
+    },
+    {
+      "asset_id": "2ccebdbd-ef7e-4cbe-8fd1-180ae7ff0c49",
+      "cohort": "WT-stGtACR",
+      "compared_sample_count": 283824,
+      "correlation": 0.1274622540951209,
+      "mean_signed_difference_percentage_points": 0.3765767461352405,
+      "method": "irls",
+      "outside_shared_domain_count": 1398,
+      "outside_shared_domain_fraction": 0.004901445190062478,
+      "p99_absolute_difference_percentage_points": 11.997967956718766,
+      "rmse_percentage_points": 3.294914693437655,
+      "subject": "HJ-FP-WT-stGtACR-F3"
+    },
+    {
+      "asset_id": "8f3d5e29-abfe-4602-b8bd-cdfd472cfe5b",
+      "cohort": "datHT-stGtACR",
+      "compared_sample_count": 264962,
+      "correlation": 0.6210093427092565,
+      "mean_signed_difference_percentage_points": -0.0018876291013976373,
+      "method": "ols",
+      "outside_shared_domain_count": 1545,
+      "outside_shared_domain_fraction": 0.005797221086125318,
+      "p99_absolute_difference_percentage_points": 2.105581888637425,
+      "rmse_percentage_points": 0.8338681285544006,
+      "subject": "HJ-FP-datHT-stGtACR-M7"
+    },
+    {
+      "asset_id": "8f3d5e29-abfe-4602-b8bd-cdfd472cfe5b",
+      "cohort": "datHT-stGtACR",
+      "compared_sample_count": 264962,
+      "correlation": 0.6192400233645966,
+      "mean_signed_difference_percentage_points": 0.07942110184531456,
+      "method": "irls",
+      "outside_shared_domain_count": 1545,
+      "outside_shared_domain_fraction": 0.005797221086125318,
+      "p99_absolute_difference_percentage_points": 2.0806771175406604,
+      "rmse_percentage_points": 0.8403575777478254,
+      "subject": "HJ-FP-datHT-stGtACR-M7"
+    }
+  ],
+  "dandiset": "000351",
+  "draft_observed_at": "2026-07-26",
+  "engineering_gates": {
+    "all_assets_digest_verified": true,
+    "all_assets_executed": true,
+    "all_cases_have_shared_samples": true
+  },
+  "failures": [],
+  "interpretation": "Parity after explicit recorded-clock interpolation; archived dF/F is not ground truth and DANDI:000351 remains a mutable draft.",
+  "schema_version": "dandi-000351-parity-v0.2",
+  "summary": {
+    "irls": {
+      "case_count": 4,
+      "exact_parity_gate": false,
+      "maximum_session_rmse_percentage_points": 3.294914693437655,
+      "median_session_correlation": 0.5901189753000202,
+      "median_session_rmse_percentage_points": 0.8127688340043115,
+      "minimum_session_correlation": 0.1274622540951209
+    },
+    "ols": {
+      "case_count": 4,
+      "exact_parity_gate": false,
+      "maximum_session_rmse_percentage_points": 3.2664777952913684,
+      "median_session_correlation": 0.5905084746455638,
+      "median_session_rmse_percentage_points": 0.8126418372811247,
+      "minimum_session_correlation": 0.12759906222377412
+    }
+  },
+  "verified_asset_ids": [
+    "a84b5b56-abcd-4555-8164-9331b0f67cf7",
+    "5cd3169d-61b7-43eb-a881-532fa42c1b35",
+    "2ccebdbd-ef7e-4cbe-8fd1-180ae7ff0c49",
+    "8f3d5e29-abfe-4602-b8bd-cdfd472cfe5b"
+  ],
+  "version": "draft"
+}

@@ -1,0 +1,65 @@
+{
+  "cases": [],
+  "dandiset": "000351",
+  "draft_observed_at": "2026-07-26",
+  "engineering_gates": {
+    "all_assets_digest_verified": true,
+    "all_assets_schema_valid": false,
+    "all_candidates_finite_for_finite_raw": false,
+    "all_timestamps_within_1us": false
+  },
+  "failures": [
+    {
+      "asset_id": "a84b5b56-abcd-4555-8164-9331b0f67cf7",
+      "cohort": "standard-FP",
+      "error": "DANDI:000351 raw and archived timestamps differ by more than 1 us",
+      "error_type": "ValueError"
+    },
+    {
+      "asset_id": "5cd3169d-61b7-43eb-a881-532fa42c1b35",
+      "cohort": "standard-FP",
+      "error": "DANDI:000351 raw and archived timestamps differ by more than 1 us",
+      "error_type": "ValueError"
+    },
+    {
+      "asset_id": "2ccebdbd-ef7e-4cbe-8fd1-180ae7ff0c49",
+      "cohort": "WT-stGtACR",
+      "error": "DANDI:000351 raw and archived arrays differ in length",
+      "error_type": "ValueError"
+    },
+    {
+      "asset_id": "8f3d5e29-abfe-4602-b8bd-cdfd472cfe5b",
+      "cohort": "datHT-stGtACR",
+      "error": "DANDI:000351 raw and archived arrays differ in length",
+      "error_type": "ValueError"
+    }
+  ],
+  "interpretation": "Archived percentage dF/F is an interoperability target, not ground truth; DANDI:000351 was an unpublished mutable draft at execution.",
+  "manifest": "benchmarks/dandi-000351-parity-manifest-v0.1.json",
+  "schema_version": "dandi-000351-parity-v0.1",
+  "summary": {
+    "irls": {
+      "case_count": 0,
+      "exact_parity_gate": false,
+      "maximum_session_rmse_percentage_points": null,
+      "median_session_correlation": null,
+      "median_session_rmse_percentage_points": null,
+      "minimum_session_correlation": null
+    },
+    "ols": {
+      "case_count": 0,
+      "exact_parity_gate": false,
+      "maximum_session_rmse_percentage_points": null,
+      "median_session_correlation": null,
+      "median_session_rmse_percentage_points": null,
+      "minimum_session_correlation": null
+    }
+  },
+  "verified_asset_ids": [
+    "a84b5b56-abcd-4555-8164-9331b0f67cf7",
+    "5cd3169d-61b7-43eb-a881-532fa42c1b35",
+    "2ccebdbd-ef7e-4cbe-8fd1-180ae7ff0c49",
+    "8f3d5e29-abfe-4602-b8bd-cdfd472cfe5b"
+  ],
+  "version": "draft"
+}
