@@ -38,6 +38,12 @@ def test_core_nwb_roundtrip(tmp_path) -> None:
     assert np.array_equal(restored.signal.values, recording.signal.values)
     assert np.array_equal(restored.time.values, recording.time.values)
 
+    with pynwb.NWBHDF5IO(path, "r") as io:
+        bounded = from_nwb_series(
+            io.read().acquisition["FiberPhotometrySignal"], max_samples=2
+        )
+    assert bounded.signal.shape == (2, 2)
+
 
 def test_extension_shaped_series_retains_channel_metadata() -> None:
     table = pd.DataFrame(

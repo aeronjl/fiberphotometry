@@ -56,13 +56,17 @@ def from_nwb_series(
     *,
     subject: str | None = None,
     session: str | None = None,
+    max_samples: int | None = None,
 ) -> xr.Dataset:
     """Read a core or ``ndx-fiber-photometry`` response series."""
+    if max_samples is not None and max_samples < 1:
+        raise ValueError("max_samples must be positive")
     metadata = _comment_metadata(getattr(series, "comments", ""))
-    data = np.asarray(series.data[:])
+    sample_slice = slice(None, max_samples)
+    data = np.asarray(series.data[sample_slice])
     if data.ndim == 1:
         data = data[:, np.newaxis]
-    timestamps = _timestamps(series, len(data))
+    timestamps = _timestamps(series, len(data), sample_slice=sample_slice)
     channel_names = metadata.get("channels")
     extension_metadata = _extension_channel_metadata(series)
     if not channel_names and extension_metadata:
@@ -89,9 +93,9 @@ def from_nwb_series(
     return recording
 
 
-def _timestamps(series: Any, length: int) -> np.ndarray:
+def _timestamps(series: Any, length: int, *, sample_slice: slice) -> np.ndarray:
     if getattr(series, "timestamps", None) is not None:
-        return np.asarray(series.timestamps[:], dtype=float)
+        return np.asarray(series.timestamps[sample_slice], dtype=float)
     rate = getattr(series, "rate", None)
     if rate is None or rate <= 0:
         raise ValueError("NWB series needs timestamps or a positive rate")

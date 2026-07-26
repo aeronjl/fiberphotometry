@@ -33,6 +33,10 @@ expected failure case where the reference channel contains biological signal.
 The unedited outcomes—including a failed headline criterion—are reported in
 [`benchmarks/results-v0.1.md`](benchmarks/results-v0.1.md).
 
+A bounded remote integration test streams small slices from the 18.4 GB NWB file
+in DANDI 001084 without downloading the asset. See
+[`docs/dandi-001084-integration.md`](docs/dandi-001084-integration.md).
+
 The scientific scope and competing methods are documented in
 [`docs/scientific-design.md`](docs/scientific-design.md). The existing-tool audit is
 in [`docs/landscape.md`](docs/landscape.md), and the extraction assessment of the

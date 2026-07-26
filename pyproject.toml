@@ -25,6 +25,7 @@ dependencies = [
 nwb = [
     "ndx-fiber-photometry>=0.2.3",
     "pynwb>=3.0",
+    "remfile>=0.1.13",
 ]
 
 [dependency-groups]
@@ -46,6 +47,7 @@ packages = ["src/fiberphotometry"]
 [tool.pytest.ini_options]
 addopts = "--strict-markers --strict-config"
 testpaths = ["tests"]
+markers = ["integration: opt-in tests requiring public network services"]
 
 [tool.ruff]
 line-length = 88

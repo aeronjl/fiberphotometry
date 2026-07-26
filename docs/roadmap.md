@@ -23,7 +23,7 @@
 ## Phase 2 — interoperability
 
 - [x] Core NWB round trip and `ndx-fiber-photometry` response-series read path
-- [ ] DANDI 001084 bounded remote-stream integration fixture
+- [x] DANDI 001084 bounded remote-stream integration fixture
 - [x] DANDI 001084 API metadata contract and bounded-streaming plan
 - [x] IBL table adapter with alternating-wavelength interpolation and masks
 - [ ] TDT and generic tabular adapters

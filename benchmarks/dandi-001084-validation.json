@@ -1,0 +1,31 @@
+{
+  "asset_id": "e766feb5-f2e6-449a-a960-9562bf60d498",
+  "identifier": "62948f98-4f3d-4a29-8862-b84fa994c6ce",
+  "max_samples_per_series": 1000,
+  "response_series": [
+    {
+      "path": "acquisition/FiberPhotometryResponseSeriesGreen",
+      "full_shape": [40000, 103],
+      "samples_read": 1000,
+      "channels_read": 103,
+      "finite_fraction": 1.0
+    },
+    {
+      "path": "processing/ophys/BaselineFiberPhotometryResponseSeriesGreen",
+      "full_shape": [40000, 103],
+      "samples_read": 1000,
+      "channels_read": 103,
+      "finite_fraction": 1.0
+    },
+    {
+      "path": "processing/ophys/DfOverFFiberPhotometryResponseSeriesGreen",
+      "full_shape": [40000, 103],
+      "samples_read": 1000,
+      "channels_read": 103,
+      "finite_fraction": 1.0
+    }
+  ],
+  "schema_warning_count": 6,
+  "time_start_s": 0.7785000000000001,
+  "time_stop_s": 34.08416100000001
+}
