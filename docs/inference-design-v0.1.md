@@ -63,6 +63,11 @@ assignment and aggregation levels but requires `randomized=True`, `False`, or
 `None`; it never infers randomization from balanced-looking data. Exact tests are
 recommended only when both the design claim and supported enumeration permit it.
 
+`create_analysis_plan()` binds the estimand and recommendation into versioned
+JSON. Plans remain `executable=False` until every method-specific assumption is
+acknowledged. `welch_power_sensitivity()` reports a power range over supplied
+effect and animal-SD ranges, avoiding a single unqualified pilot plug-in value.
+
 Missingness requires an estimand decision. The observed-data contrast describes
 available events; a complete-data contrast requires assumptions or a model for
 unobserved outcomes. The library does not relabel observed-data coverage as

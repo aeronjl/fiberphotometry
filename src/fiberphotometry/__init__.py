@@ -23,16 +23,24 @@ from fiberphotometry.inference import (
     unit_t_interval,
 )
 from fiberphotometry.model import make_recording, validate_recording
+from fiberphotometry.planning import (
+    AnalysisPlan,
+    PowerSensitivity,
+    create_analysis_plan,
+    welch_power_sensitivity,
+)
 from fiberphotometry.preprocess import reference_dff
 from fiberphotometry.qc import assess_recording
 
 __all__ = [
+    "AnalysisPlan",
     "Contrast",
     "Estimand",
     "Factor",
     "InferenceRecommendation",
     "ObservationTable",
     "PermutationPlan",
+    "PowerSensitivity",
     "ResamplingPlan",
     "StudyDesign",
     "TIntervalResult",
@@ -40,6 +48,7 @@ __all__ = [
     "align_events",
     "assess_event_confounds",
     "assess_recording",
+    "create_analysis_plan",
     "exact_sign_flip_test",
     "hierarchical_bootstrap",
     "make_recording",
@@ -50,4 +59,5 @@ __all__ = [
     "unit_t_interval",
     "validate_design",
     "validate_recording",
+    "welch_power_sensitivity",
 ]

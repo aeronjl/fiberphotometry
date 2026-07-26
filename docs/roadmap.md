@@ -50,6 +50,8 @@
 - [x] Frozen conditional power grid from 6–30 animals per condition
 - [x] Conservative design-aware scalar inference recommender
 - [x] Independent SciPy parity for Welch and paired intervals
+- [x] Versioned analysis plans with explicit assumption acknowledgement
+- [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [ ] Pointwise versus simultaneous interval reporting
