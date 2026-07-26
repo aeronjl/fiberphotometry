@@ -17,6 +17,9 @@
 - [x] Resampling with explicit interpolation provenance
 - [x] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators
+  - [x] Experimental double-exponential and AsLS signal-only APIs
+  - [x] Frozen v0.1 benchmark with retained partial failure
+  - [ ] v0.2 baseline-fidelity, normalization, and sampling-rate benchmark
 - [x] Event-correlated reference diagnostic benchmarked against confounds
 - [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)
 - [x] Initial three-scenario benchmark report with retained failure

@@ -8,9 +8,122 @@ from itertools import pairwise
 import numpy as np
 import xarray as xr
 from numpy.typing import NDArray
+from scipy.optimize import least_squares
 from scipy.signal import butter, sosfiltfilt
+from scipy.sparse import diags
+from scipy.sparse.linalg import spsolve
 
 from fiberphotometry.model import validate_recording
+
+
+def baseline_dff(
+    recording: xr.Dataset,
+    *,
+    method: str = "double_exponential",
+    variable: str = "signal",
+    min_tau_s: float = 5.0,
+    asls_smoothness: float = 1e8,
+    asls_asymmetry: float = 0.01,
+    max_iterations: int = 20,
+) -> xr.Dataset:
+    """Estimate a signal-only baseline and calculate dF/F with provenance.
+
+    ``double_exponential`` fits a non-negative offset plus two non-negative
+    exponential decays using robust nonlinear least squares. ``asls`` estimates a
+    smooth lower envelope with asymmetric least squares. Neither method can identify
+    motion or event-locked artefact from a single fluorescence channel.
+    """
+    validate_recording(recording)
+    if method not in {"double_exponential", "asls"}:
+        raise ValueError("method must be 'double_exponential' or 'asls'")
+    if variable not in recording:
+        raise ValueError(f"recording does not contain baseline variable {variable!r}")
+    if recording[variable].dims != ("time", "channel"):
+        raise ValueError("baseline variable must have time and channel dimensions")
+    if min_tau_s <= 0:
+        raise ValueError("min_tau_s must be positive")
+    if asls_smoothness <= 0:
+        raise ValueError("asls_smoothness must be positive")
+    if not 0 < asls_asymmetry < 1:
+        raise ValueError("asls_asymmetry must lie between zero and one")
+    if max_iterations < 1:
+        raise ValueError("max_iterations must be positive")
+
+    time = np.asarray(recording.time.values, dtype=float)
+    source = np.asarray(recording[variable].values, dtype=float)
+    baseline = np.full_like(source, np.nan)
+    parameters = np.full((source.shape[1], 5), np.nan)
+    failed_runs = 0
+    for channel in range(source.shape[1]):
+        for start, stop in _finite_runs(np.isfinite(source[:, channel])):
+            run_time = time[start:stop]
+            run_values = source[start:stop, channel]
+            minimum_samples = 6 if method == "double_exponential" else 3
+            if len(run_values) < minimum_samples:
+                failed_runs += 1
+                continue
+            if method == "double_exponential":
+                fitted, fitted_parameters = _fit_double_exponential(
+                    run_time, run_values, min_tau_s
+                )
+                parameters[channel] = fitted_parameters
+            else:
+                fitted = _fit_asls(
+                    run_values,
+                    smoothness=asls_smoothness,
+                    asymmetry=asls_asymmetry,
+                    max_iterations=max_iterations,
+                )
+            baseline[start:stop, channel] = fitted
+
+    corrected = np.full_like(source, np.nan)
+    safe = np.isfinite(baseline) & (np.abs(baseline) > np.finfo(float).eps)
+    corrected[safe] = (source[safe] - baseline[safe]) / baseline[safe]
+    output = recording.copy(deep=True)
+    output["fitted_baseline"] = (("time", "channel"), baseline)
+    output["dff"] = (("time", "channel"), corrected)
+    if method == "double_exponential":
+        output["baseline_fit_parameter"] = (
+            ("channel", "baseline_parameter"),
+            parameters,
+        )
+        output = output.assign_coords(
+            baseline_parameter=[
+                "offset",
+                "amplitude_1",
+                "tau_1",
+                "amplitude_2",
+                "tau_2",
+            ]
+        )
+    operation: dict[str, object] = {
+        "kind": "baseline_dff",
+        "method": method,
+        "variable": variable,
+        "formula": "(variable - fitted_baseline) / fitted_baseline",
+        "finite_run_policy": "independent",
+        "failed_short_runs": failed_runs,
+    }
+    if method == "double_exponential":
+        operation.update(
+            {
+                "loss": "soft_l1",
+                "min_tau_s": min_tau_s,
+                "max_tau_s": "10 * run_duration",
+            }
+        )
+    else:
+        operation.update(
+            {
+                "smoothness": asls_smoothness,
+                "asymmetry": asls_asymmetry,
+                "max_iterations": max_iterations,
+            }
+        )
+    output.attrs["processing_stage"] = "baseline_corrected"
+    output.attrs["fiberphotometry_baseline_dff"] = json.dumps(operation, sort_keys=True)
+    _append_operation(output, operation)
+    return output
 
 
 def resample_recording(
@@ -299,3 +412,73 @@ def _fit_irls(
             break
         beta = updated
     return beta
+
+
+def _fit_double_exponential(
+    time: NDArray[np.float64],
+    values: NDArray[np.float64],
+    min_tau_s: float,
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    relative_time = time - time[0]
+    duration = max(float(relative_time[-1]), min_tau_s)
+    low = max(float(np.percentile(values, 5)), np.finfo(float).eps)
+    high = max(float(np.percentile(values, 95)), low)
+    amplitude = max(high - low, np.finfo(float).eps)
+    initial = np.array(
+        [low, amplitude * 0.6, max(min_tau_s, duration / 10), amplitude * 0.4, duration]
+    )
+    lower = np.array([np.finfo(float).eps, 0.0, min_tau_s, 0.0, min_tau_s])
+    upper = np.array([high * 2, high * 2, duration * 10, high * 2, duration * 10])
+
+    sample_index = np.linspace(0, len(values) - 1, min(len(values), 2000), dtype=int)
+    fit_time = relative_time[sample_index]
+    fit_values = values[sample_index]
+
+    def residual(parameters: NDArray[np.float64]) -> NDArray[np.float64]:
+        offset, amplitude_1, tau_1, amplitude_2, tau_2 = parameters
+        fitted = (
+            offset
+            + amplitude_1 * np.exp(-fit_time / tau_1)
+            + amplitude_2 * np.exp(-fit_time / tau_2)
+        )
+        return np.asarray(fitted - fit_values, dtype=np.float64)
+
+    result = least_squares(
+        residual,
+        np.clip(initial, lower, upper),
+        bounds=(lower, upper),
+        loss="soft_l1",
+        f_scale=max(float(np.std(fit_values)) * 0.1, np.finfo(float).eps),
+        max_nfev=2000,
+    )
+    parameters = np.asarray(result.x, dtype=np.float64)
+    offset, amplitude_1, tau_1, amplitude_2, tau_2 = parameters
+    fitted = (
+        offset
+        + amplitude_1 * np.exp(-relative_time / tau_1)
+        + amplitude_2 * np.exp(-relative_time / tau_2)
+    )
+    return np.asarray(fitted, dtype=np.float64), parameters
+
+
+def _fit_asls(
+    values: NDArray[np.float64],
+    *,
+    smoothness: float,
+    asymmetry: float,
+    max_iterations: int,
+) -> NDArray[np.float64]:
+    count = len(values)
+    difference = diags([1.0, -2.0, 1.0], [0, 1, 2], shape=(count - 2, count))
+    penalty = smoothness * (difference.T @ difference)
+    weights = np.ones(count)
+    baseline = values.copy()
+    for _ in range(max_iterations):
+        weight_matrix = diags(weights, 0, shape=(count, count))
+        system = (weight_matrix + penalty).tocsc()
+        baseline = np.asarray(spsolve(system, weights * values))
+        updated = np.where(values > baseline, asymmetry, 1 - asymmetry)
+        if np.array_equal(updated, weights):
+            break
+        weights = updated
+    return np.asarray(baseline, dtype=np.float64)

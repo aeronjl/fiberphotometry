@@ -58,7 +58,12 @@ from fiberphotometry.planning import (
     execute_analysis_plan,
     welch_power_sensitivity,
 )
-from fiberphotometry.preprocess import lowpass_filter, reference_dff, resample_recording
+from fiberphotometry.preprocess import (
+    baseline_dff,
+    lowpass_filter,
+    reference_dff,
+    resample_recording,
+)
 from fiberphotometry.qc import assess_recording
 
 __all__ = [
@@ -98,6 +103,7 @@ __all__ = [
     "align_events",
     "assess_event_confounds",
     "assess_recording",
+    "baseline_dff",
     "create_analysis_plan",
     "exact_sign_flip_test",
     "execute_analysis_plan",

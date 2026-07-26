@@ -1,0 +1,2018 @@
+{
+  "acceptance": {
+    "double_exponential": false,
+    "large_transients": true,
+    "single_exponential": false,
+    "slow_drift": false
+  },
+  "all_acceptance_met": false,
+  "protocol": "control-free-v0.1",
+  "runs": [
+    {
+      "event_amplitude_relative_bias": 0.0272999399281977,
+      "ground_truth_correlation": 0.8101448448129752,
+      "ground_truth_rmse": 0.0030477702767321827,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": -0.0031798776112120803,
+      "ground_truth_correlation": 0.8080293277090286,
+      "ground_truth_rmse": 0.003095850360987115,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 0.01256679986506941,
+      "ground_truth_correlation": 0.8142406305798017,
+      "ground_truth_rmse": 0.00309098510752318,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.020413863881567414,
+      "ground_truth_correlation": 0.8005186164100302,
+      "ground_truth_rmse": 0.003106659475756623,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": -0.007284160402985174,
+      "ground_truth_correlation": 0.8079144467154504,
+      "ground_truth_rmse": 0.0030871208351508413,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.007443978352209177,
+      "ground_truth_correlation": 0.8048708401055439,
+      "ground_truth_rmse": 0.0031040349971506896,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.018292848671265932,
+      "ground_truth_correlation": 0.8031359710301524,
+      "ground_truth_rmse": 0.0031083545509913717,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 0.006283219346359975,
+      "ground_truth_correlation": 0.8087006273487001,
+      "ground_truth_rmse": 0.003092433540772674,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.014893782850752648,
+      "ground_truth_correlation": 0.7982760020715812,
+      "ground_truth_rmse": 0.003116874719381452,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 0.018450321356936125,
+      "ground_truth_correlation": 0.8031471986779987,
+      "ground_truth_rmse": 0.003127535937280508,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 0.0061518534582514816,
+      "ground_truth_correlation": 0.8058649532590691,
+      "ground_truth_rmse": 0.0031078020636459616,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": -0.0017801219816842204,
+      "ground_truth_correlation": 0.8117332002317535,
+      "ground_truth_rmse": 0.003111343288388966,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 0.0008558189578256027,
+      "ground_truth_correlation": 0.8048480751774542,
+      "ground_truth_rmse": 0.003073535403197155,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.036123924825641744,
+      "ground_truth_correlation": 0.8006978933192539,
+      "ground_truth_rmse": 0.003142656639411697,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 0.001951167860997487,
+      "ground_truth_correlation": 0.8084179503583302,
+      "ground_truth_rmse": 0.003097465508195149,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.027479399672608432,
+      "ground_truth_correlation": 0.8043555992264704,
+      "ground_truth_rmse": 0.003093720565740659,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.013552202432615791,
+      "ground_truth_correlation": 0.8063867877236067,
+      "ground_truth_rmse": 0.0030988529275414066,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.02895392182324068,
+      "ground_truth_correlation": 0.8042224400852497,
+      "ground_truth_rmse": 0.003098596855129707,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 0.008483532554289807,
+      "ground_truth_correlation": 0.8053815249013422,
+      "ground_truth_rmse": 0.003109378840537151,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": -0.0047925293513136485,
+      "ground_truth_correlation": 0.8062488954190526,
+      "ground_truth_rmse": 0.0030993734499971553,
+      "method": "double_exponential",
+      "scenario": "single_exponential",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 0.02354079041834149,
+      "ground_truth_correlation": 0.7727066260398416,
+      "ground_truth_rmse": 0.005879423368652283,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": 0.0034121227704747552,
+      "ground_truth_correlation": 0.7777336214243838,
+      "ground_truth_rmse": 0.005917654080852012,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 0.019094020534787173,
+      "ground_truth_correlation": 0.7793165696751804,
+      "ground_truth_rmse": 0.005902230679634466,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.015681281988234715,
+      "ground_truth_correlation": 0.7663711769209846,
+      "ground_truth_rmse": 0.0059506931408919855,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": -0.0012609609602092905,
+      "ground_truth_correlation": 0.7700024934822882,
+      "ground_truth_rmse": 0.00599179439730318,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.0004900616594462147,
+      "ground_truth_correlation": 0.7724796753932178,
+      "ground_truth_rmse": 0.006035382715570452,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.012616740938907417,
+      "ground_truth_correlation": 0.7693183019731329,
+      "ground_truth_rmse": 0.005917960613195453,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 0.013458502831748053,
+      "ground_truth_correlation": 0.7727350063290781,
+      "ground_truth_rmse": 0.005951981079756249,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.0070540754984840725,
+      "ground_truth_correlation": 0.7647612975184117,
+      "ground_truth_rmse": 0.005946872851587495,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 0.024606827867930697,
+      "ground_truth_correlation": 0.7689296223454839,
+      "ground_truth_rmse": 0.005991366849677251,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 0.004723007684266299,
+      "ground_truth_correlation": 0.7733014812067929,
+      "ground_truth_rmse": 0.005917227536332086,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": 0.0015272604374273453,
+      "ground_truth_correlation": 0.7784545546905873,
+      "ground_truth_rmse": 0.006052055604120111,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 0.0065671102089906955,
+      "ground_truth_correlation": 0.7696848998815934,
+      "ground_truth_rmse": 0.0058812128964521445,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.032605459336350465,
+      "ground_truth_correlation": 0.7647936951648452,
+      "ground_truth_rmse": 0.005995945460387795,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 0.00873308768875971,
+      "ground_truth_correlation": 0.7764697383838826,
+      "ground_truth_rmse": 0.0058553220529964835,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.021391872120654975,
+      "ground_truth_correlation": 0.7698738948758691,
+      "ground_truth_rmse": 0.005876161762823673,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.019510029165150655,
+      "ground_truth_correlation": 0.7732220004314266,
+      "ground_truth_rmse": 0.005808871877646302,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.02287775652493524,
+      "ground_truth_correlation": 0.7671289460561981,
+      "ground_truth_rmse": 0.005950527920295952,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 0.014280095147417366,
+      "ground_truth_correlation": 0.772135681824177,
+      "ground_truth_rmse": 0.005954153437585297,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": 0.002042469068080028,
+      "ground_truth_correlation": 0.7728549403787347,
+      "ground_truth_rmse": 0.005900362960805016,
+      "method": "asls",
+      "scenario": "single_exponential",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 0.027844080501310653,
+      "ground_truth_correlation": 0.8019808778171468,
+      "ground_truth_rmse": 0.0031242595628306123,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": -0.0032135378987512464,
+      "ground_truth_correlation": 0.7991828656755545,
+      "ground_truth_rmse": 0.0031783154180205758,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 0.01257367302150333,
+      "ground_truth_correlation": 0.8056220433066842,
+      "ground_truth_rmse": 0.0031711201091522375,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.021969648479514062,
+      "ground_truth_correlation": 0.7916382127028455,
+      "ground_truth_rmse": 0.003185089834797451,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": -0.007326914525028167,
+      "ground_truth_correlation": 0.7990911242841902,
+      "ground_truth_rmse": 0.003166765344071903,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.007289595933476825,
+      "ground_truth_correlation": 0.796250318605732,
+      "ground_truth_rmse": 0.003181468955408257,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.0186588556788759,
+      "ground_truth_correlation": 0.7942549009657098,
+      "ground_truth_rmse": 0.003187531234924101,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 0.006829333185179621,
+      "ground_truth_correlation": 0.8005090143084078,
+      "ground_truth_rmse": 0.003169925942279986,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.015506655363317405,
+      "ground_truth_correlation": 0.7895911796709884,
+      "ground_truth_rmse": 0.003194672659453029,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 0.01913334158458899,
+      "ground_truth_correlation": 0.7945509512872324,
+      "ground_truth_rmse": 0.003206525483599276,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 0.0069327817432021654,
+      "ground_truth_correlation": 0.7972824622859525,
+      "ground_truth_rmse": 0.003185074780563944,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": -0.0016780744904024878,
+      "ground_truth_correlation": 0.8033299362997364,
+      "ground_truth_rmse": 0.00319161135884824,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 0.0008914427312831069,
+      "ground_truth_correlation": 0.7966815472490135,
+      "ground_truth_rmse": 0.0031491146914024155,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.037524044872435686,
+      "ground_truth_correlation": 0.7924498218169052,
+      "ground_truth_rmse": 0.0032174297425219653,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 0.002078731578512959,
+      "ground_truth_correlation": 0.7997224759902206,
+      "ground_truth_rmse": 0.0031765217105877556,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.028603621249546272,
+      "ground_truth_correlation": 0.7964387758195995,
+      "ground_truth_rmse": 0.0031660935394849862,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.01451268533469748,
+      "ground_truth_correlation": 0.7979436313674219,
+      "ground_truth_rmse": 0.003175436266322898,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.029961526370897714,
+      "ground_truth_correlation": 0.7954414648019863,
+      "ground_truth_rmse": 0.003174740305535005,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 0.008905180689975709,
+      "ground_truth_correlation": 0.7974122072861747,
+      "ground_truth_rmse": 0.0031850402073766346,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": -0.004933957134335182,
+      "ground_truth_correlation": 0.7979730547424062,
+      "ground_truth_rmse": 0.00317522812312384,
+      "method": "double_exponential",
+      "scenario": "double_exponential",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 0.019686204264272332,
+      "ground_truth_correlation": 0.5124371050578012,
+      "ground_truth_rmse": 0.00874504542476637,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": 0.0040877573499095606,
+      "ground_truth_correlation": 0.5201252221210418,
+      "ground_truth_rmse": 0.00871811622918717,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": -0.0015256705076112467,
+      "ground_truth_correlation": 0.5174390240336736,
+      "ground_truth_rmse": 0.00879551381711314,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.012150768978875699,
+      "ground_truth_correlation": 0.5069530261511082,
+      "ground_truth_rmse": 0.008780563224535277,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": 0.0011558714068657429,
+      "ground_truth_correlation": 0.5041803831550625,
+      "ground_truth_rmse": 0.008896964731828008,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": 0.0003216510968955706,
+      "ground_truth_correlation": 0.5142238501459393,
+      "ground_truth_rmse": 0.008834047042095661,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.019029809987388343,
+      "ground_truth_correlation": 0.5060652443815392,
+      "ground_truth_rmse": 0.008803103640626623,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 0.017457940279818885,
+      "ground_truth_correlation": 0.5114840422461577,
+      "ground_truth_rmse": 0.008835120705800933,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.0036280959418625454,
+      "ground_truth_correlation": 0.5052723756846235,
+      "ground_truth_rmse": 0.008758923106912073,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 0.024708176275931405,
+      "ground_truth_correlation": 0.5096760591477801,
+      "ground_truth_rmse": 0.008874584461432054,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 0.008139877842301068,
+      "ground_truth_correlation": 0.5101251770495897,
+      "ground_truth_rmse": 0.008793457887749077,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": -0.008060209745736475,
+      "ground_truth_correlation": 0.520940273082006,
+      "ground_truth_rmse": 0.008896485384970182,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 0.006679069439232787,
+      "ground_truth_correlation": 0.5031193273742662,
+      "ground_truth_rmse": 0.008793444745635952,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.03533618885925923,
+      "ground_truth_correlation": 0.504898068958879,
+      "ground_truth_rmse": 0.0088215360041865,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 0.012340179224434642,
+      "ground_truth_correlation": 0.5138911982134293,
+      "ground_truth_rmse": 0.008714104300851965,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.024728183008009542,
+      "ground_truth_correlation": 0.5051330285065386,
+      "ground_truth_rmse": 0.008759682971560158,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.019224462175270945,
+      "ground_truth_correlation": 0.5088838755589075,
+      "ground_truth_rmse": 0.00870719874704517,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.03307980746163381,
+      "ground_truth_correlation": 0.5054799526449322,
+      "ground_truth_rmse": 0.00882760181407381,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 0.014120885718490435,
+      "ground_truth_correlation": 0.5147250080247433,
+      "ground_truth_rmse": 0.008791021188399402,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": 0.003685107397738262,
+      "ground_truth_correlation": 0.5115763537356772,
+      "ground_truth_rmse": 0.00876406229039074,
+      "method": "asls",
+      "scenario": "double_exponential",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 0.003797042540903428,
+      "ground_truth_correlation": 0.9888667101583349,
+      "ground_truth_rmse": 0.003534132527581797,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": -0.002473916642992833,
+      "ground_truth_correlation": 0.988670247358169,
+      "ground_truth_rmse": 0.003626423791609378,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 0.0003312046677153336,
+      "ground_truth_correlation": 0.9888557653519185,
+      "ground_truth_rmse": 0.0036363877507375095,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.006474994548695127,
+      "ground_truth_correlation": 0.988427913290452,
+      "ground_truth_rmse": 0.0036371946033383583,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": -0.003095004004438461,
+      "ground_truth_correlation": 0.9888582709404963,
+      "ground_truth_rmse": 0.0036268011908687143,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.0031389526400156876,
+      "ground_truth_correlation": 0.9885418332807905,
+      "ground_truth_rmse": 0.003608511627378266,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.005848963821144836,
+      "ground_truth_correlation": 0.9885183381639088,
+      "ground_truth_rmse": 0.0036410475528628056,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": -0.0002487768564525814,
+      "ground_truth_correlation": 0.9886994790749454,
+      "ground_truth_rmse": 0.0036182270701140907,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.004922228668136028,
+      "ground_truth_correlation": 0.9884548125838304,
+      "ground_truth_rmse": 0.0036525830015394483,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 0.002144688974939606,
+      "ground_truth_correlation": 0.9883336642309726,
+      "ground_truth_rmse": 0.0036186395687328042,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": -5.487881610400151e-05,
+      "ground_truth_correlation": 0.9886805389935707,
+      "ground_truth_rmse": 0.0036434218238627137,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": -0.002119998557007601,
+      "ground_truth_correlation": 0.9886595775944961,
+      "ground_truth_rmse": 0.003626591216647107,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": -0.0016239801305587241,
+      "ground_truth_correlation": 0.988892989722053,
+      "ground_truth_rmse": 0.0035962842449653583,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.009380448677405577,
+      "ground_truth_correlation": 0.9885095690654975,
+      "ground_truth_rmse": 0.0036916949914187524,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": -0.0016742072181748521,
+      "ground_truth_correlation": 0.988851613550607,
+      "ground_truth_rmse": 0.0036368490245668335,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.007647415986680094,
+      "ground_truth_correlation": 0.9888753438955539,
+      "ground_truth_rmse": 0.0036355817349481056,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.0010454529862394429,
+      "ground_truth_correlation": 0.9888187880742276,
+      "ground_truth_rmse": 0.0036514060888900306,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.008026705828182544,
+      "ground_truth_correlation": 0.9886299825687888,
+      "ground_truth_rmse": 0.0036230303433091126,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": -6.198500166948616e-05,
+      "ground_truth_correlation": 0.9885491443495814,
+      "ground_truth_rmse": 0.0036270142471549914,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": -0.0027603372983320278,
+      "ground_truth_correlation": 0.9887181175242514,
+      "ground_truth_rmse": 0.003635799767849392,
+      "method": "double_exponential",
+      "scenario": "large_transients",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 0.006270625218071406,
+      "ground_truth_correlation": 0.9538209017795535,
+      "ground_truth_rmse": 0.008163024749403128,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": 0.00393347831839389,
+      "ground_truth_correlation": 0.955535977511673,
+      "ground_truth_rmse": 0.00810072252591342,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 0.0036307605682480565,
+      "ground_truth_correlation": 0.9538215631292192,
+      "ground_truth_rmse": 0.008204046770414569,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.0002710965806632082,
+      "ground_truth_correlation": 0.9542664445978596,
+      "ground_truth_rmse": 0.008162506351240053,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": 0.0032237828327160677,
+      "ground_truth_correlation": 0.9528003055834396,
+      "ground_truth_rmse": 0.008299512983420285,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": 0.0032388984595072942,
+      "ground_truth_correlation": 0.9550227476232902,
+      "ground_truth_rmse": 0.008212119359150801,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.0005878827727338545,
+      "ground_truth_correlation": 0.9535097853470381,
+      "ground_truth_rmse": 0.008212363780936465,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 0.006087205963357608,
+      "ground_truth_correlation": 0.9535348109895797,
+      "ground_truth_rmse": 0.00824906211566443,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": 0.0015727593962120848,
+      "ground_truth_correlation": 0.9545939073439803,
+      "ground_truth_rmse": 0.008165523340778877,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 0.00833351185234619,
+      "ground_truth_correlation": 0.9531862994077748,
+      "ground_truth_rmse": 0.008296058322244415,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 0.004459231408265371,
+      "ground_truth_correlation": 0.9541020579161282,
+      "ground_truth_rmse": 0.008183430467356603,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": 0.0006759254198977789,
+      "ground_truth_correlation": 0.9547946965420409,
+      "ground_truth_rmse": 0.008261306972548219,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 0.004250717218482577,
+      "ground_truth_correlation": 0.9537377731853394,
+      "ground_truth_rmse": 0.008150155177004912,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.003799782789594143,
+      "ground_truth_correlation": 0.9536711740627982,
+      "ground_truth_rmse": 0.0082286161310227,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 0.004949698186602741,
+      "ground_truth_correlation": 0.9544904060820054,
+      "ground_truth_rmse": 0.008121973369723702,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.00153273392928215,
+      "ground_truth_correlation": 0.9539536097206026,
+      "ground_truth_rmse": 0.008145206447512928,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.007292202914335152,
+      "ground_truth_correlation": 0.9538820545722303,
+      "ground_truth_rmse": 0.008144394727315235,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.0026919839798780734,
+      "ground_truth_correlation": 0.9533500848199934,
+      "ground_truth_rmse": 0.008218556780332993,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 0.005818441080829054,
+      "ground_truth_correlation": 0.9545247103887998,
+      "ground_truth_rmse": 0.008152120016636176,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": 0.0034747068661056335,
+      "ground_truth_correlation": 0.9543910580175944,
+      "ground_truth_rmse": 0.008158889627565124,
+      "method": "asls",
+      "scenario": "large_transients",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 0.007542322953245296,
+      "ground_truth_correlation": 0.1853622898283398,
+      "ground_truth_rmse": 0.021252540071430005,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": 0.007236848908492652,
+      "ground_truth_correlation": 0.18594056534814007,
+      "ground_truth_rmse": 0.02114214943968084,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 0.022828623202315393,
+      "ground_truth_correlation": 0.18866894009975455,
+      "ground_truth_rmse": 0.021167841893931765,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.0013809146388258427,
+      "ground_truth_correlation": 0.18220424999052784,
+      "ground_truth_rmse": 0.021139345852374213,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": -0.030932397922225224,
+      "ground_truth_correlation": 0.18374142408319347,
+      "ground_truth_rmse": 0.021182178512686153,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.016719869990395868,
+      "ground_truth_correlation": 0.18416086879629295,
+      "ground_truth_rmse": 0.021235179962440315,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.04279235206720011,
+      "ground_truth_correlation": 0.18301342028053194,
+      "ground_truth_rmse": 0.021181957252679306,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 0.018012577914158386,
+      "ground_truth_correlation": 0.18604407117816127,
+      "ground_truth_rmse": 0.02117059856232725,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.0541089634454057,
+      "ground_truth_correlation": 0.18014246304074913,
+      "ground_truth_rmse": 0.02119597303586508,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": -0.0030930221086617102,
+      "ground_truth_correlation": 0.18513390694581378,
+      "ground_truth_rmse": 0.021207384350746098,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 0.009371165163876888,
+      "ground_truth_correlation": 0.18429640142375142,
+      "ground_truth_rmse": 0.021152055003725717,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": 0.008741635333885318,
+      "ground_truth_correlation": 0.1899926585937061,
+      "ground_truth_rmse": 0.02107129174177973,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": -0.02151057500112457,
+      "ground_truth_correlation": 0.18207884861235651,
+      "ground_truth_rmse": 0.021109147913784022,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.018991795759542986,
+      "ground_truth_correlation": 0.18222847263452568,
+      "ground_truth_rmse": 0.021172749287349312,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": -0.00027799372850472175,
+      "ground_truth_correlation": 0.18442429340419755,
+      "ground_truth_rmse": 0.021212168015960334,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.003382896996496183,
+      "ground_truth_correlation": 0.18224027750563174,
+      "ground_truth_rmse": 0.021108509612657877,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.016080773224945995,
+      "ground_truth_correlation": 0.1835582657650132,
+      "ground_truth_rmse": 0.021130832539606088,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": 0.011946648185417144,
+      "ground_truth_correlation": 0.18287166171384522,
+      "ground_truth_rmse": 0.02120470635377051,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": -0.02601595864719974,
+      "ground_truth_correlation": 0.18555938253858853,
+      "ground_truth_rmse": 0.021123783616997658,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": 0.008022368268131972,
+      "ground_truth_correlation": 0.18431448588805374,
+      "ground_truth_rmse": 0.02113487521294083,
+      "method": "double_exponential",
+      "scenario": "slow_drift",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 0.020135576232726594,
+      "ground_truth_correlation": 0.5864515967959275,
+      "ground_truth_rmse": 0.007904004452561444,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": 0.0046540496413985145,
+      "ground_truth_correlation": 0.5913062826574993,
+      "ground_truth_rmse": 0.00793174054966862,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 0.006799078587361006,
+      "ground_truth_correlation": 0.5903009683743657,
+      "ground_truth_rmse": 0.007981072534380315,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.00899252649049746,
+      "ground_truth_correlation": 0.5782735617788788,
+      "ground_truth_rmse": 0.007986859827143129,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": 0.003278494319171414,
+      "ground_truth_correlation": 0.5767129986006377,
+      "ground_truth_rmse": 0.008076650993817571,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.000531719960078502,
+      "ground_truth_correlation": 0.5897112003934147,
+      "ground_truth_rmse": 0.008030158910088714,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.019839267750499726,
+      "ground_truth_correlation": 0.5810438319077967,
+      "ground_truth_rmse": 0.007984701793739486,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 0.021278335054774566,
+      "ground_truth_correlation": 0.5852897610588419,
+      "ground_truth_rmse": 0.007977451407197534,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.005841958353083662,
+      "ground_truth_correlation": 0.5766671202567135,
+      "ground_truth_rmse": 0.007970724795102217,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 0.0229098340451358,
+      "ground_truth_correlation": 0.5838081467828568,
+      "ground_truth_rmse": 0.008074642899329127,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 0.012063718088064121,
+      "ground_truth_correlation": 0.5840971122513442,
+      "ground_truth_rmse": 0.007959798973182728,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": -0.007257201521934358,
+      "ground_truth_correlation": 0.5950186550277289,
+      "ground_truth_rmse": 0.008084332494345058,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 0.007120145636643251,
+      "ground_truth_correlation": 0.5736328937723426,
+      "ground_truth_rmse": 0.008009749970504194,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.03446018528518291,
+      "ground_truth_correlation": 0.5753266943387407,
+      "ground_truth_rmse": 0.00805168631271707,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 0.012372105616725032,
+      "ground_truth_correlation": 0.5879529853375307,
+      "ground_truth_rmse": 0.007929814269082161,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.016423945371946778,
+      "ground_truth_correlation": 0.578920614496314,
+      "ground_truth_rmse": 0.007920629788179381,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 0.01701677381657606,
+      "ground_truth_correlation": 0.5810964176633053,
+      "ground_truth_rmse": 0.007885153485654309,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.022975116906764945,
+      "ground_truth_correlation": 0.5803193406403938,
+      "ground_truth_rmse": 0.00797375758335742,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 0.013181145630020687,
+      "ground_truth_correlation": 0.5858686411650029,
+      "ground_truth_rmse": 0.007977287711599055,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": 0.0013996847911731966,
+      "ground_truth_correlation": 0.5830289693649475,
+      "ground_truth_rmse": 0.007941112747939006,
+      "method": "asls",
+      "scenario": "slow_drift",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": -0.32406305980063915,
+      "ground_truth_correlation": 0.1436934574211017,
+      "ground_truth_rmse": 0.028468225280429176,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": -0.3223480776114154,
+      "ground_truth_correlation": 0.14347123832916858,
+      "ground_truth_rmse": 0.02847732601361201,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": -0.40598226148425826,
+      "ground_truth_correlation": 0.14571855225290703,
+      "ground_truth_rmse": 0.028461738705645678,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.3991151820606218,
+      "ground_truth_correlation": 0.14084936901048764,
+      "ground_truth_rmse": 0.028457231452509568,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": -0.3631840548919018,
+      "ground_truth_correlation": 0.14216707753868926,
+      "ground_truth_rmse": 0.028457167713942348,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.3118534070801265,
+      "ground_truth_correlation": 0.14286642479709563,
+      "ground_truth_rmse": 0.028477515749222606,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.4048703982467754,
+      "ground_truth_correlation": 0.14172832112323597,
+      "ground_truth_rmse": 0.02848421448524175,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": -0.3662686489900405,
+      "ground_truth_correlation": 0.1438434014291747,
+      "ground_truth_rmse": 0.028472660000417656,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.3352902361975991,
+      "ground_truth_correlation": 0.14012438794915882,
+      "ground_truth_rmse": 0.028415914020214726,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": -0.36997253911343797,
+      "ground_truth_correlation": 0.1435050764474581,
+      "ground_truth_rmse": 0.028489866851360072,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": -0.3530099380224875,
+      "ground_truth_correlation": 0.14240449864237814,
+      "ground_truth_rmse": 0.028466356282253996,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": -0.3441161150522453,
+      "ground_truth_correlation": 0.14639713366965115,
+      "ground_truth_rmse": 0.028442236219143793,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": -0.4325813582808442,
+      "ground_truth_correlation": 0.14106023966084488,
+      "ground_truth_rmse": 0.02836693555709929,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.3795133946159428,
+      "ground_truth_correlation": 0.14143965107984835,
+      "ground_truth_rmse": 0.02838971966246228,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": -0.38772764069016863,
+      "ground_truth_correlation": 0.1430352365268578,
+      "ground_truth_rmse": 0.02841587710877879,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.4194329111318927,
+      "ground_truth_correlation": 0.1411389536252099,
+      "ground_truth_rmse": 0.02842470038334198,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": -0.38323347974103994,
+      "ground_truth_correlation": 0.14199214169373306,
+      "ground_truth_rmse": 0.028442852809301093,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.4051688453388852,
+      "ground_truth_correlation": 0.14194420857231577,
+      "ground_truth_rmse": 0.028409496320150055,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": -0.36693978684707873,
+      "ground_truth_correlation": 0.14366231367223814,
+      "ground_truth_rmse": 0.028466972528742012,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": -0.32184861245984836,
+      "ground_truth_correlation": 0.14241449240717058,
+      "ground_truth_rmse": 0.028431498366788856,
+      "method": "double_exponential",
+      "scenario": "motion_without_control",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": -0.2974781693556997,
+      "ground_truth_correlation": 0.13324544982460534,
+      "ground_truth_rmse": 0.04861884902053165,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": -0.29485738765779684,
+      "ground_truth_correlation": 0.13253445606307987,
+      "ground_truth_rmse": 0.048626233405967126,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": -0.38339501690269234,
+      "ground_truth_correlation": 0.13503919506824177,
+      "ground_truth_rmse": 0.04863771255049889,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": -0.37393811901526014,
+      "ground_truth_correlation": 0.12987011222730743,
+      "ground_truth_rmse": 0.048611114003709044,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": -0.3374688502551267,
+      "ground_truth_correlation": 0.13157676627276887,
+      "ground_truth_rmse": 0.04859828713909179,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": -0.28462530465751434,
+      "ground_truth_correlation": 0.1319798326543649,
+      "ground_truth_rmse": 0.04850103684730638,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": -0.38110841298474407,
+      "ground_truth_correlation": 0.13093285511911906,
+      "ground_truth_rmse": 0.048617664923510565,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": -0.3420145164171956,
+      "ground_truth_correlation": 0.13286408602957903,
+      "ground_truth_rmse": 0.048710196795403685,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": -0.308915650123706,
+      "ground_truth_correlation": 0.12877536695967237,
+      "ground_truth_rmse": 0.048425726513833055,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": -0.34669032934170113,
+      "ground_truth_correlation": 0.13270023714475307,
+      "ground_truth_rmse": 0.04869897059714946,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": -0.3295020734677016,
+      "ground_truth_correlation": 0.13200377951392647,
+      "ground_truth_rmse": 0.04866064819349546,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": -0.31721414359610245,
+      "ground_truth_correlation": 0.13500028607745182,
+      "ground_truth_rmse": 0.04849113848814597,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": -0.41056751593442264,
+      "ground_truth_correlation": 0.1298211368533396,
+      "ground_truth_rmse": 0.048473854357893136,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": -0.3538427151512844,
+      "ground_truth_correlation": 0.1305433103429483,
+      "ground_truth_rmse": 0.04851145126456682,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": -0.3628646250199606,
+      "ground_truth_correlation": 0.1321690021157254,
+      "ground_truth_rmse": 0.04847345816924228,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": -0.3984970384874745,
+      "ground_truth_correlation": 0.1303196457327638,
+      "ground_truth_rmse": 0.04854342326175611,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": -0.36047936317987034,
+      "ground_truth_correlation": 0.1311644284566064,
+      "ground_truth_rmse": 0.04854653783091724,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": -0.38154588884745355,
+      "ground_truth_correlation": 0.13091142045388474,
+      "ground_truth_rmse": 0.04837968176803609,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": -0.34126050731436325,
+      "ground_truth_correlation": 0.1327444853311569,
+      "ground_truth_rmse": 0.048532886302289524,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": -0.2938232494509761,
+      "ground_truth_correlation": 0.1319629786622797,
+      "ground_truth_rmse": 0.0486729657931635,
+      "method": "asls",
+      "scenario": "motion_without_control",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 1.3588396819178548,
+      "ground_truth_correlation": 0.9521962967970237,
+      "ground_truth_rmse": 0.0062195550509511035,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": 1.3277265214516136,
+      "ground_truth_correlation": 0.9513951023334452,
+      "ground_truth_rmse": 0.006215114245890412,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 1.3429228863227891,
+      "ground_truth_correlation": 0.9525346270943215,
+      "ground_truth_rmse": 0.006262170896145443,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": 1.3082259723424936,
+      "ground_truth_correlation": 0.9500371795006394,
+      "ground_truth_rmse": 0.006152162426157488,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": 1.3237950806086458,
+      "ground_truth_correlation": 0.9519073871908696,
+      "ground_truth_rmse": 0.006164971651129981,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": 1.323752654825824,
+      "ground_truth_correlation": 0.9507490640668359,
+      "ground_truth_rmse": 0.006205920015193618,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": 1.3117609147444889,
+      "ground_truth_correlation": 0.9505239161201147,
+      "ground_truth_rmse": 0.006171233059842909,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 1.3382262464251145,
+      "ground_truth_correlation": 0.9516267755205166,
+      "ground_truth_rmse": 0.006222715331053777,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": 1.3153274571711244,
+      "ground_truth_correlation": 0.9499212790778833,
+      "ground_truth_rmse": 0.006122214935114862,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 1.3502033319932105,
+      "ground_truth_correlation": 0.9500073680635721,
+      "ground_truth_rmse": 0.006238948215131938,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 1.3383764585246172,
+      "ground_truth_correlation": 0.951242417850868,
+      "ground_truth_rmse": 0.006184378922672857,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": 1.329281124157351,
+      "ground_truth_correlation": 0.9517240190012002,
+      "ground_truth_rmse": 0.006291506625501854,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 1.3318154627645398,
+      "ground_truth_correlation": 0.9517867657626115,
+      "ground_truth_rmse": 0.0061222676344816875,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": 1.293309405867279,
+      "ground_truth_correlation": 0.9503216501407108,
+      "ground_truth_rmse": 0.006150544631563748,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 1.3325351011031006,
+      "ground_truth_correlation": 0.9519230856777908,
+      "ground_truth_rmse": 0.006182549845665044,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": 1.302098264062902,
+      "ground_truth_correlation": 0.9516932826706394,
+      "ground_truth_rmse": 0.006126327390938318,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 1.3455505070734113,
+      "ground_truth_correlation": 0.9516858008402638,
+      "ground_truth_rmse": 0.006158061069667264,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": 1.3005682657048172,
+      "ground_truth_correlation": 0.9509258838479347,
+      "ground_truth_rmse": 0.00616923778038017,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 1.3397424097751525,
+      "ground_truth_correlation": 0.9508726459501621,
+      "ground_truth_rmse": 0.006221729118478716,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": 1.3260414739176618,
+      "ground_truth_correlation": 0.9514359303907647,
+      "ground_truth_rmse": 0.00618008900367247,
+      "method": "double_exponential",
+      "scenario": "event_locked_artifact",
+      "seed": 19
+    },
+    {
+      "event_amplitude_relative_bias": 1.3568786462892217,
+      "ground_truth_correlation": 0.8227844015587947,
+      "ground_truth_rmse": 0.010931963209744192,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 0
+    },
+    {
+      "event_amplitude_relative_bias": 1.3428661982796701,
+      "ground_truth_correlation": 0.828132879213531,
+      "ground_truth_rmse": 0.010905600374294187,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 1
+    },
+    {
+      "event_amplitude_relative_bias": 1.3390264588891274,
+      "ground_truth_correlation": 0.8238127927485632,
+      "ground_truth_rmse": 0.0110042806400728,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 2
+    },
+    {
+      "event_amplitude_relative_bias": 1.325212109967365,
+      "ground_truth_correlation": 0.8226277624997027,
+      "ground_truth_rmse": 0.010916589167175672,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 3
+    },
+    {
+      "event_amplitude_relative_bias": 1.3387413068018281,
+      "ground_truth_correlation": 0.818998925565125,
+      "ground_truth_rmse": 0.011040511715538381,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 4
+    },
+    {
+      "event_amplitude_relative_bias": 1.3396314257532478,
+      "ground_truth_correlation": 0.8254166917940133,
+      "ground_truth_rmse": 0.011008628146017413,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 5
+    },
+    {
+      "event_amplitude_relative_bias": 1.3204230181968475,
+      "ground_truth_correlation": 0.8209796161157608,
+      "ground_truth_rmse": 0.010949668206817626,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 6
+    },
+    {
+      "event_amplitude_relative_bias": 1.355914654715429,
+      "ground_truth_correlation": 0.8222409335755317,
+      "ground_truth_rmse": 0.011014927699959291,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 7
+    },
+    {
+      "event_amplitude_relative_bias": 1.3341037723652556,
+      "ground_truth_correlation": 0.8232485746067432,
+      "ground_truth_rmse": 0.010895201709886997,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 8
+    },
+    {
+      "event_amplitude_relative_bias": 1.3643993854951473,
+      "ground_truth_correlation": 0.8209948789183875,
+      "ground_truth_rmse": 0.011052513723602624,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 9
+    },
+    {
+      "event_amplitude_relative_bias": 1.3460686594411244,
+      "ground_truth_correlation": 0.8228584825404638,
+      "ground_truth_rmse": 0.010953557953615994,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 10
+    },
+    {
+      "event_amplitude_relative_bias": 1.3295404650650298,
+      "ground_truth_correlation": 0.8267681766354305,
+      "ground_truth_rmse": 0.01108495821605525,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 11
+    },
+    {
+      "event_amplitude_relative_bias": 1.3454709054364393,
+      "ground_truth_correlation": 0.8207230404019066,
+      "ground_truth_rmse": 0.010900691440855476,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 12
+    },
+    {
+      "event_amplitude_relative_bias": 1.3040597760710588,
+      "ground_truth_correlation": 0.8210752128236579,
+      "ground_truth_rmse": 0.010964482823806907,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 13
+    },
+    {
+      "event_amplitude_relative_bias": 1.3511178799552872,
+      "ground_truth_correlation": 0.8248137663880964,
+      "ground_truth_rmse": 0.010891695166705273,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 14
+    },
+    {
+      "event_amplitude_relative_bias": 1.315727627871287,
+      "ground_truth_correlation": 0.8217155749611128,
+      "ground_truth_rmse": 0.01088585109914061,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 15
+    },
+    {
+      "event_amplitude_relative_bias": 1.3592523336921754,
+      "ground_truth_correlation": 0.8223693001878034,
+      "ground_truth_rmse": 0.01087731615654165,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 16
+    },
+    {
+      "event_amplitude_relative_bias": 1.3074342615440753,
+      "ground_truth_correlation": 0.8204534666631034,
+      "ground_truth_rmse": 0.010968215527884434,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 17
+    },
+    {
+      "event_amplitude_relative_bias": 1.3532256961267204,
+      "ground_truth_correlation": 0.8250013486103396,
+      "ground_truth_rmse": 0.010951978778837876,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 18
+    },
+    {
+      "event_amplitude_relative_bias": 1.3429904086772477,
+      "ground_truth_correlation": 0.8240743247118401,
+      "ground_truth_rmse": 0.010924190811187617,
+      "method": "asls",
+      "scenario": "event_locked_artifact",
+      "seed": 19
+    }
+  ],
+  "summaries": {
+    "double_exponential": {
+      "asls": {
+        "event_amplitude_relative_bias_median": 0.0024204894023020025,
+        "ground_truth_correlation_median": 0.5099006180986849,
+        "ground_truth_rmse_median": 0.008793451316692513,
+        "passes": false
+      },
+      "double_exponential": {
+        "event_amplitude_relative_bias_median": -0.0024458061945768672,
+        "ground_truth_correlation_median": 0.7973473347860636,
+        "ground_truth_rmse_median": 0.0031774185643041655,
+        "passes": false
+      }
+    },
+    "event_locked_artifact": {
+      "asls": {
+        "event_amplitude_relative_bias_median": 1.341248812016459,
+        "ground_truth_correlation_median": 0.8227060820292487,
+        "ground_truth_rmse_median": 0.010950823492827751,
+        "passes": false
+      },
+      "double_exponential": {
+        "event_amplitude_relative_bias_median": 1.3285038228044823,
+        "ground_truth_correlation_median": 0.951415516362105,
+        "ground_truth_rmse_median": 0.006181319424668757,
+        "passes": false
+      }
+    },
+    "large_transients": {
+      "asls": {
+        "event_amplitude_relative_bias_median": 0.003552733717176845,
+        "ground_truth_correlation_median": 0.9539178321464165,
+        "ground_truth_rmse_median": 0.00817447690406774,
+        "passes": true
+      },
+      "double_exponential": {
+        "event_amplitude_relative_bias_median": -0.002296957600000217,
+        "ground_truth_correlation_median": 0.9886753931758698,
+        "ground_truth_rmse_median": 0.0036312979910515485,
+        "passes": true
+      }
+    },
+    "motion_without_control": {
+      "asls": {
+        "event_amplitude_relative_bias_median": -0.34435242287944834,
+        "ground_truth_correlation_median": 0.1319714056583223,
+        "ground_truth_rmse_median": 0.04857241248500452,
+        "passes": false
+      },
+      "double_exponential": {
+        "event_amplitude_relative_bias_median": -0.36845616298025835,
+        "ground_truth_correlation_median": 0.14240949552477436,
+        "ground_truth_rmse_median": 0.028457199583225956,
+        "passes": false
+      }
+    },
+    "single_exponential": {
+      "asls": {
+        "event_amplitude_relative_bias_median": 0.0027272959192773914,
+        "ground_truth_correlation_median": 0.7723076786086974,
+        "ground_truth_rmse_median": 0.005932416732391473,
+        "passes": false
+      },
+      "double_exponential": {
+        "event_amplitude_relative_bias_median": -0.0024799997964481506,
+        "ground_truth_correlation_median": 0.8056232390802056,
+        "ground_truth_rmse_median": 0.003099113188769281,
+        "passes": false
+      }
+    },
+    "slow_drift": {
+      "asls": {
+        "event_amplitude_relative_bias_median": 0.003966271980284965,
+        "ground_truth_correlation_median": 0.5834185580739022,
+        "ground_truth_rmse_median": 0.007977369559398295,
+        "passes": false
+      },
+      "double_exponential": {
+        "event_amplitude_relative_bias_median": -0.0008294541836652823,
+        "ground_truth_correlation_median": 0.1842286351100222,
+        "ground_truth_rmse_median": 0.021169220228129507,
+        "passes": false
+      }
+    }
+  }
+}

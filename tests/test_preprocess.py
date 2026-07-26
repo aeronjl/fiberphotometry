@@ -1,13 +1,53 @@
 import json
 
 import numpy as np
+import pytest
 
 from fiberphotometry import (
+    baseline_dff,
     lowpass_filter,
     make_recording,
     reference_dff,
     resample_recording,
 )
+
+
+def test_double_exponential_baseline_dff_recovers_known_trace() -> None:
+    time = np.arange(0, 120, 0.1)
+    baseline = 1.2 + 0.6 * np.exp(-time / 15) + 0.3 * np.exp(-time / 80)
+    neural = 0.04 * np.exp(-((time - 60) ** 2) / 0.5)
+    recording = make_recording(
+        time=time,
+        signal=baseline * (1 + neural),
+        subject="m",
+        session="s",
+    )
+
+    result = baseline_dff(recording, method="double_exponential")
+
+    assert np.sqrt(np.mean((result.dff.values[:, 0] - neural) ** 2)) < 0.005
+    assert "fitted_baseline" not in recording
+    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    assert operation["method"] == "double_exponential"
+    assert operation["finite_run_policy"] == "independent"
+
+
+def test_asls_baseline_dff_recovers_smooth_lower_envelope() -> None:
+    time = np.arange(0, 100, 0.1)
+    baseline = 1.5 - 0.002 * time
+    neural = np.zeros_like(time)
+    neural[400:420] = 0.05
+    recording = make_recording(
+        time=time,
+        signal=baseline * (1 + neural),
+        subject="m",
+        session="s",
+    )
+
+    result = baseline_dff(recording, method="asls", asls_smoothness=1e7)
+
+    assert np.median(result.dff.values[:300, 0]) == pytest.approx(0, abs=0.002)
+    assert np.max(result.dff.values[:, 0]) > 0.04
 
 
 def test_reference_dff_recovers_known_linear_baseline() -> None:

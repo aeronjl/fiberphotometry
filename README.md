@@ -91,6 +91,11 @@ Multiverse results can be displayed with
 rebuilt directly from its JSON artifact with
 `uv run python scripts/plot_ibl_feedback_multiverse.py`.
 
+Experimental control-free bleaching correction is available through
+`fiberphotometry.baseline_dff`. Its limitations and frozen simulation results are
+reported in [`docs/control-free-benchmark-v0.1.md`](docs/control-free-benchmark-v0.1.md);
+it is not yet part of the recommended typed pipeline.
+
 The experimental inference schema keeps arbitrary observation metadata open
 while explicitly declaring units, nesting, factor assignment, estimands, and
 exchangeability. See
