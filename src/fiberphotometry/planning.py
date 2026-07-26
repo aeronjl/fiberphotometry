@@ -60,6 +60,7 @@ class AnalysisResult:
     executed_at_utc: str
     input_fingerprint: str
     random_seed: int | None
+    schema_version: str = "1"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)

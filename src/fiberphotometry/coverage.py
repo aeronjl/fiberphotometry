@@ -53,6 +53,7 @@ class EventCoverageReport:
     gate_dispositions: tuple[tuple[str, int], ...]
     preprocessing_dispositions: tuple[tuple[str, int], ...]
     warnings: tuple[str, ...]
+    schema_version: str = "1"
 
     def to_json(self) -> str:
         """Serialize the complete coverage audit."""

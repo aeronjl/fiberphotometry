@@ -8,6 +8,7 @@ from fiberphotometry import (
     EventSession,
     PeriEventInferenceSpec,
     Preprocessing,
+    artifact_schema,
     make_recording,
 )
 
@@ -62,6 +63,12 @@ def test_scientist_workflow_plans_runs_and_renders_report(tmp_path) -> None:
     assert "animal-1" in html
     assert "IRLS reference correction" in html
     assert "input fingerprint" in html
+    artifact = json.loads(result.to_json())
+    schema = artifact_schema("event_analysis_result")
+    assert set(artifact) == set(schema["properties"])
+    assert artifact["artifact_type"] == "event_analysis_result"
+    assert artifact["schema_version"] == "1"
+    assert artifact["event_coverage"]["schema_version"] == "1"
 
 
 def test_scientist_workflow_supports_signal_only_qc() -> None:

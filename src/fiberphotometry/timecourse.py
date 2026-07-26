@@ -54,6 +54,7 @@ class PeriEventInferenceResult:
     simultaneous_critical_value: float
     method: str
     warnings: tuple[str, ...]
+    schema_version: str = "1"
 
     def to_json(self) -> str:
         """Serialize arrays and inferential semantics without hidden defaults."""

@@ -29,9 +29,16 @@ when acceptance criteria fail.
 ## Local checks
 
 ```bash
-uv sync --all-extras
+uv sync --all-extras --locked
 uv run pytest
 uv run ruff check .
 uv run ruff format --check .
 uv run mypy
+uv build
 ```
+
+`uv sync --all-extras --locked` is the canonical bootstrap command. CI runs the
+same locked environment and non-mutating checks on Python 3.11–3.13. Before
+changing a supported name or serialized field, read
+[`docs/api-stability-v0.1.md`](docs/api-stability-v0.1.md) and
+[`docs/artifact-schemas-v0.1.md`](docs/artifact-schemas-v0.1.md).

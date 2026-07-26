@@ -11,11 +11,13 @@ from datetime import UTC, datetime
 from importlib.metadata import version
 from itertools import pairwise
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
-from one.api import ONE
+
+if TYPE_CHECKING:
+    from one.api import ONE
 
 BASE_URL = "https://openalyx.internationalbrainlab.org"
 DEVELOPMENT_ANIMALS = {"fip_13", "fip_14", "fip_15", "fip_16"}
@@ -31,6 +33,8 @@ MINIMUM_EVENTS_PER_CONDITION = 20
 
 
 def main() -> None:
+    from one.api import ONE
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--cache-dir",

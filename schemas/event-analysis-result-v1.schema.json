@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/event-analysis-result-v1.schema.json",
+  "title": "FiberPhotometry event analysis result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_type",
+    "schema_version",
+    "title",
+    "preprocessing",
+    "spec",
+    "blocked_by",
+    "analysis",
+    "configuration_sha256",
+    "data_summary",
+    "event_coverage",
+    "timecourse",
+    "quality_reports",
+    "processing_lineage"
+  ],
+  "properties": {
+    "artifact_type": {"const": "event_analysis_result"},
+    "schema_version": {"const": "1"},
+    "title": {"type": "string"},
+    "preprocessing": {"type": "object"},
+    "spec": {"type": "object"},
+    "blocked_by": {"type": "array", "items": {"type": "string"}},
+    "analysis": {"type": ["object", "null"]},
+    "configuration_sha256": {"type": ["string", "null"]},
+    "data_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["animals", "sessions", "events"],
+      "properties": {
+        "animals": {"type": "integer", "minimum": 0},
+        "sessions": {"type": "integer", "minimum": 0},
+        "events": {"type": "integer", "minimum": 0}
+      }
+    },
+    "event_coverage": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "total",
+        "conditions",
+        "animals",
+        "sessions",
+        "gate_dispositions",
+        "preprocessing_dispositions",
+        "warnings"
+      ],
+      "properties": {"schema_version": {"const": "1"}}
+    },
+    "timecourse": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": [
+            "schema_version",
+            "relative_time",
+            "estimate",
+            "pointwise_lower",
+            "pointwise_upper",
+            "simultaneous_lower",
+            "simultaneous_upper",
+            "animals_per_time",
+            "animal_count",
+            "method"
+          ],
+          "properties": {"schema_version": {"const": "1"}}
+        }
+      ]
+    },
+    "quality_reports": {"type": "array", "items": {"type": "object"}},
+    "processing_lineage": {"type": "array", "items": {"type": "object"}}
+  }
+}

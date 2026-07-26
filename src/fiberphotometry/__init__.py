@@ -1,5 +1,7 @@
 """Composable fiber photometry analysis."""
 
+from importlib.metadata import PackageNotFoundError, version
+
 from fiberphotometry.compatibility import (
     CompatibilityIssue,
     MultiverseCompatibility,
@@ -134,6 +136,7 @@ from fiberphotometry.project import (
     load_project_config,
 )
 from fiberphotometry.qc import assess_recording, assess_signal_recording
+from fiberphotometry.stability import artifact_schema
 from fiberphotometry.timecourse import (
     PeriEventInferenceResult,
     PeriEventInferenceSpec,
@@ -145,6 +148,11 @@ from fiberphotometry.workflow import (
     EventSession,
     Preprocessing,
 )
+
+try:
+    __version__ = version("fiberphotometry")
+except PackageNotFoundError:  # pragma: no cover - source tree without installation
+    __version__ = "0+unknown"
 
 __all__ = [
     "AnalysisPlan",
@@ -222,7 +230,9 @@ __all__ = [
     "Unit",
     "UniverseCompatibility",
     "UniverseResult",
+    "__version__",
     "align_events",
+    "artifact_schema",
     "assess_event_confounds",
     "assess_event_coverage",
     "assess_metadata_completeness",

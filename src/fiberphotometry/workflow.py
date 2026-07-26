@@ -174,6 +174,8 @@ class EventAnalysisResult:
         animals = set(table.values("animal").tolist())
         sessions = set(table.values("session").tolist())
         payload = {
+            "artifact_type": "event_analysis_result",
+            "schema_version": "1",
             "title": self.title,
             "preprocessing": asdict(self.preprocessing),
             "spec": json.loads(self.spec.to_json()),

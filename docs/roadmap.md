@@ -102,6 +102,10 @@
   - [ ] Run five moderated sessions and publish the de-identified synthesis
 - [ ] External reproduction by two laboratories
 - [ ] Stable schema and deprecation policy
+  - [x] Declare prospective v0.1 supported and experimental API surfaces
+  - [x] Version the primary JSON result and package its normative JSON Schema
+  - [x] Add deprecation, migration, changelog, and security policies
+  - [x] Complete clean-install and canonical-artifact release audit
 - [x] First versioned public benchmark protocol and results
 - [x] Scientific decision records and method review guidance
 - [ ] External contributor governance

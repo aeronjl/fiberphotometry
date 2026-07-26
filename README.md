@@ -11,6 +11,12 @@ recorded, and testable.
 > **Status:** pre-alpha research scaffold. The API and numerical methods are not
 > yet validated for scientific use.
 
+The prospective v0.1 compatibility boundary is documented in the
+[API stability policy](docs/api-stability-v0.1.md) and
+[artifact schema policy](docs/artifact-schemas-v0.1.md). Supported workflow APIs
+are distinguished from experimental method families; importability alone is not a
+stability promise during development.
+
 ## Why this project?
 
 Fiber photometry analysis remains fragmented across approachable but constrained
