@@ -192,6 +192,9 @@ interpolation-distance provenance, is documented in
 Sharp-transient and missing-run limits, including retained reconstruction failures,
 are reported in
 [`docs/transient-gap-results-v0.1.1.md`](docs/transient-gap-results-v0.1.1.md).
+The checksum-frozen held-out IBL regularized-AsLS comparison retained stable event
+summaries but failed its aggregate whole-trace gate; see
+[`docs/ibl-regularized-asls-results-v0.1.md`](docs/ibl-regularized-asls-results-v0.1.md).
 
 The experimental inference schema keeps arbitrary observation metadata open
 while explicitly declaring units, nesting, factor assignment, estimands, and

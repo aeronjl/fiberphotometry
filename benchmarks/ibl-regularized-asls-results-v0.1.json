@@ -1,0 +1,2670 @@
+{
+  "execution_timestamp_utc": "2026-07-26T22:27:03.797770+00:00",
+  "failures": [],
+  "gates": {
+    "checks": {
+      "all_methods_execute_all_sessions": true,
+      "all_sources_and_sessions_completed": true,
+      "complete_event_fraction": true,
+      "finite_baseline_fraction": false,
+      "nearest_source_distance": false,
+      "raw_double_exponential__vs__regularized_double_exponential:event_delta_correlation": true,
+      "raw_double_exponential__vs__regularized_double_exponential:event_delta_normalized_mad": true,
+      "raw_double_exponential__vs__regularized_double_exponential:trace_correlation_case": true,
+      "raw_double_exponential__vs__regularized_double_exponential:trace_correlation_median": true,
+      "raw_double_exponential__vs__regularized_double_exponential:trace_normalized_rmse": false,
+      "raw_published_rolling__vs__regularized_published_rolling:event_delta_correlation": true,
+      "raw_published_rolling__vs__regularized_published_rolling:event_delta_normalized_mad": true,
+      "raw_published_rolling__vs__regularized_published_rolling:trace_correlation_case": true,
+      "raw_published_rolling__vs__regularized_published_rolling:trace_correlation_median": true,
+      "raw_published_rolling__vs__regularized_published_rolling:trace_normalized_rmse": false
+    },
+    "passed": false
+  },
+  "interpretation": "Held-out engineering comparison without population inference; AsLS agreement with another baseline is descriptive, not truth.",
+  "protocol_sha256": "f7a448ee82779d1332dea86f748536bb36a3f1845d116dcd2b7f8f56ea9f7bcf",
+  "result_sha256": "ed8ec3dc071957093790599f95122e5c4b30a738c6334c06d92a232fde6b365a",
+  "schema_version": "ibl-regularized-asls-results-v0.1",
+  "sessions": [
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9954347975397575,
+          "baseline_normalized_rmse": 0.08641497691058243,
+          "event_delta_correlation": 0.9989428078178263,
+          "event_delta_normalized_mad": 0.01156133296163691,
+          "paired_events": 295,
+          "trace_correlation": 0.9965597482643613,
+          "trace_normalized_rmse": 0.08631747477658333
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999215618256,
+          "baseline_normalized_rmse": 0.00034953225434817783,
+          "event_delta_correlation": 0.9989473867883509,
+          "event_delta_normalized_mad": 0.011293599591910375,
+          "paired_events": 295,
+          "trace_correlation": 0.9977619957182486,
+          "trace_normalized_rmse": 0.06977196901487434
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9824622108507658,
+          "baseline_normalized_rmse": 1.6266036922326323,
+          "event_delta_correlation": 0.9999848865390031,
+          "event_delta_normalized_mad": 0.02338785647613938,
+          "paired_events": 295,
+          "trace_correlation": 0.9951267898040159,
+          "trace_normalized_rmse": 0.9364564570118953
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9815617064970782,
+          "baseline_normalized_rmse": 2.0352446803246718,
+          "event_delta_correlation": 0.9999087687122358,
+          "event_delta_normalized_mad": 0.02943122381924123,
+          "paired_events": 295,
+          "trace_correlation": 0.995612906435105,
+          "trace_normalized_rmse": 1.1641649018251543
+        }
+      },
+      "events": 295,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 295,
+          "event_dispositions": {
+            "complete": 295
+          },
+          "finite_baseline_fraction": 0.9956646644032384,
+          "total_events": 295
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 295,
+          "event_dispositions": {
+            "complete": 295
+          },
+          "finite_baseline_fraction": 0.9814240604002944,
+          "total_events": 295
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 295,
+          "event_dispositions": {
+            "complete": 295
+          },
+          "finite_baseline_fraction": 0.9956694334175388,
+          "total_events": 295
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 295,
+          "event_dispositions": {
+            "complete": 295
+          },
+          "finite_baseline_fraction": 0.9956694334175388,
+          "total_events": 295
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 295,
+          "event_dispositions": {
+            "complete": 295
+          },
+          "finite_baseline_fraction": 0.9814288970350814,
+          "total_events": 295
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999952515717297,
+        "nearest_source_distance_max_s": 0.01033035292812201,
+        "nearest_source_distance_p95_s": 0.009039178686748528,
+        "source_interval_cv": 0.00121201828411661,
+        "source_median_interval_s": 0.019999706141561546
+      },
+      "session": "0cf7bf7c-2f3c-4bdc-b48d-955dcecab644",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_29"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9946625308254914,
+          "baseline_normalized_rmse": 0.19487696350148362,
+          "event_delta_correlation": 0.9995611334056678,
+          "event_delta_normalized_mad": 0.014520720709514105,
+          "paired_events": 245,
+          "trace_correlation": 0.9984147578162126,
+          "trace_normalized_rmse": 0.05221185326868033
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999971571046703,
+          "baseline_normalized_rmse": 0.002267050243350524,
+          "event_delta_correlation": 0.9995579732833044,
+          "event_delta_normalized_mad": 0.013904870558255233,
+          "paired_events": 245,
+          "trace_correlation": 0.9991549888937842,
+          "trace_normalized_rmse": 0.038226227257137396
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.6345916083042918,
+          "baseline_normalized_rmse": 5.295903166259162,
+          "event_delta_correlation": 0.9999218085999616,
+          "event_delta_normalized_mad": 0.05169653899771875,
+          "paired_events": 245,
+          "trace_correlation": 0.9834096188666712,
+          "trace_normalized_rmse": 1.0820497766447126
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.920930224110697,
+          "baseline_normalized_rmse": 5.855815823118513,
+          "event_delta_correlation": 0.9999262029628407,
+          "event_delta_normalized_mad": 0.05427398997242293,
+          "paired_events": 245,
+          "trace_correlation": 0.9942809256455907,
+          "trace_normalized_rmse": 1.186701072065301
+        }
+      },
+      "events": 245,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 245,
+          "event_dispositions": {
+            "complete": 245
+          },
+          "finite_baseline_fraction": 0.9989929748828001,
+          "total_events": 245
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 245,
+          "event_dispositions": {
+            "complete": 245
+          },
+          "finite_baseline_fraction": 0.9886855744511197,
+          "total_events": 245
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 245,
+          "event_dispositions": {
+            "complete": 245
+          },
+          "finite_baseline_fraction": 0.9989899441033693,
+          "total_events": 245
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 245,
+          "event_dispositions": {
+            "complete": 245
+          },
+          "finite_baseline_fraction": 0.9989899441033693,
+          "total_events": 245
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 245,
+          "event_dispositions": {
+            "complete": 245
+          },
+          "finite_baseline_fraction": 0.9886866868448808,
+          "total_events": 245
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999965644357257,
+        "nearest_source_distance_max_s": 0.010074782016999961,
+        "nearest_source_distance_p95_s": 0.009478788323940533,
+        "source_interval_cv": 0.0014049731369919927,
+        "source_median_interval_s": 0.02000414538451878
+      },
+      "session": "1120da3b-e8e3-4d22-b1fe-9c49c0d38c42",
+      "session_contrasts": {
+        "raw_double_exponential": 0.10806262060504124,
+        "raw_published_rolling": 0.10848866429964617,
+        "regularized_asls": 0.11843334526661375,
+        "regularized_double_exponential": 0.10904631951376137,
+        "regularized_published_rolling": 0.1093185504918619
+      },
+      "source_integrity": true,
+      "subject": "fip_27"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9887994047923482,
+          "baseline_normalized_rmse": 0.16305819629806653,
+          "event_delta_correlation": 0.9990578918632643,
+          "event_delta_normalized_mad": 0.017321213590517665,
+          "paired_events": 258,
+          "trace_correlation": 0.9974633331739646,
+          "trace_normalized_rmse": 0.07006341778685343
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999998857753115,
+          "baseline_normalized_rmse": 0.0005105053293164125,
+          "event_delta_correlation": 0.9990574546905672,
+          "event_delta_normalized_mad": 0.017226445349896643,
+          "paired_events": 258,
+          "trace_correlation": 0.9989836477446055,
+          "trace_normalized_rmse": 0.043025045681451705
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9295980365887401,
+          "baseline_normalized_rmse": 3.029631614554137,
+          "event_delta_correlation": 0.9999557622376068,
+          "event_delta_normalized_mad": 0.046938997269138756,
+          "paired_events": 258,
+          "trace_correlation": 0.9907842452754817,
+          "trace_normalized_rmse": 1.0757570849494977
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9416078211927991,
+          "baseline_normalized_rmse": 3.3321234363783194,
+          "event_delta_correlation": 0.9998680304544393,
+          "event_delta_normalized_mad": 0.04857372795471198,
+          "paired_events": 258,
+          "trace_correlation": 0.9923726343056516,
+          "trace_normalized_rmse": 1.1700821595808282
+        }
+      },
+      "events": 258,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 258,
+          "event_dispositions": {
+            "complete": 258
+          },
+          "finite_baseline_fraction": 0.9956687522842695,
+          "total_events": 258
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 258,
+          "event_dispositions": {
+            "complete": 258
+          },
+          "finite_baseline_fraction": 0.9793092914536955,
+          "total_events": 258
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 258,
+          "event_dispositions": {
+            "complete": 258
+          },
+          "finite_baseline_fraction": 0.9956580081385074,
+          "total_events": 258
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 258,
+          "event_dispositions": {
+            "complete": 258
+          },
+          "finite_baseline_fraction": 0.9956580081385074,
+          "total_events": 258
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 258,
+          "event_dispositions": {
+            "complete": 258
+          },
+          "finite_baseline_fraction": 0.9792991719668787,
+          "total_events": 258
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999945452363549,
+        "nearest_source_distance_max_s": 0.010417647639314964,
+        "nearest_source_distance_p95_s": 0.009631402382211718,
+        "source_interval_cv": 0.0012651169119407683,
+        "source_median_interval_s": 0.01999970510178173
+      },
+      "session": "1242037a-750c-425a-b3f6-f5a62c246133",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_28"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.99977567971403,
+          "baseline_normalized_rmse": 0.06776928373139429,
+          "event_delta_correlation": 0.9990066910874977,
+          "event_delta_normalized_mad": 0.018485608917839198,
+          "paired_events": 263,
+          "trace_correlation": 0.9819059585010924,
+          "trace_normalized_rmse": 0.28303919431309105
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999997366799072,
+          "baseline_normalized_rmse": 0.0006072350264752286,
+          "event_delta_correlation": 0.999009731815724,
+          "event_delta_normalized_mad": 0.018662661758341064,
+          "paired_events": 263,
+          "trace_correlation": 0.9819248495642189,
+          "trace_normalized_rmse": 0.2828579414412387
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9736535111927264,
+          "baseline_normalized_rmse": 2.051623853690472,
+          "event_delta_correlation": 0.9999951934387519,
+          "event_delta_normalized_mad": 0.0027628638733341506,
+          "paired_events": 263,
+          "trace_correlation": 0.987318821924819,
+          "trace_normalized_rmse": 1.105883530103254
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9858060318404815,
+          "baseline_normalized_rmse": 2.6837694222029755,
+          "event_delta_correlation": 0.9999376886749695,
+          "event_delta_normalized_mad": 0.007822166441586606,
+          "paired_events": 263,
+          "trace_correlation": 0.9754060571597247,
+          "trace_normalized_rmse": 1.4142261372518137
+        }
+      },
+      "events": 263,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 263,
+          "event_dispositions": {
+            "complete": 263
+          },
+          "finite_baseline_fraction": 0.9967762001352265,
+          "total_events": 263
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 263,
+          "event_dispositions": {
+            "complete": 263
+          },
+          "finite_baseline_fraction": 0.9805544286680189,
+          "total_events": 263
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 263,
+          "event_dispositions": {
+            "complete": 263
+          },
+          "finite_baseline_fraction": 0.9967709308048874,
+          "total_events": 263
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 263,
+          "event_dispositions": {
+            "complete": 263
+          },
+          "finite_baseline_fraction": 0.9967709308048874,
+          "total_events": 263
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 263,
+          "event_dispositions": {
+            "complete": 263
+          },
+          "finite_baseline_fraction": 0.98054986126361,
+          "total_events": 263
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999945911738776,
+        "nearest_source_distance_max_s": 0.010418992101222102,
+        "nearest_source_distance_p95_s": 0.009612242023194995,
+        "source_interval_cv": 0.0018453461325675788,
+        "source_median_interval_s": 0.01999970691676367
+      },
+      "session": "174a0663-2e6d-484b-864c-167d18d3f2fb",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_34"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9981101266017356,
+          "baseline_normalized_rmse": 0.06937493354784904,
+          "event_delta_correlation": 0.9994841612413039,
+          "event_delta_normalized_mad": 0.013379725302204036,
+          "paired_events": 262,
+          "trace_correlation": 0.9964370443555005,
+          "trace_normalized_rmse": 0.10108423235615306
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999868840285,
+          "baseline_normalized_rmse": 0.00017903865504416384,
+          "event_delta_correlation": 0.9994868377534534,
+          "event_delta_normalized_mad": 0.01326563140874697,
+          "paired_events": 262,
+          "trace_correlation": 0.9973235508802993,
+          "trace_normalized_rmse": 0.08814808596674467
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9778331170032413,
+          "baseline_normalized_rmse": 1.5633700498204446,
+          "event_delta_correlation": 0.999966716975999,
+          "event_delta_normalized_mad": 0.016615731912076968,
+          "paired_events": 262,
+          "trace_correlation": 0.9778650837454699,
+          "trace_normalized_rmse": 0.9270530356999986
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9945853459773932,
+          "baseline_normalized_rmse": 2.027712487029001,
+          "event_delta_correlation": 0.999929176463045,
+          "event_delta_normalized_mad": 0.023253493950036237,
+          "paired_events": 262,
+          "trace_correlation": 0.9828524454479567,
+          "trace_normalized_rmse": 1.1913049270528164
+        }
+      },
+      "events": 262,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 262,
+          "event_dispositions": {
+            "complete": 262
+          },
+          "finite_baseline_fraction": 0.9967765591821545,
+          "total_events": 262
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 262,
+          "event_dispositions": {
+            "complete": 262
+          },
+          "finite_baseline_fraction": 0.9803638274118343,
+          "total_events": 262
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 262,
+          "event_dispositions": {
+            "complete": 262
+          },
+          "finite_baseline_fraction": 0.996781873409408,
+          "total_events": 262
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 262,
+          "event_dispositions": {
+            "complete": 262
+          },
+          "finite_baseline_fraction": 0.996781873409408,
+          "total_events": 262
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 262,
+          "event_dispositions": {
+            "complete": 262
+          },
+          "finite_baseline_fraction": 0.9803683331965082,
+          "total_events": 262
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999945269955942,
+        "nearest_source_distance_max_s": 0.010493030890756927,
+        "nearest_source_distance_p95_s": 0.009588041689210059,
+        "source_interval_cv": 0.0012044924170258266,
+        "source_median_interval_s": 0.019999703714574935
+      },
+      "session": "1efcd958-1985-448f-9a6b-91c3d43c2a42",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_41"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9994129343832813,
+          "baseline_normalized_rmse": 0.0929895548985113,
+          "event_delta_correlation": 0.999596064236404,
+          "event_delta_normalized_mad": 0.010576851082551474,
+          "paired_events": 257,
+          "trace_correlation": 0.9957653220227379,
+          "trace_normalized_rmse": 0.12746330034082679
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999793127547,
+          "baseline_normalized_rmse": 0.00016946215579544235,
+          "event_delta_correlation": 0.9995962435709073,
+          "event_delta_normalized_mad": 0.010404553252402757,
+          "paired_events": 257,
+          "trace_correlation": 0.9962867664733552,
+          "trace_normalized_rmse": 0.12141911897570642
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.963495315353871,
+          "baseline_normalized_rmse": 2.190721241951957,
+          "event_delta_correlation": 0.999994693371908,
+          "event_delta_normalized_mad": 0.006055886341075724,
+          "paired_events": 257,
+          "trace_correlation": 0.9866247879055384,
+          "trace_normalized_rmse": 0.9174404771003564
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9746843574263881,
+          "baseline_normalized_rmse": 3.0424571272324146,
+          "event_delta_correlation": 0.9999540096103087,
+          "event_delta_normalized_mad": 0.012883637839195524,
+          "paired_events": 257,
+          "trace_correlation": 0.9848355930175418,
+          "trace_normalized_rmse": 1.2581319957532444
+        }
+      },
+      "events": 257,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9967789004212207,
+          "total_events": 257
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9802659471959915,
+          "total_events": 257
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.996773412034182,
+          "total_events": 257
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.996773412034182,
+          "total_events": 257
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9802605497313012,
+          "total_events": 257
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999944938771914,
+        "nearest_source_distance_max_s": 0.010309988708058881,
+        "nearest_source_distance_p95_s": 0.009314733658243313,
+        "source_interval_cv": 0.001136001131894881,
+        "source_median_interval_s": 0.01999970510166804
+      },
+      "session": "25c059c6-4ca3-4bf1-921f-b654a5f85af1",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_39"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9995422023190896,
+          "baseline_normalized_rmse": 0.03616983052634988,
+          "event_delta_correlation": 0.9991172166243603,
+          "event_delta_normalized_mad": 0.020151253070431262,
+          "paired_events": 264,
+          "trace_correlation": 0.9963545102476092,
+          "trace_normalized_rmse": 0.09399973873980609
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999759021736,
+          "baseline_normalized_rmse": 0.00020034675619458038,
+          "event_delta_correlation": 0.9991121030087635,
+          "event_delta_normalized_mad": 0.020707900664897545,
+          "paired_events": 264,
+          "trace_correlation": 0.996730063989488,
+          "trace_normalized_rmse": 0.08786603619867013
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.993298538197414,
+          "baseline_normalized_rmse": 0.9437238687638418,
+          "event_delta_correlation": 0.9999805940095837,
+          "event_delta_normalized_mad": 0.033376353658005155,
+          "paired_events": 264,
+          "trace_correlation": 0.9927760031586387,
+          "trace_normalized_rmse": 1.1335038743926853
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9932044917829955,
+          "baseline_normalized_rmse": 1.0939720714130248,
+          "event_delta_correlation": 0.9999277773515766,
+          "event_delta_normalized_mad": 0.03855111862971707,
+          "paired_events": 264,
+          "trace_correlation": 0.9927704670905205,
+          "trace_normalized_rmse": 1.2844123596084358
+        }
+      },
+      "events": 264,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 264,
+          "event_dispositions": {
+            "complete": 264
+          },
+          "finite_baseline_fraction": 0.9956667510121457,
+          "total_events": 264
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 264,
+          "event_dispositions": {
+            "complete": 264
+          },
+          "finite_baseline_fraction": 0.9798572452766532,
+          "total_events": 264
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 264,
+          "event_dispositions": {
+            "complete": 264
+          },
+          "finite_baseline_fraction": 0.9956717488032728,
+          "total_events": 264
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 264,
+          "event_dispositions": {
+            "complete": 264
+          },
+          "finite_baseline_fraction": 0.9956717488032728,
+          "total_events": 264
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 264,
+          "event_dispositions": {
+            "complete": 264
+          },
+          "finite_baseline_fraction": 0.9798612429092596,
+          "total_events": 264
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.99999472807406,
+        "nearest_source_distance_max_s": 0.010495339691260597,
+        "nearest_source_distance_p95_s": 0.009630986839698609,
+        "source_interval_cv": 0.0012463897789802844,
+        "source_median_interval_s": 0.019999417843109768
+      },
+      "session": "3c69cb31-7ab4-4d03-a96b-815603759213",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_37"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9999821503463265,
+          "baseline_normalized_rmse": 0.008955066758517044,
+          "event_delta_correlation": 0.9991015748793125,
+          "event_delta_normalized_mad": 0.019184659944401536,
+          "paired_events": 255,
+          "trace_correlation": 0.9986249009894737,
+          "trace_normalized_rmse": 0.04796363460229282
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999929034259,
+          "baseline_normalized_rmse": 0.00010654532337444763,
+          "event_delta_correlation": 0.9991026092396713,
+          "event_delta_normalized_mad": 0.018949436234829288,
+          "paired_events": 255,
+          "trace_correlation": 0.9985493989842179,
+          "trace_normalized_rmse": 0.049938329686006214
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9644789914547626,
+          "baseline_normalized_rmse": 1.638579975798499,
+          "event_delta_correlation": 0.9999550821837746,
+          "event_delta_normalized_mad": 0.03784118091835984,
+          "paired_events": 255,
+          "trace_correlation": 0.9840313575080591,
+          "trace_normalized_rmse": 1.191681964356524
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9697841696565463,
+          "baseline_normalized_rmse": 1.731279648265391,
+          "event_delta_correlation": 0.9999076628099706,
+          "event_delta_normalized_mad": 0.040084439153996385,
+          "paired_events": 255,
+          "trace_correlation": 0.9862806940858523,
+          "trace_normalized_rmse": 1.2448798730531794
+        }
+      },
+      "events": 255,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 255,
+          "event_dispositions": {
+            "complete": 255
+          },
+          "finite_baseline_fraction": 0.9901258934644677,
+          "total_events": 255
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 255,
+          "event_dispositions": {
+            "complete": 255
+          },
+          "finite_baseline_fraction": 0.9734051450172281,
+          "total_events": 255
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 255,
+          "event_dispositions": {
+            "complete": 255
+          },
+          "finite_baseline_fraction": 0.9901421251303325,
+          "total_events": 255
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 255,
+          "event_dispositions": {
+            "complete": 255
+          },
+          "finite_baseline_fraction": 0.9901421251303325,
+          "total_events": 255
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 255,
+          "event_dispositions": {
+            "complete": 255
+          },
+          "finite_baseline_fraction": 0.9734205376110265,
+          "total_events": 255
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999944242789198,
+        "nearest_source_distance_max_s": 0.010367997650973848,
+        "nearest_source_distance_p95_s": 0.009700699471613916,
+        "source_interval_cv": 0.0011348757199765255,
+        "source_median_interval_s": 0.019999704032670707
+      },
+      "session": "4027cc92-19e5-4312-98a6-c43db0c23c91",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_40"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9999957730360405,
+          "baseline_normalized_rmse": 0.0034167308280953538,
+          "event_delta_correlation": 0.9992546367185878,
+          "event_delta_normalized_mad": 0.020063377751430328,
+          "paired_events": 254,
+          "trace_correlation": 0.9892024316914555,
+          "trace_normalized_rmse": 0.15466647895554977
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999997049717,
+          "baseline_normalized_rmse": 2.6240840620573424e-05,
+          "event_delta_correlation": 0.9992538535663699,
+          "event_delta_normalized_mad": 0.02011587905987481,
+          "paired_events": 254,
+          "trace_correlation": 0.9891427047927152,
+          "trace_normalized_rmse": 0.15720588060202548
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9996428311982898,
+          "baseline_normalized_rmse": 0.10414306251648685,
+          "event_delta_correlation": 0.9999766039191785,
+          "event_delta_normalized_mad": 0.011442404012411473,
+          "paired_events": 254,
+          "trace_correlation": 0.9449225779989401,
+          "trace_normalized_rmse": 1.2951673672718038
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9997635808325899,
+          "baseline_normalized_rmse": 0.11101273016292579,
+          "event_delta_correlation": 0.9999056209044797,
+          "event_delta_normalized_mad": 0.015363679007208704,
+          "paired_events": 254,
+          "trace_correlation": 0.9667853729746178,
+          "trace_normalized_rmse": 1.3414554426528202
+        }
+      },
+      "events": 254,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 254,
+          "event_dispositions": {
+            "complete": 254
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 254
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 254,
+          "event_dispositions": {
+            "complete": 254
+          },
+          "finite_baseline_fraction": 0.9833157162726008,
+          "total_events": 254
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 254,
+          "event_dispositions": {
+            "complete": 254
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 254
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 254,
+          "event_dispositions": {
+            "complete": 254
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 254
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 254,
+          "event_dispositions": {
+            "complete": 254
+          },
+          "finite_baseline_fraction": 0.9833161803565965,
+          "total_events": 254
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999944368724096,
+        "nearest_source_distance_max_s": 0.010484544670362084,
+        "nearest_source_distance_p95_s": 0.009578982723314765,
+        "source_interval_cv": 0.0011955373846817491,
+        "source_median_interval_s": 0.01999970405449858
+      },
+      "session": "42d1a5bf-1de4-41c4-bbd2-1a1345ba81ad",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_42"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9973229237892817,
+          "baseline_normalized_rmse": 0.07448210566027033,
+          "event_delta_correlation": 0.9991828617426933,
+          "event_delta_normalized_mad": 0.01738689227399815,
+          "paired_events": 251,
+          "trace_correlation": 0.9945691885566441,
+          "trace_normalized_rmse": 0.17544219951546505
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999996685676045,
+          "baseline_normalized_rmse": 0.000670613998115088,
+          "event_delta_correlation": 0.9991840103774667,
+          "event_delta_normalized_mad": 0.017863889937759184,
+          "paired_events": 251,
+          "trace_correlation": 0.994295982727117,
+          "trace_normalized_rmse": 0.1748501426550086
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9250005511146674,
+          "baseline_normalized_rmse": 3.3270904993607044,
+          "event_delta_correlation": 0.9999980306826358,
+          "event_delta_normalized_mad": 0.0034482244027207853,
+          "paired_events": 251,
+          "trace_correlation": 0.9948891658713639,
+          "trace_normalized_rmse": 0.851281285857525
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9431664174461628,
+          "baseline_normalized_rmse": 4.959806774876139,
+          "event_delta_correlation": 0.9998983415903636,
+          "event_delta_normalized_mad": 0.011961446321666411,
+          "paired_events": 251,
+          "trace_correlation": 0.9862310163760337,
+          "trace_normalized_rmse": 1.2578686274731852
+        }
+      },
+      "events": 251,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 251,
+          "event_dispositions": {
+            "complete": 251
+          },
+          "finite_baseline_fraction": 0.9967759328949343,
+          "total_events": 251
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 251,
+          "event_dispositions": {
+            "complete": 251
+          },
+          "finite_baseline_fraction": 0.9801052824671895,
+          "total_events": 251
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 251,
+          "event_dispositions": {
+            "complete": 251
+          },
+          "finite_baseline_fraction": 0.9967704818707859,
+          "total_events": 251
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 251,
+          "event_dispositions": {
+            "complete": 251
+          },
+          "finite_baseline_fraction": 0.9967704818707859,
+          "total_events": 251
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 251,
+          "event_dispositions": {
+            "complete": 251
+          },
+          "finite_baseline_fraction": 0.9801003874310045,
+          "total_events": 251
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999944414490031,
+        "nearest_source_distance_max_s": 0.010419508896461593,
+        "nearest_source_distance_p95_s": 0.009557608235400038,
+        "source_interval_cv": 0.0011930828376460047,
+        "source_median_interval_s": 0.019999351806745835
+      },
+      "session": "447a1fcb-c057-4f08-8f83-37ac7871acd0",
+      "session_contrasts": {
+        "raw_double_exponential": 0.008712114765258717,
+        "raw_published_rolling": 0.008712441069406359,
+        "regularized_asls": 0.00879268273706724,
+        "regularized_double_exponential": 0.008752097014224448,
+        "regularized_published_rolling": 0.008752801051826424
+      },
+      "source_integrity": true,
+      "subject": "fip_36"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9984220830548469,
+          "baseline_normalized_rmse": 0.08256409032705593,
+          "event_delta_correlation": 0.9993872820033692,
+          "event_delta_normalized_mad": 0.011389636196876171,
+          "paired_events": 316,
+          "trace_correlation": 0.995257336679795,
+          "trace_normalized_rmse": 0.14061903594711708
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999997573826441,
+          "baseline_normalized_rmse": 0.0007784470757585836,
+          "event_delta_correlation": 0.9993905830359527,
+          "event_delta_normalized_mad": 0.010911732337373338,
+          "paired_events": 316,
+          "trace_correlation": 0.9976191858964264,
+          "trace_normalized_rmse": 0.0976050271030196
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.998183383918069,
+          "baseline_normalized_rmse": 0.878168076346313,
+          "event_delta_correlation": 0.9999706453441084,
+          "event_delta_normalized_mad": 0.015099333687166346,
+          "paired_events": 316,
+          "trace_correlation": 0.9843225257750424,
+          "trace_normalized_rmse": 0.9464768706791956
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9974071723402096,
+          "baseline_normalized_rmse": 1.1932705096242875,
+          "event_delta_correlation": 0.9999246757396385,
+          "event_delta_normalized_mad": 0.0225766738983422,
+          "paired_events": 316,
+          "trace_correlation": 0.9771587284263579,
+          "trace_normalized_rmse": 1.2711851866668362
+        }
+      },
+      "events": 316,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 316,
+          "event_dispositions": {
+            "complete": 316
+          },
+          "finite_baseline_fraction": 0.9978831329632144,
+          "total_events": 316
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 316,
+          "event_dispositions": {
+            "complete": 316
+          },
+          "finite_baseline_fraction": 0.9845739416774285,
+          "total_events": 316
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 316,
+          "event_dispositions": {
+            "complete": 316
+          },
+          "finite_baseline_fraction": 0.9978836870873855,
+          "total_events": 316
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 316,
+          "event_dispositions": {
+            "complete": 316
+          },
+          "finite_baseline_fraction": 0.9978836870873855,
+          "total_events": 316
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 316,
+          "event_dispositions": {
+            "complete": 316
+          },
+          "finite_baseline_fraction": 0.9845779796975935,
+          "total_events": 316
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999955632852985,
+        "nearest_source_distance_max_s": 0.010469589739841467,
+        "nearest_source_distance_p95_s": 0.009521247763439078,
+        "source_interval_cv": 0.003317290777511819,
+        "source_median_interval_s": 0.01999388468266261
+      },
+      "session": "4774f467-2989-4e70-bba1-8568f7a954ce",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_31"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9999758066005467,
+          "baseline_normalized_rmse": 1351.4026522303395,
+          "event_delta_correlation": 0.9986936925234848,
+          "event_delta_normalized_mad": 0.01569535466652881,
+          "paired_events": 103,
+          "trace_correlation": 0.9993562640144676,
+          "trace_normalized_rmse": 0.05096779724337739
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999895981169189,
+          "baseline_normalized_rmse": 0.004847860529310469,
+          "event_delta_correlation": 0.9987175884359156,
+          "event_delta_normalized_mad": 0.017185296256571527,
+          "paired_events": 103,
+          "trace_correlation": 0.999329891852389,
+          "trace_normalized_rmse": 0.035906837541737756
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.006610018213114692,
+          "baseline_normalized_rmse": 10.573283796324846,
+          "event_delta_correlation": 0.9999755472305762,
+          "event_delta_normalized_mad": 0.05228101226808611,
+          "paired_events": 103,
+          "trace_correlation": 0.9935094650413967,
+          "trace_normalized_rmse": 1.0496047889424192
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.805138931298365,
+          "baseline_normalized_rmse": 12.197532175368416,
+          "event_delta_correlation": 0.9999336217039619,
+          "event_delta_normalized_mad": 0.059502130430237256,
+          "paired_events": 103,
+          "trace_correlation": 0.9921069119439822,
+          "trace_normalized_rmse": 1.1775952955531575
+        }
+      },
+      "events": 103,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 103,
+          "event_dispositions": {
+            "complete": 103
+          },
+          "finite_baseline_fraction": 0.9967027896874965,
+          "total_events": 103
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 103,
+          "event_dispositions": {
+            "complete": 103
+          },
+          "finite_baseline_fraction": 0.9798285000506397,
+          "total_events": 103
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 103,
+          "event_dispositions": {
+            "complete": 103
+          },
+          "finite_baseline_fraction": 0.996723729319245,
+          "total_events": 103
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 103,
+          "event_dispositions": {
+            "complete": 103
+          },
+          "finite_baseline_fraction": 0.996723729319245,
+          "total_events": 103
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 103,
+          "event_dispositions": {
+            "complete": 103
+          },
+          "finite_baseline_fraction": 0.9798413654505436,
+          "total_events": 103
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999943706689334,
+        "nearest_source_distance_max_s": 0.0102428604054694,
+        "nearest_source_distance_p95_s": 0.009511094036042778,
+        "source_interval_cv": 0.002206777745256166,
+        "source_median_interval_s": 0.02003506588698656
+      },
+      "session": "64143389-16b4-4160-bdd6-065392df6fed",
+      "session_contrasts": {
+        "raw_double_exponential": 0.08808021538589197,
+        "raw_published_rolling": 0.08688523146153396,
+        "regularized_asls": 0.09469894749486359,
+        "regularized_double_exponential": 0.08724057939440472,
+        "regularized_published_rolling": 0.08625548533685448
+      },
+      "source_integrity": true,
+      "subject": "fip_27"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9997613444744379,
+          "baseline_normalized_rmse": 0.02148275025980769,
+          "event_delta_correlation": 0.9994411407175726,
+          "event_delta_normalized_mad": 0.01582652018095247,
+          "paired_events": 236,
+          "trace_correlation": 0.9959156743642341,
+          "trace_normalized_rmse": 0.1076780713679267
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999218714043,
+          "baseline_normalized_rmse": 0.00034566790316981365,
+          "event_delta_correlation": 0.9994237711379055,
+          "event_delta_normalized_mad": 0.01619583125624905,
+          "paired_events": 236,
+          "trace_correlation": 0.9972977921744534,
+          "trace_normalized_rmse": 0.08725997719969522
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.998678659975341,
+          "baseline_normalized_rmse": 0.36520863534854725,
+          "event_delta_correlation": 0.9999803256126067,
+          "event_delta_normalized_mad": 0.03752220291281312,
+          "paired_events": 236,
+          "trace_correlation": 0.9929946726004213,
+          "trace_normalized_rmse": 1.0001800263241494
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9988859221275038,
+          "baseline_normalized_rmse": 0.4618216451041947,
+          "event_delta_correlation": 0.9999207290916735,
+          "event_delta_normalized_mad": 0.047356408398360465,
+          "paired_events": 236,
+          "trace_correlation": 0.9939565372362101,
+          "trace_normalized_rmse": 1.2441148290189719
+        }
+      },
+      "events": 236,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 236,
+          "event_dispositions": {
+            "complete": 236
+          },
+          "finite_baseline_fraction": 0.9945603768284008,
+          "total_events": 236
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 236,
+          "event_dispositions": {
+            "complete": 236
+          },
+          "finite_baseline_fraction": 0.976633530793647,
+          "total_events": 236
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 236,
+          "event_dispositions": {
+            "complete": 236
+          },
+          "finite_baseline_fraction": 0.9945718777835566,
+          "total_events": 236
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 236,
+          "event_dispositions": {
+            "complete": 236
+          },
+          "finite_baseline_fraction": 0.9945718777835566,
+          "total_events": 236
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 236,
+          "event_dispositions": {
+            "complete": 236
+          },
+          "finite_baseline_fraction": 0.9766435313880569,
+          "total_events": 236
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999940218918321,
+        "nearest_source_distance_max_s": 0.010234696071279359,
+        "nearest_source_distance_p95_s": 0.009438385711007413,
+        "source_interval_cv": 0.002931633491227585,
+        "source_median_interval_s": 0.019999706572662035
+      },
+      "session": "6f4411f3-f7b2-491b-b1a2-118dfc6cf283",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_30"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9995736717129626,
+          "baseline_normalized_rmse": 0.041541322852288495,
+          "event_delta_correlation": 0.999731692727243,
+          "event_delta_normalized_mad": 0.009473619344186019,
+          "paired_events": 233,
+          "trace_correlation": 0.995267658001558,
+          "trace_normalized_rmse": 0.15029062905575585
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999996619127584,
+          "baseline_normalized_rmse": 0.0007461012384058754,
+          "event_delta_correlation": 0.9997336723972968,
+          "event_delta_normalized_mad": 0.0094701104849169,
+          "paired_events": 233,
+          "trace_correlation": 0.9956449464406307,
+          "trace_normalized_rmse": 0.1441322000320039
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9950804022568615,
+          "baseline_normalized_rmse": 0.8613574035526306,
+          "event_delta_correlation": 0.9999895215023248,
+          "event_delta_normalized_mad": 0.008647587851830903,
+          "paired_events": 233,
+          "trace_correlation": 0.9889546648221369,
+          "trace_normalized_rmse": 0.9261920041518067
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9965331216260704,
+          "baseline_normalized_rmse": 1.2562753621818,
+          "event_delta_correlation": 0.9999591245561222,
+          "event_delta_normalized_mad": 0.01470309020066551,
+          "paired_events": 233,
+          "trace_correlation": 0.9750217815202656,
+          "trace_normalized_rmse": 1.3224492678119422
+        }
+      },
+      "events": 233,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 233,
+          "event_dispositions": {
+            "complete": 233
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 233
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 233,
+          "event_dispositions": {
+            "complete": 233
+          },
+          "finite_baseline_fraction": 0.9816938806653441,
+          "total_events": 233
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 233,
+          "event_dispositions": {
+            "complete": 233
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 233
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 233,
+          "event_dispositions": {
+            "complete": 233
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 233
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 233,
+          "event_dispositions": {
+            "complete": 233
+          },
+          "finite_baseline_fraction": 0.9816910866910867,
+          "total_events": 233
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.999993894993895,
+        "nearest_source_distance_max_s": 0.01042094934632587,
+        "nearest_source_distance_p95_s": 0.009449011856167288,
+        "source_interval_cv": 0.001455833738442104,
+        "source_median_interval_s": 0.019999704840529375
+      },
+      "session": "7be63997-b185-4cfd-897a-e298a1116f62",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_32"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9997177174103783,
+          "baseline_normalized_rmse": 0.03980280816521873,
+          "event_delta_correlation": 0.9991719901294631,
+          "event_delta_normalized_mad": 0.010813829144663629,
+          "paired_events": 242,
+          "trace_correlation": 0.9971645142502603,
+          "trace_normalized_rmse": 0.1253222304107475
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.999998679994038,
+          "baseline_normalized_rmse": 0.0016954116267523236,
+          "event_delta_correlation": 0.999173070674031,
+          "event_delta_normalized_mad": 0.011025187608470332,
+          "paired_events": 242,
+          "trace_correlation": 0.9971534281129302,
+          "trace_normalized_rmse": 0.12472647138216243
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9274783848660265,
+          "baseline_normalized_rmse": 3.9025133445439013,
+          "event_delta_correlation": 0.9999963475826533,
+          "event_delta_normalized_mad": 0.0065075998888996615,
+          "paired_events": 242,
+          "trace_correlation": 0.9977906631253586,
+          "trace_normalized_rmse": 0.8383032085019992
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.8981787753298409,
+          "baseline_normalized_rmse": 5.968616403583679,
+          "event_delta_correlation": 0.9999454660531831,
+          "event_delta_normalized_mad": 0.014475908480012645,
+          "paired_events": 242,
+          "trace_correlation": 0.9963512215481727,
+          "trace_normalized_rmse": 1.2545289338387684
+        }
+      },
+      "events": 242,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 242,
+          "event_dispositions": {
+            "complete": 242
+          },
+          "finite_baseline_fraction": 0.9967789526893982,
+          "total_events": 242
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 242,
+          "event_dispositions": {
+            "complete": 242
+          },
+          "finite_baseline_fraction": 0.9791513598344805,
+          "total_events": 242
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 242,
+          "event_dispositions": {
+            "complete": 242
+          },
+          "finite_baseline_fraction": 0.9967730938330238,
+          "total_events": 242
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 242,
+          "event_dispositions": {
+            "complete": 242
+          },
+          "finite_baseline_fraction": 0.9967730938330238,
+          "total_events": 242
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 242,
+          "event_dispositions": {
+            "complete": 242
+          },
+          "finite_baseline_fraction": 0.9791456045893776,
+          "total_events": 242
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999941222109892,
+        "nearest_source_distance_max_s": 0.01045235073479489,
+        "nearest_source_distance_p95_s": 0.009631470731028458,
+        "source_interval_cv": 0.0014679741799325731,
+        "source_median_interval_s": 0.01999970510178173
+      },
+      "session": "ac96ec97-79e7-4fa7-966d-588155089580",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_33"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9975646589752191,
+          "baseline_normalized_rmse": 0.0895027144988452,
+          "event_delta_correlation": 0.997582964020625,
+          "event_delta_normalized_mad": 0.03485447478642742,
+          "paired_events": 261,
+          "trace_correlation": 0.9949015933720575,
+          "trace_normalized_rmse": 0.19446318435879728
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999513270041,
+          "baseline_normalized_rmse": 0.0003265571439312923,
+          "event_delta_correlation": 0.9975919386623415,
+          "event_delta_normalized_mad": 0.03372024941697228,
+          "paired_events": 261,
+          "trace_correlation": 0.9949434901023696,
+          "trace_normalized_rmse": 0.19889179046618846
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9835869340860992,
+          "baseline_normalized_rmse": 2.194908122344291,
+          "event_delta_correlation": 0.9999953103931788,
+          "event_delta_normalized_mad": 0.004626077275851458,
+          "paired_events": 261,
+          "trace_correlation": 0.9934849434718951,
+          "trace_normalized_rmse": 0.7504156961942331
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9816722945908429,
+          "baseline_normalized_rmse": 3.8510265240351327,
+          "event_delta_correlation": 0.9998735969859526,
+          "event_delta_normalized_mad": 0.014113647860631268,
+          "paired_events": 261,
+          "trace_correlation": 0.9733234307806802,
+          "trace_normalized_rmse": 1.3035493578210902
+        }
+      },
+      "events": 261,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 261,
+          "event_dispositions": {
+            "complete": 261
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 261
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 261,
+          "event_dispositions": {
+            "complete": 261
+          },
+          "finite_baseline_fraction": 0.9835651420993216,
+          "total_events": 261
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 261,
+          "event_dispositions": {
+            "complete": 261
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 261
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 261,
+          "event_dispositions": {
+            "complete": 261
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 261
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 261,
+          "event_dispositions": {
+            "complete": 261
+          },
+          "finite_baseline_fraction": 0.9835655924113479,
+          "total_events": 261
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999945200374829,
+        "nearest_source_distance_max_s": 0.010012405116263778,
+        "nearest_source_distance_p95_s": 0.00839811958024228,
+        "source_interval_cv": 0.0011818589711442915,
+        "source_median_interval_s": 0.019999560632641078
+      },
+      "session": "b13c005f-48d4-4444-80c8-6ea59be80c0f",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_35"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9998752280880322,
+          "baseline_normalized_rmse": 0.04143732879204474,
+          "event_delta_correlation": 0.9999363643951373,
+          "event_delta_normalized_mad": 0.0014012758825430102,
+          "paired_events": 248,
+          "trace_correlation": 0.999257250043226,
+          "trace_normalized_rmse": 0.06094696593785586
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.999999917809679,
+          "baseline_normalized_rmse": 0.000573286201546561,
+          "event_delta_correlation": 0.9999360429073165,
+          "event_delta_normalized_mad": 0.0014196667618047774,
+          "paired_events": 248,
+          "trace_correlation": 0.9994422586597822,
+          "trace_normalized_rmse": 0.047637963916819966
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9929725569152877,
+          "baseline_normalized_rmse": 1.6465100666893366,
+          "event_delta_correlation": 0.9999915254693393,
+          "event_delta_normalized_mad": 0.004811184296769874,
+          "paired_events": 248,
+          "trace_correlation": 0.9722863710240103,
+          "trace_normalized_rmse": 0.9701074779171373
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9941442230990533,
+          "baseline_normalized_rmse": 2.2480808068027307,
+          "event_delta_correlation": 0.9999194576755027,
+          "event_delta_normalized_mad": 0.00940103800907881,
+          "paired_events": 248,
+          "trace_correlation": 0.9617070603333145,
+          "trace_normalized_rmse": 1.2962378924741482
+        }
+      },
+      "events": 248,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 248,
+          "event_dispositions": {
+            "complete": 248
+          },
+          "finite_baseline_fraction": 0.9979881861821921,
+          "total_events": 248
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 248,
+          "event_dispositions": {
+            "complete": 248
+          },
+          "finite_baseline_fraction": 0.981228659405509,
+          "total_events": 248
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 248,
+          "event_dispositions": {
+            "complete": 248
+          },
+          "finite_baseline_fraction": 0.9979880625041916,
+          "total_events": 248
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 248,
+          "event_dispositions": {
+            "complete": 248
+          },
+          "finite_baseline_fraction": 0.9979880625041916,
+          "total_events": 248
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 248,
+          "event_dispositions": {
+            "complete": 248
+          },
+          "finite_baseline_fraction": 0.9812275054210539,
+          "total_events": 248
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999944112847339,
+        "nearest_source_distance_max_s": 0.010000564837810089,
+        "nearest_source_distance_p95_s": 0.0014029259402150247,
+        "source_interval_cv": 0.0012348694833202011,
+        "source_median_interval_s": 0.01999955621302263
+      },
+      "session": "c12751cf-626d-4cb7-b7cc-5e8fc1bf52db",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_38"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9975994899786343,
+          "baseline_normalized_rmse": 0.10729088813607209,
+          "event_delta_correlation": 0.9978572266732652,
+          "event_delta_normalized_mad": 0.021726686559185537,
+          "paired_events": 253,
+          "trace_correlation": 0.9980168424931233,
+          "trace_normalized_rmse": 0.09848017582167475
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999671088499,
+          "baseline_normalized_rmse": 0.00022822540631011197,
+          "event_delta_correlation": 0.9978703758412527,
+          "event_delta_normalized_mad": 0.02165890885986527,
+          "paired_events": 253,
+          "trace_correlation": 0.9985367113574212,
+          "trace_normalized_rmse": 0.07786634345809719
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9873325748403583,
+          "baseline_normalized_rmse": 2.166791815087416,
+          "event_delta_correlation": 0.9998960932135967,
+          "event_delta_normalized_mad": 0.03337197719947377,
+          "paired_events": 253,
+          "trace_correlation": 0.9860028827449023,
+          "trace_normalized_rmse": 0.8724773982060089
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9827593035439783,
+          "baseline_normalized_rmse": 3.0421979675182262,
+          "event_delta_correlation": 0.9997623635188609,
+          "event_delta_normalized_mad": 0.04902253055452387,
+          "paired_events": 253,
+          "trace_correlation": 0.982469274523233,
+          "trace_normalized_rmse": 1.1904028440358865
+        }
+      },
+      "events": 253,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 253,
+          "event_dispositions": {
+            "complete": 253
+          },
+          "finite_baseline_fraction": 0.9934497202777544,
+          "total_events": 253
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 253,
+          "event_dispositions": {
+            "complete": 253
+          },
+          "finite_baseline_fraction": 0.9765876697309606,
+          "total_events": 253
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 253,
+          "event_dispositions": {
+            "complete": 253
+          },
+          "finite_baseline_fraction": 0.9934550852413296,
+          "total_events": 253
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 253,
+          "event_dispositions": {
+            "complete": 253
+          },
+          "finite_baseline_fraction": 0.9934550852413296,
+          "total_events": 253
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 253,
+          "event_dispositions": {
+            "complete": 253
+          },
+          "finite_baseline_fraction": 0.9765923710134496,
+          "total_events": 253
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999943772209977,
+        "nearest_source_distance_max_s": 0.010437523882956157,
+        "nearest_source_distance_p95_s": 0.009701707222825462,
+        "source_interval_cv": 0.001214538812317295,
+        "source_median_interval_s": 0.01999955925703034
+      },
+      "session": "cb367875-3afa-4a26-b4fe-4c39bd0f5fd4",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_26"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9998466633091828,
+          "baseline_normalized_rmse": 0.43823340454413495,
+          "event_delta_correlation": 0.9985922726341946,
+          "event_delta_normalized_mad": 0.02912079282685669,
+          "paired_events": 28,
+          "trace_correlation": 0.9975401222750375,
+          "trace_normalized_rmse": 0.13188357005177273
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9994165215314071,
+          "baseline_normalized_rmse": 0.024686831571445012,
+          "event_delta_correlation": 0.9985823141481142,
+          "event_delta_normalized_mad": 0.025451707871441093,
+          "paired_events": 28,
+          "trace_correlation": 0.9977411700377249,
+          "trace_normalized_rmse": 0.12357460926176257
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.17179975763092672,
+          "baseline_normalized_rmse": 15.757874652244839,
+          "event_delta_correlation": 0.9999991981663721,
+          "event_delta_normalized_mad": 0.005107713566245291,
+          "paired_events": 28,
+          "trace_correlation": 0.9994047321871927,
+          "trace_normalized_rmse": 0.7278345528101463
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.6995626861737053,
+          "baseline_normalized_rmse": 21.37394124032433,
+          "event_delta_correlation": 0.9999645839848943,
+          "event_delta_normalized_mad": 0.012397499188824311,
+          "paired_events": 28,
+          "trace_correlation": 0.9903419442743928,
+          "trace_normalized_rmse": 1.2952174593505934
+        }
+      },
+      "events": 28,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 28,
+          "event_dispositions": {
+            "complete": 28
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 28
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 28,
+          "event_dispositions": {
+            "complete": 28
+          },
+          "finite_baseline_fraction": 0.7765941597139452,
+          "total_events": 28
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 28,
+          "event_dispositions": {
+            "complete": 28
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 28
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 28,
+          "event_dispositions": {
+            "complete": 28
+          },
+          "finite_baseline_fraction": 1.0,
+          "total_events": 28
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 28,
+          "event_dispositions": {
+            "complete": 28
+          },
+          "finite_baseline_fraction": 0.7731385345594779,
+          "total_events": 28
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.999925838030258,
+        "nearest_source_distance_max_s": 0.010166502700087676,
+        "nearest_source_distance_p95_s": 0.009765368905885908,
+        "source_interval_cv": 0.0073555025105227914,
+        "source_median_interval_s": 0.019768110097629688
+      },
+      "session": "cf718114-1275-4331-bf03-1cbece7b58ef",
+      "session_contrasts": {
+        "raw_double_exponential": 0.023125650252134766,
+        "raw_published_rolling": 0.023009684502974644,
+        "regularized_asls": 0.023003476387429212,
+        "regularized_double_exponential": 0.022816441284037262,
+        "regularized_published_rolling": 0.02271359679519573
+      },
+      "source_integrity": true,
+      "subject": "fip_33"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9985404787722325,
+          "baseline_normalized_rmse": 0.09697803553796625,
+          "event_delta_correlation": 0.9954336195493064,
+          "event_delta_normalized_mad": 0.028559272135725136,
+          "paired_events": 332,
+          "trace_correlation": 0.9971947554314736,
+          "trace_normalized_rmse": 0.11587974001459332
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999985608437416,
+          "baseline_normalized_rmse": 0.001395865593303298,
+          "event_delta_correlation": 0.9954459822011495,
+          "event_delta_normalized_mad": 0.028652137377938768,
+          "paired_events": 332,
+          "trace_correlation": 0.9972742763639052,
+          "trace_normalized_rmse": 0.11100079027098803
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9774616571148939,
+          "baseline_normalized_rmse": 3.1154553960572318,
+          "event_delta_correlation": 0.999997343506076,
+          "event_delta_normalized_mad": 0.013057451726277343,
+          "paired_events": 332,
+          "trace_correlation": 0.9989803289234392,
+          "trace_normalized_rmse": 0.8389357763860689
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9300702222296893,
+          "baseline_normalized_rmse": 4.943871762187969,
+          "event_delta_correlation": 0.9999481224631093,
+          "event_delta_normalized_mad": 0.020259821852345546,
+          "paired_events": 332,
+          "trace_correlation": 0.9966096387091535,
+          "trace_normalized_rmse": 1.2533426954752431
+        }
+      },
+      "events": 332,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 332,
+          "event_dispositions": {
+            "complete": 332
+          },
+          "finite_baseline_fraction": 0.9967746963538482,
+          "total_events": 332
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 332,
+          "event_dispositions": {
+            "complete": 332
+          },
+          "finite_baseline_fraction": 0.9608167571909884,
+          "total_events": 332
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 332,
+          "event_dispositions": {
+            "complete": 332
+          },
+          "finite_baseline_fraction": 0.9967862239330383,
+          "total_events": 332
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 332,
+          "event_dispositions": {
+            "complete": 332
+          },
+          "finite_baseline_fraction": 0.9967862239330383,
+          "total_events": 332
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 332,
+          "event_dispositions": {
+            "complete": 332
+          },
+          "finite_baseline_fraction": 0.9608231104075979,
+          "total_events": 332
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999880082982576,
+        "nearest_source_distance_max_s": 0.010382100424749297,
+        "nearest_source_distance_p95_s": 0.009466357493863597,
+        "source_interval_cv": 0.002492023783115864,
+        "source_median_interval_s": 0.019999069767436595
+      },
+      "session": "dc4b7809-3832-4deb-b2ff-862b1c7e2299",
+      "session_contrasts": {
+        "raw_double_exponential": 0.028100557197554422,
+        "raw_published_rolling": 0.027753845246167946,
+        "regularized_asls": 0.02882011274339254,
+        "regularized_double_exponential": 0.028287416349201247,
+        "regularized_published_rolling": 0.0279142046938095
+      },
+      "source_integrity": true,
+      "subject": "fip_29"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9997354672368152,
+          "baseline_normalized_rmse": 0.052180999206015745,
+          "event_delta_correlation": 0.9980743795674049,
+          "event_delta_normalized_mad": 0.013370697932144454,
+          "paired_events": 257,
+          "trace_correlation": 0.9953629553345599,
+          "trace_normalized_rmse": 0.15043728768777404
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999964585831,
+          "baseline_normalized_rmse": 0.00013658493126643816,
+          "event_delta_correlation": 0.9980748257740202,
+          "event_delta_normalized_mad": 0.013317169823422719,
+          "paired_events": 257,
+          "trace_correlation": 0.9955215030329264,
+          "trace_normalized_rmse": 0.14830803206929358
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9950761210788052,
+          "baseline_normalized_rmse": 1.6648981661655502,
+          "event_delta_correlation": 0.999993366365326,
+          "event_delta_normalized_mad": 0.005561729249765949,
+          "paired_events": 257,
+          "trace_correlation": 0.9884203687826484,
+          "trace_normalized_rmse": 0.8594678993524956
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9844849301095538,
+          "baseline_normalized_rmse": 2.650603960927266,
+          "event_delta_correlation": 0.9998816020768823,
+          "event_delta_normalized_mad": 0.013313308701573996,
+          "paired_events": 257,
+          "trace_correlation": 0.9753911285003484,
+          "trace_normalized_rmse": 1.266070346488371
+        }
+      },
+      "events": 257,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9944156074621238,
+          "total_events": 257
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9777844324660057,
+          "total_events": 257
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9944045783747213,
+          "total_events": 257
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9944045783747213,
+          "total_events": 257
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 257,
+          "event_dispositions": {
+            "complete": 257
+          },
+          "finite_baseline_fraction": 0.9777735878353648,
+          "total_events": 257
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999944544879829,
+        "nearest_source_distance_max_s": 0.010467662440305503,
+        "nearest_source_distance_p95_s": 0.009356702724119259,
+        "source_interval_cv": 0.0011813043563480958,
+        "source_median_interval_s": 0.019999704404426666
+      },
+      "session": "e1d95d70-4d91-44f7-b5d6-95bb28452468",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_36"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9999990573370109,
+          "baseline_normalized_rmse": 0.10324468057951075,
+          "event_delta_correlation": 0.9977342125636114,
+          "event_delta_normalized_mad": 0.033283688776141115,
+          "paired_events": 273,
+          "trace_correlation": 0.9619637341274876,
+          "trace_normalized_rmse": 0.378972035975617
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999997791408936,
+          "baseline_normalized_rmse": 0.0006430276699270639,
+          "event_delta_correlation": 0.9977263682923703,
+          "event_delta_normalized_mad": 0.03310132325689231,
+          "paired_events": 273,
+          "trace_correlation": 0.9612376921798985,
+          "trace_normalized_rmse": 0.37956756881558595
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.8317093679587106,
+          "baseline_normalized_rmse": 6.582153265070396,
+          "event_delta_correlation": 0.9999972347718872,
+          "event_delta_normalized_mad": 0.0020166518259710944,
+          "paired_events": 273,
+          "trace_correlation": 0.9961395364984067,
+          "trace_normalized_rmse": 1.1495966481277529
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.929790745295799,
+          "baseline_normalized_rmse": 7.951872088379137,
+          "event_delta_correlation": 0.9999218985066894,
+          "event_delta_normalized_mad": 0.006910624984234588,
+          "paired_events": 273,
+          "trace_correlation": 0.9929188552393728,
+          "trace_normalized_rmse": 1.3901685288238161
+        }
+      },
+      "events": 273,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 273,
+          "event_dispositions": {
+            "complete": 273
+          },
+          "finite_baseline_fraction": 0.995666143615034,
+          "total_events": 273
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 273,
+          "event_dispositions": {
+            "complete": 273
+          },
+          "finite_baseline_fraction": 0.9796596962030721,
+          "total_events": 273
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 273,
+          "event_dispositions": {
+            "complete": 273
+          },
+          "finite_baseline_fraction": 0.9956556314011389,
+          "total_events": 273
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 273,
+          "event_dispositions": {
+            "complete": 273
+          },
+          "finite_baseline_fraction": 0.9956556314011389,
+          "total_events": 273
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 273,
+          "event_dispositions": {
+            "complete": 273
+          },
+          "finite_baseline_fraction": 0.9796497819810107,
+          "total_events": 273
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999946629378392,
+        "nearest_source_distance_max_s": 0.010015836473428408,
+        "nearest_source_distance_p95_s": 0.006934291842526363,
+        "source_interval_cv": 0.0011883441600151793,
+        "source_median_interval_s": 0.019999559859115834
+      },
+      "session": "f020005e-a138-4f84-8d8d-da12a464e5a9",
+      "session_contrasts": {
+        "raw_double_exponential": -0.0003014671329093944,
+        "raw_published_rolling": -0.00029697682314811663,
+        "regularized_asls": -0.0002795419643775149,
+        "regularized_double_exponential": -0.00028128566452416675,
+        "regularized_published_rolling": -0.0002767641030716806
+      },
+      "source_integrity": true,
+      "subject": "fip_34"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9991736605873561,
+          "baseline_normalized_rmse": 0.12540816533873858,
+          "event_delta_correlation": 0.9986014861235948,
+          "event_delta_normalized_mad": 0.014179602562038858,
+          "paired_events": 265,
+          "trace_correlation": 0.9988895418098279,
+          "trace_normalized_rmse": 0.0580921769823515
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9999999601349853,
+          "baseline_normalized_rmse": 0.00025415805125474225,
+          "event_delta_correlation": 0.9986159456910161,
+          "event_delta_normalized_mad": 0.01369535788014549,
+          "paired_events": 265,
+          "trace_correlation": 0.9992836430849835,
+          "trace_normalized_rmse": 0.04863260362521388
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.8767072995344785,
+          "baseline_normalized_rmse": 3.708848018192277,
+          "event_delta_correlation": 0.9999055203165826,
+          "event_delta_normalized_mad": 0.035317567217184834,
+          "paired_events": 265,
+          "trace_correlation": 0.9908197473069508,
+          "trace_normalized_rmse": 0.7398187870345319
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.949009285620221,
+          "baseline_normalized_rmse": 5.648951714935504,
+          "event_delta_correlation": 0.9997554834690721,
+          "event_delta_normalized_mad": 0.05626053829997507,
+          "paired_events": 265,
+          "trace_correlation": 0.9857157231975181,
+          "trace_normalized_rmse": 1.076970013441018
+        }
+      },
+      "events": 265,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 265,
+          "event_dispositions": {
+            "complete": 265
+          },
+          "finite_baseline_fraction": 0.9856857167301194,
+          "total_events": 265
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 265,
+          "event_dispositions": {
+            "complete": 265
+          },
+          "finite_baseline_fraction": 0.9696496556444368,
+          "total_events": 265
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 265,
+          "event_dispositions": {
+            "complete": 265
+          },
+          "finite_baseline_fraction": 0.9857012229357945,
+          "total_events": 265
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 265,
+          "event_dispositions": {
+            "complete": 265
+          },
+          "finite_baseline_fraction": 0.9857012229357945,
+          "total_events": 265
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 265,
+          "event_dispositions": {
+            "complete": 265
+          },
+          "finite_baseline_fraction": 0.9696645615986397,
+          "total_events": 265
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999946526637755,
+        "nearest_source_distance_max_s": 0.010357050786296895,
+        "nearest_source_distance_p95_s": 0.009638012911636906,
+        "source_interval_cv": 0.001238642510444346,
+        "source_median_interval_s": 0.019999704753445258
+      },
+      "session": "f9661c29-a2d6-4d44-bceb-7713ef24890f",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_27"
+    },
+    {
+      "comparisons": {
+        "raw_double_exponential__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.999764924879947,
+          "baseline_normalized_rmse": 0.02379551673071737,
+          "event_delta_correlation": 0.9991792473015882,
+          "event_delta_normalized_mad": 0.01747677878883205,
+          "paired_events": 269,
+          "trace_correlation": 0.9951495032813346,
+          "trace_normalized_rmse": 0.11126168666519513
+        },
+        "raw_published_rolling__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.999999999433046,
+          "baseline_normalized_rmse": 3.5988785188409065e-05,
+          "event_delta_correlation": 0.9991780203559608,
+          "event_delta_normalized_mad": 0.017523406343553143,
+          "paired_events": 269,
+          "trace_correlation": 0.9954182359997785,
+          "trace_normalized_rmse": 0.10818780666179821
+        },
+        "regularized_asls__vs__regularized_double_exponential": {
+          "baseline_correlation": 0.9979873470228953,
+          "baseline_normalized_rmse": 0.644753165190366,
+          "event_delta_correlation": 0.9999873117001338,
+          "event_delta_normalized_mad": 0.01928575819770851,
+          "paired_events": 269,
+          "trace_correlation": 0.9913381020113061,
+          "trace_normalized_rmse": 0.995529599144269
+        },
+        "regularized_asls__vs__regularized_published_rolling": {
+          "baseline_correlation": 0.9970432701126346,
+          "baseline_normalized_rmse": 0.786225058388031,
+          "event_delta_correlation": 0.999909672034129,
+          "event_delta_normalized_mad": 0.022048491457288887,
+          "paired_events": 269,
+          "trace_correlation": 0.9860227011137086,
+          "trace_normalized_rmse": 1.204530590080461
+        }
+      },
+      "events": 269,
+      "methods": {
+        "raw_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 269,
+          "event_dispositions": {
+            "complete": 269
+          },
+          "finite_baseline_fraction": 0.9745991882161075,
+          "total_events": 269
+        },
+        "raw_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 269,
+          "event_dispositions": {
+            "complete": 269
+          },
+          "finite_baseline_fraction": 0.9589731298489499,
+          "total_events": 269
+        },
+        "regularized_asls": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 269,
+          "event_dispositions": {
+            "complete": 269
+          },
+          "finite_baseline_fraction": 0.9746391537699963,
+          "total_events": 269
+        },
+        "regularized_double_exponential": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 269,
+          "event_dispositions": {
+            "complete": 269
+          },
+          "finite_baseline_fraction": 0.9746391537699963,
+          "total_events": 269
+        },
+        "regularized_published_rolling": {
+          "complete_event_fraction": 1.0,
+          "complete_events": 269,
+          "event_dispositions": {
+            "complete": 269
+          },
+          "finite_baseline_fraction": 0.9590120368922933,
+          "total_events": 269
+        }
+      },
+      "regularization": {
+        "gap_masked_target_fraction": 0.0,
+        "interpolated_target_fraction": 0.9999947892241154,
+        "nearest_source_distance_max_s": 0.010328275600386405,
+        "nearest_source_distance_p95_s": 0.009394291045737191,
+        "source_interval_cv": 0.001174570731939727,
+        "source_median_interval_s": 0.019999703539951952
+      },
+      "session": "fa392bd5-9734-4476-bcd5-42679a86396a",
+      "session_contrasts": {
+        "raw_double_exponential": null,
+        "raw_published_rolling": null,
+        "regularized_asls": null,
+        "regularized_double_exponential": null,
+        "regularized_published_rolling": null
+      },
+      "source_integrity": true,
+      "subject": "fip_43"
+    }
+  ],
+  "sessions_completed": 24,
+  "sessions_requested": 24,
+  "summary": {
+    "comparisons": {
+      "raw_double_exponential__vs__regularized_double_exponential": {
+        "baseline_correlation_median": 0.9995579370160261,
+        "baseline_normalized_rmse_median": 0.07852309799366314,
+        "case_count": 24,
+        "paired_events": 5920,
+        "pooled_event_delta_correlation": 0.9989941382226265,
+        "pooled_event_delta_normalized_mad": 0.014584837771619025,
+        "session_contrast_pairs": 6,
+        "session_contrast_sign_agreement": 1.0,
+        "trace_correlation_median": 0.9963957773015548,
+        "trace_correlation_minimum": 0.9619637341274876,
+        "trace_normalized_rmse_median": 0.11357071333989423
+      },
+      "raw_published_rolling__vs__regularized_published_rolling": {
+        "baseline_correlation_median": 0.9999999196857523,
+        "baseline_normalized_rmse_median": 0.00043001879183229516,
+        "case_count": 24,
+        "paired_events": 5920,
+        "pooled_event_delta_correlation": 0.9990059499558692,
+        "pooled_event_delta_normalized_mad": 0.014307664408350743,
+        "session_contrast_pairs": 6,
+        "session_contrast_sign_agreement": 1.0,
+        "trace_correlation_median": 0.9972860342691793,
+        "trace_correlation_minimum": 0.9612376921798985,
+        "trace_normalized_rmse_median": 0.10289641688240891
+      },
+      "regularized_asls__vs__regularized_double_exponential": {
+        "baseline_correlation_median": 0.9776473870590676,
+        "baseline_normalized_rmse_median": 2.109207834388944,
+        "case_count": 24,
+        "paired_events": 5920,
+        "pooled_event_delta_correlation": 0.9997417461668777,
+        "pooled_event_delta_normalized_mad": 0.013970561674141239,
+        "session_contrast_pairs": 6,
+        "session_contrast_sign_agreement": 1.0,
+        "trace_correlation_median": 0.9908019962912162,
+        "trace_correlation_minimum": 0.9449225779989401,
+        "trace_normalized_rmse_median": 0.9414666638455454
+      },
+      "regularized_asls__vs__regularized_published_rolling": {
+        "baseline_correlation_median": 0.9816170005439606,
+        "baseline_normalized_rmse_median": 2.862983694860601,
+        "case_count": 24,
+        "paired_events": 5920,
+        "pooled_event_delta_correlation": 0.9996310613634535,
+        "pooled_event_delta_normalized_mad": 0.019901003121115406,
+        "session_contrast_pairs": 6,
+        "session_contrast_sign_agreement": 1.0,
+        "trace_correlation_median": 0.9861268587448712,
+        "trace_correlation_minimum": 0.9617070603333145,
+        "trace_normalized_rmse_median": 1.2561987806559767
+      }
+    },
+    "maximum_nearest_source_distance_fraction": 0.5247822598434518,
+    "methods": {
+      "raw_double_exponential": {
+        "complete_event_fraction": 1.0,
+        "complete_events": 5920,
+        "minimum_finite_baseline_fraction": 0.9745991882161075,
+        "sessions": 24,
+        "total_events": 5920
+      },
+      "raw_published_rolling": {
+        "complete_event_fraction": 1.0,
+        "complete_events": 5920,
+        "minimum_finite_baseline_fraction": 0.7765941597139452,
+        "sessions": 24,
+        "total_events": 5920
+      },
+      "regularized_asls": {
+        "complete_event_fraction": 1.0,
+        "complete_events": 5920,
+        "minimum_finite_baseline_fraction": 0.9746391537699963,
+        "sessions": 24,
+        "total_events": 5920
+      },
+      "regularized_double_exponential": {
+        "complete_event_fraction": 1.0,
+        "complete_events": 5920,
+        "minimum_finite_baseline_fraction": 0.9746391537699963,
+        "sessions": 24,
+        "total_events": 5920
+      },
+      "regularized_published_rolling": {
+        "complete_event_fraction": 1.0,
+        "complete_events": 5920,
+        "minimum_finite_baseline_fraction": 0.7731385345594779,
+        "sessions": 24,
+        "total_events": 5920
+      }
+    }
+  }
+}

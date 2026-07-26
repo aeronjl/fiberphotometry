@@ -19,7 +19,7 @@
 - [x] Frozen smooth-signal irregular-clock fidelity benchmark
 - [x] Sharp-transient, missing-run, and event-boundary resampling benchmark
 - [x] Outcome-blind real-data event-coverage and selection audit across 383 IBL sessions
-- [ ] New held-out real-data regularized-AsLS comparison
+- [x] New held-out real-data regularized-AsLS comparison (retained gate failure; no promotion)
 - [x] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators
   - [x] Experimental double-exponential and AsLS signal-only APIs

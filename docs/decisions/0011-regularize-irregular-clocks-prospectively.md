@@ -40,3 +40,15 @@ The completed v0.3.2 result is not amended or rerun under this policy.
 Revisit before promotion if target-rate inflation is requested, protected gaps
 remove material event coverage, interpolation distance approaches the event
 timescale, or validation on sharp transients and held-out recordings fails.
+
+## Evidence added later
+
+The checksum-frozen 24-session held-out IBL comparison made AsLS mechanically
+executable and retained all 5,920 event windows. Raw-versus-regularized event
+deltas were highly stable, but the aggregate protocol failed its strict
+whole-trace normalized-RMSE, interpolation-distance, and finite-coverage gates.
+Maximum source distance reached 0.525 median samples, and AsLS baseline magnitude
+remained materially comparator-dependent despite near-identical short-window event
+deltas. Regularization therefore remains explicit and experimental rather than a
+silent or recommended default. See the
+[held-out report](../ibl-regularized-asls-results-v0.1.md).

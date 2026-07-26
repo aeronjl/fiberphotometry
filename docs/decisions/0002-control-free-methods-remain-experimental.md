@@ -66,3 +66,11 @@ the slow-trend-correlation gate (double exponential 0.259; AsLS 0.713, against a
 not population validation; the isosbestic comparator is not ground truth. The
 mixed result therefore satisfies the real-data revisit trigger but does not justify
 promotion. See the [pilot report](../dandi-000971-control-v0.1.md).
+
+The later 24-session held-out IBL comparison executed regularized AsLS everywhere
+and retained all selected event windows, but failed its prospective whole-trace
+fidelity and coverage gate. AsLS-versus-comparator event deltas were very similar
+while fitted baselines differed materially, demonstrating estimand-specific
+agreement rather than baseline identifiability. This reinforces the experimental,
+non-default status. See the
+[held-out regularization report](../ibl-regularized-asls-results-v0.1.md).
