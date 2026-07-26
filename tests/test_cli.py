@@ -9,7 +9,13 @@ from fiberphotometry.cli import main
 from fiberphotometry.project import TabularProjectConfig
 
 
-def _project(tmp_path: Path, *, acknowledge: bool = True, nwb: bool = False) -> Path:
+def _project(
+    tmp_path: Path,
+    *,
+    acknowledge: bool = True,
+    nwb: bool = False,
+    mixed_model: bool = False,
+) -> Path:
     data = tmp_path / "data"
     data.mkdir()
     sessions = []
@@ -119,6 +125,8 @@ response = [0.0, 0.5]
 [analysis.inference]
 intent = "exploratory"
 randomized = false
+scalar_mixed_model = {str(mixed_model).lower()}
+contrast_unit = "session"
 acknowledged_assumptions = [
 {assumptions}]
 
@@ -270,8 +278,54 @@ implant_batch = "2026-07-A"''',
     }
 
 
+def test_cli_writes_opt_in_scalar_mixed_model_summary(tmp_path) -> None:
+    pynwb = pytest.importorskip("pynwb")
+    project_path = _project(tmp_path, nwb=True, mixed_model=True)
+    output = tmp_path / "results"
+
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+
+    mixed = json.loads((output / "mixed-model.json").read_text())
+    manifest = json.loads((output / "manifest.json").read_text())
+    assert mixed["spec"]["role"] == "sensitivity_analysis"
+    assert mixed["engine"] == "statsmodels.MixedLM"
+    assert mixed["groups"] == 4
+    assert mixed["nested_units"] is None
+    assert "mixed-model.json" in manifest["artifacts"]
+    assert "mixed-model.html" in manifest["artifacts"]
+    assert "Secondary sensitivity estimand" in (output / "mixed-model.html").read_text()
+    nwb_path = next((output / "nwb").glob("*.nwb"))
+    with pynwb.NWBHDF5IO(nwb_path, "r") as io:
+        assert "fiberphotometry_scalar_mixed_model" in io.read().scratch
+
+
 def test_nwb_export_rejects_timezone_free_session_metadata(tmp_path) -> None:
     project_path = _project(tmp_path, nwb=True)
     project_path.write_text(project_path.read_text().replace("T12:00:00Z", "T12:00:00"))
 
     assert main(["inspect", str(project_path)]) == 2
+
+
+def test_cli_preflight_blocks_structurally_incompatible_asls(tmp_path) -> None:
+    project_path = _project(tmp_path)
+    project_path.write_text(
+        project_path.read_text()
+        .replace('kind = "reference"', 'kind = "signal_only"')
+        .replace('method = "irls"', 'method = "asls"')
+    )
+    recording = tmp_path / "data" / "recording-1.csv"
+    recording.write_text(recording.read_text().replace("0.050,", "0.051,", 1))
+    preflight_path = tmp_path / "preflight.json"
+
+    assert main(["inspect", str(project_path), "--output", str(preflight_path)]) == 0
+    assert main(["run", str(project_path)]) == 2
+
+    preflight = json.loads(preflight_path.read_text())
+    compatibility = preflight["pipeline_compatibility"]
+    assert compatibility["status"] == "incompatible"
+    assert {issue["code"] for issue in compatibility["issues"]} == {
+        "asls_requires_regular_sampling"
+    }
+    manifest = json.loads((tmp_path / "artifacts" / "manifest.json").read_text())
+    assert manifest["status"] == "failed"
+    assert "structurally incompatible" in manifest["error"]

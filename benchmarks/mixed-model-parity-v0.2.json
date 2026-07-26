@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "result_sha256": "8a043545a05b3284de9616d8bdf2561e990681b54c8c96eb843244c7ad72ba20",
+  "scenarios": [
+    {
+      "absolute_differences": {
+        "estimate": 0.0,
+        "interval": 0.0,
+        "standard_error": 0.0
+      },
+      "animals": 24,
+      "converged": true,
+      "direct_statsmodels": {
+        "confidence_interval": [
+          0.3572907667245305,
+          0.5096149025809797
+        ],
+        "estimate": 0.4334528346527551,
+        "standard_error": 0.0388589119641898
+      },
+      "fiberphotometry": {
+        "confidence_interval": [
+          0.3572907667245305,
+          0.5096149025809797
+        ],
+        "estimate": 0.4334528346527551,
+        "standard_error": 0.0388589119641898
+      },
+      "name": "unbalanced_events",
+      "observations": 406,
+      "passed": true,
+      "sessions": 24
+    },
+    {
+      "absolute_differences": {
+        "estimate": 0.0,
+        "interval": 0.0,
+        "standard_error": 0.0
+      },
+      "animals": 24,
+      "converged": true,
+      "direct_statsmodels": {
+        "confidence_interval": [
+          0.28685975369093747,
+          0.4388349474711543
+        ],
+        "estimate": 0.3628473505810459,
+        "standard_error": 0.0387698944926993
+      },
+      "fiberphotometry": {
+        "confidence_interval": [
+          0.28685975369093747,
+          0.4388349474711543
+        ],
+        "estimate": 0.3628473505810459,
+        "standard_error": 0.0387698944926993
+      },
+      "name": "unbalanced_nested_sessions",
+      "observations": 831,
+      "passed": true,
+      "sessions": 48
+    }
+  ],
+  "schema_version": "mixed-model-parity-v0.2",
+  "scope": "numerical wrapper parity for fixed-effect estimates, standard errors, and normal-theory intervals; not interval coverage validation",
+  "statsmodels_version": "0.14.6",
+  "tolerance": 1e-10
+}

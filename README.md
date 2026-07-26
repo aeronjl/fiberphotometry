@@ -102,6 +102,12 @@ NWB files containing raw and processed signals, events, QC, and analysis provena
 Every inspection and run also produces a
 [versioned metadata completeness report](docs/metadata-completeness-v0.1.md) with
 separate readiness states for analysis, NWB export, and publication/reuse.
+An [outcome-blind compatibility preflight](docs/pipeline-compatibility-v0.1.md)
+distinguishes missing mechanical requirements from QC blocks or scientific
+analysis failures before preprocessing runs.
+An opt-in [scalar mixed-model summary](docs/scalar-mixed-model-v0.1.md) provides a
+separate event-level sensitivity analysis with explicit convergence and variance
+diagnostics; it does not silently replace the primary animal-level estimand.
 
 For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The
@@ -175,10 +181,9 @@ The follow-up
 establishes that the held-out recordings are signal-only; the proposed v0.3
 workflow remains an explicitly non-normative
 [`design draft`](docs/drafts/ibl-feedback-signal-only-v0.3-design.md).
-That design has now been superseded by the outcome-blind
-[`frozen v0.3 protocol`](benchmarks/protocol-ibl-feedback-signal-only-v0.3.md),
-whose readiness gate retained 383 sessions from 18 held-out animals; fluorescence
-contrasts have not yet been calculated.
+That design was superseded by the outcome-blind v0.3 protocol. The documented
+v0.3.1 and v0.3.2 amendments and completed 383-session execution are reported in
+the [`v0.3.2 results`](docs/ibl-feedback-signal-only-results-v0.3.2.md).
 The follow-up baseline-fidelity and normalization study is in
 [`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
 

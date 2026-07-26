@@ -36,6 +36,8 @@ the original reasoning is not silently rewritten.
 | [SDR-0006](0006-require-explicit-nwb-session-metadata.md) | Accepted | Require explicit NWB session metadata and avoid invented hardware |
 | [SDR-0007](0007-require-explicit-tdt-store-mapping.md) | Accepted | Require explicit TDT stream, channel, and epoc semantics |
 | [SDR-0008](0008-open-metadata-versioned-readiness-profile.md) | Accepted | Preserve open metadata while versioning readiness profiles |
+| [SDR-0009](0009-separate-structural-incompatibility-from-scientific-failure.md) | Accepted | Preflight structural incompatibility without accessing outcomes |
+| [SDR-0010](0010-mixed-models-are-sensitivity-summaries.md) | Accepted | Report scalar mixed models as secondary sensitivity summaries |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

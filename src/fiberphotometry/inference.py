@@ -26,6 +26,7 @@ class Estimand:
     outcome: str
     contrast: Contrast
     aggregation_unit: str
+    contrast_unit: str | None = None
 
 
 @dataclass(frozen=True)
@@ -85,6 +86,7 @@ def recommend_inference(
 ) -> InferenceRecommendation:
     """Recommend supported scalar methods without inferring randomization."""
     validate_design(table, design).raise_for_errors()
+    _validate_contrast_unit(design, estimand)
     assignment = _factor_assignment_unit(design, estimand.contrast.factor)
     aggregation = estimand.aggregation_unit
     unit_count = len(set(table.values(_unit_column(design, aggregation)).tolist()))
@@ -130,6 +132,7 @@ def unit_t_interval(
 ) -> TIntervalResult:
     """Compute a Welch or paired t interval on declared aggregation-unit means."""
     validate_design(table, design).raise_for_errors()
+    _validate_contrast_unit(design, estimand)
     if not 0 < confidence < 1:
         raise ValueError("confidence must lie between zero and one")
     unit_column = _unit_column(design, estimand.aggregation_unit)
@@ -139,6 +142,10 @@ def unit_t_interval(
         standard_error = float(np.std(differences, ddof=1) / np.sqrt(len(differences)))
         degrees = float(len(differences) - 1)
     else:
+        if estimand.contrast_unit is not None:
+            raise ValueError(
+                "contrast_unit is currently supported for paired inference"
+            )
         factor = table.values(_factor_column(design, estimand.contrast.factor))
         outcome = np.asarray(table.values(estimand.outcome), dtype=float)
         units = table.values(unit_column)
@@ -222,6 +229,7 @@ def exact_sign_flip_test(
 ) -> PermutationResult:
     """Enumerate the exact paired sign-flip null distribution (at most 20 units)."""
     validate_design(table, design).raise_for_errors()
+    _validate_contrast_unit(design, estimand)
     unit = _unit_column(design, exchangeability_unit)
     differences = _unit_differences(table, design, estimand, unit)
     if len(differences) > 20:
@@ -244,6 +252,7 @@ def permutation_test(
 ) -> PermutationResult:
     """Test a contrast with explicit sign-flip or blocked-label exchangeability."""
     validate_design(table, design).raise_for_errors()
+    _validate_contrast_unit(design, estimand)
     rng = np.random.default_rng(seed)
     observed = _estimate(table, design, estimand, np.arange(len(table)))
     if plan.mode == "sign_flip":
@@ -286,6 +295,7 @@ def _validate_estimand_and_units(
             raise ValueError("resample_units must follow a directly nested path")
     if estimand.aggregation_unit not in units:
         raise ValueError("aggregation_unit must occur in resample_units")
+    _validate_contrast_unit(design, estimand)
     table.values(estimand.outcome)
     _factor_column(design, estimand.contrast.factor)
     factor = next(
@@ -376,6 +386,19 @@ def _estimate(
     rows: NDArray[np.int_],
     aggregation_groups: NDArray[np.int_] | None = None,
 ) -> float:
+    if estimand.contrast_unit is not None:
+        aggregation = (
+            table.values(_unit_column(design, estimand.aggregation_unit))[rows]
+            if aggregation_groups is None
+            else aggregation_groups
+        )
+        unit_estimates = []
+        for unit in dict.fromkeys(aggregation.tolist()):
+            unit_rows = rows[aggregation == unit]
+            value = _unit_contrast(table, design, estimand, unit_rows)
+            if np.isfinite(value):
+                unit_estimates.append(value)
+        return float(np.mean(unit_estimates)) if unit_estimates else float("nan")
     factor = table.values(_factor_column(design, estimand.contrast.factor))[rows]
     outcome = np.asarray(table.values(estimand.outcome)[rows], dtype=float)
     units = (
@@ -417,7 +440,7 @@ def _unit_differences(
     incomplete = []
     for unit in dict.fromkeys(units.tolist()):
         rows = np.flatnonzero(units == unit)
-        value = _estimate(table, design, estimand, rows)
+        value = _unit_contrast(table, design, estimand, rows)
         if np.isfinite(value):
             differences.append(value)
         else:
@@ -430,6 +453,60 @@ def _unit_differences(
     if len(differences) < 2:
         raise ValueError("sign-flip inference requires at least two complete units")
     return np.asarray(differences)
+
+
+def _unit_contrast(
+    table: ObservationTable,
+    design: StudyDesign,
+    estimand: Estimand,
+    rows: NDArray[np.int_],
+) -> float:
+    if estimand.contrast_unit is None:
+        return _raw_contrast(table, design, estimand, rows)
+    contrast_units = table.values(_unit_column(design, estimand.contrast_unit))[rows]
+    values = []
+    for unit in dict.fromkeys(contrast_units.tolist()):
+        selected = rows[contrast_units == unit]
+        value = _raw_contrast(table, design, estimand, selected)
+        if not np.isfinite(value):
+            return float("nan")
+        values.append(value)
+    return float(np.mean(values)) if values else float("nan")
+
+
+def _raw_contrast(
+    table: ObservationTable,
+    design: StudyDesign,
+    estimand: Estimand,
+    rows: NDArray[np.int_],
+) -> float:
+    factor = table.values(_factor_column(design, estimand.contrast.factor))[rows]
+    outcome = np.asarray(table.values(estimand.outcome)[rows], dtype=float)
+    numerator = outcome[(factor == estimand.contrast.numerator) & np.isfinite(outcome)]
+    denominator = outcome[
+        (factor == estimand.contrast.denominator) & np.isfinite(outcome)
+    ]
+    if not len(numerator) or not len(denominator):
+        return float("nan")
+    return float(np.mean(numerator) - np.mean(denominator))
+
+
+def _validate_contrast_unit(design: StudyDesign, estimand: Estimand) -> None:
+    if estimand.contrast_unit is None:
+        return
+    declared = {unit.name: unit for unit in design.units}
+    if estimand.contrast_unit not in declared:
+        raise ValueError("contrast_unit must name a declared unit")
+    current = estimand.contrast_unit
+    visited = set()
+    while current != estimand.aggregation_unit:
+        if current in visited or current not in declared:
+            raise ValueError("contrast_unit must be nested within aggregation_unit")
+        visited.add(current)
+        parent = declared[current].nested_within
+        if parent is None:
+            raise ValueError("contrast_unit must be nested within aggregation_unit")
+        current = parent
 
 
 def _bootstrap_interval(

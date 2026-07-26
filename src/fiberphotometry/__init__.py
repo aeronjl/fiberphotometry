@@ -1,5 +1,13 @@
 """Composable fiber photometry analysis."""
 
+from fiberphotometry.compatibility import (
+    CompatibilityIssue,
+    MultiverseCompatibility,
+    PipelineCompatibility,
+    UniverseCompatibility,
+    assess_multiverse_compatibility,
+    assess_pipeline_compatibility,
+)
 from fiberphotometry.config import EventAnalysisConfig
 from fiberphotometry.design import (
     Factor,
@@ -53,6 +61,11 @@ from fiberphotometry.metadata import (
     MetadataCompletenessReport,
     MetadataReadiness,
     assess_metadata_completeness,
+)
+from fiberphotometry.mixed import (
+    ScalarMixedModelResult,
+    ScalarMixedModelSpec,
+    fit_scalar_mixed_model,
 )
 from fiberphotometry.model import make_recording, validate_recording
 from fiberphotometry.multiverse import (
@@ -121,6 +134,7 @@ __all__ = [
     "AnalysisResult",
     "BaselineDFFOperation",
     "ChoiceRef",
+    "CompatibilityIssue",
     "CompatibilityRule",
     "Contrast",
     "DecisionAlternative",
@@ -141,12 +155,14 @@ __all__ = [
     "MetadataCheck",
     "MetadataCompletenessReport",
     "MetadataReadiness",
+    "MultiverseCompatibility",
     "MultiverseReportGroup",
     "MultiverseResult",
     "MultiverseSpec",
     "NWBExportConfig",
     "ObservationTable",
     "PermutationPlan",
+    "PipelineCompatibility",
     "PipelineResult",
     "PipelineSpec",
     "PowerSensitivity",
@@ -159,6 +175,8 @@ __all__ = [
     "ResampleOperation",
     "ResamplingPlan",
     "RobustnessSummary",
+    "ScalarMixedModelResult",
+    "ScalarMixedModelSpec",
     "StudyDesign",
     "TDTBlockSchema",
     "TDTEpocEvents",
@@ -179,10 +197,13 @@ __all__ = [
     "TabularRecordingSchema",
     "TabularSessionSource",
     "Unit",
+    "UniverseCompatibility",
     "UniverseResult",
     "align_events",
     "assess_event_confounds",
     "assess_metadata_completeness",
+    "assess_multiverse_compatibility",
+    "assess_pipeline_compatibility",
     "assess_recording",
     "assess_signal_recording",
     "baseline_dff",
@@ -190,6 +211,7 @@ __all__ = [
     "exact_sign_flip_test",
     "execute_analysis_plan",
     "export_project_nwb",
+    "fit_scalar_mixed_model",
     "hierarchical_bootstrap",
     "inspect_loaded_tabular_input",
     "inspect_tabular_input",

@@ -40,7 +40,7 @@
 - [ ] Recover DANDI 000351 raw-to-dF/F transformation provenance
 - [x] IBL table adapter with alternating-wavelength interpolation and masks
 - [x] Real IBL session reproduction against archived analysis outputs
-- [ ] TDT and generic tabular adapters
+- [x] TDT and generic tabular adapters
   - [x] Schema-first wide CSV/TSV recording and event adapter
   - [x] Explicit TDT stream/epoc adapter through the same canonical boundary
   - [x] Checksum-pinned official real-block TDT integration fixture
@@ -53,7 +53,7 @@
 - [x] Experimental design-aware sign-flip and label permutations
 - [x] Frozen pseudoreplication benchmark contrasting trial and animal resampling
 - [x] Initial independent MixedLM point-estimate parity
-- [ ] Independent interval and unbalanced mixed-model parity
+- [x] Independent interval and unbalanced mixed-model plumbing parity
 - [x] Extended non-Gaussian, heteroscedastic, unequal-count calibration
 - [x] Condition-stratified hierarchical resampling
 - [x] Four-animal IBL event-table/design integration
@@ -76,9 +76,9 @@
 - [x] Resolve new-cohort IBL channel provenance (470-nm-only acquisition)
 - [x] Implement the published rolling baseline with 20/50-Hz and gap fixtures
 - [x] Freeze signal-only IBL v0.3 (18 animals; 15 executable universes)
-- [ ] Execute and report the frozen signal-only IBL v0.3 multiverse
+- [x] Execute and report the amended signal-only IBL v0.3.2 multiverse
 - [x] Pilot power sensitivity ranges
-- [ ] Scalar mixed-model summaries
+- [x] Opt-in scalar mixed-model sensitivity summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [ ] Pointwise versus simultaneous interval reporting
 

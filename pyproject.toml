@@ -30,6 +30,7 @@ nwb = [
     "remfile>=0.1.13",
 ]
 tdt = ["tdt>=0.7.3"]
+stats = ["pandas>=2.2", "statsmodels>=0.14.5"]
 
 [dependency-groups]
 dev = [

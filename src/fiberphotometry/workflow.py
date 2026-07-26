@@ -183,6 +183,7 @@ class EventAnalysis:
     randomized: bool | None = False
     intent: Literal["confirmatory", "exploratory", "descriptive"] = "exploratory"
     blocking_warnings: tuple[str, ...] = ()
+    contrast_unit: Literal["session"] | None = None
     configuration_fingerprint: str | None = None
 
     def __post_init__(self) -> None:
@@ -209,14 +210,29 @@ class EventAnalysis:
 
     def run(self, *, acknowledged_assumptions: Sequence[str]) -> EventAnalysisResult:
         """Execute only after the caller explicitly acknowledges plan assumptions."""
-        plan = self.plan(acknowledged_assumptions=acknowledged_assumptions)
+        spec = self.pipeline_spec(acknowledged_assumptions=acknowledged_assumptions)
+        plan = spec.analysis_plan
         if not plan.executable:
             missing = sorted(
                 set(plan.required_assumptions) - set(plan.acknowledged_assumptions)
             )
             message = "unacknowledged analysis assumptions: " + ", ".join(missing)
             raise ValueError(message)
-        spec = PipelineSpec(
+        inputs = self._inputs()
+        return EventAnalysisResult(
+            run_pipeline(spec, inputs),
+            spec,
+            self.title,
+            self.preprocessing,
+            self.configuration_fingerprint,
+        )
+
+    def pipeline_spec(
+        self, *, acknowledged_assumptions: Sequence[str] = ()
+    ) -> PipelineSpec:
+        """Build the complete typed pipeline without accessing outcome values."""
+        plan = self.plan(acknowledged_assumptions=acknowledged_assumptions)
+        return PipelineSpec(
             self.preprocessing.operations,
             QualityGateSpec(self.blocking_warnings),
             EventSummarySpec(
@@ -230,7 +246,9 @@ class EventAnalysis:
             plan,
             schema_version="2",
         )
-        inputs = tuple(
+
+    def _inputs(self) -> tuple[RecordingInput, ...]:
+        return tuple(
             RecordingInput(
                 session.recording,
                 session.event_times,
@@ -244,13 +262,6 @@ class EventAnalysis:
                 },
             )
             for session in self.sessions
-        )
-        return EventAnalysisResult(
-            run_pipeline(spec, inputs),
-            spec,
-            self.title,
-            self.preprocessing,
-            self.configuration_fingerprint,
         )
 
     def _design(self) -> StudyDesign:
@@ -271,6 +282,7 @@ class EventAnalysis:
             "event_response",
             Contrast(self.factor_name, self.numerator, self.denominator),
             "animal",
+            contrast_unit=self.contrast_unit,
         )
 
     def _routing_table(self) -> ObservationTable:

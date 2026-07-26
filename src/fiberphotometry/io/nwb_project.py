@@ -20,6 +20,8 @@ def export_project_nwb(
     loaded: LoadedTabularProject,
     result: EventAnalysisResult,
     output_directory: Path,
+    *,
+    mixed_model_json: str | None = None,
 ) -> tuple[Path, ...]:
     """Write one validated NWB file per session and return resolved paths."""
     if project.nwb is None:
@@ -116,6 +118,13 @@ def export_project_nwb(
             result.to_json(),
             "Complete population analysis, QC summaries, and processing lineage",
         )
+        if mixed_model_json is not None:
+            _add_json_scratch(
+                nwbfile,
+                "fiberphotometry_scalar_mixed_model",
+                mixed_model_json,
+                "Secondary scalar mixed-model sensitivity summary",
+            )
         _add_json_scratch(
             nwbfile,
             "fiberphotometry_session_preflight",

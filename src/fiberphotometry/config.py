@@ -36,6 +36,8 @@ class EventAnalysisConfig:
     intent: Literal["confirmatory", "exploratory", "descriptive"] = "exploratory"
     acknowledged_assumptions: tuple[str, ...] = ()
     blocking_warnings: tuple[str, ...] = ()
+    scalar_mixed_model: bool = False
+    contrast_unit: Literal["session"] | None = None
     schema_version: str = "1"
 
     @classmethod
@@ -84,7 +86,13 @@ class EventAnalysisConfig:
         _reject_unknown(windows, {"baseline", "response"}, "event_windows")
         _reject_unknown(
             inference,
-            {"intent", "randomized", "acknowledged_assumptions"},
+            {
+                "intent",
+                "randomized",
+                "acknowledged_assumptions",
+                "scalar_mixed_model",
+                "contrast_unit",
+            },
             "inference",
         )
         _reject_unknown(quality, {"blocking_warnings"}, "quality")
@@ -103,6 +111,12 @@ class EventAnalysisConfig:
             randomized = None
         else:
             raise ValueError("inference.randomized must be boolean or 'unspecified'")
+        scalar_mixed_model = inference.get("scalar_mixed_model", False)
+        if not isinstance(scalar_mixed_model, bool):
+            raise ValueError("inference.scalar_mixed_model must be boolean")
+        contrast_unit = inference.get("contrast_unit")
+        if contrast_unit not in {None, "session"}:
+            raise ValueError("inference.contrast_unit must be 'session' when supplied")
         return cls(
             title=str(payload.get("title", "Fiber photometry event contrast")),
             numerator=str(_required(contrast, "numerator")),
@@ -124,6 +138,8 @@ class EventAnalysisConfig:
             blocking_warnings=_strings(
                 quality.get("blocking_warnings", ()), "quality.blocking_warnings"
             ),
+            scalar_mixed_model=scalar_mixed_model,
+            contrast_unit=contrast_unit,
         )
 
     @property
@@ -165,6 +181,7 @@ class EventAnalysisConfig:
             randomized=self.randomized,
             intent=self.intent,
             blocking_warnings=self.blocking_warnings,
+            contrast_unit=self.contrast_unit,
             configuration_fingerprint=self.fingerprint,
         )
 

@@ -34,6 +34,7 @@ The configured output directory receives:
 
 - `preflight.json`: acquisition and event diagnostics for every session;
 - `metadata.json`: actionable analysis, NWB, and publication/reuse readiness;
+- `mixed-model.json`: optional event-level scalar mixed-model sensitivity summary;
 - `analysis.json`: typed pipeline, inference, QC, and processing lineage;
 - `report.html`: self-contained scientist-facing evidence report;
 - `manifest.json`: project identity, package version, status, and SHA-256 for every
@@ -75,6 +76,11 @@ not invent unavailable `ndx-fiber-photometry` hardware metadata; see
 `inspect` validates data without bypassing the analysis contract. `run` still
 fails when required assumptions are not recorded, contrast levels are absent,
 input roles are ambiguous, reference data are unavailable, or a schema is invalid.
+
+For repeated sessions within animal, `analysis.inference.contrast_unit = "session"`
+calculates each within-session contrast first and weights complete sessions equally
+within animal. Omitting it retains observation-pooled weighting for backward
+compatibility; the choice is serialized in the estimand.
 
 ## Current boundary
 

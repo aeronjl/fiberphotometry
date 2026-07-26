@@ -13,11 +13,16 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import cast
 
+from fiberphotometry.compatibility import (
+    PipelineCompatibility,
+    assess_pipeline_compatibility,
+)
 from fiberphotometry.io.nwb_project import export_project_nwb
 from fiberphotometry.metadata import (
     MetadataCompletenessReport,
     assess_metadata_completeness,
 )
+from fiberphotometry.mixed import fit_scalar_mixed_model
 from fiberphotometry.project import (
     LoadedTabularProject,
     ProjectConfig,
@@ -64,6 +69,7 @@ def run_project(
     """Execute one loaded project and atomically materialize its artifacts."""
     output_directory.mkdir(parents=True, exist_ok=True)
     completeness = assess_metadata_completeness(project, loaded)
+    compatibility = _pipeline_compatibility(project, loaded)
     metadata = completeness.to_json()
     preflight = _preflight_json(project, loaded, completeness)
     _atomic_write(output_directory / "preflight.json", preflight)
@@ -80,13 +86,36 @@ def run_project(
             initial_hashes,
         ),
     )
+    if compatibility.status != "compatible":
+        codes = sorted({issue.code for issue in compatibility.issues})
+        error = "pipeline structurally incompatible: " + ", ".join(codes)
+        _atomic_write(
+            output_directory / "manifest.json",
+            _manifest(project, "failed", initial_hashes, error=error),
+        )
+        raise ValueError(error)
     study = project.build_analysis(loaded.sessions)
     try:
         result = study.run(
             acknowledged_assumptions=project.analysis.acknowledged_assumptions
         )
+        mixed_result = (
+            fit_scalar_mixed_model(
+                result.pipeline.observation_table,
+                result.spec.design,
+                result.spec.analysis_plan.estimand,
+            )
+            if project.analysis.scalar_mixed_model
+            else None
+        )
+        mixed_model = mixed_result.to_json() if mixed_result is not None else None
     except ValueError as error:
-        for stale_name in ("analysis.json", "report.html"):
+        for stale_name in (
+            "analysis.json",
+            "mixed-model.html",
+            "mixed-model.json",
+            "report.html",
+        ):
             (output_directory / stale_name).unlink(missing_ok=True)
         failure_manifest = _manifest(
             project,
@@ -102,6 +131,12 @@ def run_project(
         "analysis.json": result.to_json(),
         "report.html": result.to_html(),
     }
+    if mixed_result is not None and mixed_model is not None:
+        artifacts["mixed-model.json"] = mixed_model
+        artifacts["mixed-model.html"] = mixed_result.to_html()
+    else:
+        (output_directory / "mixed-model.json").unlink(missing_ok=True)
+        (output_directory / "mixed-model.html").unlink(missing_ok=True)
     for name, content in artifacts.items():
         if name in {"metadata.json", "preflight.json"}:
             continue
@@ -115,7 +150,13 @@ def run_project(
             for stale in nwb_directory.glob("*.nwb"):
                 stale.unlink()
     try:
-        nwb_paths = export_project_nwb(project, loaded, result, output_directory)
+        nwb_paths = export_project_nwb(
+            project,
+            loaded,
+            result,
+            output_directory,
+            mixed_model_json=mixed_model,
+        )
     except ValueError as error:
         nwb_directory = output_directory / "nwb"
         if nwb_directory.is_dir():
@@ -170,6 +211,7 @@ def _preflight_json(
     loaded: LoadedTabularProject,
     completeness: MetadataCompletenessReport,
 ) -> str:
+    compatibility = _pipeline_compatibility(project, loaded)
     sessions = []
     sources = cast(tuple[SessionSource, ...], project.sources)
     for source, inspection in zip(sources, loaded.inspections, strict=True):
@@ -185,11 +227,22 @@ def _preflight_json(
             "schema_version": "1",
             "project_sha256": project.fingerprint,
             "metadata_completeness": json.loads(completeness.to_json()),
+            "pipeline_compatibility": json.loads(compatibility.to_json()),
             "sessions": sessions,
         },
         indent=2,
         sort_keys=True,
     )
+
+
+def _pipeline_compatibility(
+    project: ProjectConfig, loaded: LoadedTabularProject
+) -> PipelineCompatibility:
+    study = project.build_analysis(loaded.sessions)
+    spec = study.pipeline_spec(
+        acknowledged_assumptions=project.analysis.acknowledged_assumptions
+    )
+    return assess_pipeline_compatibility(spec, loaded.inputs)
 
 
 def _atomic_write(path: Path, content: str) -> None:
