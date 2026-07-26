@@ -1,0 +1,4945 @@
+{
+  "development_animals": [
+    "fip_13",
+    "fip_14",
+    "fip_15",
+    "fip_16"
+  ],
+  "eligible_animal_count": 0,
+  "eligible_animals": [],
+  "eligible_session_count": 0,
+  "manifest_sha256": "c62ef6d2773cf6f5f9e488b72f94f067d82c93de85115611474b91719a9ce14a",
+  "one_api_version": "3.5.2",
+  "one_base_url": "https://openalyx.internationalbrainlab.org",
+  "query_datasets": [
+    "photometry.signal.pqt",
+    "photometryROI.locations.pqt",
+    "_ibl_trials.table.pqt"
+  ],
+  "query_timestamp_utc": "2026-07-26T18:27:40.570802+00:00",
+  "readiness_gate_passed": false,
+  "readiness_threshold": 12,
+  "reason_counts": {
+    "adapter_schema_failure": 407,
+    "development_animal": 139
+  },
+  "returned_animal_count": 22,
+  "returned_session_count": 546,
+  "schema_version": "ibl-feedback-cohort-v0.2",
+  "sessions": [
+    {
+      "date": "2022-04-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "00d496aa-900c-48ff-8557-9d33592d0841",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0137f64d-9238-4d1a-b0df-fc3c5c001626",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "019dda5f-1bc7-4f55-b72d-6ca2128cf979",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0292f4f5-fb98-49ae-8ade-147beebc56c8",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "02fe38b9-c0f9-4fdc-96bb-3a64d685b44b",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-19",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "0300fe04-77cf-4232-a2d0-e6317d5b33bb",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-27",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "0327b074-d8e1-43a4-b2d2-db6a82d63649",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "03c103ed-9ad1-439e-9fdb-f81186adedce",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "05255b38-31d2-473d-9eda-7bc9ebd5c094",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-02",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "055082fe-0d25-4c03-8221-69f369c30d83",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "056f9053-1cc6-40e9-a950-8b248e17fa2e",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-15",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "057b8bd0-a039-40bf-9dd0-3566093df836",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-18",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "0588d58f-7c08-4131-9403-1b6e886196b4",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-19",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "06200cc3-af35-4ba5-84a3-ceeb96b2eb31",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "06f6e192-8986-464e-b257-29b9bca81d2b",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-11",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "070918c2-eff5-417a-bfff-e4ff6fcf9de2",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-29",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "07db3ce4-2209-4eb1-849b-980ab9276068",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "087441bb-d69e-481c-a17d-d1aa6cf9e951",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "091e1e4c-9abd-4faa-a840-5747b05725c2",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0966f7c6-9286-450e-a000-ad6d883bbf17",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "096c4e56-9def-40d4-83fd-d8d829baa139",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "099e0050-b9e1-41d7-9f0f-882c7209d3c8",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-02",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "09ade9f3-e9e6-41dc-8e93-1c85a3492650",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-20",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "0aa91b92-3872-4d64-bec8-cfb441a03e31",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-11",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "0b3342bd-cfac-48df-b353-c86752f994a2",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0b7e0ec3-c73a-4393-b4ee-08fe075c3bff",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0be7bf12-f36c-4343-8e94-0ffa82c74801",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0c5e5df3-0dc7-4c8b-8f7e-596753485fb6",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-22",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "0c6d25fc-c3ea-4b7c-899b-6a20363511bf",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0ce14d48-e394-4b34-9ccf-3103c5db6c53",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0cf7bf7c-2f3c-4bdc-b48d-955dcecab644",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-06-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0dc88f52-5eb9-41de-970b-18b68c61e16c",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0e9cadf9-8381-4335-99d8-88229b94c5bf",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0f53f525-84f9-4f08-80f8-dc66a8ad8147",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0f93589a-a806-41aa-9947-c55843cf258c",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "0fa21655-bbb7-402a-93d7-603c9b190769",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-05-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "10e9dbd8-8506-4dd0-817f-bec8ee98dd0e",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1120da3b-e8e3-4d22-b1fe-9c49c0d38c42",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-12-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "115af5ef-c7ec-41f2-ba87-41cb99a329b6",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "11a2ec80-850c-4a9d-bebc-34859f922652",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1242037a-750c-425a-b3f6-f5a62c246133",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-12-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1256d700-7cb7-442f-bf07-70c8530be1df",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "127eb687-b556-47ca-8554-b1b35994824f",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2021-03-16",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "12acea6e-3a1d-4144-b9c6-af47b142cd73",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "12cc5015-5a75-4668-a0ba-ef23054ff1cb",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "13060ae6-247d-486b-bb87-2d553dbbf5c1",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-26",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "13a678cd-09db-47c0-8eb5-785cd19aa806",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "13ff56ef-8b5d-496f-8806-9306e776b28e",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "146b2be5-7440-4713-9eb3-b6dad7dfb822",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1544402b-6458-485f-8570-c7756c95b408",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-28",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "15793697-600a-402a-8d1c-90fc78340c6f",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "15a5552b-3f2a-4481-a3ab-4610b94e8a2f",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "16c6eeb3-5a84-4418-a3e7-d91dc9592a6a",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "16db1c03-cc30-487b-ba26-7385f6cfbab4",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "174a0663-2e6d-484b-864c-167d18d3f2fb",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-11-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1763cf46-4234-4f4a-b05d-529f7cac5ba3",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2023-04-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "18a0cc8a-36b4-450f-b665-4ea557ef5d3a",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "19533274-8330-4021-b617-cb75677e5675",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1a0dba82-d6b8-4d66-b9d6-2a94a30feeb1",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1a362471-b286-4e6b-9712-9f877d47d088",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1abae9bf-bbaf-45ec-877b-85364f2d20e6",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1ac6b521-e1dd-4a63-992c-7138b12c1116",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "1b0da8e1-6dc8-4bb5-8b98-90a5f639563c",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1c1ea1cb-489b-4640-a998-14c1ad20f508",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1c21e94f-31e2-4887-9f95-9185c9463c98",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1c93886a-6883-4b2f-95ee-824e7ddfba43",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1d3b4c41-5e6a-4683-9577-7f74e15543b2",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1efcd958-1985-448f-9a6b-91c3d43c2a42",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-05-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1f1e7643-3901-40f0-977b-6f26afbca3c6",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "1fba6775-edf4-4358-a9cf-0c82626149f1",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "1fdec890-18d9-410b-aa86-3b38532188fa",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-24",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "20233624-8a28-4f4b-8964-d41125c91ef0",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2054e4cd-5843-4423-95ed-74e7667a57f7",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "20663067-3868-45a0-8861-c4b9957ffa42",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2146c4a2-d866-4ba8-9d1b-96b1068a811d",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-12",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "235528eb-2b2d-47d3-9cd3-6107f36fe521",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "23babe12-74cc-4d16-af98-9263063de3d2",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "24ea94ff-7cd0-437f-81ea-6e78a0d8fbca",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "24f87c78-ce2a-43be-bc4e-105ecbef002b",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "24fb847f-e8a6-487a-bf84-b026e39c81bb",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "25c059c6-4ca3-4bf1-921f-b654a5f85af1",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-12-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "263f39e8-9a7c-418b-9ab8-488486a241b6",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "26fd2587-9517-433c-bee7-b6d581e4e8b7",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "271872eb-7888-4ad5-ae86-b57455b03e82",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "278accb3-85a9-42c8-82fe-4c65323a2e3c",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "279ab728-7d4e-450d-ab8c-a55886cd22b2",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "27f110b0-5326-4b89-832b-64459de65967",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-12",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "287694fc-7ba0-417c-ae6e-86c298fdc257",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "28beb87b-320f-4847-b844-c203320ecf4e",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "28d8055d-1931-4362-a8e5-49a6262453d8",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2956b1fa-c422-47a9-bcad-f69e93b60f1d",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "297e756f-dfa8-4cc3-a3dc-5a60d782bedd",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "29aea2cf-6bad-4a1b-a7af-5ae6b344dc82",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "29f65ec8-4395-4edb-af0c-b676cb22eff8",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2af848bc-863a-4528-a97a-54873866ba97",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "2c011946-fde8-4476-b911-d29fea0ba2fd",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2d1f7152-463f-4d50-8b35-635483059268",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2dac7e22-9952-4137-9b69-d4fe6d15d3cc",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-30",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "2db21ee1-8138-4bea-8840-c81f1f0c291a",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2db4170b-7b96-4417-bc7e-a924243afc33",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2dc38d3a-a57d-4796-b293-bc1e631e6c1e",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2e01394d-766f-403b-a136-feb0c10f82b5",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-17",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "2e06f551-323f-4d92-bbef-f35c60da87f5",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2e1ac2e3-17e5-4493-8a8f-d32992b8339f",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2e4c9517-722a-4451-8f44-af73ccde2dac",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-02",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "2e765f87-0ebd-4c58-a069-b971e2e87de6",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-25",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "2f2f6f7a-5501-417d-bf8b-b173703092fa",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2f41de8e-cc2e-434f-ad3e-ec0639292688",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2fdd589c-3e15-4c16-86f8-bb67d12c4565",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "2fef9971-cdc6-421d-a34d-e5ed1d601134",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "300447d9-2957-43a2-9b21-469a463cbe9a",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-31",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "30dae268-5ef3-4ffc-94ab-a0fafdc3a2b0",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-15",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3169be89-4c5a-4660-aad6-e6e0ba82fa97",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "31a0394c-c6a7-4ecb-a5f2-f717bfdf24eb",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "31d39053-f24d-49e8-9fb1-52368641b074",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "31fabee0-26ca-4c76-acdb-77af3900aaad",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-26",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3204c2c4-83f2-495c-87d1-4d680a2fc8e4",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "324503db-b4f5-43c4-adb1-57d165a56cf5",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-22",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "32cfa243-44e8-4372-9688-58f0479f6900",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "32d0a015-d460-468f-a830-db523e39f4ad",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-31",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "32dbeea0-64c1-43b8-910e-8d4608fa1cd6",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-17",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "33337f04-5dbc-4537-8446-9bd9bae04023",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-26",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "33354ccc-b1a6-490f-8cb9-16ba4afb4b77",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-29",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3377dbc9-4a13-49d2-ae2c-5db421c8ffae",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "33c23a64-8140-409e-99b3-f6083adde0ca",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "341851dc-160d-4ad1-a9b4-9122acb64b8d",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-25",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "343b2786-5026-437f-91cf-94f1130ad869",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3460d7c5-38d6-42bc-8011-97bb06e73161",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3553c404-323a-48f3-8a32-8966a6405a2c",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "359e335c-c685-40de-b3ff-8b8e0b4dae16",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "35f9250b-9797-4a42-be63-486bd0a3a833",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "36183a8d-ced2-47df-8e04-e9cea0d30205",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "36de41e5-1833-4229-b822-4a1a118fc2d8",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3701bc87-a346-42ed-a295-c944148d3d40",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-14",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "371a2580-a499-4700-9523-73b04905b546",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "37ccdf9c-438e-485e-a4d3-3e67cbceff3e",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "394514af-4c58-42de-bd5b-8e1a05172b52",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3a0ce07a-1b6b-4edb-ae1b-7d00beb98781",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-23",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3b4d69ef-0ca7-46ba-b6d9-68ecd2e3ed02",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-12",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3b5edc88-aadc-45fe-9588-9b24745d8f07",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3c69cb31-7ab4-4d03-a96b-815603759213",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2021-04-23",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3c946c36-2eee-478e-8b16-f2b6272d4cf4",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3ee63d10-c9da-4594-b05a-566d54ace3f4",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3fae9b39-d41a-4d50-a0c3-c4d4e2fc4fa9",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3fcb5845-173a-46a1-b6cf-b564f57befd4",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "3fe85c21-ec7f-4eb4-8e20-47c1d2415238",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "3fffbee7-b429-4f17-964d-a250bf96933d",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4027cc92-19e5-4312-98a6-c43db0c23c91",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2023-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "429fb6e4-31bb-4e8d-9b39-6688a417d467",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "42d1a5bf-1de4-41c4-bbd2-1a1345ba81ad",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2023-04-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "43d3df4c-2ecd-4ed0-ad19-eaab41656504",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-10",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "44093ff5-40ed-4649-80d0-1a3b5f482884",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "447a1fcb-c057-4f08-8f83-37ac7871acd0",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-12-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "447ed11c-e8b9-49b9-b8e7-b56112612d3f",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "44ddcae3-bb01-4bc2-bb81-c7ea78dd010f",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "44e89cef-4640-44d8-96a1-bce7cff8bf63",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "44ed5cb5-3063-4e90-8367-e612b46dc292",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2023-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "45fd0a3c-0a98-467f-ad60-9a6c453ad61e",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4730fb32-c001-4cf0-837e-5ca8976fdfde",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4774f467-2989-4e70-bba1-8568f7a954ce",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2021-03-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "47b00cd4-79bd-4ac8-a42f-2a8bd99fd10a",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "47c37c52-d870-4ff6-b519-757f3e071525",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "480443df-1817-4238-9fa8-6d2dc9d9cf4b",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-12",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "487f5700-abad-4de3-af62-fd42b555633c",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "48995a3a-bc64-4e38-bee0-d0151c0870b6",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-15",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "49e40a17-8051-4510-b5f0-f4feb062e2a7",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4a6a9b6a-9538-4dff-8613-e7449435c93e",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-10",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "4a7c4b57-8279-4e39-83c5-7369dda98c37",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4a7d2bdd-0895-47c9-91da-d65cf311183b",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4aa5ade5-b2d9-4921-a0b9-0fa0ee1deb02",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-16",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "4ad45323-1e9c-48ed-af88-4c587517233b",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4cd12789-3f26-4619-90fd-77120edf8b9c",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4d7d5941-143a-40d3-b7c0-e37f8c1cb1a7",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4dd449c6-e964-43fa-8bc5-706121716a33",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4ddbf416-84a6-4592-8a0b-481ec2a40778",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4e34339a-c34f-48f6-af6d-c658395573a5",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4e6f207a-e1e7-4087-a2a9-8161894a6746",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4ed2e70f-fa03-4b3e-bea7-52124e778dae",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-30",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "4f0f29d2-d903-4fce-85f2-4b3534b98071",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "4f169523-a844-4bac-9746-e4fa113dd621",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-28",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "4fbee7a2-85c7-47bd-b5c6-d226bba3ae08",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-23",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "4ff773e9-32d0-4984-b5e2-faec4280d527",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-28",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "503696cc-b0e2-463a-b132-9c0d2eb0b12d",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "50f9cb82-15ea-4fd5-bd66-d05447ff7750",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "51f72968-9c7f-4bb5-8ae3-5da2cdd65200",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-24",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "529a07aa-d8ad-48ec-9cb2-484c681c0104",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "52dc78e7-7970-459e-bfbc-a40c875e2aac",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-29",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "53128ad1-5581-4960-9c30-86e78a94c880",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "53d184fc-43df-4b4f-8b87-2c08f5075eee",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2023-04-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "54ba22c9-ccfb-4163-8f33-b5c92841c0f6",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "554c8618-786a-4cd0-a474-1e9872ac6e03",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "56380394-ea9d-49ad-8160-16bd6521d5bd",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "563b49a9-e2e1-46a7-888f-e363a935ac92",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-31",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "567879f7-816d-44ba-ad2f-b26b9e0311b5",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "56893254-9298-4e87-a1d7-3dd33fdf2bbb",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-13",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "56d057a7-d6bc-4b3b-b4a4-ff43870eb70b",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-14",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5790b60d-8070-4e9b-8bf8-d2c6fb8c4908",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "57a0f7c5-ab84-4b93-8c64-51229157b29b",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "581e7791-d917-4894-a6fc-3985def566de",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "58b00e32-8033-4325-a0e5-267a053de440",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "591c8043-f66d-46b4-8ebe-ac9a5e66fb06",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-05",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5a03c1f2-378d-4ee5-ad75-10a60a258455",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5ac60f45-cbf9-4946-ab64-25264d30b122",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5b9b73bb-5a14-4597-861a-65d3c238c0f1",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5ba72ab1-f8e0-43cc-93b2-0bf327b7ab8d",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-17",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5bdbe101-615a-4d7c-85d1-61c825df7e80",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5c55c830-aaa0-41f5-ab47-f447fda63fee",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5cb65a9d-8258-4e38-982e-88a8020f3c76",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5d0a6c14-3a68-4f9f-aa66-7da3ac6685d5",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5dcf7f70-8dff-4e88-9c6f-8f602223c107",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5e08424e-9c1b-4d56-872b-1071f4412e61",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-19",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5e30b7e0-121f-40c5-8531-47b2a2c03289",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5e4dd7c2-96cc-46e9-9fa6-d012accd3222",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-10",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5e50a2a8-7466-4a35-a1ce-69856e372f44",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "5ef8cae6-f7d8-40ed-b9de-1f70b194bcb7",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-30",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "5fd79017-cd20-47f6-bbf7-090de8990c85",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6035899a-97b0-4c4e-8fe2-b0cad1f52a8a",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "60358efe-980e-4162-8b91-c8933fc57179",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "604662d0-d4dc-4aa6-83e1-a8f5382ded7b",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "60f064f1-d5b5-47af-8578-fafb84c94046",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "624c8a4e-1ba5-4988-8761-60ae93e8ccea",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "628c8895-2f1b-4d1b-8727-b46dfe0d6c80",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-15",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "631b1fa3-8b2a-4ca3-b19b-c7ba0a96bf1a",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-27",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "63c10527-7b82-40f3-bcf6-33a6f7cf7281",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "640c3511-7bd6-4fa7-9d75-9d77e302a7e3",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-04-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "64143389-16b4-4160-bdd6-065392df6fed",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6585eef4-54ab-4fe1-b16a-34eaa4d41725",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "65b726ea-2fcf-44d3-ae18-ad407bb333ce",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "65f3b6c5-2faa-40c7-b7f2-36bf35e35b6a",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "66a16c26-465c-48f9-9c80-cc89229fff79",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "672a738b-f1ed-4fb1-a184-220c08b06c24",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "685efe78-ad57-45a1-a05b-4aef74da0437",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6907d51c-8beb-44a0-8177-baeec399be77",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "690cd977-25d0-461d-ba33-a6025913f9e9",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6964a6b0-330e-460b-bb89-e6ee67c3b65c",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "699342d8-f240-48ae-b975-e5274aea9aca",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6a60a53b-1dc8-4236-9d1a-b3663ae9c427",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-16",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "6a9951bb-c05f-4318-a685-e637b9c180fc",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6c1757aa-1248-435d-a921-484d33262a7f",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6d0dc99b-b416-49e4-b4b8-cce0fc6ac074",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6d242f30-4bef-41e6-935f-9d69287ae99f",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-16",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "6da3b727-8696-405e-837b-ed7208235fb9",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6e3b1082-e8cd-40c9-8faa-c0615e4a35cf",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6eb0bfad-9ae7-4b9d-bbf6-d45b7f6bfc8a",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-31",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "6f1a6c54-3947-4b47-8b5b-72d991cc9d6b",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6f4411f3-f7b2-491b-b1a2-118dfc6cf283",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-05-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6f51ef10-957b-4c3b-91f2-c4ceb263452e",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-18",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "6f5a8543-486d-432a-9446-a9da44b6c082",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "6fe75039-b037-4ada-8f7c-a020bf873b45",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "705fd869-5b10-42ac-bb5a-6247f6c36456",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7101b619-a43e-4ccd-93c0-780e00c3c9a4",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "712804b0-c422-4121-a4de-c5288c84af92",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "71bb43ab-074c-4297-a0e0-dfa4f8fd8605",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-20",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "72928bb6-d21b-4542-9148-f2cd13c93bb4",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-22",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "72953772-c654-495e-8216-63095a841427",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "729dc7d2-dc01-4291-b913-8cc8130182eb",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "72b5dad8-22ff-4e31-9eac-afbed641ef85",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "72ca97e3-888f-4cef-b9e4-fe4a202d9d6a",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-11-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7308245d-ee7d-4e6d-86a6-ecfa1abc0e0e",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-26",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "7372397e-9747-469e-99b4-88053158d1c7",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "74fdb9e9-e221-4a64-a01d-0a56fa32cbbf",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "75021662-5e27-4ddc-ac12-316254ff5671",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "75647cee-5577-4aca-96a3-362b50a16cf8",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7587fa0a-9927-4b53-adac-7f88eb4c0d45",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "75aec35f-1765-4edf-adaf-067294dd3a7d",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "760e23c2-ec36-473e-86ef-2e50e479a279",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-24",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "76a632ae-85f6-432d-b1f4-3fa65fcba266",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-18",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "76fa8023-62cb-450f-84e3-e0d1bd45d4c9",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "77195cd5-852d-469d-89b4-fb779cd4b4fe",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-31",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "77fb872c-19de-419a-ad88-bd0e97176a20",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "78295227-df61-4b24-8d60-c7c1ce098595",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-19",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "78b74abe-400a-4739-8432-c2b4d59885fc",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-12",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "78f273c2-6486-4845-a935-da1ae5c98eff",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "792a6e48-24a6-45e4-a337-ae44740a8541",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "79f2b661-b8ea-4674-a3c6-7d66dde3ba6a",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-05",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "7a867587-aba3-48da-ace9-3f4ac7082b6f",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7be63997-b185-4cfd-897a-e298a1116f62",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2023-04-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7cd9092c-f7e8-4fe1-a186-3bace88575dc",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7ce7f660-5bac-43cf-8b8f-0a1b2d4e5bbe",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7d1f1c66-c31f-4218-b36d-c03787f231d8",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7d489bc1-5077-4b39-91c1-e5641f76ef16",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7d4a7338-2034-4347-b2aa-55a8f6b0ae05",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-30",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "7d7ec553-10e1-41fa-9be0-63537f15c093",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-30",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "7f0370f2-6b47-4d68-840b-50b16c7ad1a1",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7f67d7d7-c913-4004-a13e-50208c8c758d",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "7f92a49f-dc96-4b6c-a6c7-de2f7f28925a",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7fa9edd2-f0c1-4240-9f3a-672938b8e9a0",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7fc66a98-4b40-433d-b615-36999c419907",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "7fe0c48d-b660-4a9a-a516-bf677f534525",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "803806e2-a74c-4b11-b560-01bdabbbf561",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "80e1fffa-0293-45a3-b846-83a2ae4b2ee1",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-01",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "813f9028-52f3-4e30-a481-d42b908bafbb",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "81871142-8852-4a21-a5da-3040f98eca70",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "82054ad1-1d40-4be9-ba9f-40e69f9697ac",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-01",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "8211cb1b-9da9-4bc7-a969-fda0372db5c3",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "825a2201-eadf-4765-84a1-a770c70182b9",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "825f7437-8334-484a-b3f1-ea0ca9479946",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "826a20d8-efed-4537-99ee-1753c735e98d",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-28",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "827094d4-1221-45c3-bd60-71be2e70fed0",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "835d18a9-6560-4ab7-89fa-0d1612b7e1e3",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "84c2ba54-c7e7-42d0-9ff0-7eca8244f5ad",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8524792c-5f8a-4c3b-89dc-f6388cc1a3e7",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-14",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "86340231-f7f6-4c26-9bab-12ebf9f74e07",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-22",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "868e91a6-8cdb-431f-8ae5-61383a820a15",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "86f8d18f-bb1e-4fab-b50c-cb5b96afb3d8",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "87684ef5-e645-4ad6-95fe-b41d9a3a5757",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "878652fc-62f5-41ff-b96d-637ad966f690",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "886af9f1-ead7-42a8-955b-b1d20b50bac6",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "88788129-a312-485a-ae1f-11fabcbb1b24",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "88e5bf4c-24af-4a66-ab0b-5acc1b771bf0",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-05-04",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "893c5df3-8e02-402d-9497-023cdb827e86",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "89559187-b320-4c48-989c-f087256101fb",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8a2661e9-6666-4a2a-bd92-81da12357f94",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8a30e617-59a8-46c3-b676-f6dc0df50635",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-12",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "8b29ec8c-aaeb-42be-bb46-9489a3e86da3",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8b45d92d-c66f-4864-9ad5-cedd274d8eb3",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8b4c3f6e-09f4-48cb-bdd7-7212714ac385",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8cf9c040-d76f-4632-848f-e4bca5a00460",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8ee26977-bd05-448e-88f4-9160b9d2ba8b",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "8f88f1b7-1184-4bf9-9342-25d322b3480c",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-30",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "8fa60561-7878-4c9e-ac50-4b1c43244b21",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "9088ede4-b94f-42d7-a486-9503fafe1e49",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "915955b5-c77b-40d0-8b93-e946203b3bcc",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-31",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "91701939-b1e1-415b-a58b-24085d84ac21",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-19",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "917d3d38-aa71-4edb-b3d6-351c4c46643b",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "91c3fb5e-4d55-4de7-858e-f9d9f24a42b8",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "922a8942-ce78-46d6-8325-651419859d7d",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "92e63336-63c1-4f51-a7e2-9734c1e7ee19",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-23",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "93cb2012-21c6-4811-8f34-d8e62a11b365",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "95f42879-6eb9-4753-b23a-6caff336f0f5",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "96a9cb2e-a72f-4a61-9c56-6672e9343f3c",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "974fd70b-5551-4e5a-97fe-705919ecb33e",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "97939dec-f894-47a1-8a70-7175938e7897",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "97fbebe0-a1e3-4244-aca1-6008f0b1bf89",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "99307a17-8505-496e-8db5-1f28315471c1",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "993b8b06-9504-4d13-9d7b-6575ec4eb4ec",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "99a774da-115e-40ba-8506-3c68d0361489",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "99aeb01b-e2f6-4aab-b609-1b7d475768ce",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "99ed1574-682b-431d-a5a0-545c596790a3",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9a3ad802-a6f8-4d98-8703-50f42edc4245",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9a55d6c9-bc1d-4477-beb7-c4191a1706d0",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9a937315-fd37-4384-aa47-05ed776e912f",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9ba1d2cd-2b49-450a-8a59-0c37654c8f93",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-01",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "9bc2dae4-4bb9-48bd-ba88-38eb07910c51",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9c10827e-cc9e-481d-af0b-80c7a679d9d5",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9c5b09fb-7a1b-4e12-97f7-4fca0778bc8e",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9f84459b-6204-4c8c-a025-cd5091de768c",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9fa3c9a2-7987-4376-b9aa-5a3a492bbbf6",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "9fe86a0d-6890-46b3-821d-30dca9813030",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a00befba-9845-4ecb-bef7-b6d7043387a9",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-06-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a0e80b87-ef71-42e9-bbe7-4d0371c22039",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-12",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a17c6d4c-b47d-4310-9a7d-850acccd1524",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a1860dd8-6df3-43ce-96a1-ae52a677836b",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a204eaa9-7840-4d72-857f-3089d3bf0402",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a38eb2e3-8124-4845-bece-840ba86a1aed",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a478cb4f-a119-4fea-b5db-2bf91b61708b",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a491bcb5-5397-4124-9709-a0ce4e6a46c7",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a6414eeb-aed8-4825-8888-1dd81c4cb275",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-31",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "a6fad759-59f1-4c69-b804-c37ab4619b7d",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a79cfbe2-78ab-44ee-a781-558e2b7c388c",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a7ed3268-8fe9-4294-a6e0-682506585b77",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a8557c37-240e-4b4c-9a30-5356e346951b",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "a8c086c1-bfb7-4458-ab6e-d21dd963fb7c",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a933c588-4d7a-45e8-976b-4d75c0f28478",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "a94f32cc-3e17-4774-b4f8-eab90383fec9",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "a9d7aed6-0c95-47bc-9db3-2db22b383716",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-18",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "a9e41f14-0890-49a3-8dff-b0f88771bc0f",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "abcd826e-1899-4544-8f67-247c520887c3",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "abee1514-b9ff-4648-9295-33211c41f407",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ac1d8b2c-1b99-41a0-88c8-d462ce9cb991",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ac3d2ea7-cf09-4349-9af4-2afc608533e5",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ac7553db-9723-4c78-91c8-24612cd8a491",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ac96ec97-79e7-4fa7-966d-588155089580",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-05-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ae461059-d5c7-4b69-bb8f-9dac7cb70469",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2021-04-28",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "af08fc25-efc9-45e6-bd04-b541a97b0079",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "af11ea8b-767e-44ad-8500-ff7a5a164c63",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "afc8c074-66f6-4c07-86dd-13d2d0de37da",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b0002f10-fe09-4360-80a9-49d09c194cb1",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b1346d4b-61bd-4edb-a694-046f4c53e078",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b13c005f-48d4-4444-80c8-6ea59be80c0f",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2021-03-15",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "b1420283-3782-40fd-bb03-d8a80b63aa63",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b1b1d24a-d82f-4b26-94e8-6a108e4fb25f",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b2575db2-044d-4be5-8342-b20c718ee021",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b26abea2-23b4-40fc-ae14-54c6777dbf02",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b303b63c-3556-4a22-8fe8-5d064e2e1ddc",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b3d899be-2eb3-41e8-9e45-12287abd18c9",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b4f19879-9d83-4e6e-b9e6-a8a61b93d222",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2023-05-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b553d630-dafb-4c1f-9477-9556b3b20f75",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b61d5448-3cb1-4016-b381-b17efddaf718",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b630c5a7-3b63-4fad-9c28-41d1fe0524e0",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "b65adfd2-d76e-4cb6-a173-1cb301917b87",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-26",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "b6913f93-e7b1-4faf-ab4d-54261b0e31ea",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b6e6140a-35d9-4cb4-8fa2-c3fe5a6de8b1",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b72d04c2-4ea9-4169-96de-814af421c6e1",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b7c746c0-1c96-492f-b858-252df551da9a",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b7fb5a34-3bc6-42cc-a0e6-ddfde9115a5c",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b803e652-d1f6-4f82-84d8-d96e91392b4e",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b8b799cb-2610-4d3b-9c28-381c7617f39d",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b8f104d6-1f17-4f64-a246-bb4bb50b2f99",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "b94c9ad1-19e9-4d70-b1d7-4dbdf77c44a1",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "badb77ff-bc51-43ea-848d-2684ac2e9fe6",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-22",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "baf9eb7b-e616-47d7-a747-4b161382e770",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-25",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "bb3b2494-056f-4c7a-b0ac-7af6b3db3998",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "bbf86d40-4d79-4973-b92e-a0ff422a766c",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-15",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "bc57c9b0-1c86-44c8-8f34-81aa4db29550",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "be852859-f560-4d6d-899d-f81053ae3425",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-22",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "be8e188a-041b-4540-a2dc-62b951f38648",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-21",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "beba689c-d417-47a7-89d0-c245ec47f464",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "bf9c50de-f998-47df-b45b-3af0dbd2640e",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c0ad3dbf-e3d0-4d95-8e84-23e0621984a1",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "c0e76008-7c6e-4dba-a516-94a5c294088e",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c12751cf-626d-4cb7-b7cc-5e8fc1bf52db",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2023-05-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c148a953-1d79-44ca-81d1-01958aef14da",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c18fd470-2935-4cdc-9c63-56857aa18715",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c1d0b08c-896d-4720-903c-365b3107d0cf",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c2a40839-8e34-478b-8114-1b818eada8b3",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c2ca0218-84f0-4e53-957c-cae2e923cca2",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c38cee7b-b73d-4ac8-93d3-1770735fea17",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c431f822-b7d5-485b-a5af-94334859a591",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c4ed46cd-0618-4a41-91e2-f716e834b5f6",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c4fd7540-062e-437d-8199-fe204b57ca71",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c5720956-6182-4574-95fa-b38bd87ce66f",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-16",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "c5cbbce2-8a3f-4942-8d81-6b950fc19638",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c5cfda0c-03df-4f73-a3c3-b5c1608e753e",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c688bea8-326f-4b4b-9fbf-f956eeb13a99",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c6aaf16c-e34b-4b39-98b9-658d50c9ba21",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c71eea54-2402-47cb-aa0f-708acf0449d9",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c869ffd0-af79-49ba-86fe-7a07c850d552",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c8c2acc3-e6dc-4327-8ff0-94696ebbeab3",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-10",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "c910ae14-8f23-4974-b981-fda5e1da17d5",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c91f569d-4eed-4486-9306-df4c5e20aa0c",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-12",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "c98f09a0-59a1-4e70-9a15-f261ed476e09",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "c9a0f251-bee5-47ba-96a5-5e07112c6530",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "c9b2ddb6-9c9c-4b83-8cf1-3bfa05104472",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-07",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "cb0fd340-20f3-4c71-8af5-193d9b69ad18",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cb367875-3afa-4a26-b4fe-4c39bd0f5fd4",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-03-31",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cb71e41e-30b7-42d9-8b94-6f424c32362f",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cbddc1c3-ae93-4793-a73e-dd93413fc189",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cc15364c-c646-4e43-bfd9-0c4a47368ed3",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ccef5e8e-b4ad-4a2c-98b2-94caa068ff01",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ccf9520b-f300-4af0-996f-b92a2ef8d5d5",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cd9f3fe6-57ba-46ea-8d11-29e1e73b759c",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cdb0a49f-b1cf-46de-94b9-308a8fd3fae5",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-26",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "cdff5da7-6620-4732-ab0c-8c25bc529db4",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-05",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ce48fb7d-4107-4be9-97dd-1ebf543805d2",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ce99b8c7-b5e1-43c8-8afd-49522c076de6",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-23",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "ceacd4de-448f-4c53-b87f-d1340f0671f9",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cf718114-1275-4331-bf03-1cbece7b58ef",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cf7611d2-8b60-4b29-8c26-68a8d1c7e5a2",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "cfc395ca-8c4e-4e6a-89f1-b7011a6aaaf7",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d00fc17c-7784-472d-b515-7119dae59096",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d13ef6e3-2107-41ed-80c4-1bef80123118",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d1563d73-7196-4fd6-a425-96a9a6f3ab9f",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d17f10cd-d387-43bf-aae0-fdc021df04f0",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-21",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "d1cbdf9e-f3ae-4d64-8d3d-63c78d709f35",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-02",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "d23c4657-2839-4586-9d72-1a04cb08cf31",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-27",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d26ce132-8355-41d7-8ede-21a16d0a1ce5",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d291a097-d904-458f-b24f-93b34abe0595",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d2988562-b4b0-4de8-abd6-1252ad377ec8",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d3417cfb-e9ea-4631-9564-5dda7105a418",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-16",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "d390bd0b-0d4d-4751-b315-0440b285a5e0",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d4fcbfc4-e7a8-4c53-9ea1-56a7ce9fa2dd",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d5f038cc-7971-4ed7-a341-5c54889d4a4b",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-13",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "d62e7925-2a13-43af-8065-71a62daa5055",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d65de215-7b2b-4d14-840b-ba0aefce2706",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d73bc77a-85b4-4c0f-a676-8e65e1a09165",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d75b169a-aff7-4e85-b8eb-482915dbe2fb",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "d8efe52c-7066-4c97-a06d-fc4c93f917fe",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-06",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "d94b2ae4-e581-4dee-bc0a-5d8e2b048bf8",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-09",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "da4a516c-2b23-45a8-a523-6f3f38c40681",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-19",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "da5faa27-cf07-4e1e-83d1-e71031757789",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "da91583f-f0db-4d56-9679-f1ffa95855e1",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "daad7182-3f1a-495b-a0d3-7176efa4dc0b",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-11-30",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "dbc24c6c-685b-42d2-9707-ea484831bcb3",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "dbee1a39-5a33-4a40-ba97-b26027e24ce5",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-11",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "dc359095-3490-4252-8c37-69f74945ae8a",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "dc456ff2-1932-4039-9246-a4c9ebc492ae",
+      "status": "excluded",
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "dc4b7809-3832-4deb-b2ff-862b1c7e2299",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-17",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "dd655e94-6b7f-41dc-a7cb-a06920c293d4",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "dd7fa98d-594c-40f8-a200-046ca9fde5f1",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "df0fb5b1-f0e7-4b99-8178-ef5490e9ef30",
+      "status": "excluded",
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "dfdc5135-3f53-4256-94a4-1d34fed37cc4",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-16",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "e0c2a3d9-250e-4706-944c-0932e83390d8",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e19de0bd-ecba-491b-9fb1-dc4033217d70",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e1d95d70-4d91-44f7-b5d6-95bb28452468",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-04-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e1e9b2f4-30b5-458a-94ef-82b978fccf6d",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e2004bdf-4e1f-4fe7-8c72-88301afcc743",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e286b2f3-9f69-4e72-b484-ae52e23fad7d",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-13",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "e320f15e-f884-4c42-9af7-9ec373e9b7c5",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e3701be3-84ce-47f0-a554-5f41e1d03cf1",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e4d35ee0-6a70-4b0c-9534-3bf34de0f177",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e5e98ee4-08e1-402d-868e-353821836f0a",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-26",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e5e9efb2-b557-41df-918b-7acdabed11cc",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e6444ff3-8da3-4745-9447-190ae9dfcea1",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e70a9079-5999-43ac-a8a6-6ca3f6266e9c",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-18",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e71eac05-0b2c-4f38-a75e-436ac09c222f",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e78715fb-2aac-4ab0-968f-06412b3ce51f",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e7a05655-61f3-4a6a-8100-6932ddc0cfe6",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-07",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e7deef1c-8faa-45a5-b548-3eaabbadec4f",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-23",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "e8455785-cacd-4947-b2b5-89e1e6e88930",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e85e83c7-e4d3-4d07-919f-d1164e744775",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-08",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "e90cd21e-ce10-48f3-af7f-38c2594ed283",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "e92883a9-c215-4dcc-af7f-6940e4735d6a",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "eb85df6a-5f39-4b3d-ad9a-67bdfda04ab3",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ec177572-7e02-4fe6-8cba-e44e24141e44",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ec892296-a5b9-4b42-aea1-c91546e9c382",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-28",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "ec8e13c5-127a-4b0a-8f6a-65d5b2e7070b",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ecbeaea2-6aa3-428d-856e-7f004dc95c73",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ece524d0-25a7-4077-b38f-d4fbaa21c88e",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-02",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "edbf758d-3cc5-45d6-a1de-7226d619cc64",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ee215ed8-b64e-40fc-8071-da6aafddb664",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ee2821a8-1f5e-4733-9bad-1b773b989020",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ef24aeef-b9a5-4fd6-a61a-2ad1ca3d340d",
+      "status": "excluded",
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ef86f55c-e807-42b5-933c-5320c2fb3eb4",
+      "status": "excluded",
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-11",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "efacce93-0cb2-4ab2-a292-895728d61a7a",
+      "status": "excluded",
+      "subject": "fip_13",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-21",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "eff8c4f6-09cb-43d1-946a-40e15976dec3",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f020005e-a138-4f84-8d8d-da12a464e5a9",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2"
+    },
+    {
+      "date": "2022-06-08",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f0362331-fa01-474e-81e1-877797b8a983",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f0c4477f-8623-43c7-a3bf-f0487ba66442",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f0d93628-0ed5-4aa4-ac77-fc604ab0af77",
+      "status": "excluded",
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-04",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f2c7e8a1-1b8b-43ed-8dbe-bef52722fbf0",
+      "status": "excluded",
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f346a32f-3dea-489f-87b4-c4a197aee89d",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-01",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "f38cf46d-4b4d-4eef-9641-77eb899655d0",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-06",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f3ade21d-8af0-424d-8daf-bcf9f99523bf",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f45f39a9-e10f-4471-99d1-792d21cc91ba",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-06-22",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f4aa778e-6a0d-4542-a0ab-4d2e2813d92b",
+      "status": "excluded",
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-09",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f53d9606-49c5-482f-9a8d-30068575564b",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-20",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f5583a9a-5daf-485b-b4cb-1be1a1eab7fb",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-04-15",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "f5f668a7-5443-40d0-bc6a-97c53084dfb8",
+      "status": "excluded",
+      "subject": "fip_14",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-25",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f6227ff1-410c-4fbd-96a0-13f6f76bd4b6",
+      "status": "excluded",
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-23",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f7d75955-ed10-494d-96e1-e8f469299f43",
+      "status": "excluded",
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f9661c29-a2d6-4d44-bceb-7713ef24890f",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-12-16",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f969302e-826d-478d-8fe2-6cd2b5891cb0",
+      "status": "excluded",
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-24",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "f9a90493-8d4f-4d18-bd76-8222904ae56c",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fa392bd5-9734-4476-bcd5-42679a86396a",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2"
+    },
+    {
+      "date": "2022-06-03",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fa418850-f41d-4fbd-a54a-c3d359766b29",
+      "status": "excluded",
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-05-19",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fba1d3cb-517f-4e60-b7f2-3b22d611f409",
+      "status": "excluded",
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-04-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fbc351ea-3c7f-4e6e-ac3c-40feddcb06c9",
+      "status": "excluded",
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-04-17",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fc3deeb9-86f6-46ab-90e1-b20ee34fba33",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-11",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fc567b9a-70b9-41f5-8cc0-d6bbd4f4d1c3",
+      "status": "excluded",
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-15",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fddb6b95-034b-4ab4-b883-4e4f6af38115",
+      "status": "excluded",
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-05",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "fdfabd07-bb2c-4d8f-b0c1-cd9b81d53271",
+      "status": "excluded",
+      "subject": "fip_15",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2021-03-24",
+      "lab": "wittenlab",
+      "reason": "development_animal",
+      "session": "fea96cfe-79fd-41f0-844e-39233c3ad521",
+      "status": "excluded",
+      "subject": "fip_16",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-10",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "fef39af7-f414-4611-960b-b69acb3fb0b1",
+      "status": "excluded",
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2023-05-01",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ffc6506e-4d17-4748-a6c9-889c984a4d10",
+      "status": "excluded",
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    },
+    {
+      "date": "2022-12-14",
+      "lab": "wittenlab",
+      "reason": "adapter_schema_failure",
+      "session": "ffcfa75a-72f0-48e0-9ccf-66b84dc74188",
+      "status": "excluded",
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2"
+    }
+  ]
+}
