@@ -104,6 +104,9 @@ a mixed, non-promotional result; see
 The DANDI:000351 raw-to-archived audit retained both a structural alignment failure
 and a failed timestamp-aligned reconstruction; see
 [`docs/dandi-000351-parity-v0.2.md`](docs/dandi-000351-parity-v0.2.md).
+The prospective 18-animal IBL expansion stopped at its frozen readiness gate because
+the new sessions lack labelled reference-channel rows; see
+[`docs/ibl-feedback-prospective-v0.2.md`](docs/ibl-feedback-prospective-v0.2.md).
 The follow-up baseline-fidelity and normalization study is in
 [`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
 

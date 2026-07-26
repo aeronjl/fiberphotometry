@@ -32,6 +32,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0002](0002-control-free-methods-remain-experimental.md) | Accepted | Keep initial control-free methods experimental |
 | [SDR-0003](0003-separate-subtraction-and-division.md) | Accepted | Represent subtraction and division as different transformations |
 | [SDR-0004](0004-require-explicit-derived-data-alignment.md) | Accepted | Require explicit alignment for externally derived data |
+| [SDR-0005](0005-do-not-infer-photometry-channel-identity.md) | Accepted | Do not infer photometry channel identity from row position |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

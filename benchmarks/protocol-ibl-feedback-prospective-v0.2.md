@@ -1,6 +1,7 @@
 # Prospective IBL feedback robustness protocol v0.2
 
-Status: **frozen but not ready to execute** (26 July 2026)
+Status: **readiness gate executed and failed; outcome analysis not run** (26 July
+2026)
 
 This protocol defines a held-out expansion of the descriptive feedback analysis
 before additional animals' feedback contrasts are examined. The four development
@@ -108,3 +109,14 @@ the population unit (see the trial/session distinction in
 None. Any change after this commit requires a dated amendment stating the change,
 rationale, and outcome-data access status. Changes to the estimand, eligibility,
 readiness threshold, primary hierarchy, or reference universe require v0.3.
+
+## Execution record
+
+The outcome-blind cohort query was executed on 26 July 2026 and committed as
+[`ibl-feedback-cohort-v0.2.json`](ibl-feedback-cohort-v0.2.json), SHA-256
+`c62ef6d2773cf6f5f9e488b72f94f067d82c93de85115611474b91719a9ce14a`.
+It returned 546 sessions from 22 animals. The 139 sessions from four development
+animals were excluded as specified. All 407 sessions from 18 new animals lacked
+the required labelled 415-nm reference rows and failed the versioned adapter
+schema. Zero animals were eligible, so the threshold of 12 was not met and no
+feedback contrast or dF/F outcome was calculated.
