@@ -36,6 +36,8 @@ The unedited outcomes—including a failed headline criterion—are reported in
 A bounded remote integration test streams small slices from the 18.4 GB NWB file
 in DANDI 001084 without downloading the asset. See
 [`docs/dandi-001084-integration.md`](docs/dandi-001084-integration.md).
+The first DANDI and IBL numerical findings are in
+[`docs/validation-report-v0.1.md`](docs/validation-report-v0.1.md).
 
 The scientific scope and competing methods are documented in
 [`docs/scientific-design.md`](docs/scientific-design.md). The existing-tool audit is

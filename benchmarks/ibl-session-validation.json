@@ -1,0 +1,43 @@
+{
+  "session": "7a867587-aba3-48da-ace9-3f4ac7082b6f",
+  "subject": "fip_13",
+  "samples": 74681,
+  "trials": 320,
+  "channels": ["DMS", "NAcc", "DLS"],
+  "estimated_rate_hz": 20.00109865961785,
+  "included_fraction": 0.7828497208125226,
+  "reference_finite_fraction": 0.7828363305258366,
+  "archived_acquired_window_comparison": [
+    {
+      "region": "DMS",
+      "valid_events": 246,
+      "correlation": 1.0,
+      "rmse": 2.9415013084437446e-15,
+      "max_absolute_error": 1.0494209667921695e-14
+    },
+    {
+      "region": "NAcc",
+      "valid_events": 246,
+      "correlation": 0.9999999999999999,
+      "rmse": 4.180619839736357e-15,
+      "max_absolute_error": 1.670712179713263e-14
+    },
+    {
+      "region": "DLS",
+      "valid_events": 246,
+      "correlation": 0.9999999999999998,
+      "rmse": 3.189758212134011e-15,
+      "max_absolute_error": 1.8974405380234316e-14
+    }
+  ],
+  "interpolated_alignment_comparison": [
+    {"region": "DMS", "valid_events": 246, "correlation": 0.9923181224724009, "rmse": 1.602052984167671e-05},
+    {"region": "NAcc", "valid_events": 246, "correlation": 0.9887412893861716, "rmse": 1.8519112870041943e-05},
+    {"region": "DLS", "valid_events": 246, "correlation": 0.9824056611523514, "rmse": 1.9110123178411246e-05}
+  ],
+  "reference_fit_coefficients": {
+    "DMS": [-0.013015382920291944, 4.405380867688254],
+    "NAcc": [0.0010088221977084268, 0.8433290303132838],
+    "DLS": [0.0007951364166464452, 0.8369748710392746]
+  }
+}

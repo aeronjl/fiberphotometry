@@ -70,3 +70,68 @@ def align_events(
         },
         name=f"event_aligned_{variable}",
     )
+
+
+def summarize_event_windows(
+    recording: xr.Dataset,
+    event_times: Sequence[float],
+    *,
+    baseline: tuple[float, float],
+    response: tuple[float, float],
+    variable: str = "signal",
+) -> xr.Dataset:
+    """Summarize actual acquired samples without interpolating or averaging events.
+
+    Window starts are inclusive and stops exclusive. Events remain a dimension,
+    so downstream inference retains the session and animal hierarchy.
+    """
+    validate_recording(recording)
+    if variable not in recording:
+        raise ValueError(f"recording does not contain {variable!r}")
+    if baseline[0] >= baseline[1] or response[0] >= response[1]:
+        raise ValueError("window starts must be earlier than stops")
+    events = np.asarray(event_times, dtype=float)
+    times = np.asarray(recording.time.values, dtype=float)
+    values = np.asarray(recording[variable].values, dtype=float)
+    baseline_means = _window_means(values, times, events, baseline)
+    response_means = _window_means(values, times, events, response)
+    return xr.Dataset(
+        data_vars={
+            "baseline_mean": (("event", "channel"), baseline_means),
+            "response_mean": (("event", "channel"), response_means),
+            "delta": (("event", "channel"), response_means - baseline_means),
+        },
+        coords={
+            "event": np.arange(len(events)),
+            "event_time": ("event", events),
+            "channel": recording.channel.values,
+        },
+        attrs={
+            "subject": recording.attrs["subject"],
+            "session": recording.attrs["session"],
+            "source_variable": variable,
+            "baseline_window": str(baseline),
+            "response_window": str(response),
+        },
+    )
+
+
+def _window_means(
+    values: np.ndarray,
+    times: np.ndarray,
+    events: np.ndarray,
+    window: tuple[float, float],
+) -> np.ndarray:
+    output = np.full((len(events), values.shape[1]), np.nan)
+    for index, event in enumerate(events):
+        if not np.isfinite(event):
+            continue
+        selected = (times >= event + window[0]) & (times < event + window[1])
+        if selected.any():
+            selected_values = values[selected]
+            finite = np.isfinite(selected_values)
+            counts = finite.sum(axis=0)
+            sums = np.where(finite, selected_values, 0.0).sum(axis=0)
+            valid = counts > 0
+            output[index, valid] = sums[valid] / counts[valid]
+    return output

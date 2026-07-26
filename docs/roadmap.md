@@ -24,8 +24,10 @@
 
 - [x] Core NWB round trip and `ndx-fiber-photometry` response-series read path
 - [x] DANDI 001084 bounded remote-stream integration fixture
+- [x] DANDI archived dF/F numerical reproduction and provenance discrepancy report
 - [x] DANDI 001084 API metadata contract and bounded-streaming plan
 - [x] IBL table adapter with alternating-wavelength interpolation and masks
+- [x] Real IBL session reproduction against archived analysis outputs
 - [ ] TDT and generic tabular adapters
 - [ ] Metadata completeness report
 

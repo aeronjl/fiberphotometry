@@ -1,0 +1,14 @@
+{
+  "asset_id": "e766feb5-f2e6-449a-a960-9562bf60d498",
+  "samples_per_channel": 1000,
+  "channels": 103,
+  "formula": "(raw - archived_baseline) / archived_baseline",
+  "correlation": 0.9550991183371618,
+  "rmse": 0.011744069017133148,
+  "mean_bias": 0.010983418806235672,
+  "max_absolute_error": 0.02659283572868587,
+  "median_channel_correlation": 1.0,
+  "median_channel_offset": 0.009776189338773304,
+  "offset_adjusted_rmse": 1.2223313113427346e-16,
+  "interpretation": "Archived dF/F equals the stated fitted-baseline formula plus an undocumented channel-specific additive zeroing step."
+}

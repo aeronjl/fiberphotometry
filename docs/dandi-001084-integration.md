@@ -59,8 +59,9 @@ several device `model` fields as text, whereas NWB 2.9 represents them as links 
 `DeviceModel`. Current PyNWB can read by remapping those values, but the resulting
 objects should not be assumed safely writable without metadata repair.
 
-The remaining validation task is numerical comparison of the bounded processed
-trace against the DANDI example notebook, rather than merely structural agreement.
+Numerical comparison is now reported in
+[`validation-report-v0.1.md`](validation-report-v0.1.md). It identified an
+undocumented but exactly recoverable channel-wise additive zeroing step.
 
 Sources:
 
