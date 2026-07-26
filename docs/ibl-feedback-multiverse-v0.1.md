@@ -12,6 +12,14 @@ The compact numerical artifact is
 and `scripts/run_ibl_feedback_multiverse.py` recreates the complete materialized
 pipelines and provenance from public data.
 
+![Specification curve showing all nine estimates and their analysis choices](figures/ibl-feedback-specification-curve-v0.1.svg)
+
+The curve orders universes by their point estimate; this ordering is descriptive,
+not an inferential ranking. Blue points are alternative universes and the red point
+is the reference IRLS/standard-window workflow. Rebuild it from the frozen JSON,
+without downloading source data, using
+`uv run python scripts/plot_ibl_feedback_multiverse.py`.
+
 ## Results
 
 All nine workflows executed and produced positive correct-minus-incorrect dF/F
@@ -56,3 +64,8 @@ The simulation benchmark already showed that agreement among reference-based
 methods cannot establish that the reference is valid. Nothing here resolves
 that identifiability problem, the observational correctness contrast, or the
 four-animal sample size.
+
+The prospectively frozen expansion protocol is
+[`benchmarks/protocol-ibl-feedback-prospective-v0.2.md`](../benchmarks/protocol-ibl-feedback-prospective-v0.2.md).
+It cannot be activated by counting the existing animals' repeated sessions as new
+replicates; it has an explicit new-animal readiness gate.

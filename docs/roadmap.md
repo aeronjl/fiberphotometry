@@ -59,6 +59,9 @@
 - [x] Failure-retaining robustness and decision summaries
 - [x] Reference-pipeline leave-one-animal-out diagnostics
 - [x] First frozen descriptive public-data multiverse
+- [x] Specification-curve plot API and frozen IBL figure
+- [x] Prospective, new-animal-gated IBL expansion protocol
+- [ ] Execute held-out IBL expansion when at least 12 new animals are public
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures

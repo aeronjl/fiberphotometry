@@ -86,6 +86,11 @@ event_qc = assess_event_confounds(recording, [10, 20, 30])
 Diagnostic figures are optional: install with `uv sync --extra plots`, then use
 `fiberphotometry.plotting.plot_event_diagnostics`.
 
+Multiverse results can be displayed with
+`fiberphotometry.plotting.plot_specification_curve`; the frozen IBL example is
+rebuilt directly from its JSON artifact with
+`uv run python scripts/plot_ibl_feedback_multiverse.py`.
+
 The experimental inference schema keeps arbitrary observation metadata open
 while explicitly declaring units, nesting, factor assignment, estimands, and
 exchangeability. See
