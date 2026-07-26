@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fiberphotometry"
+version = "0.1.0.dev0"
+description = "Composable, provenance-aware fiber photometry analysis in Python"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "BSD-3-Clause"
+authors = [{ name = "Aeron Laffere" }]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+dependencies = [
+  "numpy>=2.0",
+  "xarray>=2025.1",
+]
+
+[project.optional-dependencies]
+nwb = ["pynwb>=3.0"]
+
+[dependency-groups]
+dev = [
+  "mypy>=1.15",
+  "pytest>=8.3",
+  "pytest-cov>=6.0",
+  "ruff>=0.11",
+]
+
+[project.urls]
+Repository = "https://github.com/aeronjl/fiberphotometry"
+Issues = "https://github.com/aeronjl/fiberphotometry/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fiberphotometry"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --strict-config"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["fiberphotometry"]

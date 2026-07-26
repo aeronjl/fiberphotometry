@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "This project is pre-alpha. Cite a versioned release when one becomes available."
+title: "FiberPhotometry"
+type: software
+authors:
+  - family-names: "Laffere"
+    given-names: "Aeron"
+repository-code: "https://github.com/aeronjl/fiberphotometry"
+license: "BSD-3-Clause"
+version: "0.1.0-dev"
+date-released: "2026-07-26"
+
