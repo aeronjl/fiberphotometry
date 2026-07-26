@@ -1,0 +1,77 @@
+schema_version = "1"
+output_directory = "artifacts"
+
+[[sessions]]
+subject = "mouse-01"
+session = "session-01"
+recording = "data/recording-1.csv"
+events = "data/events-1.csv"
+
+[[sessions]]
+subject = "mouse-02"
+session = "session-02"
+recording = "data/recording-2.csv"
+events = "data/events-2.csv"
+
+[[sessions]]
+subject = "mouse-03"
+session = "session-03"
+recording = "data/recording-3.csv"
+events = "data/events-3.csv"
+
+[[sessions]]
+subject = "mouse-04"
+session = "session-04"
+recording = "data/recording-4.csv"
+events = "data/events-4.csv"
+
+[recording]
+time_column = "time"
+time_unit = "seconds"
+
+[[recording.channels]]
+name = "DMS"
+signal_column = "signal"
+reference_column = "reference"
+
+[events]
+time_column = "time"
+event_id_column = "event_id"
+time_unit = "seconds"
+
+[[events.columns]]
+source = "condition"
+
+[analysis]
+schema_version = "1"
+title = "Drug-aligned DMS response"
+
+[analysis.contrast]
+factor = "condition"
+numerator = "drug"
+denominator = "control"
+
+[analysis.channel]
+name = "DMS"
+
+[analysis.preprocessing]
+kind = "reference"
+method = "irls"
+normalization = "divide"
+
+[analysis.event_windows]
+baseline = [-0.5, 0.0]
+response = [0.0, 0.5]
+
+[analysis.inference]
+intent = "exploratory"
+randomized = false
+acknowledged_assumptions = [
+  "approximately_gaussian_unit_differences",
+  "complete_pairs",
+  "estimand_matches_question",
+  "independent_aggregation_units",
+]
+
+[analysis.quality]
+blocking_warnings = []

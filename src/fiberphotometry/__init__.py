@@ -33,6 +33,7 @@ from fiberphotometry.io.tabular import (
     TabularInputInspection,
     TabularInspection,
     TabularRecordingSchema,
+    inspect_loaded_tabular_input,
     inspect_tabular_input,
     inspect_tabular_recording,
     load_tabular_events,
@@ -83,6 +84,11 @@ from fiberphotometry.preprocess import (
     reference_dff,
     resample_recording,
 )
+from fiberphotometry.project import (
+    LoadedTabularProject,
+    TabularProjectConfig,
+    TabularSessionSource,
+)
 from fiberphotometry.qc import assess_recording, assess_signal_recording
 from fiberphotometry.workflow import (
     EventAnalysis,
@@ -110,6 +116,7 @@ __all__ = [
     "Factor",
     "InferenceRecommendation",
     "LeaveOneOutResult",
+    "LoadedTabularProject",
     "LowpassFilterOperation",
     "MaterializedUniverse",
     "MultiverseReportGroup",
@@ -138,7 +145,9 @@ __all__ = [
     "TabularEvents",
     "TabularInputInspection",
     "TabularInspection",
+    "TabularProjectConfig",
     "TabularRecordingSchema",
+    "TabularSessionSource",
     "Unit",
     "UniverseResult",
     "align_events",
@@ -150,6 +159,7 @@ __all__ = [
     "exact_sign_flip_test",
     "execute_analysis_plan",
     "hierarchical_bootstrap",
+    "inspect_loaded_tabular_input",
     "inspect_tabular_input",
     "inspect_tabular_recording",
     "load_tabular_events",

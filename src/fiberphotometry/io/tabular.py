@@ -262,6 +262,33 @@ def inspect_tabular_recording(
 ) -> TabularInspection:
     """Load and summarize a source before selecting an analysis workflow."""
     recording = load_tabular_recording(path, schema, subject=subject, session=session)
+    return _inspect_loaded_recording(recording)
+
+
+def inspect_loaded_tabular_input(item: RecordingInput) -> TabularInputInspection:
+    """Inspect an already loaded canonical input without rereading source files."""
+    recording = _inspect_loaded_recording(item.recording)
+    if not item.event_times:
+        raise ValueError("tabular input requires at least one event")
+    event_inspection = TabularEventInspection(
+        source_name=str(item.recording.attrs.get("event_source_name", "unknown")),
+        source_sha256=str(
+            item.recording.attrs.get("event_source_sha256", "unavailable")
+        ),
+        row_count=len(item.event_times),
+        start_time_s=min(float(value) for value in item.event_times),
+        end_time_s=max(float(value) for value in item.event_times),
+        metadata_columns=tuple(item.columns),
+    )
+    warnings = list(recording.warnings)
+    if event_inspection.start_time_s < recording.start_time_s:
+        warnings.append("events_before_recording")
+    if event_inspection.end_time_s > recording.end_time_s:
+        warnings.append("events_after_recording")
+    return TabularInputInspection(recording, event_inspection, tuple(warnings))
+
+
+def _inspect_loaded_recording(recording: xr.Dataset) -> TabularInspection:
     times = np.asarray(recording.time.values, dtype=float)
     intervals = np.diff(times)
     median_interval = float(np.median(intervals))
@@ -313,24 +340,15 @@ def inspect_tabular_input(
     session: str,
 ) -> TabularInputInspection:
     """Inspect recording integrity and clock coverage before analysis."""
-    recording = inspect_tabular_recording(
-        recording_path, recording_schema, subject=subject, session=session
+    item = load_tabular_input(
+        recording_path,
+        recording_schema,
+        event_path,
+        event_schema,
+        subject=subject,
+        session=session,
     )
-    events = load_tabular_events(event_path, event_schema)
-    event_inspection = TabularEventInspection(
-        source_name=events.source_name,
-        source_sha256=events.source_sha256,
-        row_count=len(events.event_times),
-        start_time_s=min(events.event_times),
-        end_time_s=max(events.event_times),
-        metadata_columns=tuple(events.columns),
-    )
-    warnings = list(recording.warnings)
-    if event_inspection.start_time_s < recording.start_time_s:
-        warnings.append("events_before_recording")
-    if event_inspection.end_time_s > recording.end_time_s:
-        warnings.append("events_after_recording")
-    return TabularInputInspection(recording, event_inspection, tuple(warnings))
+    return inspect_loaded_tabular_input(item)
 
 
 def _validate_recording_schema(schema: TabularRecordingSchema) -> None:

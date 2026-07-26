@@ -47,10 +47,11 @@ class EventAnalysisConfig:
             payload = tomllib.loads(source.decode())
         else:
             payload = tomllib.loads(source)
-        return cls._from_mapping(payload)
+        return cls.from_mapping(payload)
 
     @classmethod
-    def _from_mapping(cls, payload: dict[str, Any]) -> EventAnalysisConfig:
+    def from_mapping(cls, payload: dict[str, Any]) -> EventAnalysisConfig:
+        """Build a strict configuration from an already parsed TOML table."""
         _reject_unknown(
             payload,
             {

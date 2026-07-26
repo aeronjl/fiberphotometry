@@ -84,6 +84,15 @@ Ordinary lab exports can enter the same canonical model through the
 channel, timestamp, event, and metadata roles are explicitly mapped rather than
 inferred from column order or filenames.
 
+The [configuration-first CLI](docs/cli-v0.1.md) now takes a complete tabular
+project through preflight, analysis, fingerprinted JSON, and a self-contained HTML
+report:
+
+```bash
+fiberphotometry inspect project.toml
+fiberphotometry run project.toml
+```
+
 For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The
 [public IBL tutorial](docs/tutorials/ibl-feedback-report.md) takes that contract

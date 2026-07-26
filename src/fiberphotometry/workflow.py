@@ -160,6 +160,12 @@ class EventAnalysisResult:
         destination.write_text(self.to_html(), encoding="utf-8")
         return destination.resolve()
 
+    def write_json(self, path: str | Path) -> Path:
+        """Write the machine-readable result and return its resolved path."""
+        destination = Path(path)
+        destination.write_text(self.to_json(), encoding="utf-8")
+        return destination.resolve()
+
 
 @dataclass(frozen=True)
 class EventAnalysis:

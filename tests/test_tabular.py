@@ -8,6 +8,7 @@ from fiberphotometry import (
     TabularEventColumn,
     TabularEventSchema,
     TabularRecordingSchema,
+    inspect_loaded_tabular_input,
     inspect_tabular_input,
     inspect_tabular_recording,
     load_tabular_events,
@@ -130,6 +131,16 @@ def test_input_inspection_reports_event_clock_coverage(tmp_path) -> None:
         "events_after_recording",
     )
     assert json.loads(report.to_json())["events"]["source_name"] == "events.tsv"
+
+    loaded = load_tabular_input(
+        recording_path,
+        _recording_schema(),
+        event_path,
+        _event_schema(),
+        subject="mouse-01",
+        session="session-01",
+    )
+    assert inspect_loaded_tabular_input(loaded) == report
 
 
 def test_tabular_mapping_rejects_partial_reference_identity(tmp_path) -> None:
