@@ -78,6 +78,11 @@ See [the workflow guide](docs/product-workflow-v0.1.md) and the runnable
 planning step is intentional: execution cannot silently accept inferential
 assumptions on the scientist's behalf.
 
+For configuration-first reruns, use the versioned
+[`feedback-analysis.toml`](examples/feedback-analysis.toml). The
+[public IBL tutorial](docs/tutorials/ibl-feedback-report.md) takes that contract
+through public-data import to fingerprinted JSON and HTML artifacts.
+
 ## Lower-level API
 
 ```python

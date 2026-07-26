@@ -1,5 +1,6 @@
 """Composable fiber photometry analysis."""
 
+from fiberphotometry.config import EventAnalysisConfig
 from fiberphotometry.design import (
     Factor,
     ObservationTable,
@@ -85,6 +86,7 @@ __all__ = [
     "DecisionSummary",
     "Estimand",
     "EventAnalysis",
+    "EventAnalysisConfig",
     "EventAnalysisResult",
     "EventSession",
     "EventSummarySpec",

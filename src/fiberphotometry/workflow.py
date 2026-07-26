@@ -111,9 +111,13 @@ class EventAnalysisResult:
     spec: PipelineSpec
     title: str
     preprocessing: Preprocessing
+    configuration_fingerprint: str | None = None
 
     def to_json(self) -> str:
         analysis = self.pipeline.analysis
+        table = self.pipeline.observation_table
+        animals = set(table.values("animal").tolist())
+        sessions = set(table.values("session").tolist())
         payload = {
             "title": self.title,
             "preprocessing": asdict(self.preprocessing),
@@ -122,6 +126,25 @@ class EventAnalysisResult:
             "analysis": (
                 json.loads(analysis.to_json()) if analysis is not None else None
             ),
+            "configuration_sha256": self.configuration_fingerprint,
+            "data_summary": {
+                "animals": len(animals),
+                "sessions": len(sessions),
+                "events": len(table),
+            },
+            "quality_reports": [
+                json.loads(report.to_json()) for report in self.pipeline.quality_reports
+            ],
+            "processing_lineage": [
+                {
+                    "subject": recording.attrs["subject"],
+                    "session": recording.attrs["session"],
+                    "operations": json.loads(
+                        str(recording.attrs.get("fiberphotometry_operations", "[]"))
+                    ),
+                }
+                for recording in self.pipeline.processed_recordings
+            ],
         }
         return json.dumps(payload, indent=2, sort_keys=True)
 
@@ -154,6 +177,7 @@ class EventAnalysis:
     randomized: bool | None = False
     intent: Literal["confirmatory", "exploratory", "descriptive"] = "exploratory"
     blocking_warnings: tuple[str, ...] = ()
+    configuration_fingerprint: str | None = None
 
     def __post_init__(self) -> None:
         if not self.sessions:
@@ -216,7 +240,11 @@ class EventAnalysis:
             for session in self.sessions
         )
         return EventAnalysisResult(
-            run_pipeline(spec, inputs), spec, self.title, self.preprocessing
+            run_pipeline(spec, inputs),
+            spec,
+            self.title,
+            self.preprocessing,
+            self.configuration_fingerprint,
         )
 
     def _design(self) -> StudyDesign:

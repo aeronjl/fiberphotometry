@@ -1,0 +1,69 @@
+import json
+from pathlib import Path
+
+import pytest
+from test_workflow import _sessions
+
+from fiberphotometry import EventAnalysisConfig
+
+
+def test_toml_config_builds_and_runs_reproducibly() -> None:
+    config = EventAnalysisConfig.from_toml(Path("examples/feedback-analysis.toml"))
+
+    first = config.run(_sessions())
+    second = config.run(_sessions())
+
+    assert first.pipeline.analysis is not None
+    assert first.pipeline.analysis.estimate == second.pipeline.analysis.estimate
+    assert first.configuration_fingerprint == config.fingerprint
+    assert config.fingerprint in first.to_html()
+    assert config.fingerprint in config.to_json()
+    artifact = json.loads(first.to_json())
+    assert artifact["data_summary"] == {"animals": 4, "sessions": 4, "events": 20}
+    assert len(artifact["quality_reports"]) == 4
+    assert artifact["processing_lineage"][0]["operations"][0]["kind"] == "reference_dff"
+
+
+def test_toml_config_rejects_unknown_keys_and_invalid_methods() -> None:
+    unknown = (
+        Path("examples/feedback-analysis.toml")
+        .read_text()
+        .replace(
+            'title = "IBL feedback-aligned DMS response"',
+            'title = "test"\nmagic = true',
+        )
+    )
+    invalid = (
+        Path("examples/feedback-analysis.toml")
+        .read_text()
+        .replace('method = "irls"', 'method = "guess"')
+    )
+
+    with pytest.raises(ValueError, match="unknown root"):
+        EventAnalysisConfig.from_toml(unknown)
+    with pytest.raises(ValueError, match="reference preprocessing method"):
+        EventAnalysisConfig.from_toml(invalid)
+
+
+def test_toml_config_requires_recorded_assumptions_to_execute() -> None:
+    raw = Path("examples/feedback-analysis.toml").read_text()
+    start = raw.index("acknowledged_assumptions = [")
+    end = raw.index("\n]", start) + 2
+    unacknowledged = raw[:start] + "acknowledged_assumptions = []" + raw[end:]
+    config = EventAnalysisConfig.from_toml(unacknowledged)
+
+    with pytest.raises(ValueError, match="unacknowledged"):
+        config.run(_sessions())
+
+
+def test_signal_only_config_selects_units_explicitly() -> None:
+    raw = Path("examples/feedback-analysis.toml").read_text()
+    raw = raw.replace('kind = "reference"', 'kind = "signal_only"')
+    raw = raw.replace('method = "irls"', 'method = "rolling_mean"')
+    raw = raw.replace('normalization = "divide"', 'normalization = "subtract"')
+    config = EventAnalysisConfig.from_toml(raw)
+
+    study = config.build(_sessions(reference=False))
+
+    assert study.preprocessing.output_variable == "baseline_subtracted"
+    assert study.preprocessing.units == "acquired fluorescence"
