@@ -95,6 +95,7 @@
 - [x] CLI from tabular project configuration to preflight, JSON, and HTML artifacts
 - [x] CLI export of raw/processed signals, events, QC, and provenance to NWB
 - [x] Unit-safe grouped report for complete multiverse robustness results
+- [ ] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [ ] Usability review with practicing photometry scientists
   - [x] Freeze v0.1 protocol, stimulus generator, response sheet, and scoring key
