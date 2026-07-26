@@ -176,12 +176,14 @@ dependencies = [
 
 [package.optional-dependencies]
 nwb = [
+    { name = "ndx-fiber-photometry" },
     { name = "pynwb" },
 ]
 
 [package.dev-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "pandas" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
@@ -189,6 +191,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "ndx-fiber-photometry", marker = "extra == 'nwb'", specifier = ">=0.2.3" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pynwb", marker = "extra == 'nwb'", specifier = ">=3.0" },
     { name = "xarray", specifier = ">=2025.1" },
@@ -198,6 +201,7 @@ provides-extras = ["nwb"]
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=1.15" },
+    { name = "pandas", specifier = ">=2.2" },
     { name = "pytest", specifier = ">=8.3" },
     { name = "pytest-cov", specifier = ">=6.0" },
     { name = "ruff", specifier = ">=0.11" },
@@ -442,6 +446,33 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a2/6e/371856a3fb9d31ca8dac321cda606860fa4548858c0cc45d9d1d4ca2628b/mypy_extensions-1.1.0.tar.gz", hash = "sha256:52e68efc3284861e772bbcd66823fde5ae21fd2fdb51c62a211403730b916558", size = 6343, upload-time = "2025-04-22T14:54:24.164Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/79/7b/2c79738432f5c924bef5071f933bcc9efd0473bac3b4aa584a6f7c1c8df8/mypy_extensions-1.1.0-py3-none-any.whl", hash = "sha256:1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505", size = 4963, upload-time = "2025-04-22T14:54:22.983Z" },
+]
+
+[[package]]
+name = "ndx-fiber-photometry"
+version = "0.2.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hdmf" },
+    { name = "ndx-ophys-devices" },
+    { name = "pynwb" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6c/42/6a6b4740264af1c186f6ac0b7d652a57da4f64738bb59aa304a25f54644b/ndx_fiber_photometry-0.2.3.tar.gz", hash = "sha256:b5e973b144c3f50e81ea59ae6e77c09ced991f551a8d04e11c7e41730a609cc9", size = 33526, upload-time = "2026-01-23T20:23:36.256Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0e/ea/973b9d1b7eb6e4418d28e3590a7c5d2f85693cda4e82185610b05d7b9e13/ndx_fiber_photometry-0.2.3-py2.py3-none-any.whl", hash = "sha256:7fd4ae55b8b1d094f5133034d4b7a5bb635c28027f58fd96a1af2260e79cc71e", size = 11729, upload-time = "2026-01-23T20:23:33.956Z" },
+]
+
+[[package]]
+name = "ndx-ophys-devices"
+version = "0.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hdmf" },
+    { name = "pynwb" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/72/7c/32a962a126ac82d13736d9c990aee92464434e111788bae3505c3e499305/ndx_ophys_devices-0.3.1.tar.gz", hash = "sha256:4d76f3f78b50d7f79fe76c2f281ceb057eb708ca84f86b0576adca23716992b7", size = 27674, upload-time = "2025-09-19T15:16:52.803Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/58/21/974d8249b771198066a895288e70a820f374ea0ec75dc85e9c1462f351e8/ndx_ophys_devices-0.3.1-py2.py3-none-any.whl", hash = "sha256:1bf2756ae13f8bd8ad58d62c25f7edf1336aa37f0aeaf5312253178f3f944af0", size = 17891, upload-time = "2025-09-19T15:16:48.489Z" },
 ]
 
 [[package]]

@@ -7,7 +7,7 @@
 - [x] Event alignment retaining individual events
 - [x] Initial landscape and extraction audits
 - [x] Ground-truth simulation seed
-- [ ] Pre-register benchmark scenarios and acceptance thresholds
+- [x] Freeze benchmark scenarios and acceptance thresholds in-repository
 - [ ] Confirm package name with likely users before first public release
 
 ## Phase 1 — trustworthy preprocessing
@@ -17,14 +17,15 @@
 - [ ] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators
 - [ ] Reference contamination and lag diagnostics
-- [ ] Synthetic factorial benchmark report
+- [x] Initial three-scenario benchmark report with retained failure
 - [ ] Diagnostic plots that expose rather than conceal failures
 
 ## Phase 2 — interoperability
 
-- [ ] `ndx-fiber-photometry` read/write round trip
-- [ ] DANDI 001084 integration fixture
-- [ ] IBL/ONE adapter and public example
+- [x] Core NWB round trip and `ndx-fiber-photometry` response-series read path
+- [ ] DANDI 001084 bounded remote-stream integration fixture
+- [x] DANDI 001084 API metadata contract and bounded-streaming plan
+- [x] IBL table adapter with alternating-wavelength interpolation and masks
 - [ ] TDT and generic tabular adapters
 - [ ] Metadata completeness report
 
@@ -41,7 +42,6 @@
 
 - [ ] External reproduction by two laboratories
 - [ ] Stable schema and deprecation policy
-- [ ] Versioned public benchmark results
+- [x] First versioned public benchmark protocol and results
 - [ ] Contributor governance and method review template
 - [ ] 1.0 release and archival DOI
-

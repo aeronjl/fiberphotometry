@@ -14,6 +14,8 @@ def simulate_recording(
     rate: float = 20.0,
     seed: int = 0,
     artifact_scale: float = 0.25,
+    transient_scale: float = 0.08,
+    reference_contamination: float = 0.0,
 ) -> tuple[xr.Dataset, np.ndarray]:
     """Generate a recording with known neural transients and shared artefact."""
     rng = np.random.default_rng(seed)
@@ -24,9 +26,17 @@ def simulate_recording(
         after = time >= event
         neural[after] += np.exp(-(time[after] - event) / 1.2)
     shared_artifact = artifact_scale * np.sin(time / 3) + 0.1 * np.exp(-time / 80)
-    reference = 1.0 + shared_artifact + rng.normal(0, 0.01, len(time))
+    reference = (
+        1.0
+        + shared_artifact
+        + reference_contamination * neural
+        + rng.normal(0, 0.01, len(time))
+    )
     signal = (
-        2.0 + 1.4 * shared_artifact + 0.08 * neural + rng.normal(0, 0.01, len(time))
+        2.0
+        + 1.4 * shared_artifact
+        + transient_scale * neural
+        + rng.normal(0, 0.01, len(time))
     )
     recording = make_recording(
         time=time,

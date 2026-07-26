@@ -22,11 +22,15 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-nwb = ["pynwb>=3.0"]
+nwb = [
+    "ndx-fiber-photometry>=0.2.3",
+    "pynwb>=3.0",
+]
 
 [dependency-groups]
 dev = [
   "mypy>=1.15",
+  "pandas>=2.2",
   "pytest>=8.3",
   "pytest-cov>=6.0",
   "ruff>=0.11",
