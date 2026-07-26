@@ -1,0 +1,58 @@
+{
+  "schema_version": "dandi-000971-tutorial-manifest-v0.1",
+  "dandiset": "000971",
+  "published_version": "0.260213.1851",
+  "doi": "10.48324/dandi.000971/0.260213.1851",
+  "license": "CC-BY-4.0",
+  "selection": "Two explicitly pinned animals from each published PR, DPR, and PS phenotype family; one raw photometry-bearing RI60-family session per animal; no replacement after outcome execution.",
+  "assets": [
+    {
+      "asset_id": "68e165c7-6f20-4ac1-b981-c5172e9eddfb",
+      "family": "FP-PR",
+      "subject": "028-392",
+      "path": "sub-028-392/sub-028-392_ses-FP-PR-2020-07-09T13-01-26.nwb",
+      "size_bytes": 376929803,
+      "sha256": "e8f144ef5d1f0e7e67c34a20907c71e0f19136d013cd396a17778d3a577020b8"
+    },
+    {
+      "asset_id": "1b652815-9f6c-4946-92a9-7c8d68edba6a",
+      "family": "FP-PR",
+      "subject": "048-392",
+      "path": "sub-048-392/sub-048-392_ses-FP-PR-2020-07-10T13-16-31.nwb",
+      "size_bytes": 365304277,
+      "sha256": "12d8d3a5168b21ac9a0b9b35818f6f0fd07c4a0b24dde5bd36c97dbdd1155296"
+    },
+    {
+      "asset_id": "75e5b66e-5f83-48ab-9d0e-ca33da7c78e6",
+      "family": "FP-DPR",
+      "subject": "272-396",
+      "path": "sub-272-396/sub-272-396_ses-FP-DPR-2020-07-07T13-09-19.nwb",
+      "size_bytes": 363756083,
+      "sha256": "679bffe692348b136a774702e9759498212d87a863be4bb33a7ac903ce02e784"
+    },
+    {
+      "asset_id": "77f00211-7d9f-4932-a5fd-0faef2ad8d26",
+      "family": "FP-DPR",
+      "subject": "333-393",
+      "path": "sub-333-393/sub-333-393_ses-FP-DPR-2020-07-13T11-57-48.nwb",
+      "size_bytes": 342215414,
+      "sha256": "26c0ca2c836906629aebb9d3ba1b34b3e4aaeaf94295523ca4d8d11548c17514"
+    },
+    {
+      "asset_id": "466747eb-ff43-40bb-86f4-140ecc5f427a",
+      "family": "FP-PS",
+      "subject": "112-283",
+      "path": "sub-112-283/sub-112-283_ses-FP-PS-2019-06-20T09-32-04_behavior.nwb",
+      "size_bytes": 362391292,
+      "sha256": "f2d54c3c51631e922534ffaeb06d808d2a0076cf7890d220ca3c1bf144440ce5"
+    },
+    {
+      "asset_id": "3052c104-0407-45ea-9acc-8b51d3be7e23",
+      "family": "FP-PS",
+      "subject": "113-283",
+      "path": "sub-113-283/sub-113-283_ses-FP-PS-2019-06-05T11-36-07_behavior.nwb",
+      "size_bytes": 392129135,
+      "sha256": "906b9a95cfa5c513f6ce396d85a041c7419b19b4759f259bc5d10899aafbde21"
+    }
+  ]
+}

@@ -66,6 +66,56 @@ def from_dandi_000971_nwb(
     )
 
 
+def rewarded_unrewarded_nose_pokes(
+    path: str | Path, *, tolerance_s: float = 1e-9
+) -> tuple[np.ndarray, tuple[str, ...]]:
+    """Read active nose pokes and classify the rewarded subset.
+
+    DANDI:000971 stores active-poke and reward timestamps as separate behavioral
+    series.  The conversion audit records each reward timestamp as a member of the
+    active-poke series.  This adapter validates that relationship instead of
+    guessing an active side or matching a reward to a merely nearby action.
+    """
+    if tolerance_s < 0:
+        raise ValueError("tolerance_s must be nonnegative")
+
+    import h5py
+
+    with h5py.File(path, "r") as nwb:
+        behavior_path = "processing/behavior"
+        if behavior_path not in nwb:
+            raise ValueError("DANDI:000971 asset has no behavioral processing module")
+        behavior = nwb[behavior_path]
+        candidates = []
+        for side in ("left", "right"):
+            poke_name = f"{side}_nose_poke_times"
+            reward_name = f"{side}_reward_times"
+            if poke_name not in behavior or reward_name not in behavior:
+                continue
+            pokes = np.asarray(behavior[poke_name]["timestamps"][:], dtype=float)
+            rewards = np.asarray(behavior[reward_name]["timestamps"][:], dtype=float)
+            if len(pokes) and len(rewards):
+                candidates.append((side, pokes, rewards))
+        if len(candidates) != 1:
+            raise ValueError(
+                "DANDI:000971 requires exactly one rewarded active nose-poke side"
+            )
+        _, pokes, rewards = candidates[0]
+
+    rewarded = np.zeros(len(pokes), dtype=bool)
+    for reward in rewards:
+        matches = np.flatnonzero(np.isclose(pokes, reward, rtol=0, atol=tolerance_s))
+        if len(matches) != 1:
+            raise ValueError(
+                "every reward timestamp must match exactly one active nose poke"
+            )
+        rewarded[int(matches[0])] = True
+    if rewarded.all():
+        raise ValueError("session contains no unrewarded active nose pokes")
+    labels = tuple("rewarded" if value else "unrewarded" for value in rewarded)
+    return pokes, labels
+
+
 def _column_mapping(nwb: Any, table: Any) -> dict[tuple[str, str], int]:
     if "name" in table:  # small synthetic fixtures and possible future exports
         names = [_text(value) for value in table["name"][:]]

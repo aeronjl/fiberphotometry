@@ -1,7 +1,10 @@
 """Interchange adapters for external photometry formats."""
 
 from fiberphotometry.io.dandi_000351 import from_dandi_000351_nwb
-from fiberphotometry.io.dandi_000971 import from_dandi_000971_nwb
+from fiberphotometry.io.dandi_000971 import (
+    from_dandi_000971_nwb,
+    rewarded_unrewarded_nose_pokes,
+)
 from fiberphotometry.io.ibl import from_ibl_tables
 from fiberphotometry.io.tabular import (
     TabularChannel,
@@ -52,4 +55,5 @@ __all__ = [
     "load_tabular_input",
     "load_tabular_recording",
     "load_tdt_input",
+    "rewarded_unrewarded_nose_pokes",
 ]

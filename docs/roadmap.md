@@ -97,6 +97,10 @@
 - [x] Unit-safe grouped report for complete multiverse robustness results
 - [x] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
+- [ ] Canonical raw-NWB to animal-level robustness tutorial
+  - [x] Freeze the DANDI 000971 cohort, estimand, and eight-universe protocol
+  - [x] Add the executable workflow and synthetic end-to-end regression fixture
+  - [ ] Execute the frozen public cohort and publish the retained result narrative
 - [ ] Usability review with practicing photometry scientists
   - [x] Freeze v0.1 protocol, stimulus generator, response sheet, and scoring key
   - [ ] Run five moderated sessions and publish the de-identified synthesis

@@ -3,7 +3,10 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from fiberphotometry.io.dandi_000971 import from_dandi_000971_nwb
+from fiberphotometry.io.dandi_000971 import (
+    from_dandi_000971_nwb,
+    rewarded_unrewarded_nose_pokes,
+)
 
 h5py = pytest.importorskip("h5py")
 
@@ -36,6 +39,20 @@ def _write_fixture(path, *, names=None):
         table.create_dataset("location", data=[b"DMS", b"DLS", b"DMS", b"DLS"])
         nwb.create_dataset("general/subject/subject_id", data=b"mouse-1")
         nwb.create_dataset("identifier", data=b"session-1")
+
+
+def _write_behavior(path, *, rewards=(2.0, 8.0), second_side=False):
+    with h5py.File(path, "a") as nwb:
+        behavior = nwb.create_group("processing/behavior")
+        pokes = behavior.create_group("right_nose_poke_times")
+        pokes.create_dataset("timestamps", data=[2.0, 4.0, 6.0, 8.0])
+        rewarded = behavior.create_group("right_reward_times")
+        rewarded.create_dataset("timestamps", data=rewards)
+        if second_side:
+            left_pokes = behavior.create_group("left_nose_poke_times")
+            left_pokes.create_dataset("timestamps", data=[3.0])
+            left_rewards = behavior.create_group("left_reward_times")
+            left_rewards.create_dataset("timestamps", data=[3.0])
 
 
 def test_loads_and_block_averages_paired_regions(tmp_path):
@@ -91,3 +108,30 @@ def test_reads_names_from_commanded_voltage_references(tmp_path):
     recording = from_dandi_000971_nwb(path)
 
     assert recording.channel.values.tolist() == ["DMS", "DLS"]
+
+
+def test_classifies_rewarded_active_nose_pokes(tmp_path):
+    path = tmp_path / "sample.nwb"
+    _write_fixture(path)
+    _write_behavior(path)
+
+    times, labels = rewarded_unrewarded_nose_pokes(path)
+
+    np.testing.assert_allclose(times, [2, 4, 6, 8])
+    assert labels == ("rewarded", "unrewarded", "unrewarded", "rewarded")
+
+
+@pytest.mark.parametrize(
+    ("rewards", "second_side", "match"),
+    [
+        ((2.1,), False, "match exactly one"),
+        ((2.0,), True, "exactly one rewarded"),
+    ],
+)
+def test_rejects_ambiguous_behavior(tmp_path, rewards, second_side, match):
+    path = tmp_path / "sample.nwb"
+    _write_fixture(path)
+    _write_behavior(path, rewards=rewards, second_side=second_side)
+
+    with pytest.raises(ValueError, match=match):
+        rewarded_unrewarded_nose_pokes(path)
