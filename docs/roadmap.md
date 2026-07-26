@@ -54,6 +54,7 @@
 - [x] Result provenance with package version, timestamp, input fingerprint, and seed
 - [x] Seeded Monte Carlo plan execution
 - [x] First frozen descriptive IBL analysis plan and result
+- [x] Typed preprocessing-to-inference pipeline with non-destructive QC gates
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures

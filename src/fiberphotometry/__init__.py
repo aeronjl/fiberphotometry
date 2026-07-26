@@ -23,6 +23,15 @@ from fiberphotometry.inference import (
     unit_t_interval,
 )
 from fiberphotometry.model import make_recording, validate_recording
+from fiberphotometry.pipeline import (
+    EventSummarySpec,
+    PipelineResult,
+    PipelineSpec,
+    PreprocessingSpec,
+    QualityGateSpec,
+    RecordingInput,
+    run_pipeline,
+)
 from fiberphotometry.planning import (
     AnalysisPlan,
     AnalysisResult,
@@ -39,11 +48,17 @@ __all__ = [
     "AnalysisResult",
     "Contrast",
     "Estimand",
+    "EventSummarySpec",
     "Factor",
     "InferenceRecommendation",
     "ObservationTable",
     "PermutationPlan",
+    "PipelineResult",
+    "PipelineSpec",
     "PowerSensitivity",
+    "PreprocessingSpec",
+    "QualityGateSpec",
+    "RecordingInput",
     "ResamplingPlan",
     "StudyDesign",
     "TIntervalResult",
@@ -59,6 +74,7 @@ __all__ = [
     "permutation_test",
     "recommend_inference",
     "reference_dff",
+    "run_pipeline",
     "summarize_event_windows",
     "unit_t_interval",
     "validate_design",

@@ -12,12 +12,17 @@ from one.api import ONE
 from fiberphotometry import (
     Contrast,
     Estimand,
+    EventSummarySpec,
     Factor,
     ObservationTable,
+    PipelineSpec,
+    PreprocessingSpec,
+    QualityGateSpec,
+    RecordingInput,
     StudyDesign,
     Unit,
     create_analysis_plan,
-    execute_analysis_plan,
+    run_pipeline,
     validate_design,
 )
 from fiberphotometry.events import summarize_event_windows
@@ -35,6 +40,7 @@ def main() -> None:
     columns: dict[str, list[object]] = {
         name: [] for name in ("event_id", "animal", "session", "feedback", "dms_delta")
     }
+    pipeline_inputs = []
     with tempfile.TemporaryDirectory(prefix="fiberphotometry-ibl-design-") as cache:
         one = ONE(
             base_url="https://openalyx.internationalbrainlab.org",
@@ -62,8 +68,10 @@ def main() -> None:
             )
             dms = int(np.flatnonzero(recording.channel.values == "DMS")[0])
             feedback = np.asarray(trials["feedbackType"])
+            selected_indices = []
             for index, value in enumerate(summary.delta.values[:, dms]):
                 if np.isfinite(value) and feedback[index] in (-1, 1):
+                    selected_indices.append(index)
                     columns["event_id"].append(f"{eid}:{index}")
                     columns["animal"].append(animal)
                     columns["session"].append(eid)
@@ -71,6 +79,21 @@ def main() -> None:
                         "correct" if feedback[index] == 1 else "incorrect"
                     )
                     columns["dms_delta"].append(float(value))
+            pipeline_inputs.append(
+                RecordingInput(
+                    recording=recording,
+                    event_times=events[selected_indices],
+                    event_ids=[f"{eid}:{index}" for index in selected_indices],
+                    columns={
+                        "animal": [animal] * len(selected_indices),
+                        "session": [eid] * len(selected_indices),
+                        "feedback": [
+                            "correct" if feedback[index] == 1 else "incorrect"
+                            for index in selected_indices
+                        ],
+                    },
+                )
+            )
     table = ObservationTable.from_columns(columns)
     design = StudyDesign(
         observation_id="event_id",
@@ -96,7 +119,26 @@ def main() -> None:
         intent="descriptive",
         acknowledged_assumptions=draft.required_assumptions,
     )
-    result = execute_analysis_plan(plan, table, design)
+    pipeline = run_pipeline(
+        PipelineSpec(
+            preprocessing=PreprocessingSpec(),
+            quality_gate=QualityGateSpec(()),
+            event_summary=EventSummarySpec(
+                baseline=(-0.5, 0),
+                response=(0, 0.5),
+                channel="DMS",
+                variable="signal",
+                output_column="dms_delta",
+            ),
+            design=design,
+            analysis_plan=plan,
+        ),
+        pipeline_inputs,
+    )
+    if pipeline.observation_table.columns != table.columns or pipeline.analysis is None:
+        raise RuntimeError(
+            "pipeline result diverged from the frozen direct calculation"
+        )
     print(
         json.dumps(
             {
@@ -109,7 +151,8 @@ def main() -> None:
                 },
                 "design_valid": report.valid,
                 "design": json.loads(design.to_json()),
-                "analysis": json.loads(result.to_json()),
+                "pipeline_blocked_by": pipeline.blocked_by,
+                "analysis": json.loads(pipeline.analysis.to_json()),
             },
             indent=2,
             sort_keys=True,

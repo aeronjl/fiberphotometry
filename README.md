@@ -101,6 +101,8 @@ Finite-sample Welch coverage and conditional power guidance are in
 The first executable public-data analysis is reported, with its post-hoc and
 four-animal limitations, in
 [`docs/ibl-feedback-analysis-v0.1.md`](docs/ibl-feedback-analysis-v0.1.md).
+The typed end-to-end composition and its explicit QC-gating behavior are
+documented in [`docs/pipeline-v0.1.md`](docs/pipeline-v0.1.md).
 
 ## Development
 
