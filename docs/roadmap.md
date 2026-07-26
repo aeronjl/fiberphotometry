@@ -87,6 +87,8 @@
 - [x] Unit-safe grouped report for complete multiverse robustness results
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [ ] Usability review with practicing photometry scientists
+  - [x] Freeze v0.1 protocol, stimulus generator, response sheet, and scoring key
+  - [ ] Run five moderated sessions and publish the de-identified synthesis
 - [ ] External reproduction by two laboratories
 - [ ] Stable schema and deprecation policy
 - [x] First versioned public benchmark protocol and results

@@ -87,6 +87,8 @@ Complete multiverse results can be rendered through
 `MultiverseResult.write_grouped_html`. The
 [grouped-report contract](docs/grouped-multiverse-report-v0.1.md) requires every
 compatible universe to occupy exactly one unit-compatible evidence lane.
+The frozen [formative usability study](docs/usability/README.md) tests whether
+practicing photometry scientists can correctly interpret that report without help.
 
 ## Lower-level API
 

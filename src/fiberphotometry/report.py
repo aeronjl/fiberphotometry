@@ -496,7 +496,7 @@ _CSS = r"""
 --gcamp:#167a50;--gcamp-soft:#e4f1e9;--amber:#9a6416;--amber-soft:#f7eddc}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);
 font-family:"Avenir Next","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-main{width:min(960px,calc(100% - 32px));margin:48px auto 80px}.report-head{display:flex;
+main{width:calc(100vw - 32px);max-width:960px;min-width:0;margin:48px auto 80px}.report-head{display:flex;
 justify-content:space-between;gap:32px;align-items:flex-start;padding-bottom:32px}
 h1,h2,h3,p{margin-top:0}h1{font-family:Charter,"Iowan Old Style",Georgia,serif;
 font-size:42px;line-height:1.08;letter-spacing:-.025em;margin-bottom:12px;text-wrap:balance}
@@ -522,14 +522,14 @@ color:var(--secondary);margin-bottom:0}.chips{display:flex;gap:6px;flex-wrap:wra
 monospace}.warning-chip{background:var(--amber-soft);color:var(--amber)}.quiet-chip{background:
 var(--gcamp-soft);color:var(--gcamp)}.section-head{display:flex;justify-content:space-between;
 gap:32px;align-items:end;margin-bottom:20px}.section-head>p{font-size:12px;max-width:300px;
-margin-bottom:0}.effect-plot{overflow-x:auto}.effect-plot svg{display:block;width:100%;min-width:560px}
+margin-bottom:0}.effect-plot{max-width:100%;overflow-x:auto}.effect-plot svg{display:block;width:100%;min-width:560px}
 .zero-line{stroke:var(--line);stroke-width:1.5;stroke-dasharray:3 3}.effect-stem{stroke:#9aaba2;
 stroke-width:2}.effect-dot{fill:var(--gcamp)}.animal-label,.effect-value{fill:var(--secondary);
 font:11px ui-monospace,SFMono-Regular,monospace}.effect-value{font-variant-numeric:tabular-nums}
-.lane-stack{display:grid;gap:16px;margin-top:16px}.evidence-lane{margin-top:0;
+.lane-stack{display:grid;min-width:0;gap:16px;margin-top:16px}.evidence-lane{min-width:0;margin-top:0;
 border-left:3px solid var(--gcamp);padding-left:21px}.lane-head{display:flex;
-.evidence-lane.lane-warning{border-left-color:var(--amber)}
-justify-content:space-between;gap:32px;align-items:end;margin-bottom:16px}.lane-head p{
+justify-content:space-between;gap:32px;align-items:end;margin-bottom:16px}.evidence-lane.lane-warning{
+border-left-color:var(--amber)}.lane-head p{
 color:var(--secondary);margin-bottom:0}.lane-counts{display:flex;margin:0}.lane-counts div{
 padding:0 14px;border-left:1px solid var(--line)}.lane-counts dd{font-size:18px}
 .interval-stem{stroke:#9aaba2;stroke-width:2}.robustness-summary .estimate{font-size:46px}
