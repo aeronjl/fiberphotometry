@@ -48,6 +48,12 @@ from fiberphotometry.io.tdt import (
     TDTStreamChannel,
     load_tdt_input,
 )
+from fiberphotometry.metadata import (
+    MetadataCheck,
+    MetadataCompletenessReport,
+    MetadataReadiness,
+    assess_metadata_completeness,
+)
 from fiberphotometry.model import make_recording, validate_recording
 from fiberphotometry.multiverse import (
     ChoiceRef,
@@ -132,6 +138,9 @@ __all__ = [
     "LoadedTabularProject",
     "LowpassFilterOperation",
     "MaterializedUniverse",
+    "MetadataCheck",
+    "MetadataCompletenessReport",
+    "MetadataReadiness",
     "MultiverseReportGroup",
     "MultiverseResult",
     "MultiverseSpec",
@@ -173,6 +182,7 @@ __all__ = [
     "UniverseResult",
     "align_events",
     "assess_event_confounds",
+    "assess_metadata_completeness",
     "assess_recording",
     "assess_signal_recording",
     "baseline_dff",

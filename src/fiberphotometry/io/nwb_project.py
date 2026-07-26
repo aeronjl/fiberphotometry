@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from fiberphotometry.io.nwb import add_recording_to_nwb
+from fiberphotometry.metadata import assess_metadata_completeness
 from fiberphotometry.pipeline import RecordingInput
 from fiberphotometry.project import LoadedTabularProject, ProjectConfig
 from fiberphotometry.workflow import EventAnalysisResult
@@ -34,6 +35,7 @@ def export_project_nwb(
     nwb_directory = output_directory / "nwb"
     nwb_directory.mkdir(parents=True, exist_ok=True)
     paths = []
+    completeness = assess_metadata_completeness(project, loaded)
     names = set()
     for source, session, item, inspection, processed, quality in zip(
         project.sources,
@@ -96,6 +98,12 @@ def export_project_nwb(
             processing_module=processing,
         )
         _add_events(nwbfile, item)
+        _add_json_scratch(
+            nwbfile,
+            "fiberphotometry_metadata_completeness",
+            completeness.to_json(),
+            "Metadata readiness for analysis, NWB export, and publication reuse",
+        )
         _add_json_scratch(
             nwbfile,
             "fiberphotometry_project",

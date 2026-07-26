@@ -44,7 +44,7 @@
   - [x] Schema-first wide CSV/TSV recording and event adapter
   - [x] Explicit TDT stream/epoc adapter through the same canonical boundary
   - [x] Checksum-pinned official real-block TDT integration fixture
-- [ ] Metadata completeness report
+- [x] Versioned metadata completeness and analysis/NWB/publication readiness report
 
 ## Phase 3 — inference
 

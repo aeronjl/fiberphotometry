@@ -14,6 +14,10 @@ from pathlib import Path
 from typing import cast
 
 from fiberphotometry.io.nwb_project import export_project_nwb
+from fiberphotometry.metadata import (
+    MetadataCompletenessReport,
+    assess_metadata_completeness,
+)
 from fiberphotometry.project import (
     LoadedTabularProject,
     ProjectConfig,
@@ -30,7 +34,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         project = load_project_config(args.project)
         loaded = project.load()
         if args.command == "inspect":
-            payload = _preflight_json(project, loaded)
+            completeness = assess_metadata_completeness(project, loaded)
+            payload = _preflight_json(project, loaded, completeness)
             if args.output is None:
                 print(payload)
             else:
@@ -58,14 +63,21 @@ def run_project(
 ) -> Path:
     """Execute one loaded project and atomically materialize its artifacts."""
     output_directory.mkdir(parents=True, exist_ok=True)
-    preflight = _preflight_json(project, loaded)
+    completeness = assess_metadata_completeness(project, loaded)
+    metadata = completeness.to_json()
+    preflight = _preflight_json(project, loaded, completeness)
     _atomic_write(output_directory / "preflight.json", preflight)
+    _atomic_write(output_directory / "metadata.json", metadata)
+    initial_hashes = {
+        "metadata.json": _text_sha256(metadata),
+        "preflight.json": _text_sha256(preflight),
+    }
     _atomic_write(
         output_directory / "manifest.json",
         _manifest(
             project,
             "running",
-            {"preflight.json": _text_sha256(preflight)},
+            initial_hashes,
         ),
     )
     study = project.build_analysis(loaded.sessions)
@@ -79,18 +91,19 @@ def run_project(
         failure_manifest = _manifest(
             project,
             "failed",
-            {"preflight.json": _text_sha256(preflight)},
+            initial_hashes,
             error=str(error),
         )
         _atomic_write(output_directory / "manifest.json", failure_manifest)
         raise
     artifacts = {
+        "metadata.json": metadata,
         "preflight.json": preflight,
         "analysis.json": result.to_json(),
         "report.html": result.to_html(),
     }
     for name, content in artifacts.items():
-        if name == "preflight.json":
+        if name in {"metadata.json", "preflight.json"}:
             continue
         _atomic_write(output_directory / name, content)
     artifact_hashes = {
@@ -152,7 +165,11 @@ def _manifest(
     return json.dumps(payload, indent=2, sort_keys=True)
 
 
-def _preflight_json(project: ProjectConfig, loaded: LoadedTabularProject) -> str:
+def _preflight_json(
+    project: ProjectConfig,
+    loaded: LoadedTabularProject,
+    completeness: MetadataCompletenessReport,
+) -> str:
     sessions = []
     sources = cast(tuple[SessionSource, ...], project.sources)
     for source, inspection in zip(sources, loaded.inspections, strict=True):
@@ -167,6 +184,7 @@ def _preflight_json(project: ProjectConfig, loaded: LoadedTabularProject) -> str
         {
             "schema_version": "1",
             "project_sha256": project.fingerprint,
+            "metadata_completeness": json.loads(completeness.to_json()),
             "sessions": sessions,
         },
         indent=2,

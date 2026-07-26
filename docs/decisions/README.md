@@ -35,6 +35,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0005](0005-do-not-infer-photometry-channel-identity.md) | Accepted | Do not infer photometry channel identity from row position |
 | [SDR-0006](0006-require-explicit-nwb-session-metadata.md) | Accepted | Require explicit NWB session metadata and avoid invented hardware |
 | [SDR-0007](0007-require-explicit-tdt-store-mapping.md) | Accepted | Require explicit TDT stream, channel, and epoc semantics |
+| [SDR-0008](0008-open-metadata-versioned-readiness-profile.md) | Accepted | Preserve open metadata while versioning readiness profiles |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

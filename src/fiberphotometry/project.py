@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import tomllib
-from dataclasses import asdict, dataclass, replace
+from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime
 from pathlib import Path
 from typing import Any, TypeAlias, cast
@@ -77,6 +78,7 @@ class TabularProjectConfig:
     recording_schema: TabularRecordingSchema
     event_schema: TabularEventSchema
     analysis: EventAnalysisConfig
+    metadata: dict[str, Any] = field(default_factory=dict)
     nwb: NWBExportConfig | None = None
     schema_version: str = "1"
 
@@ -98,6 +100,7 @@ class TabularProjectConfig:
                 "recording",
                 "events",
                 "analysis",
+                "metadata",
                 "nwb",
             },
             "project root",
@@ -123,6 +126,7 @@ class TabularProjectConfig:
             recording_schema=recording_schema,
             event_schema=event_schema,
             analysis=analysis,
+            metadata=_metadata(payload.get("metadata")),
             nwb=nwb,
         )
 
@@ -192,6 +196,7 @@ class TabularProjectConfig:
             "recording": asdict(self.recording_schema),
             "events": asdict(self.event_schema),
             "analysis": json.loads(self.analysis.to_json()),
+            "metadata": self.metadata,
             "nwb": asdict(self.nwb) if self.nwb is not None else None,
         }
         return json.dumps(payload, indent=2, sort_keys=True)
@@ -207,6 +212,7 @@ class TDTProjectConfig:
     sources: tuple[TDTSessionSource, ...]
     tdt_schema: TDTBlockSchema
     analysis: EventAnalysisConfig
+    metadata: dict[str, Any] = field(default_factory=dict)
     nwb: NWBExportConfig | None = None
     schema_version: str = "1"
 
@@ -226,6 +232,7 @@ class TDTProjectConfig:
                 "sessions",
                 "tdt",
                 "analysis",
+                "metadata",
                 "nwb",
             },
             "project root",
@@ -247,6 +254,7 @@ class TDTProjectConfig:
             sources=sources,
             tdt_schema=_tdt_schema(_table(payload, "tdt")),
             analysis=analysis,
+            metadata=_metadata(payload.get("metadata")),
             nwb=_nwb_config(payload.get("nwb"), sources),
         )
 
@@ -310,6 +318,7 @@ class TDTProjectConfig:
             ],
             "tdt": asdict(self.tdt_schema),
             "analysis": json.loads(self.analysis.to_json()),
+            "metadata": self.metadata,
             "nwb": asdict(self.nwb) if self.nwb is not None else None,
         }
         return json.dumps(payload, indent=2, sort_keys=True)
@@ -577,6 +586,35 @@ def _table(payload: dict[str, Any], name: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError(f"{name} must be a TOML table")
     return value
+
+
+def _metadata(value: object) -> dict[str, Any]:
+    """Retain open, TOML-native metadata for evolving scientific conventions."""
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        raise ValueError("metadata must be a TOML table")
+    _validate_metadata_value(value, "metadata")
+    return value
+
+
+def _validate_metadata_value(value: object, path: str) -> None:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if not isinstance(key, str) or not key.strip():
+                raise ValueError(f"{path} keys must be non-empty strings")
+            _validate_metadata_value(child, f"{path}.{key}")
+        return
+    if isinstance(value, list):
+        for index, child in enumerate(value):
+            _validate_metadata_value(child, f"{path}[{index}]")
+        return
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ValueError(f"{path} must be finite")
+    if not isinstance(value, str | int | float | bool):
+        raise ValueError(
+            f"{path} must contain only TOML scalar, array, or table values"
+        )
 
 
 def _nonempty_string(payload: dict[str, Any], key: str, section: str) -> str:

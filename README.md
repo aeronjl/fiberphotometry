@@ -99,6 +99,9 @@ fiberphotometry run project.toml
 
 Projects with explicit session timing metadata may also emit validated per-session
 NWB files containing raw and processed signals, events, QC, and analysis provenance.
+Every inspection and run also produces a
+[versioned metadata completeness report](docs/metadata-completeness-v0.1.md) with
+separate readiness states for analysis, NWB export, and publication/reuse.
 
 For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The

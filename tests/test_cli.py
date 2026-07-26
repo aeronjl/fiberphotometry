@@ -143,11 +143,17 @@ def test_cli_inspects_and_runs_complete_tabular_project(tmp_path, capsys) -> Non
     manifest = json.loads((output / "manifest.json").read_text())
     assert preflight["project_sha256"] == project.fingerprint
     assert len(preflight["sessions"]) == 4
+    readiness = {
+        item["target"]: item for item in preflight["metadata_completeness"]["readiness"]
+    }
+    assert readiness["analysis"]["status"] == "ready"
+    assert readiness["nwb"]["status"] == "incomplete"
+    assert readiness["publication"]["status"] == "incomplete"
     assert analysis["analysis"] is not None
     assert analysis["configuration_sha256"] == project.fingerprint
     assert analysis["data_summary"] == {"animals": 4, "events": 16, "sessions": 4}
     assert manifest["status"] == "complete"
-    for name in ("preflight.json", "analysis.json", "report.html"):
+    for name in ("metadata.json", "preflight.json", "analysis.json", "report.html"):
         assert (
             manifest["artifacts"][name]["sha256"]
             == hashlib.sha256((output / name).read_bytes()).hexdigest()
@@ -209,6 +215,7 @@ def test_cli_exports_valid_provenance_complete_nwb(tmp_path) -> None:
         assert set(nwbfile.trials.colnames) >= {"event_id", "condition"}
         assert set(nwbfile.scratch) == {
             "fiberphotometry_analysis",
+            "fiberphotometry_metadata_completeness",
             "fiberphotometry_project",
             "fiberphotometry_session_preflight",
             "fiberphotometry_session_qc",
@@ -226,6 +233,41 @@ def test_cli_exports_valid_provenance_complete_nwb(tmp_path) -> None:
             manifest["artifacts"][name]["sha256"]
             == hashlib.sha256(path.read_bytes()).hexdigest()
         )
+
+
+def test_complete_metadata_profile_is_publication_ready(tmp_path) -> None:
+    project_path = _project(tmp_path, nwb=True)
+    project_path.write_text(
+        project_path.read_text().replace(
+            'output_directory = "artifacts"',
+            '''output_directory = "artifacts"
+
+[metadata]
+experimenters = ["A. Scientist"]
+institution = "Example University"
+lab = "Example Lab"
+experiment_description = "Within-animal photometry contrast"
+protocol = "https://example.org/protocol"
+species = "Mus musculus"
+indicator = "GCaMP"
+brain_regions = ["DMS"]
+acquisition_system = "Example lock-in system"
+data_license = "CC-BY-4.0"
+implant_batch = "2026-07-A"''',
+        )
+    )
+
+    output = tmp_path / "results"
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+
+    report = json.loads((output / "metadata.json").read_text())
+    readiness = {item["target"]: item for item in report["readiness"]}
+    assert report["unrecognized_fields"] == ["implant_batch"]
+    assert {target: item["status"] for target, item in readiness.items()} == {
+        "analysis": "ready",
+        "nwb": "ready",
+        "publication": "ready",
+    }
 
 
 def test_nwb_export_rejects_timezone_free_session_metadata(tmp_path) -> None:

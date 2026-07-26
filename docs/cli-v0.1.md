@@ -33,6 +33,7 @@ pip install "fiberphotometry[nwb]"
 The configured output directory receives:
 
 - `preflight.json`: acquisition and event diagnostics for every session;
+- `metadata.json`: actionable analysis, NWB, and publication/reuse readiness;
 - `analysis.json`: typed pipeline, inference, QC, and processing lineage;
 - `report.html`: self-contained scientist-facing evidence report;
 - `manifest.json`: project identity, package version, status, and SHA-256 for every
