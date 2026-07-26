@@ -22,7 +22,6 @@ def test_reference_dff_recovers_known_linear_baseline() -> None:
         subject="m",
         session="s",
     )
-
     corrected = reference_dff(recording, method="irls")
 
     coefficients = corrected.reference_fit_coefficient.values[0]
@@ -59,6 +58,7 @@ def test_resampling_retains_source_and_does_not_bridge_large_gap() -> None:
         subject="m",
         session="s",
     )
+    recording["included"] = (("time",), [True, True, False, True])
 
     result = resample_recording(recording, rate_hz=2, max_gap_s=1.1)
 
@@ -66,9 +66,12 @@ def test_resampling_retains_source_and_does_not_bridge_large_gap() -> None:
     assert result.sizes["source_time"] == 4
     assert np.array_equal(result.source_signal.values[:, 0], [0, 1, 4, 5])
     assert np.isnan(result.signal.sel(time=2.0).item())
+    assert not result.included.sel(time=2.0).item()
+    assert np.array_equal(result.source_included.values, [True, True, False, True])
     operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
     assert operation["kind"] == "resample"
     assert operation["max_gap_s"] == 1.1
+    assert operation["time_only_boolean_method"] == "nearest"
 
 
 def test_lowpass_retains_input_and_reports_edge_handling() -> None:

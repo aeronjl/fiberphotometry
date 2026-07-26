@@ -63,3 +63,8 @@ Every executed operation is appended to the recording's
 cannot accidentally receive a v2 tuple, and a v2 spec cannot receive the legacy
 object. Frozen numerical behavior is reported in
 [`benchmarks/results-v0.8.md`](../benchmarks/results-v0.8.md).
+
+Time-indexed Boolean acquisition masks are propagated during resampling with
+nearest-neighbor labels, retained on the source-time axis, and forced false
+inside gaps larger than the declared interpolation limit. They are never
+linearly interpolated as numeric signals.

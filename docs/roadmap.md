@@ -58,6 +58,7 @@
 - [x] Typed multiverse expansion with stable IDs and compatibility rules
 - [x] Failure-retaining robustness and decision summaries
 - [x] Reference-pipeline leave-one-animal-out diagnostics
+- [x] First frozen descriptive public-data multiverse
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures

@@ -72,7 +72,7 @@ class MultiverseSpec:
     compatibility_rules: tuple[CompatibilityRule, ...]
     reference_selection: tuple[ChoiceRef, ...]
     intent: Literal["confirmatory", "exploratory", "descriptive"]
-    smallest_effect: float = 0.0
+    smallest_effect: float | None = None
     direction: Literal["positive", "negative", "either"] = "either"
     leave_one_unit_out: bool = False
     schema_version: str = "1"
@@ -273,7 +273,7 @@ def run_multiverse(
 def _validate_spec(spec: MultiverseSpec) -> None:
     if spec.schema_version != "1":
         raise ValueError("unsupported multiverse schema version")
-    if spec.smallest_effect < 0:
+    if spec.smallest_effect is not None and spec.smallest_effect < 0:
         raise ValueError("smallest_effect must be nonnegative")
     if not spec.decision_nodes:
         raise ValueError("a multiverse requires at least one decision node")
@@ -357,7 +357,11 @@ def _summarize(
     ]
     valid_count = sum(result.status != "incompatible" for result in results)
     reference = next((result for result in results if result.is_reference), None)
-    practical = [_meets_effect(value, spec) for value in estimates]
+    practical = (
+        [_meets_effect(value, spec) for value in estimates]
+        if spec.smallest_effect is not None
+        else None
+    )
     decision_summaries = []
     for node in spec.decision_nodes:
         for alternative in node.alternatives:
@@ -395,7 +399,7 @@ def _summarize(
         if valid_count
         else None,
         fraction_meeting_practical_effect=float(np.sum(practical) / valid_count)
-        if valid_count
+        if valid_count and practical is not None
         else None,
         reference_estimate=reference.estimate if reference is not None else None,
         decision_summaries=tuple(decision_summaries),
@@ -403,6 +407,8 @@ def _summarize(
 
 
 def _meets_effect(estimate: float, spec: MultiverseSpec) -> bool:
+    if spec.smallest_effect is None:
+        raise ValueError("a practical-effect threshold was not declared")
     if spec.direction == "positive":
         return estimate >= spec.smallest_effect
     if spec.direction == "negative":

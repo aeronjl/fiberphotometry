@@ -34,7 +34,9 @@ def resample_recording(
     unsupported = [
         name
         for name, variable in recording.data_vars.items()
-        if "time" in variable.dims and variable.dims != ("time", "channel")
+        if "time" in variable.dims
+        and variable.dims != ("time", "channel")
+        and not (variable.dims == ("time",) and variable.dtype == bool)
     ]
     if unsupported:
         raise ValueError(f"cannot resample unsupported time variables: {unsupported}")
@@ -52,6 +54,27 @@ def resample_recording(
         attrs=dict(recording.attrs),
     )
     for name, variable in recording.data_vars.items():
+        if variable.dims == ("time",):
+            source_mask = np.asarray(variable.values, dtype=bool)
+            right = np.searchsorted(source_time, target_time, side="left")
+            right = np.clip(right, 0, len(source_time) - 1)
+            left = np.maximum(right - 1, 0)
+            nearest = np.where(
+                abs(target_time - source_time[left])
+                <= abs(source_time[right] - target_time),
+                left,
+                right,
+            )
+            resampled_mask = source_mask[nearest]
+            if max_gap_s is not None:
+                for gap_left, gap_right in pairwise(source_time):
+                    if gap_right - gap_left > max_gap_s:
+                        resampled_mask[
+                            (target_time > gap_left) & (target_time < gap_right)
+                        ] = False
+            output[name] = (("time",), resampled_mask)
+            output[f"source_{name}"] = (("source_time",), source_mask.copy())
+            continue
         if variable.dims != ("time", "channel"):
             output[name] = variable.copy(deep=True)
             continue
@@ -87,6 +110,7 @@ def resample_recording(
             "max_gap_s": max_gap_s,
             "source_samples": len(source_time),
             "output_samples": len(target_time),
+            "time_only_boolean_method": "nearest",
         },
     )
     return output

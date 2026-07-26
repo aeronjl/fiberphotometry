@@ -1,0 +1,52 @@
+{
+  "decision_medians": {
+    "correction": {
+      "irls": 0.018076924590897825,
+      "ols": 0.018017529569899444,
+      "resample_filter_irls": 0.01801791501991875
+    },
+    "window": {
+      "displaced_baseline": 0.019782619350061984,
+      "early": 0.01434340897482673,
+      "standard": 0.01801791501991875
+    }
+  },
+  "estimate_range": [
+    0.014111241994879491,
+    0.019827216946495817
+  ],
+  "failed_universes": 0,
+  "fraction_negative": 0.0,
+  "fraction_positive": 1.0,
+  "fraction_meeting_practical_effect": null,
+  "leave_one_out_reference_estimates": {
+    "fip_13": 0.024220147234247688,
+    "fip_14": 0.014181546743033416,
+    "fip_15": 0.015549038341066074,
+    "fip_16": 0.01835696604524412
+  },
+  "median_estimate": 0.01801791501991875,
+  "raw_fluorescence_comparator": {
+    "confidence_interval": [
+      -0.00002675240747905487,
+      0.00021882462333097763
+    ],
+    "estimate": 0.00009603610792596138,
+    "included_in_dff_robustness_summary": false,
+    "p_value": 0.08855645413528215,
+    "units": "acquired fluorescence"
+  },
+  "reference_estimate": 0.018076924590897825,
+  "successful_universes": 9,
+  "universes": [
+    {"correction":"ols","window":"standard","id":"66d87675c07743e6","estimate":0.018017529569899444,"confidence_interval":[-0.003146063882345281,0.039181123022144174],"p_value":0.07320398123673907},
+    {"correction":"ols","window":"early","id":"58d8b1fc4f7a72bc","estimate":0.01434340897482673,"confidence_interval":[-0.002670538177386073,0.031357356127039535],"p_value":0.07486261656090418},
+    {"correction":"ols","window":"displaced_baseline","id":"9316e397c9440668","estimate":0.019763372758696347,"confidence_interval":[0.0019403250968921641,0.03758642042050053],"p_value":0.03866949585548965},
+    {"correction":"irls","window":"standard","id":"b0ef0b488f0f7ce6","estimate":0.018076924590897825,"confidence_interval":[-0.003161306460605029,0.03931515564240068],"p_value":0.0732424451421149},
+    {"correction":"irls","window":"early","id":"9863da8621a771a0","estimate":0.014390119486104204,"confidence_interval":[-0.0026755048081870975,0.031455743780395506],"p_value":0.07482532252580484},
+    {"correction":"irls","window":"displaced_baseline","id":"bff67601a76dccaf","estimate":0.019827216946495817,"confidence_interval":[0.0019394740068633606,0.037714959886128274],"p_value":0.03870843164634097},
+    {"correction":"resample_filter_irls","window":"standard","id":"1b68f4c2e255af77","estimate":0.01801791501991875,"confidence_interval":[-0.0029736778497021325,0.039009507889539635],"p_value":0.07184272305462402},
+    {"correction":"resample_filter_irls","window":"early","id":"b550edf2f7152038","estimate":0.014111241994879491,"confidence_interval":[-0.002596459705338606,0.03081894369509759],"p_value":0.07454827427393318},
+    {"correction":"resample_filter_irls","window":"displaced_baseline","id":"032e961ecfa6ffbc","estimate":0.019782619350061984,"confidence_interval":[0.001999762585076125,0.03756547611504785],"p_value":0.03835474818759427}
+  ]
+}

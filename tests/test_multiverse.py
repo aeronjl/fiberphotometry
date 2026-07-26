@@ -127,3 +127,4 @@ def test_multiverse_retains_qc_blocked_universes() -> None:
 
     assert [item.status for item in result.universes] == ["success", "blocked"]
     assert result.summary.blocked_universes == 1
+    assert result.summary.fraction_meeting_practical_effect is None

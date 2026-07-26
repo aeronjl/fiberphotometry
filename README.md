@@ -109,6 +109,8 @@ and edge behavior, is in
 The typed multiverse contract and its first adversarial engine benchmark are in
 [`docs/multiverse-contract-v0.1.md`](docs/multiverse-contract-v0.1.md) and
 [`benchmarks/results-v0.9.md`](benchmarks/results-v0.9.md).
+The first public-data multiverse is reported, with its post-hoc limitations, in
+[`docs/ibl-feedback-multiverse-v0.1.md`](docs/ibl-feedback-multiverse-v0.1.md).
 
 ## Development
 
