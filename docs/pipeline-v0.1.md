@@ -32,14 +32,34 @@ is an explicit choice to report QC without gating inference.
 
 ## Current boundaries
 
-Version 0.1 deliberately supports reference-based preprocessing and scalar
-acquired-sample summaries. It does not yet model filtering, resampling,
-time-resolved inference, exclusion policies, multiple comparisons, or missing
-outcomes. Those should enter as new tagged operations and validation rules, not
-as miscellaneous optional fields on the existing types.
+Version 1 deliberately supports reference-based preprocessing and scalar
+acquired-sample summaries. Version 2 adds filtering and resampling, but neither
+schema models time-resolved inference, exclusion policies, multiple comparisons,
+or missing outcomes. Those should enter as new tagged operations and validation
+rules, not as miscellaneous optional fields on the existing types.
 
 The automated fixture runs the full path across four synthetic animals and
 checks that the animal remains the aggregation unit. A second fixture injects
 missingness and verifies that a QC failure blocks inference without shrinking
 the observation table. The public IBL builder also runs this API and asserts
 that its table is identical to the frozen direct calculation.
+
+## Schema v2 operation sequences
+
+Schema v1 remains accepted unchanged. Schema v2 replaces its single
+`PreprocessingSpec` with an ordered tuple of tagged operations:
+
+- `ResampleOperation` uses linear interpolation and can prohibit interpolation
+  across source gaps larger than a declared duration. Original time-channel
+  arrays are retained on a `source_time` axis.
+- `LowpassFilterOperation` filters finite runs independently with a zero-phase
+  Butterworth SOS implementation. Pre-filter arrays are retained, short runs are
+  set to missing rather than filtered across gaps, and the exact edge padding is
+  recorded.
+- `ReferenceDFFOperation` retains the existing robust/OLS correction behavior.
+
+Every executed operation is appended to the recording's
+`fiberphotometry_operations` JSON provenance in execution order. A v1 spec
+cannot accidentally receive a v2 tuple, and a v2 spec cannot receive the legacy
+object. Frozen numerical behavior is reported in
+[`benchmarks/results-v0.8.md`](../benchmarks/results-v0.8.md).

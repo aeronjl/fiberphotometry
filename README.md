@@ -103,6 +103,9 @@ four-animal limitations, in
 [`docs/ibl-feedback-analysis-v0.1.md`](docs/ibl-feedback-analysis-v0.1.md).
 The typed end-to-end composition and its explicit QC-gating behavior are
 documented in [`docs/pipeline-v0.1.md`](docs/pipeline-v0.1.md).
+The first resampling/filtering implementation benchmark, including explicit gap
+and edge behavior, is in
+[`benchmarks/results-v0.8.md`](benchmarks/results-v0.8.md).
 
 ## Development
 

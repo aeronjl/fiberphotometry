@@ -3,12 +3,152 @@
 from __future__ import annotations
 
 import json
+from itertools import pairwise
 
 import numpy as np
 import xarray as xr
 from numpy.typing import NDArray
+from scipy.signal import butter, sosfiltfilt
 
 from fiberphotometry.model import validate_recording
+
+
+def resample_recording(
+    recording: xr.Dataset,
+    *,
+    rate_hz: float,
+    max_gap_s: float | None = None,
+) -> xr.Dataset:
+    """Linearly resample time-channel variables while retaining source arrays.
+
+    Interpolation never crosses a source interval larger than ``max_gap_s``.
+    The original arrays remain available on the separate ``source_time`` axis.
+    """
+    validate_recording(recording)
+    if rate_hz <= 0:
+        raise ValueError("rate_hz must be positive")
+    if max_gap_s is not None and max_gap_s <= 0:
+        raise ValueError("max_gap_s must be positive when provided")
+    if "source_time" in recording.coords:
+        raise ValueError("recording has already been resampled")
+    unsupported = [
+        name
+        for name, variable in recording.data_vars.items()
+        if "time" in variable.dims and variable.dims != ("time", "channel")
+    ]
+    if unsupported:
+        raise ValueError(f"cannot resample unsupported time variables: {unsupported}")
+
+    source_time = np.asarray(recording.time.values, dtype=float)
+    step = 1 / rate_hz
+    target_time = np.arange(source_time[0], source_time[-1] + step / 2, step)
+    target_time = target_time[target_time <= source_time[-1]]
+    output = xr.Dataset(
+        coords={
+            "time": target_time,
+            "channel": recording.channel.values,
+            "source_time": source_time,
+        },
+        attrs=dict(recording.attrs),
+    )
+    for name, variable in recording.data_vars.items():
+        if variable.dims != ("time", "channel"):
+            output[name] = variable.copy(deep=True)
+            continue
+        source = np.asarray(variable.values, dtype=float)
+        resampled = np.full((len(target_time), source.shape[1]), np.nan)
+        for channel in range(source.shape[1]):
+            finite = np.isfinite(source[:, channel])
+            if finite.sum() < 2:
+                continue
+            valid_time = source_time[finite]
+            resampled[:, channel] = np.interp(
+                target_time,
+                valid_time,
+                source[finite, channel],
+                left=np.nan,
+                right=np.nan,
+            )
+            if max_gap_s is not None:
+                for left, right in pairwise(valid_time):
+                    if right - left > max_gap_s:
+                        resampled[
+                            (target_time > left) & (target_time < right), channel
+                        ] = np.nan
+        output[name] = (("time", "channel"), resampled)
+        output[f"source_{name}"] = (("source_time", "channel"), source.copy())
+    output.attrs["processing_stage"] = "resampled"
+    _append_operation(
+        output,
+        {
+            "kind": "resample",
+            "method": "linear",
+            "rate_hz": rate_hz,
+            "max_gap_s": max_gap_s,
+            "source_samples": len(source_time),
+            "output_samples": len(target_time),
+        },
+    )
+    return output
+
+
+def lowpass_filter(
+    recording: xr.Dataset,
+    *,
+    cutoff_hz: float,
+    order: int = 4,
+    variables: tuple[str, ...] = ("signal", "reference"),
+) -> xr.Dataset:
+    """Zero-phase low-pass finite runs and retain every pre-filter variable."""
+    validate_recording(recording)
+    intervals = np.diff(np.asarray(recording.time.values, dtype=float))
+    rate_hz = 1 / float(np.median(intervals))
+    if float(np.std(intervals) / np.mean(intervals)) > 1e-6:
+        raise ValueError("low-pass filtering requires regularly sampled data")
+    if not 0 < cutoff_hz < rate_hz / 2:
+        raise ValueError("cutoff_hz must lie between zero and the Nyquist frequency")
+    if order < 1:
+        raise ValueError("filter order must be positive")
+    sos = butter(order, cutoff_hz, btype="lowpass", fs=rate_hz, output="sos")
+    padlen = 3 * (
+        2 * len(sos) + 1 - min(int(np.sum(sos[:, 2] == 0)), int(np.sum(sos[:, 5] == 0)))
+    )
+    output = recording.copy(deep=True)
+    short_segments: dict[str, int] = {}
+    for name in variables:
+        if name not in recording:
+            raise ValueError(f"recording does not contain filter variable {name!r}")
+        if f"prefilter_{name}" in recording:
+            raise ValueError(f"variable {name!r} has already been filtered")
+        source = np.asarray(recording[name].values, dtype=float)
+        filtered = np.full_like(source, np.nan)
+        short = 0
+        for channel in range(source.shape[1]):
+            for start, stop in _finite_runs(np.isfinite(source[:, channel])):
+                if stop - start <= padlen:
+                    short += 1
+                    continue
+                filtered[start:stop, channel] = sosfiltfilt(
+                    sos, source[start:stop, channel], padlen=padlen
+                )
+        output[f"prefilter_{name}"] = recording[name].copy(deep=True)
+        output[name] = (("time", "channel"), filtered)
+        short_segments[name] = short
+    output.attrs["processing_stage"] = "filtered"
+    _append_operation(
+        output,
+        {
+            "kind": "lowpass_filter",
+            "method": "butterworth_sosfiltfilt",
+            "cutoff_hz": cutoff_hz,
+            "order": order,
+            "sampling_rate_hz": rate_hz,
+            "edge_padding_samples": padlen,
+            "variables": variables,
+            "short_segments_set_to_nan": short_segments,
+        },
+    )
+    return output
 
 
 def reference_dff(
@@ -78,7 +218,29 @@ def reference_dff(
         },
         sort_keys=True,
     )
+    _append_operation(
+        output,
+        {
+            "kind": "reference_dff",
+            "method": method,
+            "max_iterations": max_iterations,
+            "tolerance": tolerance,
+        },
+    )
     return output
+
+
+def _finite_runs(values: NDArray[np.bool_]) -> list[tuple[int, int]]:
+    padded = np.concatenate([[False], values, [False]])
+    edges = np.flatnonzero(padded[1:] != padded[:-1])
+    return list(zip(edges[::2].tolist(), edges[1::2].tolist(), strict=True))
+
+
+def _append_operation(recording: xr.Dataset, operation: dict[str, object]) -> None:
+    key = "fiberphotometry_operations"
+    operations = json.loads(str(recording.attrs.get(key, "[]")))
+    operations.append(operation)
+    recording.attrs[key] = json.dumps(operations, sort_keys=True)
 
 
 def _fit_ols(

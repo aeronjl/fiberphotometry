@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping, Sequence
-from dataclasses import asdict, dataclass
-from typing import Literal
+from dataclasses import asdict, dataclass, field
+from typing import Literal, TypeAlias
 
 import numpy as np
 import xarray as xr
@@ -18,17 +18,51 @@ from fiberphotometry.design import (
 )
 from fiberphotometry.events import summarize_event_windows
 from fiberphotometry.planning import AnalysisPlan, AnalysisResult, execute_analysis_plan
-from fiberphotometry.preprocess import reference_dff
+from fiberphotometry.preprocess import lowpass_filter, reference_dff, resample_recording
 from fiberphotometry.qc import RecordingQC, assess_recording
 
 
 @dataclass(frozen=True)
 class PreprocessingSpec:
-    """Reference-correction choice and its complete numerical parameters."""
+    """Legacy schema-v1 reference-correction specification."""
 
     method: Literal["irls", "ols"] = "irls"
     max_iterations: int = 50
     tolerance: float = 1e-8
+
+
+@dataclass(frozen=True)
+class ResampleOperation:
+    """Linear resampling with an optional maximum bridgeable source gap."""
+
+    rate_hz: float
+    max_gap_s: float | None = None
+    kind: Literal["resample"] = field(default="resample", init=False)
+
+
+@dataclass(frozen=True)
+class LowpassFilterOperation:
+    """Zero-phase Butterworth low-pass operation."""
+
+    cutoff_hz: float
+    order: int = 4
+    variables: tuple[str, ...] = ("signal", "reference")
+    kind: Literal["lowpass_filter"] = field(default="lowpass_filter", init=False)
+
+
+@dataclass(frozen=True)
+class ReferenceDFFOperation:
+    """Robust or OLS reference correction in an ordered operation sequence."""
+
+    method: Literal["irls", "ols"] = "irls"
+    max_iterations: int = 50
+    tolerance: float = 1e-8
+    kind: Literal["reference_dff"] = field(default="reference_dff", init=False)
+
+
+PreprocessingOperation: TypeAlias = (
+    ResampleOperation | LowpassFilterOperation | ReferenceDFFOperation
+)
 
 
 @dataclass(frozen=True)
@@ -55,7 +89,7 @@ class EventSummarySpec:
 class PipelineSpec:
     """Versioned scientific choices; open event metadata stays outside the schema."""
 
-    preprocessing: PreprocessingSpec
+    preprocessing: PreprocessingSpec | tuple[PreprocessingOperation, ...]
     quality_gate: QualityGateSpec
     event_summary: EventSummarySpec
     design: StudyDesign
@@ -96,8 +130,14 @@ def run_pipeline(
     spec: PipelineSpec, inputs: Sequence[RecordingInput]
 ) -> PipelineResult:
     """Run a declared scalar workflow while retaining all intermediate products."""
-    if spec.schema_version != "1":
+    if spec.schema_version not in {"1", "2"}:
         raise ValueError("unsupported pipeline schema version")
+    if spec.schema_version == "1" and not isinstance(
+        spec.preprocessing, PreprocessingSpec
+    ):
+        raise ValueError("schema-v1 pipelines require PreprocessingSpec")
+    if spec.schema_version == "2" and not isinstance(spec.preprocessing, tuple):
+        raise ValueError("schema-v2 pipelines require an operation tuple")
     if not inputs:
         raise ValueError("pipeline requires at least one recording")
     if spec.analysis_plan.estimand.outcome != spec.event_summary.output_column:
@@ -140,13 +180,7 @@ def run_pipeline(
                         f"{report.subject}/{report.session}/{channel.channel}:{warning}"
                     )
 
-        preprocessing = spec.preprocessing
-        corrected = reference_dff(
-            item.recording,
-            method=preprocessing.method,
-            max_iterations=preprocessing.max_iterations,
-            tolerance=preprocessing.tolerance,
-        )
+        corrected = _preprocess(item.recording, spec)
         summary = summarize_event_windows(
             corrected,
             item.event_times,
@@ -192,3 +226,36 @@ def _channel_index(recording: xr.Dataset, channel: str) -> int:
             f"recording must contain exactly one channel named {channel!r}"
         )
     return int(matches[0])
+
+
+def _preprocess(recording: xr.Dataset, spec: PipelineSpec) -> xr.Dataset:
+    if isinstance(spec.preprocessing, PreprocessingSpec):
+        return reference_dff(
+            recording,
+            method=spec.preprocessing.method,
+            max_iterations=spec.preprocessing.max_iterations,
+            tolerance=spec.preprocessing.tolerance,
+        )
+    output = recording
+    for operation in spec.preprocessing:
+        if isinstance(operation, ResampleOperation):
+            output = resample_recording(
+                output, rate_hz=operation.rate_hz, max_gap_s=operation.max_gap_s
+            )
+        elif isinstance(operation, LowpassFilterOperation):
+            output = lowpass_filter(
+                output,
+                cutoff_hz=operation.cutoff_hz,
+                order=operation.order,
+                variables=operation.variables,
+            )
+        elif isinstance(operation, ReferenceDFFOperation):
+            output = reference_dff(
+                output,
+                method=operation.method,
+                max_iterations=operation.max_iterations,
+                tolerance=operation.tolerance,
+            )
+        else:
+            raise TypeError(f"unsupported preprocessing operation: {operation!r}")
+    return output

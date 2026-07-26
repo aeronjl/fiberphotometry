@@ -1,3 +1,6 @@
+import json
+from dataclasses import replace
+
 import numpy as np
 
 from fiberphotometry import (
@@ -5,11 +8,14 @@ from fiberphotometry import (
     Estimand,
     EventSummarySpec,
     Factor,
+    LowpassFilterOperation,
     ObservationTable,
     PipelineSpec,
     PreprocessingSpec,
     QualityGateSpec,
     RecordingInput,
+    ReferenceDFFOperation,
+    ResampleOperation,
     StudyDesign,
     Unit,
     create_analysis_plan,
@@ -115,3 +121,27 @@ def test_qc_gate_blocks_inference_without_dropping_observations() -> None:
     assert len(result.observation_table) == 16
     assert len(result.blocked_by) == 4
     assert all("low_valid_fraction" in reason for reason in result.blocked_by)
+
+
+def test_schema_v2_executes_tagged_preprocessing_sequence() -> None:
+    spec = replace(
+        _spec(),
+        preprocessing=(
+            ResampleOperation(rate_hz=20, max_gap_s=0.2),
+            LowpassFilterOperation(cutoff_hz=5),
+            ReferenceDFFOperation(method="ols"),
+        ),
+        schema_version="2",
+    )
+
+    result = run_pipeline(spec, _inputs())
+
+    assert result.inference_executed
+    operations = result.processed_recordings[0].attrs["fiberphotometry_operations"]
+    assert [item["kind"] for item in json.loads(operations)] == [
+        "resample",
+        "lowpass_filter",
+        "reference_dff",
+    ]
+    assert "source_signal" in result.processed_recordings[0]
+    assert "prefilter_signal" in result.processed_recordings[0]

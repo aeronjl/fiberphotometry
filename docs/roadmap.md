@@ -14,8 +14,8 @@
 
 - [x] Channel-level validity, dropout, repeated-extreme, and flat-step QC
 - [x] Sampling-rate and gap diagnostics
-- [ ] Resampling with explicit interpolation provenance
-- [ ] Filter API with edge-effect reporting
+- [x] Resampling with explicit interpolation provenance
+- [x] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators
 - [x] Event-correlated reference diagnostic benchmarked against confounds
 - [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)

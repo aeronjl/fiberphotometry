@@ -25,11 +25,14 @@ from fiberphotometry.inference import (
 from fiberphotometry.model import make_recording, validate_recording
 from fiberphotometry.pipeline import (
     EventSummarySpec,
+    LowpassFilterOperation,
     PipelineResult,
     PipelineSpec,
     PreprocessingSpec,
     QualityGateSpec,
     RecordingInput,
+    ReferenceDFFOperation,
+    ResampleOperation,
     run_pipeline,
 )
 from fiberphotometry.planning import (
@@ -40,7 +43,7 @@ from fiberphotometry.planning import (
     execute_analysis_plan,
     welch_power_sensitivity,
 )
-from fiberphotometry.preprocess import reference_dff
+from fiberphotometry.preprocess import lowpass_filter, reference_dff, resample_recording
 from fiberphotometry.qc import assess_recording
 
 __all__ = [
@@ -51,6 +54,7 @@ __all__ = [
     "EventSummarySpec",
     "Factor",
     "InferenceRecommendation",
+    "LowpassFilterOperation",
     "ObservationTable",
     "PermutationPlan",
     "PipelineResult",
@@ -59,6 +63,8 @@ __all__ = [
     "PreprocessingSpec",
     "QualityGateSpec",
     "RecordingInput",
+    "ReferenceDFFOperation",
+    "ResampleOperation",
     "ResamplingPlan",
     "StudyDesign",
     "TIntervalResult",
@@ -70,10 +76,12 @@ __all__ = [
     "exact_sign_flip_test",
     "execute_analysis_plan",
     "hierarchical_bootstrap",
+    "lowpass_filter",
     "make_recording",
     "permutation_test",
     "recommend_inference",
     "reference_dff",
+    "resample_recording",
     "run_pipeline",
     "summarize_event_windows",
     "unit_t_interval",
