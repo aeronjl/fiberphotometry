@@ -1,0 +1,159 @@
+{
+  "acceptance": {
+    "interpretation": "Engineering thresholds tied to the downstream estimand; the literature does not establish universal photometry thresholds.",
+    "ordinary": {
+      "event_contrast_relative_error_max": 0.01,
+      "peak_amplitude_relative_error_max": 0.05,
+      "peak_time_error_samples_max": 1.0,
+      "response_mean_relative_error_max": 0.01
+    },
+    "stress": {
+      "event_contrast_relative_error_max": 0.05,
+      "peak_amplitude_relative_error_max": 0.15,
+      "peak_time_error_samples_max": 2.0,
+      "response_mean_relative_error_max": 0.05
+    },
+    "structural": {
+      "condition_dependent_exclusion_must_warn": true,
+      "gap_affected_events_must_be_classified": true,
+      "protected_gap_bridges_allowed": 0
+    }
+  },
+  "acquisition": {
+    "duration_s": 12.0,
+    "event_phase_samples": [
+      0.0,
+      0.5
+    ],
+    "event_time_s": 6.0,
+    "rates_hz": [
+      20.0,
+      50.0
+    ],
+    "timestamp_jitter_fraction": [
+      0.005,
+      0.02
+    ]
+  },
+  "event_windows_s": {
+    "baseline": [
+      -1.0,
+      0.0
+    ],
+    "response": [
+      0.0,
+      1.0
+    ]
+  },
+  "metrics": [
+    "normalized_waveform_rmse",
+    "peak_amplitude_relative_error",
+    "peak_time_error_samples",
+    "response_mean_relative_error",
+    "event_contrast_relative_error",
+    "false_peak_amplitude",
+    "reconstructed_window_fraction",
+    "event_disposition"
+  ],
+  "out_of_scope": [
+    "behavioral_clock_mapping",
+    "variable_duration_trial_warping",
+    "model_based_reconstruction"
+  ],
+  "perturbations": {
+    "gap_lengths_samples": [
+      2,
+      5,
+      20
+    ],
+    "gap_locations": [
+      "baseline",
+      "event",
+      "response"
+    ],
+    "isolated_dropout_offsets_samples": [
+      -1,
+      0,
+      1
+    ]
+  },
+  "policies": {
+    "contiguous_gap": [
+      "protected_missing",
+      "naive_linear_negative_control"
+    ],
+    "isolated_dropout": [
+      "linear",
+      "previous_value",
+      "protected_missing"
+    ],
+    "jitter": [
+      "linear_median_rate",
+      "nearest_sample"
+    ]
+  },
+  "practice_sources": [
+    {
+      "claim": "indicator kinetics should govern filtering and temporal reduction",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10939905/"
+    },
+    {
+      "claim": "manual artifact removal may fit retained segments separately",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8688475/"
+    },
+    {
+      "claim": "isolated dropped frames are commonly linearly interpolated",
+      "url": "https://www.mightexbio.com/fiber-photometry-data-preprocessing-deinterleaving-signals-and-fixing-dropped-frames/"
+    },
+    {
+      "claim": "published workflows may replace selected artifact regions by linear interpolation",
+      "url": "https://www.nature.com/articles/s41467-024-45288-x"
+    }
+  ],
+  "protocol_sha256": "4e88ee8fbd851d605c94125ef7ba8afb002a58bca65b8f16faa09f28b7bc1a3c",
+  "reporting": {
+    "naive_gap_interpolation_is_negative_control_only": true,
+    "never_pool_different_metrics": true,
+    "retain_all_failures": true,
+    "stratify_by_transient_class": true
+  },
+  "schema_version": "transient-gap-protocol-v0.1",
+  "scope": [
+    "timestamp_jitter",
+    "isolated_dropped_samples",
+    "protected_contiguous_gaps",
+    "event_windows_intersecting_gaps"
+  ],
+  "seed": 20260726,
+  "status": "frozen_before_aggregate_execution",
+  "transients": [
+    {
+      "class": "stress",
+      "family": "gaussian",
+      "width_samples": 1.5
+    },
+    {
+      "class": "ordinary",
+      "family": "gaussian",
+      "width_samples": 5.0
+    },
+    {
+      "class": "stress",
+      "decay_samples": 10.0,
+      "family": "alpha",
+      "rise_samples": 2.0
+    },
+    {
+      "class": "ordinary",
+      "decay_samples": 25.0,
+      "family": "alpha",
+      "rise_samples": 5.0
+    },
+    {
+      "class": "ordinary",
+      "family": "biphasic",
+      "separation_samples": 8.0,
+      "width_samples": 5.0
+    }
+  ]
+}
