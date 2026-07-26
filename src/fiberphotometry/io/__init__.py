@@ -20,8 +20,19 @@ from fiberphotometry.io.tabular import (
     load_tabular_input,
     load_tabular_recording,
 )
+from fiberphotometry.io.tdt import (
+    TDTBlockSchema,
+    TDTEpocEvents,
+    TDTEpocValue,
+    TDTStreamChannel,
+    load_tdt_input,
+)
 
 __all__ = [
+    "TDTBlockSchema",
+    "TDTEpocEvents",
+    "TDTEpocValue",
+    "TDTStreamChannel",
     "TabularChannel",
     "TabularChannelInspection",
     "TabularEventColumn",
@@ -40,4 +51,5 @@ __all__ = [
     "load_tabular_events",
     "load_tabular_input",
     "load_tabular_recording",
+    "load_tdt_input",
 ]

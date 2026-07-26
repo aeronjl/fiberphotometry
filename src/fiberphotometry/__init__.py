@@ -41,6 +41,13 @@ from fiberphotometry.io.tabular import (
     load_tabular_input,
     load_tabular_recording,
 )
+from fiberphotometry.io.tdt import (
+    TDTBlockSchema,
+    TDTEpocEvents,
+    TDTEpocValue,
+    TDTStreamChannel,
+    load_tdt_input,
+)
 from fiberphotometry.model import make_recording, validate_recording
 from fiberphotometry.multiverse import (
     ChoiceRef,
@@ -88,8 +95,12 @@ from fiberphotometry.preprocess import (
 from fiberphotometry.project import (
     LoadedTabularProject,
     NWBExportConfig,
+    ProjectConfig,
     TabularProjectConfig,
     TabularSessionSource,
+    TDTProjectConfig,
+    TDTSessionSource,
+    load_project_config,
 )
 from fiberphotometry.qc import assess_recording, assess_signal_recording
 from fiberphotometry.workflow import (
@@ -132,6 +143,7 @@ __all__ = [
     "PowerSensitivity",
     "Preprocessing",
     "PreprocessingSpec",
+    "ProjectConfig",
     "QualityGateSpec",
     "RecordingInput",
     "ReferenceDFFOperation",
@@ -139,6 +151,12 @@ __all__ = [
     "ResamplingPlan",
     "RobustnessSummary",
     "StudyDesign",
+    "TDTBlockSchema",
+    "TDTEpocEvents",
+    "TDTEpocValue",
+    "TDTProjectConfig",
+    "TDTSessionSource",
+    "TDTStreamChannel",
     "TIntervalResult",
     "TabularChannel",
     "TabularChannelInspection",
@@ -166,9 +184,11 @@ __all__ = [
     "inspect_loaded_tabular_input",
     "inspect_tabular_input",
     "inspect_tabular_recording",
+    "load_project_config",
     "load_tabular_events",
     "load_tabular_input",
     "load_tabular_recording",
+    "load_tdt_input",
     "lowpass_filter",
     "make_recording",
     "materialize_multiverse",

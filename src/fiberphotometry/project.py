@@ -8,7 +8,7 @@ import tomllib
 from dataclasses import asdict, dataclass, replace
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeAlias, cast
 
 from fiberphotometry.config import EventAnalysisConfig
 from fiberphotometry.io.tabular import (
@@ -19,6 +19,13 @@ from fiberphotometry.io.tabular import (
     TabularRecordingSchema,
     inspect_loaded_tabular_input,
     load_tabular_input,
+)
+from fiberphotometry.io.tdt import (
+    TDTBlockSchema,
+    TDTEpocEvents,
+    TDTEpocValue,
+    TDTStreamChannel,
+    load_tdt_input,
 )
 from fiberphotometry.pipeline import RecordingInput
 from fiberphotometry.workflow import EventAnalysis, EventSession
@@ -31,6 +38,17 @@ class TabularSessionSource:
     recording: Path
     events: Path
     session_start_time: datetime | None = None
+
+
+@dataclass(frozen=True)
+class TDTSessionSource:
+    subject: str
+    session: str
+    block: Path
+    session_start_time: datetime | None = None
+
+
+SessionSource: TypeAlias = TabularSessionSource | TDTSessionSource
 
 
 @dataclass(frozen=True)
@@ -74,6 +92,7 @@ class TabularProjectConfig:
             payload,
             {
                 "schema_version",
+                "input_format",
                 "output_directory",
                 "sessions",
                 "recording",
@@ -85,6 +104,8 @@ class TabularProjectConfig:
         )
         if payload.get("schema_version") != "1":
             raise ValueError("unsupported tabular project schema_version")
+        if payload.get("input_format", "tabular") != "tabular":
+            raise ValueError("tabular project input_format must be 'tabular'")
         base = source.parent
         sources = _session_sources(payload.get("sessions"), base)
         recording_schema = _recording_schema(_table(payload, "recording"))
@@ -176,6 +197,138 @@ class TabularProjectConfig:
         return json.dumps(payload, indent=2, sort_keys=True)
 
 
+@dataclass(frozen=True)
+class TDTProjectConfig:
+    """Complete project contract for explicitly mapped TDT blocks."""
+
+    source_path: Path
+    source_sha256: str
+    output_directory: Path
+    sources: tuple[TDTSessionSource, ...]
+    tdt_schema: TDTBlockSchema
+    analysis: EventAnalysisConfig
+    nwb: NWBExportConfig | None = None
+    schema_version: str = "1"
+
+    @classmethod
+    def from_toml(cls, path: str | Path) -> TDTProjectConfig:
+        source = Path(path).resolve()
+        if not source.is_file():
+            raise ValueError(f"project configuration does not exist: {source}")
+        raw = source.read_bytes()
+        payload = tomllib.loads(raw.decode("utf-8"))
+        _reject_unknown(
+            payload,
+            {
+                "schema_version",
+                "input_format",
+                "output_directory",
+                "sessions",
+                "tdt",
+                "analysis",
+                "nwb",
+            },
+            "project root",
+        )
+        if payload.get("schema_version") != "1":
+            raise ValueError("unsupported TDT project schema_version")
+        if payload.get("input_format") != "tdt":
+            raise ValueError("TDT project input_format must be 'tdt'")
+        base = source.parent
+        sources = _tdt_session_sources(payload.get("sessions"), base)
+        analysis = EventAnalysisConfig.from_mapping(_table(payload, "analysis"))
+        output_raw = payload.get("output_directory", "artifacts")
+        if not isinstance(output_raw, str) or not output_raw.strip():
+            raise ValueError("output_directory must be a non-empty path string")
+        return cls(
+            source_path=source,
+            source_sha256=hashlib.sha256(raw).hexdigest(),
+            output_directory=(base / output_raw).resolve(),
+            sources=sources,
+            tdt_schema=_tdt_schema(_table(payload, "tdt")),
+            analysis=analysis,
+            nwb=_nwb_config(payload.get("nwb"), sources),
+        )
+
+    @property
+    def fingerprint(self) -> str:
+        return self.source_sha256
+
+    def load(self, *, reader: Any | None = None) -> LoadedTabularProject:
+        sessions = []
+        inspections = []
+        inputs = []
+        factor = self.analysis.factor_name
+        for source in self.sources:
+            item = load_tdt_input(
+                source.block,
+                self.tdt_schema,
+                subject=source.subject,
+                session=source.session,
+                reader=reader,
+            )
+            if factor not in item.columns:
+                raise ValueError(
+                    f"TDT event mapping does not provide analysis factor {factor!r}"
+                )
+            sessions.append(
+                EventSession.from_arrays(
+                    item.recording,
+                    item.event_times,
+                    tuple(str(value) for value in item.columns[factor]),
+                    event_ids=item.event_ids,
+                )
+            )
+            inspections.append(inspect_loaded_tabular_input(item))
+            inputs.append(item)
+        return LoadedTabularProject(tuple(sessions), tuple(inspections), tuple(inputs))
+
+    def build_analysis(self, sessions: tuple[EventSession, ...]) -> EventAnalysis:
+        return replace(
+            self.analysis.build(sessions),
+            configuration_fingerprint=self.fingerprint,
+        )
+
+    def normalized_json(self) -> str:
+        payload = {
+            "schema_version": self.schema_version,
+            "input_format": "tdt",
+            "project_sha256": self.fingerprint,
+            "output_directory": self.output_directory.name,
+            "sessions": [
+                {
+                    "subject": source.subject,
+                    "session": source.session,
+                    "block": source.block.name,
+                    "session_start_time": (
+                        source.session_start_time.isoformat()
+                        if source.session_start_time is not None
+                        else None
+                    ),
+                }
+                for source in self.sources
+            ],
+            "tdt": asdict(self.tdt_schema),
+            "analysis": json.loads(self.analysis.to_json()),
+            "nwb": asdict(self.nwb) if self.nwb is not None else None,
+        }
+        return json.dumps(payload, indent=2, sort_keys=True)
+
+
+ProjectConfig: TypeAlias = TabularProjectConfig | TDTProjectConfig
+
+
+def load_project_config(path: str | Path) -> ProjectConfig:
+    """Dispatch a project file while retaining tabular v0.1 compatibility."""
+    source = Path(path)
+    if not source.is_file():
+        raise ValueError(f"project configuration does not exist: {source.resolve()}")
+    payload = tomllib.loads(source.read_text(encoding="utf-8"))
+    if payload.get("input_format", "tabular") == "tdt":
+        return TDTProjectConfig.from_toml(source)
+    return TabularProjectConfig.from_toml(source)
+
+
 def _session_sources(value: object, base: Path) -> tuple[TabularSessionSource, ...]:
     if not isinstance(value, list) or not value:
         raise ValueError("sessions must be a non-empty TOML array of tables")
@@ -216,15 +369,126 @@ def _session_sources(value: object, base: Path) -> tuple[TabularSessionSource, .
     return tuple(sources)
 
 
+def _tdt_session_sources(value: object, base: Path) -> tuple[TDTSessionSource, ...]:
+    if not isinstance(value, list) or not value:
+        raise ValueError("sessions must be a non-empty TOML array of tables")
+    sources = []
+    identities = set()
+    for index, item in enumerate(value):
+        if not isinstance(item, dict):
+            raise ValueError("every sessions entry must be a TOML table")
+        _reject_unknown(
+            item,
+            {"subject", "session", "block", "session_start_time"},
+            f"sessions[{index}]",
+        )
+        subject = _nonempty_string(item, "subject", f"sessions[{index}]")
+        session = _nonempty_string(item, "session", f"sessions[{index}]")
+        identity = (subject, session)
+        if identity in identities:
+            raise ValueError("subject/session pairs must be unique")
+        identities.add(identity)
+        start_time = item.get("session_start_time")
+        if start_time is not None and not isinstance(start_time, datetime):
+            raise ValueError(
+                f"sessions[{index}].session_start_time must be a TOML datetime"
+            )
+        sources.append(
+            TDTSessionSource(
+                subject,
+                session,
+                (
+                    base / _nonempty_string(item, "block", f"sessions[{index}]")
+                ).resolve(),
+                start_time,
+            )
+        )
+    return tuple(sources)
+
+
+def _tdt_schema(payload: dict[str, Any]) -> TDTBlockSchema:
+    _reject_unknown(payload, {"channels", "events"}, "tdt")
+    channels_raw = payload.get("channels")
+    if not isinstance(channels_raw, list) or not channels_raw:
+        raise ValueError("tdt.channels must be a non-empty array of tables")
+    channels = []
+    for index, item in enumerate(channels_raw):
+        if not isinstance(item, dict):
+            raise ValueError("every tdt.channels entry must be a TOML table")
+        _reject_unknown(
+            item,
+            {
+                "name",
+                "signal_store",
+                "signal_channel",
+                "reference_store",
+                "reference_channel",
+            },
+            f"tdt.channels[{index}]",
+        )
+        channels.append(
+            TDTStreamChannel(
+                name=_nonempty_string(item, "name", f"tdt.channels[{index}]"),
+                signal_store=_nonempty_string(
+                    item, "signal_store", f"tdt.channels[{index}]"
+                ),
+                signal_channel=_positive_integer(
+                    item.get("signal_channel", 1),
+                    f"tdt.channels[{index}].signal_channel",
+                ),
+                reference_store=_optional_string(
+                    item.get("reference_store"),
+                    f"tdt.channels[{index}].reference_store",
+                ),
+                reference_channel=(
+                    _positive_integer(
+                        item["reference_channel"],
+                        f"tdt.channels[{index}].reference_channel",
+                    )
+                    if "reference_channel" in item
+                    else None
+                ),
+            )
+        )
+    events = _table(payload, "events")
+    _reject_unknown(events, {"store", "factor_name", "values"}, "tdt.events")
+    values_raw = events.get("values")
+    if not isinstance(values_raw, list) or not values_raw:
+        raise ValueError("tdt.events.values must be a non-empty array of tables")
+    values = []
+    for index, item in enumerate(values_raw):
+        if not isinstance(item, dict):
+            raise ValueError("every tdt.events.values entry must be a TOML table")
+        _reject_unknown(item, {"value", "label"}, f"tdt.events.values[{index}]")
+        raw_value = item.get("value")
+        if not isinstance(raw_value, int | float):
+            raise ValueError(f"tdt.events.values[{index}].value must be numeric")
+        values.append(
+            TDTEpocValue(
+                float(raw_value),
+                _nonempty_string(item, "label", f"tdt.events.values[{index}]"),
+            )
+        )
+    return TDTBlockSchema(
+        channels=tuple(channels),
+        events=TDTEpocEvents(
+            store=_nonempty_string(events, "store", "tdt.events"),
+            factor_name=_nonempty_string(events, "factor_name", "tdt.events"),
+            values=tuple(values),
+        ),
+    )
+
+
 def _nwb_config(
-    value: object, sources: tuple[TabularSessionSource, ...]
+    value: object,
+    sources: tuple[TabularSessionSource, ...] | tuple[TDTSessionSource, ...],
 ) -> NWBExportConfig | None:
     if value is None:
         return None
     if not isinstance(value, dict):
         raise ValueError("nwb must be a TOML table")
     _reject_unknown(value, {"session_description", "identifier_prefix"}, "nwb")
-    for index, source in enumerate(sources):
+    for index, source in enumerate(cast(tuple[SessionSource, ...], sources)):
         start = source.session_start_time
         if start is None:
             raise ValueError(
@@ -327,6 +591,20 @@ def _optional_delimiter(value: object, section: str) -> str | None:
         return None
     if not isinstance(value, str) or len(value) != 1:
         raise ValueError(f"{section}.delimiter must be exactly one character")
+    return value
+
+
+def _optional_string(value: object, name: str) -> str | None:
+    if value is None:
+        return None
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{name} must be a non-empty string when supplied")
+    return value
+
+
+def _positive_integer(value: object, name: str) -> int:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 1:
+        raise ValueError(f"{name} must be a positive integer")
     return value
 
 

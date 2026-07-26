@@ -1,0 +1,63 @@
+schema_version = "1"
+input_format = "tdt"
+output_directory = "artifacts"
+
+[tdt]
+
+[[tdt.channels]]
+name = "region-1"
+signal_store = "x465A"
+signal_channel = 1
+reference_store = "x405A"
+reference_channel = 1
+
+[tdt.events]
+store = "Trl_"
+factor_name = "condition"
+
+[[tdt.events.values]]
+value = 1
+label = "control"
+
+[[tdt.events.values]]
+value = 2
+label = "treatment"
+
+[[sessions]]
+subject = "mouse-01"
+session = "session-01"
+block = "data/Subject-Block-1"
+
+[analysis]
+schema_version = "1"
+title = "TDT photometry analysis"
+
+[analysis.contrast]
+factor = "condition"
+numerator = "treatment"
+denominator = "control"
+
+[analysis.channel]
+name = "region-1"
+
+[analysis.preprocessing]
+kind = "reference"
+method = "irls"
+normalization = "divide"
+
+[analysis.event_windows]
+baseline = [-2.0, 0.0]
+response = [0.0, 5.0]
+
+[analysis.inference]
+intent = "exploratory"
+randomized = false
+acknowledged_assumptions = [
+  "approximately_gaussian_unit_differences",
+  "complete_pairs",
+  "estimand_matches_question",
+  "independent_aggregation_units",
+]
+
+[analysis.quality]
+blocking_warnings = []

@@ -11,9 +11,15 @@ import tempfile
 from collections.abc import Sequence
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+from typing import cast
 
 from fiberphotometry.io.nwb_project import export_project_nwb
-from fiberphotometry.project import LoadedTabularProject, TabularProjectConfig
+from fiberphotometry.project import (
+    LoadedTabularProject,
+    ProjectConfig,
+    SessionSource,
+    load_project_config,
+)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -21,7 +27,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
     try:
-        project = TabularProjectConfig.from_toml(args.project)
+        project = load_project_config(args.project)
         loaded = project.load()
         if args.command == "inspect":
             payload = _preflight_json(project, loaded)
@@ -46,7 +52,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 def run_project(
-    project: TabularProjectConfig,
+    project: ProjectConfig,
     loaded: LoadedTabularProject,
     output_directory: Path,
 ) -> Path:
@@ -122,7 +128,7 @@ def run_project(
 
 
 def _manifest(
-    project: TabularProjectConfig,
+    project: ProjectConfig,
     status: str,
     artifact_hashes: dict[str, str],
     *,
@@ -146,9 +152,10 @@ def _manifest(
     return json.dumps(payload, indent=2, sort_keys=True)
 
 
-def _preflight_json(project: TabularProjectConfig, loaded: LoadedTabularProject) -> str:
+def _preflight_json(project: ProjectConfig, loaded: LoadedTabularProject) -> str:
     sessions = []
-    for source, inspection in zip(project.sources, loaded.inspections, strict=True):
+    sources = cast(tuple[SessionSource, ...], project.sources)
+    for source, inspection in zip(sources, loaded.inspections, strict=True):
         sessions.append(
             {
                 "subject": source.subject,

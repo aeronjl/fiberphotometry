@@ -78,6 +78,7 @@ input roles are ambiguous, reference data are unavailable, or a schema is invali
 ## Current boundary
 
 v0.1 handles the categorical, within-animal scalar event contrast supported by
-`EventAnalysis`. It does not yet expose multiverse execution, arbitrary designs,
-or TDT import through the command line. Those features should extend
-the typed library contracts rather than accumulate command-specific behavior.
+`EventAnalysis`, with either schema-first tabular files or explicitly mapped TDT
+blocks. It does not yet expose multiverse execution or arbitrary designs. Those
+features should extend the typed library contracts rather than accumulate
+command-specific behavior.

@@ -42,7 +42,8 @@
 - [x] Real IBL session reproduction against archived analysis outputs
 - [ ] TDT and generic tabular adapters
   - [x] Schema-first wide CSV/TSV recording and event adapter
-  - [ ] TDT acquisition adapter through the same canonical boundary
+  - [x] Explicit TDT stream/epoc adapter through the same canonical boundary
+  - [ ] Bounded real-block TDT integration and parity fixture
 - [ ] Metadata completeness report
 
 ## Phase 3 — inference

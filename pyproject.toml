@@ -29,6 +29,7 @@ nwb = [
     "pynwb>=3.0",
     "remfile>=0.1.13",
 ]
+tdt = ["tdt>=0.7.3"]
 
 [dependency-groups]
 dev = [

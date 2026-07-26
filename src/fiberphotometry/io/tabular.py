@@ -90,6 +90,7 @@ class TabularInspection:
     irregular_interval_fraction: float
     channels: tuple[TabularChannelInspection, ...]
     warnings: tuple[str, ...]
+    source_fingerprint_scope: str = "file_content"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -327,6 +328,9 @@ def _inspect_loaded_recording(recording: xr.Dataset) -> TabularInspection:
         irregular_interval_fraction=irregular_fraction,
         channels=tuple(channel_inspections),
         warnings=tuple(warnings),
+        source_fingerprint_scope=str(
+            recording.attrs.get("source_fingerprint_scope", "file_content")
+        ),
     )
 
 

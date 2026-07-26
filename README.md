@@ -22,7 +22,7 @@ This project aims to provide:
 
 - a canonical labelled representation for signals, events, subjects, and sessions;
 - modular preprocessing with complete parameter and provenance records;
-- acquisition adapters at the boundary, including NWB;
+- acquisition adapters at the boundary, including NWB and TDT blocks;
 - schema-first CSV/TSV recording and event import with source fingerprints;
 - event alignment that preserves the nested experimental design;
 - several clearly labelled inferential approaches rather than one hidden default;
@@ -83,6 +83,10 @@ Ordinary lab exports can enter the same canonical model through the
 [generic tabular import contract](docs/tabular-import-v0.1.md). Signal, reference,
 channel, timestamp, event, and metadata roles are explicitly mapped rather than
 inferred from column order or filenames.
+
+TDT blocks use the same boundary through an
+[explicit stream and epoc mapping](docs/tdt-import-v0.1.md). Store names, channel
+indices, and epoc meanings are declared by the scientist rather than guessed.
 
 The [configuration-first CLI](docs/cli-v0.1.md) now takes a complete tabular
 project through preflight, analysis, fingerprinted JSON, and a self-contained HTML

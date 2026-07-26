@@ -10,12 +10,12 @@ from typing import Any
 
 from fiberphotometry.io.nwb import add_recording_to_nwb
 from fiberphotometry.pipeline import RecordingInput
-from fiberphotometry.project import LoadedTabularProject, TabularProjectConfig
+from fiberphotometry.project import LoadedTabularProject, ProjectConfig
 from fiberphotometry.workflow import EventAnalysisResult
 
 
 def export_project_nwb(
-    project: TabularProjectConfig,
+    project: ProjectConfig,
     loaded: LoadedTabularProject,
     result: EventAnalysisResult,
     output_directory: Path,
