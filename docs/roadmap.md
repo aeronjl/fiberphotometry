@@ -18,6 +18,7 @@
 - [x] Session-adaptive median-rate regularization and gap diagnostics
 - [x] Frozen smooth-signal irregular-clock fidelity benchmark
 - [x] Sharp-transient, missing-run, and event-boundary resampling benchmark
+- [x] Outcome-blind real-data event-coverage and selection audit across 383 IBL sessions
 - [ ] New held-out real-data regularized-AsLS comparison
 - [x] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators

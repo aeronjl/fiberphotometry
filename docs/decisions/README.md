@@ -40,6 +40,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0010](0010-mixed-models-are-sensitivity-summaries.md) | Accepted | Report scalar mixed models as secondary sensitivity summaries |
 | [SDR-0011](0011-regularize-irregular-clocks-prospectively.md) | Accepted | Regularize irregular clocks only through prospective, auditable policy |
 | [SDR-0012](0012-protect-missing-event-windows.md) | Accepted | Protect missing event windows instead of silently reconstructing them |
+| [SDR-0013](0013-report-event-selection-before-preprocessing.md) | Accepted | Report event selection before and after preprocessing |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.
