@@ -96,6 +96,8 @@ Broader scalar interval calibration and independent MixedLM point-estimate parit
 are reported in [`benchmarks/results-v0.5.md`](benchmarks/results-v0.5.md).
 The larger adversarial calibration, which retains failed coverage and power
 criteria, is in [`benchmarks/results-v0.6.md`](benchmarks/results-v0.6.md).
+Finite-sample Welch coverage and conditional power guidance are in
+[`benchmarks/results-v0.7.md`](benchmarks/results-v0.7.md).
 
 ## Development
 

@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
   "numpy>=2.0",
+  "scipy>=1.14",
   "xarray>=2025.1",
 ]
 
@@ -36,6 +37,7 @@ dev = [
   "pytest>=8.3",
   "pytest-cov>=6.0",
   "ruff>=0.11",
+  "scipy-stubs>=1.14",
 ]
 ibl-validation = ["one-api==3.5.2"]
 stats-validation = ["statsmodels>=0.14.5"]

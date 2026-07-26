@@ -9,6 +9,7 @@ from typing import Literal
 
 import numpy as np
 from numpy.typing import NDArray
+from scipy.stats import t as student_t
 
 from fiberphotometry.design import ObservationTable, StudyDesign, validate_design
 
@@ -55,6 +56,70 @@ class PermutationResult:
     p_value: float
     null_distribution: NDArray[np.float64]
     seed: int
+
+
+@dataclass(frozen=True)
+class TIntervalResult:
+    estimate: float
+    standard_error: float
+    degrees_of_freedom: float
+    confidence_interval: tuple[float, float]
+    p_value: float
+    method: str
+
+
+def unit_t_interval(
+    table: ObservationTable,
+    design: StudyDesign,
+    estimand: Estimand,
+    *,
+    mode: Literal["welch", "paired"],
+    confidence: float = 0.95,
+) -> TIntervalResult:
+    """Compute a Welch or paired t interval on declared aggregation-unit means."""
+    validate_design(table, design).raise_for_errors()
+    if not 0 < confidence < 1:
+        raise ValueError("confidence must lie between zero and one")
+    unit_column = _unit_column(design, estimand.aggregation_unit)
+    if mode == "paired":
+        differences = _unit_differences(table, design, estimand, unit_column)
+        estimate = float(np.mean(differences))
+        standard_error = float(np.std(differences, ddof=1) / np.sqrt(len(differences)))
+        degrees = float(len(differences) - 1)
+    else:
+        factor = table.values(_factor_column(design, estimand.contrast.factor))
+        outcome = np.asarray(table.values(estimand.outcome), dtype=float)
+        units = table.values(unit_column)
+        numerator = _unit_level_means(
+            outcome, factor, units, estimand.contrast.numerator
+        )
+        denominator = _unit_level_means(
+            outcome, factor, units, estimand.contrast.denominator
+        )
+        if len(numerator) < 2 or len(denominator) < 2:
+            raise ValueError("Welch inference requires at least two units per level")
+        estimate = float(np.mean(numerator) - np.mean(denominator))
+        numerator_variance = float(np.var(numerator, ddof=1) / len(numerator))
+        denominator_variance = float(np.var(denominator, ddof=1) / len(denominator))
+        standard_error = float(np.sqrt(numerator_variance + denominator_variance))
+        degrees = float(
+            (numerator_variance + denominator_variance) ** 2
+            / (
+                numerator_variance**2 / (len(numerator) - 1)
+                + denominator_variance**2 / (len(denominator) - 1)
+            )
+        )
+    critical = float(student_t.ppf(0.5 + confidence / 2, degrees))
+    statistic = estimate / standard_error
+    p_value = float(2 * student_t.sf(abs(statistic), degrees))
+    return TIntervalResult(
+        estimate,
+        standard_error,
+        degrees,
+        (estimate - critical * standard_error, estimate + critical * standard_error),
+        p_value,
+        mode,
+    )
 
 
 def hierarchical_bootstrap(

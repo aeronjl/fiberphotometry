@@ -53,6 +53,16 @@ multiple-comparison correction or time-resolved simultaneous interval is
 implied. Calibration results are in
 [`benchmarks/results-v0.5.md`](../benchmarks/results-v0.5.md).
 
+`unit_t_interval()` provides Welch and paired-t comparators on aggregation-unit
+means. These encode stronger distributional assumptions than randomization
+inference but showed appropriate finite-sample Gaussian coverage in
+[`benchmarks/results-v0.7.md`](../benchmarks/results-v0.7.md).
+
+Missingness requires an estimand decision. The observed-data contrast describes
+available events; a complete-data contrast requires assumptions or a model for
+unobserved outcomes. The library does not relabel observed-data coverage as
+recovery of a complete-data effect.
+
 An end-to-end public IBL example converts acquired-sample DMS feedback responses
 from four animals into 2,507 event observations. The declared
 animal→session→event hierarchy validates successfully while retaining the

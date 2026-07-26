@@ -46,6 +46,8 @@
 - [x] Extended non-Gaussian, heteroscedastic, unequal-count calibration
 - [x] Condition-stratified hierarchical resampling
 - [x] Four-animal IBL event-table/design integration
+- [x] Animal-level Welch and paired-t interval comparators
+- [x] Frozen conditional power grid from 6–30 animals per condition
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [ ] Pointwise versus simultaneous interval reporting

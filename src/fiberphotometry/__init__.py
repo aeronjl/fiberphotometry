@@ -14,9 +14,11 @@ from fiberphotometry.inference import (
     Estimand,
     PermutationPlan,
     ResamplingPlan,
+    TIntervalResult,
     exact_sign_flip_test,
     hierarchical_bootstrap,
     permutation_test,
+    unit_t_interval,
 )
 from fiberphotometry.model import make_recording, validate_recording
 from fiberphotometry.preprocess import reference_dff
@@ -30,6 +32,7 @@ __all__ = [
     "PermutationPlan",
     "ResamplingPlan",
     "StudyDesign",
+    "TIntervalResult",
     "Unit",
     "align_events",
     "assess_event_confounds",
@@ -40,6 +43,7 @@ __all__ = [
     "permutation_test",
     "reference_dff",
     "summarize_event_windows",
+    "unit_t_interval",
     "validate_design",
     "validate_recording",
 ]
