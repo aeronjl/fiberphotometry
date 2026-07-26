@@ -41,6 +41,8 @@
 - [x] IBL table adapter with alternating-wavelength interpolation and masks
 - [x] Real IBL session reproduction against archived analysis outputs
 - [ ] TDT and generic tabular adapters
+  - [x] Schema-first wide CSV/TSV recording and event adapter
+  - [ ] TDT acquisition adapter through the same canonical boundary
 - [ ] Metadata completeness report
 
 ## Phase 3 — inference

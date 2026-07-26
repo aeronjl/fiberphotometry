@@ -23,6 +23,7 @@ This project aims to provide:
 - a canonical labelled representation for signals, events, subjects, and sessions;
 - modular preprocessing with complete parameter and provenance records;
 - acquisition adapters at the boundary, including NWB;
+- schema-first CSV/TSV recording and event import with source fingerprints;
 - event alignment that preserves the nested experimental design;
 - several clearly labelled inferential approaches rather than one hidden default;
 - simulation and public-data benchmarks with known or independently checkable answers.
@@ -77,6 +78,11 @@ See [the workflow guide](docs/product-workflow-v0.1.md) and the runnable
 [`event_analysis_report.py`](examples/event_analysis_report.py). The explicit
 planning step is intentional: execution cannot silently accept inferential
 assumptions on the scientist's behalf.
+
+Ordinary lab exports can enter the same canonical model through the
+[generic tabular import contract](docs/tabular-import-v0.1.md). Signal, reference,
+channel, timestamp, event, and metadata roles are explicitly mapped rather than
+inferred from column order or filenames.
 
 For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The
