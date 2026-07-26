@@ -70,7 +70,7 @@ class BaselineDFFOperation:
     """Signal-only baseline correction with explicit normalization semantics."""
 
     method: Literal["double_exponential", "asls", "rolling_mean"]
-    normalization: Literal["divide", "subtract"] = "divide"
+    normalization: Literal["divide", "subtract", "both"] = "divide"
     variable: str = "signal"
     min_tau_s: float = 5.0
     asls_smoothness: float = 1e8

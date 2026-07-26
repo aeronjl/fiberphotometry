@@ -68,6 +68,25 @@ def test_subtractive_baseline_output_retains_fluorescence_units() -> None:
     assert "/ fitted_baseline" not in operation["formula"]
 
 
+def test_baseline_can_expose_both_normalizations_without_refitting() -> None:
+    time = np.arange(0, 100, 0.1)
+    signal = 1 + 0.2 * np.exp(-time / 30)
+    recording = make_recording(time=time, signal=signal, subject="m", session="s")
+
+    result = baseline_dff(recording, method="double_exponential", normalization="both")
+
+    assert "dff" in result
+    assert "baseline_subtracted" in result
+    assert np.allclose(
+        result.dff.values * result.fitted_baseline.values,
+        result.baseline_subtracted.values,
+        equal_nan=True,
+    )
+    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    assert operation["normalization"] == "both"
+    assert len(operation["formula"]) == 2
+
+
 def test_asls_smoothness_scales_with_sampling_rate() -> None:
     time = np.arange(0, 30, 0.025)
     recording = make_recording(

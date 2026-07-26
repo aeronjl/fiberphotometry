@@ -26,7 +26,7 @@ def baseline_dff(
     asls_smoothness: float = 1e8,
     asls_asymmetry: float = 0.01,
     max_iterations: int = 20,
-    normalization: Literal["divide", "subtract"] = "divide",
+    normalization: Literal["divide", "subtract", "both"] = "divide",
     asls_reference_rate_hz: float = 20.0,
     rolling_window_s: float = 60.0,
     rolling_gap_factor: float = 1.5,
@@ -58,8 +58,8 @@ def baseline_dff(
         raise ValueError("asls_asymmetry must lie between zero and one")
     if max_iterations < 1:
         raise ValueError("max_iterations must be positive")
-    if normalization not in {"divide", "subtract"}:
-        raise ValueError("normalization must be 'divide' or 'subtract'")
+    if normalization not in {"divide", "subtract", "both"}:
+        raise ValueError("normalization must be 'divide', 'subtract', or 'both'")
     if asls_reference_rate_hz <= 0:
         raise ValueError("asls_reference_rate_hz must be positive")
     if rolling_window_s <= 0:
@@ -122,12 +122,12 @@ def baseline_dff(
     corrected = source - baseline
     output = recording.copy(deep=True)
     output["fitted_baseline"] = (("time", "channel"), baseline)
-    if normalization == "divide":
+    if normalization in {"divide", "both"}:
         divided = np.full_like(source, np.nan)
         safe = np.isfinite(baseline) & (np.abs(baseline) > np.finfo(float).eps)
         divided[safe] = corrected[safe] / baseline[safe]
         output["dff"] = (("time", "channel"), divided)
-    else:
+    if normalization in {"subtract", "both"}:
         output["baseline_subtracted"] = (("time", "channel"), corrected)
     if method == "double_exponential":
         output["baseline_fit_parameter"] = (
@@ -148,11 +148,14 @@ def baseline_dff(
         "method": method,
         "variable": variable,
         "normalization": normalization,
-        "formula": (
-            "(variable - fitted_baseline) / fitted_baseline"
-            if normalization == "divide"
-            else "variable - fitted_baseline"
-        ),
+        "formula": {
+            "divide": "(variable - fitted_baseline) / fitted_baseline",
+            "subtract": "variable - fitted_baseline",
+            "both": [
+                "(variable - fitted_baseline) / fitted_baseline",
+                "variable - fitted_baseline",
+            ],
+        }[normalization],
         "finite_run_policy": "independent",
         "failed_short_runs": failed_runs,
     }

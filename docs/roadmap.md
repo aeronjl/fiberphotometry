@@ -72,7 +72,8 @@
 - [x] Refresh held-out IBL manifest (gate failed: no labelled reference channels)
 - [x] Resolve new-cohort IBL channel provenance (470-nm-only acquisition)
 - [x] Implement the published rolling baseline with 20/50-Hz and gap fixtures
-- [ ] Freeze signal-only IBL v0.3
+- [x] Freeze signal-only IBL v0.3 (18 animals; 15 executable universes)
+- [ ] Execute and report the frozen signal-only IBL v0.3 multiverse
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures

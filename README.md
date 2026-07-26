@@ -112,6 +112,10 @@ The follow-up
 establishes that the held-out recordings are signal-only; the proposed v0.3
 workflow remains an explicitly non-normative
 [`design draft`](docs/drafts/ibl-feedback-signal-only-v0.3-design.md).
+That design has now been superseded by the outcome-blind
+[`frozen v0.3 protocol`](benchmarks/protocol-ibl-feedback-signal-only-v0.3.md),
+whose readiness gate retained 383 sessions from 18 held-out animals; fluorescence
+contrasts have not yet been calculated.
 The follow-up baseline-fidelity and normalization study is in
 [`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
 

@@ -1,0 +1,614 @@
+{
+  "cohort_manifest_sha256": "38197a26ab4804131423a9650a473a11e2b14f09ac2877875b574f2770d894e6",
+  "eligible_universe_count": 15,
+  "estimand": "animal-level correct-minus-incorrect feedback response",
+  "incompatible_universe_count": 3,
+  "intent": "exploratory",
+  "materialized_universes": [
+    {
+      "choices": [
+        {
+          "alternative": "double_exponential",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_standard",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "bbb7837904b243fc"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "double_exponential",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_early",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "999b3ad820e98deb"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "double_exponential",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_displaced_baseline",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "c6a6a198ac7344ee"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "double_exponential",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_standard",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "bdef2a78ec74214b"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "double_exponential",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_early",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "a20b5cb2ff42a90d"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "double_exponential",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_displaced_baseline",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "3f8b2d4f25880fe8"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "asls",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_standard",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "35867d72532e623a"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "asls",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_early",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "52d8e64077c516b0"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "asls",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_displaced_baseline",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "c6835f8ae2e5941b"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "asls",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_standard",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "4df9cf0520da4d2b"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "asls",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_early",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "175d7bfd19d39c05"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "asls",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_displaced_baseline",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "e4bac6fb7aea0342"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "published_rolling",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_standard",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "007125adbc779244"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "published_rolling",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_early",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "cb0665f6be181959"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "published_rolling",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "divide_displaced_baseline",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": null,
+      "status": "eligible_for_execution",
+      "universe_id": "49cc1db865638dba"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "published_rolling",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_standard",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": "the published rolling comparator was declared only as divisive dF/F",
+      "status": "incompatible",
+      "universe_id": "bedcb156072a2344"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "published_rolling",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_early",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": "the published rolling comparator was declared only as divisive dF/F",
+      "status": "incompatible",
+      "universe_id": "01003be5bc770dc8"
+    },
+    {
+      "choices": [
+        {
+          "alternative": "published_rolling",
+          "node": "baseline_estimator"
+        },
+        {
+          "alternative": "subtract_displaced_baseline",
+          "node": "normalization_window"
+        }
+      ],
+      "incompatibility": "the published rolling comparator was declared only as divisive dF/F",
+      "status": "incompatible",
+      "universe_id": "cb0d2c1de495d2d4"
+    }
+  ],
+  "outcome_access_at_freeze": "no photometry values or condition-specific fluorescence summaries",
+  "protocol_sha256": "abcec0a742a20869b7522c1cd700391371764afb9fa60778e16579a7876f05fc",
+  "reference_role": "published rolling/standard is a display and leave-one-animal-out reference, not a preferred or confirmatory workflow",
+  "schema_version": "ibl-feedback-protocol-v0.3",
+  "spec": {
+    "base_pipeline": {
+      "analysis_plan": {
+        "acknowledged_assumptions": [
+          "approximately_gaussian_unit_differences",
+          "complete_pairs",
+          "estimand_matches_question",
+          "independent_aggregation_units"
+        ],
+        "estimand": {
+          "aggregation_unit": "animal",
+          "contrast": {
+            "denominator": "incorrect",
+            "factor": "feedback",
+            "numerator": "correct"
+          },
+          "outcome": "feedback_delta"
+        },
+        "executable": true,
+        "intent": "exploratory",
+        "method": "paired_t",
+        "required_assumptions": [
+          "independent_aggregation_units",
+          "estimand_matches_question",
+          "approximately_gaussian_unit_differences",
+          "complete_pairs"
+        ],
+        "schema_version": "1",
+        "seed": null
+      },
+      "design": {
+        "factors": [
+          {
+            "assignment_unit": "event",
+            "column": "feedback",
+            "kind": "categorical",
+            "name": "feedback"
+          }
+        ],
+        "observation_id": "event_id",
+        "schema_version": "1",
+        "units": [
+          {
+            "column": "animal",
+            "name": "animal",
+            "nested_within": null
+          },
+          {
+            "column": "session",
+            "name": "session",
+            "nested_within": "animal"
+          },
+          {
+            "column": "event_id",
+            "name": "event",
+            "nested_within": "session"
+          }
+        ]
+      },
+      "event_summary": {
+        "baseline": [
+          -0.5,
+          0.0
+        ],
+        "channel": "DMS",
+        "output_column": "feedback_delta",
+        "response": [
+          0.0,
+          0.5
+        ],
+        "statistic": "delta",
+        "variable": "dff"
+      },
+      "preprocessing": [
+        {
+          "asls_asymmetry": 0.01,
+          "asls_reference_rate_hz": 20.0,
+          "asls_smoothness": 100000000.0,
+          "kind": "baseline_dff",
+          "max_iterations": 20,
+          "method": "rolling_mean",
+          "min_tau_s": 5.0,
+          "normalization": "both",
+          "rolling_gap_factor": 1.5,
+          "rolling_window_s": 60.0,
+          "variable": "signal"
+        }
+      ],
+      "quality_gate": {
+        "blocking_warnings": [],
+        "scope": "selected_channel"
+      },
+      "schema_version": "2"
+    },
+    "compatibility_rules": [
+      {
+        "reason": "the published rolling comparator was declared only as divisive dF/F",
+        "when": [
+          {
+            "alternative": "published_rolling",
+            "node": "baseline_estimator"
+          },
+          {
+            "alternative": "subtract_standard",
+            "node": "normalization_window"
+          }
+        ]
+      },
+      {
+        "reason": "the published rolling comparator was declared only as divisive dF/F",
+        "when": [
+          {
+            "alternative": "published_rolling",
+            "node": "baseline_estimator"
+          },
+          {
+            "alternative": "subtract_early",
+            "node": "normalization_window"
+          }
+        ]
+      },
+      {
+        "reason": "the published rolling comparator was declared only as divisive dF/F",
+        "when": [
+          {
+            "alternative": "published_rolling",
+            "node": "baseline_estimator"
+          },
+          {
+            "alternative": "subtract_displaced_baseline",
+            "node": "normalization_window"
+          }
+        ]
+      }
+    ],
+    "decision_nodes": [
+      {
+        "alternatives": [
+          {
+            "label": "double_exponential",
+            "rationale": "robust non-negative two-timescale bleaching fit",
+            "value": [
+              {
+                "asls_asymmetry": 0.01,
+                "asls_reference_rate_hz": 20.0,
+                "asls_smoothness": 100000000.0,
+                "kind": "baseline_dff",
+                "max_iterations": 20,
+                "method": "double_exponential",
+                "min_tau_s": 5.0,
+                "normalization": "both",
+                "rolling_gap_factor": 1.5,
+                "rolling_window_s": 60.0,
+                "variable": "signal"
+              }
+            ]
+          },
+          {
+            "label": "asls",
+            "rationale": "rate-aware asymmetric least-squares lower envelope",
+            "value": [
+              {
+                "asls_asymmetry": 0.01,
+                "asls_reference_rate_hz": 20.0,
+                "asls_smoothness": 100000000.0,
+                "kind": "baseline_dff",
+                "max_iterations": 20,
+                "method": "asls",
+                "min_tau_s": 5.0,
+                "normalization": "both",
+                "rolling_gap_factor": 1.5,
+                "rolling_window_s": 60.0,
+                "variable": "signal"
+              }
+            ]
+          },
+          {
+            "label": "published_rolling",
+            "rationale": "published centred 60-second rolling-mean comparator",
+            "value": [
+              {
+                "asls_asymmetry": 0.01,
+                "asls_reference_rate_hz": 20.0,
+                "asls_smoothness": 100000000.0,
+                "kind": "baseline_dff",
+                "max_iterations": 20,
+                "method": "rolling_mean",
+                "min_tau_s": 5.0,
+                "normalization": "both",
+                "rolling_gap_factor": 1.5,
+                "rolling_window_s": 60.0,
+                "variable": "signal"
+              }
+            ]
+          }
+        ],
+        "name": "baseline_estimator",
+        "target": "preprocessing"
+      },
+      {
+        "alternatives": [
+          {
+            "label": "divide_standard",
+            "rationale": "divide normalization with standard event window",
+            "value": {
+              "baseline": [
+                -0.5,
+                0.0
+              ],
+              "channel": "DMS",
+              "output_column": "feedback_delta",
+              "response": [
+                0.0,
+                0.5
+              ],
+              "statistic": "delta",
+              "variable": "dff"
+            }
+          },
+          {
+            "label": "divide_early",
+            "rationale": "divide normalization with early event window",
+            "value": {
+              "baseline": [
+                -0.5,
+                0.0
+              ],
+              "channel": "DMS",
+              "output_column": "feedback_delta",
+              "response": [
+                0.0,
+                0.25
+              ],
+              "statistic": "delta",
+              "variable": "dff"
+            }
+          },
+          {
+            "label": "divide_displaced_baseline",
+            "rationale": "divide normalization with displaced_baseline event window",
+            "value": {
+              "baseline": [
+                -1.0,
+                -0.2
+              ],
+              "channel": "DMS",
+              "output_column": "feedback_delta",
+              "response": [
+                0.0,
+                0.5
+              ],
+              "statistic": "delta",
+              "variable": "dff"
+            }
+          },
+          {
+            "label": "subtract_standard",
+            "rationale": "subtract normalization with standard event window",
+            "value": {
+              "baseline": [
+                -0.5,
+                0.0
+              ],
+              "channel": "DMS",
+              "output_column": "feedback_delta",
+              "response": [
+                0.0,
+                0.5
+              ],
+              "statistic": "delta",
+              "variable": "baseline_subtracted"
+            }
+          },
+          {
+            "label": "subtract_early",
+            "rationale": "subtract normalization with early event window",
+            "value": {
+              "baseline": [
+                -0.5,
+                0.0
+              ],
+              "channel": "DMS",
+              "output_column": "feedback_delta",
+              "response": [
+                0.0,
+                0.25
+              ],
+              "statistic": "delta",
+              "variable": "baseline_subtracted"
+            }
+          },
+          {
+            "label": "subtract_displaced_baseline",
+            "rationale": "subtract normalization with displaced_baseline event window",
+            "value": {
+              "baseline": [
+                -1.0,
+                -0.2
+              ],
+              "channel": "DMS",
+              "output_column": "feedback_delta",
+              "response": [
+                0.0,
+                0.5
+              ],
+              "statistic": "delta",
+              "variable": "baseline_subtracted"
+            }
+          }
+        ],
+        "name": "normalization_window",
+        "target": "event_summary"
+      }
+    ],
+    "direction": "either",
+    "intent": "exploratory",
+    "leave_one_unit_out": true,
+    "reference_selection": [
+      {
+        "alternative": "published_rolling",
+        "node": "baseline_estimator"
+      },
+      {
+        "alternative": "divide_standard",
+        "node": "normalization_window"
+      }
+    ],
+    "schema_version": "1",
+    "smallest_effect": null
+  },
+  "status": "frozen_before_photometry-outcome access"
+}

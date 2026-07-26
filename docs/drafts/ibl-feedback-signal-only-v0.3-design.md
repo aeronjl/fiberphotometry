@@ -1,6 +1,9 @@
 # Draft: IBL feedback signal-only analysis v0.3
 
-Status: **design draft; not frozen and not executed** (26 July 2026)
+Status: **superseded by the frozen protocol; not executed** (26 July 2026)
+
+The normative successor is the
+[frozen v0.3 protocol](../../benchmarks/protocol-ibl-feedback-signal-only-v0.3.md).
 
 This document proposes a prospective use of the 18 held-out IBL animals that
 failed the paired-reference v0.2 readiness gate. It does not amend v0.2 and must
@@ -77,15 +80,10 @@ inherit sample-count parameters calibrated at 50 Hz.
 - Treat disagreement as information about preprocessing dependence, not as an
   inconvenience to be averaged away.
 
-## Required work before freezing
+## Completed prerequisites for freezing
 
-1. Confirm that the IBL adapter can expose labelled 470-nm samples without assigning
-   reference semantics to wavelength-0 rows.
-2. Write a machine-readable v0.3 protocol and validate all universe combinations
-   without loading condition-specific fluorescence summaries.
-3. Generate and commit the new outcome-blind cohort manifest.
-4. Freeze thresholds, seeds, exclusions, reporting language, and stop rules before
-   computing the first correct-minus-incorrect contrast.
+All four prerequisites were completed before computing any
+correct-minus-incorrect fluorescence contrast. See the normative successor above.
 
 ## Stop rules
 
