@@ -43,6 +43,9 @@
 - [x] Frozen pseudoreplication benchmark contrasting trial and animal resampling
 - [x] Initial independent MixedLM point-estimate parity
 - [ ] Independent interval and unbalanced mixed-model parity
+- [x] Extended non-Gaussian, heteroscedastic, unequal-count calibration
+- [x] Condition-stratified hierarchical resampling
+- [x] Four-animal IBL event-table/design integration
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [ ] Pointwise versus simultaneous interval reporting

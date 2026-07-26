@@ -94,6 +94,8 @@ The first frozen inference benchmark demonstrates the pseudoreplication failure
 of trial-level resampling in [`benchmarks/results-v0.4.md`](benchmarks/results-v0.4.md).
 Broader scalar interval calibration and independent MixedLM point-estimate parity
 are reported in [`benchmarks/results-v0.5.md`](benchmarks/results-v0.5.md).
+The larger adversarial calibration, which retains failed coverage and power
+criteria, is in [`benchmarks/results-v0.6.md`](benchmarks/results-v0.6.md).
 
 ## Development
 

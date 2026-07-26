@@ -96,3 +96,19 @@ def test_shuffle_moves_labels_only_between_assignment_units() -> None:
 
     assert result.estimate == 1.0
     assert 0 < result.p_value <= 1
+
+
+def test_between_unit_bootstrap_can_preserve_condition_strata() -> None:
+    table, design, estimand = _paired_table()
+
+    result = hierarchical_bootstrap(
+        table,
+        design,
+        estimand,
+        ResamplingPlan(("animal", "event"), strata=("condition",)),
+        interval_method="percentile",
+        draws=50,
+        seed=4,
+    )
+
+    assert np.all(np.isfinite(result.distribution))

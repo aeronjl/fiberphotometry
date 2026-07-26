@@ -1,0 +1,23 @@
+{
+  "acceptance": {
+    "coverage_four_of_five": false,
+    "gaussian_power": false,
+    "scenario_has_acceptable_method": false,
+    "unequal_count_power": false
+  },
+  "all_acceptance_met": false,
+  "coverage_ranges": {
+    "basic": [0.876, 0.888],
+    "bca": [0.874, 0.89],
+    "percentile": [0.878, 0.886]
+  },
+  "default_eligible_methods": [],
+  "draws": 500,
+  "power_ranges_effect_0.8": {
+    "basic": [0.368, 0.392],
+    "bca": [0.352, 0.38],
+    "percentile": [0.356, 0.386]
+  },
+  "protocol": "v0.6",
+  "studies_per_cell": 500
+}

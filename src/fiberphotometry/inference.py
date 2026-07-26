@@ -30,6 +30,7 @@ class Estimand:
 @dataclass(frozen=True)
 class ResamplingPlan:
     resample_units: tuple[str, ...]
+    strata: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -74,8 +75,9 @@ def hierarchical_bootstrap(
     )
     rng = np.random.default_rng(seed)
     aggregation_column = _unit_column(design, estimand.aggregation_unit)
+    stratum_columns = tuple(table.values(column) for column in plan.strata)
     sampled = [
-        _resample_rows(table, unit_columns, aggregation_column, rng)
+        _resample_strata(table, unit_columns, aggregation_column, stratum_columns, rng)
         for _ in range(draws)
     ]
     distribution = np.asarray(
@@ -218,6 +220,36 @@ def _resample_rows(
             output.append(child_rows)
             groups.append(child_groups)
     return np.concatenate(output).astype(int), np.concatenate(groups).astype(int)
+
+
+def _resample_strata(
+    table: ObservationTable,
+    unit_columns: tuple[str, ...],
+    aggregation_column: str,
+    stratum_columns: tuple[np.ndarray, ...],
+    rng: np.random.Generator,
+) -> tuple[NDArray[np.int_], NDArray[np.int_]]:
+    if not stratum_columns:
+        return _resample_rows(table, unit_columns, aggregation_column, rng)
+    keys = [
+        tuple(column[row] for column in stratum_columns) for row in range(len(table))
+    ]
+    rows_out = []
+    groups_out = []
+    counter = [0]
+    for key in dict.fromkeys(keys):
+        rows = np.asarray([index for index, value in enumerate(keys) if value == key])
+        sampled_rows, groups = _resample_rows(
+            table,
+            unit_columns,
+            aggregation_column,
+            rng,
+            rows=rows,
+            counter=counter,
+        )
+        rows_out.append(sampled_rows)
+        groups_out.append(groups)
+    return np.concatenate(rows_out), np.concatenate(groups_out)
 
 
 def _estimate(

@@ -52,3 +52,11 @@ inference rejects incomplete units instead of silently dropping them. No
 multiple-comparison correction or time-resolved simultaneous interval is
 implied. Calibration results are in
 [`benchmarks/results-v0.5.md`](../benchmarks/results-v0.5.md).
+
+An end-to-end public IBL example converts acquired-sample DMS feedback responses
+from four animals into 2,507 event observations. The declared
+animal→session→event hierarchy validates successfully while retaining the
+imbalanced 1,850 correct and 657 incorrect trials. The script does not claim
+that feedback is randomized or that this four-animal contrast supports
+population inference; it demonstrates the data/design boundary. See
+[`benchmarks/ibl-observation-table-v0.1.json`](../benchmarks/ibl-observation-table-v0.1.json).
