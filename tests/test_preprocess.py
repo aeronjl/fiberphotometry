@@ -213,6 +213,8 @@ def test_resampling_retains_source_and_does_not_bridge_large_gap() -> None:
     assert np.isnan(result.signal.sel(time=2.0).item())
     assert not result.included.sel(time=2.0).item()
     assert np.array_equal(result.source_included.values, [True, True, False, True])
+    assert result.protected_gap.sel(time=2.0).item()
+    assert not result.interpolated.sel(time=2.0).item()
     operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
     assert operation["kind"] == "resample"
     assert operation["max_gap_s"] == 1.1
@@ -246,6 +248,7 @@ def test_median_rate_regularization_reports_jitter_and_preserves_smooth_signal()
     assert operation["source_interval_cv"] > 0
     assert operation["gap_masked_target_fraction"] == 0
     assert operation["nearest_source_distance_max_s"] < 0.002
+    assert operation["interpolated_target_fraction"] > 0
 
 
 def test_lowpass_retains_input_and_reports_edge_handling() -> None:

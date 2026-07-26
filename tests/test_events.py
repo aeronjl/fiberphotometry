@@ -1,6 +1,12 @@
 import numpy as np
 
-from fiberphotometry import align_events, make_recording, summarize_event_windows
+from fiberphotometry import (
+    align_events,
+    condition_exclusion_warning,
+    condition_reconstruction_warning,
+    make_recording,
+    summarize_event_windows,
+)
 
 
 def test_align_events_retains_events_and_metadata() -> None:
@@ -45,3 +51,45 @@ def test_summarize_event_windows_uses_acquired_samples() -> None:
     assert summary.baseline_mean.item() == 1.0
     assert summary.response_mean.item() == 6.0
     assert summary.delta.item() == 5.0
+    assert summary.event_disposition.item() == "complete"
+    assert summary.baseline_finite_fraction.item() == 1.0
+    assert summary.response_finite_fraction.item() == 1.0
+    assert summary.baseline_interpolated_fraction.item() == 0.0
+    assert summary.response_interpolated_fraction.item() == 0.0
+
+
+def test_event_alignment_does_not_bridge_protected_nan_gap() -> None:
+    recording = make_recording(
+        time=[0.0, 1.0, 2.0, 3.0, 4.0],
+        signal=[0.0, 1.0, np.nan, 3.0, 4.0],
+        subject="mouse",
+        session="gap",
+    )
+
+    aligned = align_events(recording, [2.0], window=(-1, 1), rate=2, variable="signal")
+    summary = summarize_event_windows(
+        recording,
+        [2.0],
+        baseline=(-1.0, 0.0),
+        response=(0.0, 1.0),
+    )
+
+    assert np.array_equal(
+        np.isfinite(aligned.values[0, :, 0]),
+        [True, False, False, False, True],
+    )
+    assert np.isnan(summary.response_mean.item())
+    assert summary.response_finite_fraction.item() == 0.0
+    assert summary.event_disposition.item() == "event_inside_gap"
+
+
+def test_condition_exclusion_warning_detects_imbalanced_complete_events() -> None:
+    assert condition_exclusion_warning(
+        ["a", "a", "b", "b"],
+        ["complete", "complete", "complete", "response_intersects_gap"],
+    )
+    assert not condition_exclusion_warning(
+        ["a", "a", "b", "b"],
+        ["complete", "response_intersects_gap"] * 2,
+    )
+    assert condition_reconstruction_warning(["a", "a", "b", "b"], [0.0, 0.0, 0.0, 0.1])

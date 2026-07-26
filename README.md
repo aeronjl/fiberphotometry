@@ -189,6 +189,9 @@ The follow-up baseline-fidelity and normalization study is in
 Prospective median-rate regularization for jittered clocks, including gap and
 interpolation-distance provenance, is documented in
 [`docs/irregular-sampling-v0.1.md`](docs/irregular-sampling-v0.1.md).
+Sharp-transient and missing-run limits, including retained reconstruction failures,
+are reported in
+[`docs/transient-gap-results-v0.1.1.md`](docs/transient-gap-results-v0.1.1.md).
 
 The experimental inference schema keeps arbitrary observation metadata open
 while explicitly declaring units, nesting, factor assignment, estimands, and

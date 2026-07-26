@@ -18,6 +18,7 @@ def align_events(
     rate: float,
     variable: str = "dff",
     event_ids: Sequence[str] | None = None,
+    max_gap_s: float | None = None,
 ) -> xr.DataArray:
     """Interpolate a signal onto a common peri-event time axis.
 
@@ -32,6 +33,8 @@ def align_events(
         raise ValueError("window start must be earlier than window stop")
     if rate <= 0:
         raise ValueError("rate must be positive")
+    if max_gap_s is not None and max_gap_s <= 0:
+        raise ValueError("max_gap_s must be positive when provided")
 
     events = np.asarray(event_times, dtype=float)
     ids = list(event_ids or [str(index) for index in range(len(events))])
@@ -47,11 +50,12 @@ def align_events(
         target = event_time + relative_time
         within = (target >= source_time[0]) & (target <= source_time[-1])
         for channel in range(source.shape[1]):
-            finite = np.isfinite(source[:, channel])
-            if finite.sum() >= 2:
-                values[event_index, within, channel] = np.interp(
-                    target[within], source_time[finite], source[finite, channel]
-                )
+            values[event_index, within, channel] = _interpolate_finite_runs(
+                source_time,
+                source[:, channel],
+                target[within],
+                max_gap_s=max_gap_s,
+            )
 
     return xr.DataArray(
         values,
@@ -67,6 +71,7 @@ def align_events(
             "session": recording.attrs["session"],
             "source_variable": variable,
             "alignment_rate_hz": rate,
+            "max_bridgeable_gap_s": max_gap_s,
         },
         name=f"event_aligned_{variable}",
     )
@@ -93,13 +98,47 @@ def summarize_event_windows(
     events = np.asarray(event_times, dtype=float)
     times = np.asarray(recording.time.values, dtype=float)
     values = np.asarray(recording[variable].values, dtype=float)
-    baseline_means = _window_means(values, times, events, baseline)
-    response_means = _window_means(values, times, events, response)
+    baseline_means, baseline_fraction = _window_means(values, times, events, baseline)
+    response_means, response_fraction = _window_means(values, times, events, response)
+    baseline_interpolated = _window_flag_fraction(
+        recording, times, events, baseline, "interpolated"
+    )
+    response_interpolated = _window_flag_fraction(
+        recording, times, events, response, "interpolated"
+    )
+    disposition = np.full(baseline_means.shape, "complete", dtype="U40")
+    baseline_missing = baseline_fraction < 1
+    response_missing = response_fraction < 1
+    disposition[baseline_missing] = "baseline_intersects_gap"
+    disposition[response_missing] = "response_intersects_gap"
+    disposition[baseline_missing & response_missing] = (
+        "baseline_and_response_intersect_gap"
+    )
+    event_rows = np.asarray([int(np.argmin(abs(times - event))) for event in events])
+    event_missing = ~np.isfinite(values[event_rows, :])
+    disposition[event_missing] = "event_inside_gap"
     return xr.Dataset(
         data_vars={
             "baseline_mean": (("event", "channel"), baseline_means),
             "response_mean": (("event", "channel"), response_means),
             "delta": (("event", "channel"), response_means - baseline_means),
+            "baseline_finite_fraction": (
+                ("event", "channel"),
+                baseline_fraction,
+            ),
+            "response_finite_fraction": (
+                ("event", "channel"),
+                response_fraction,
+            ),
+            "event_disposition": (("event", "channel"), disposition),
+            "baseline_interpolated_fraction": (
+                ("event",),
+                baseline_interpolated,
+            ),
+            "response_interpolated_fraction": (
+                ("event",),
+                response_interpolated,
+            ),
         },
         coords={
             "event": np.arange(len(events)),
@@ -121,8 +160,9 @@ def _window_means(
     times: np.ndarray,
     events: np.ndarray,
     window: tuple[float, float],
-) -> np.ndarray:
+) -> tuple[np.ndarray, np.ndarray]:
     output = np.full((len(events), values.shape[1]), np.nan)
+    fractions = np.zeros((len(events), values.shape[1]), dtype=float)
     for index, event in enumerate(events):
         if not np.isfinite(event):
             continue
@@ -131,7 +171,86 @@ def _window_means(
             selected_values = values[selected]
             finite = np.isfinite(selected_values)
             counts = finite.sum(axis=0)
+            fractions[index] = counts / selected.sum()
             sums = np.where(finite, selected_values, 0.0).sum(axis=0)
-            valid = counts > 0
+            valid = counts == selected.sum()
             output[index, valid] = sums[valid] / counts[valid]
+    return output, fractions
+
+
+def condition_exclusion_warning(
+    conditions: Sequence[str], dispositions: Sequence[str]
+) -> bool:
+    """Warn when complete-event fractions differ across conditions."""
+    labels = np.asarray(conditions, dtype=str)
+    status = np.asarray(dispositions, dtype=str)
+    if len(labels) != len(status):
+        raise ValueError("conditions and dispositions must have equal length")
+    fractions = [
+        float(np.mean(status[labels == label] == "complete"))
+        for label in np.unique(labels)
+    ]
+    return len(fractions) > 1 and not np.allclose(fractions, fractions[0])
+
+
+def condition_reconstruction_warning(
+    conditions: Sequence[str], reconstructed_fractions: Sequence[float]
+) -> bool:
+    """Warn when mean reconstructed coverage differs across conditions."""
+    labels = np.asarray(conditions, dtype=str)
+    fractions = np.asarray(reconstructed_fractions, dtype=float)
+    if len(labels) != len(fractions):
+        raise ValueError(
+            "conditions and reconstructed_fractions must have equal length"
+        )
+    condition_means = [
+        float(np.mean(fractions[labels == label])) for label in np.unique(labels)
+    ]
+    return len(condition_means) > 1 and not np.allclose(
+        condition_means, condition_means[0]
+    )
+
+
+def _window_flag_fraction(
+    recording: xr.Dataset,
+    times: np.ndarray,
+    events: np.ndarray,
+    window: tuple[float, float],
+    variable: str,
+) -> np.ndarray:
+    output = np.zeros(len(events), dtype=float)
+    if variable not in recording:
+        return output
+    flags = np.asarray(recording[variable].values, dtype=bool)
+    for index, event in enumerate(events):
+        selected = (times >= event + window[0]) & (times < event + window[1])
+        if np.any(selected):
+            output[index] = float(np.mean(flags[selected]))
+    return output
+
+
+def _interpolate_finite_runs(
+    source_time: np.ndarray,
+    source: np.ndarray,
+    target: np.ndarray,
+    *,
+    max_gap_s: float | None,
+) -> np.ndarray:
+    output = np.full(len(target), np.nan)
+    finite_rows = np.flatnonzero(np.isfinite(source))
+    if not len(finite_rows):
+        return output
+    split = np.flatnonzero(np.diff(finite_rows) > 1) + 1
+    groups = np.split(finite_rows, split)
+    for group in groups:
+        if max_gap_s is not None and len(group) > 1:
+            time_splits = np.flatnonzero(np.diff(source_time[group]) > max_gap_s) + 1
+            runs = np.split(group, time_splits)
+        else:
+            runs = [group]
+        for run in runs:
+            if len(run) < 2:
+                continue
+            within = (target >= source_time[run[0]]) & (target <= source_time[run[-1]])
+            output[within] = np.interp(target[within], source_time[run], source[run])
     return output

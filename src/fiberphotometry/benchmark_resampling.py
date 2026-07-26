@@ -165,14 +165,3 @@ def reconstruction_metrics(
         reconstructed_fraction,
         disposition,
     )
-
-
-def condition_exclusion_warning(
-    conditions: NDArray[np.str_], dispositions: NDArray[np.str_]
-) -> bool:
-    """Warn when complete-event fractions differ across declared conditions."""
-    fractions = []
-    for condition in np.unique(conditions):
-        rows = conditions == condition
-        fractions.append(float(np.mean(dispositions[rows] == "complete")))
-    return len(fractions) > 1 and not np.allclose(fractions, fractions[0])

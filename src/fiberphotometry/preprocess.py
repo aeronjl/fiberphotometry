@@ -311,6 +311,12 @@ def resample_recording(
         for left, right in pairwise(source_time):
             if right - left > resolved_max_gap_s:
                 gap_mask |= (target_time > left) & (target_time < right)
+    exact_tolerance = max(step * 1e-9, np.finfo(float).eps * 16)
+    output["interpolated"] = (
+        ("time",),
+        (nearest_distance > exact_tolerance) & ~gap_mask,
+    )
+    output["protected_gap"] = (("time",), gap_mask)
     _append_operation(
         output,
         {
@@ -332,6 +338,9 @@ def resample_recording(
             "gap_masked_target_fraction": float(np.mean(gap_mask)),
             "nearest_source_distance_p95_s": float(np.quantile(nearest_distance, 0.95)),
             "nearest_source_distance_max_s": float(np.max(nearest_distance)),
+            "interpolated_target_fraction": float(
+                np.mean((nearest_distance > exact_tolerance) & ~gap_mask)
+            ),
             "time_only_boolean_method": "nearest",
         },
     )

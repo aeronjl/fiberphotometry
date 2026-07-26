@@ -27,5 +27,10 @@ photometry features. Sharp event transients, discontinuities, missing runs, even
 coverage near protected gaps, and a new held-out real-data comparison remain
 required before regularized AsLS is promoted beyond experimental status.
 
+The subsequent sharp-transient and missing-run study is reported in
+[transient-gap results v0.1.1](transient-gap-results-v0.1.1.md). It supports
+median-rate linear jitter regularization but rejects silent interpolation across
+missing event-window samples.
+
 The governing rationale is
 [SDR-0011](decisions/0011-regularize-irregular-clocks-prospectively.md).

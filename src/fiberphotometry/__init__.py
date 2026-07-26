@@ -17,7 +17,12 @@ from fiberphotometry.design import (
     validate_design,
 )
 from fiberphotometry.event_qc import assess_event_confounds
-from fiberphotometry.events import align_events, summarize_event_windows
+from fiberphotometry.events import (
+    align_events,
+    condition_exclusion_warning,
+    condition_reconstruction_warning,
+    summarize_event_windows,
+)
 from fiberphotometry.inference import (
     Contrast,
     Estimand,
@@ -207,6 +212,8 @@ __all__ = [
     "assess_recording",
     "assess_signal_recording",
     "baseline_dff",
+    "condition_exclusion_warning",
+    "condition_reconstruction_warning",
     "create_analysis_plan",
     "exact_sign_flip_test",
     "execute_analysis_plan",

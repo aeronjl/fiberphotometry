@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from dataclasses import asdict
@@ -12,21 +13,24 @@ import numpy as np
 
 from fiberphotometry.benchmark_resampling import (
     TransientSpec,
-    condition_exclusion_warning,
     generate_transient,
     reconstruction_metrics,
 )
+from fiberphotometry.events import condition_exclusion_warning
 
-PROTOCOL_SHA256 = "4e88ee8fbd851d605c94125ef7ba8afb002a58bca65b8f16faa09f28b7bc1a3c"
+PROTOCOL_HASHES = {
+    "v0.1": "4e88ee8fbd851d605c94125ef7ba8afb002a58bca65b8f16faa09f28b7bc1a3c",
+    "v0.1.1": "5a3eea425b041c6bd31115bc4c12f165e496fbbea0269eb1119bfd3dcc994efc",
+}
 
 
-def _load_protocol(path: Path) -> dict[str, Any]:
+def _load_protocol(path: Path, expected_hash: str) -> dict[str, Any]:
     payload = json.loads(path.read_text())
     expected = payload.pop("protocol_sha256")
     observed = hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
-    if expected != observed or expected != PROTOCOL_SHA256:
+    if expected != observed or expected != expected_hash:
         raise SystemExit("frozen transient-gap protocol fingerprint mismatch")
     return payload
 
@@ -43,11 +47,17 @@ def _transient(item: dict[str, Any]) -> TransientSpec:
 
 
 def _passes(metrics: dict[str, Any], limits: dict[str, float]) -> bool:
+    contrast_metric = (
+        "event_contrast_peak_normalized_error"
+        if "event_contrast_peak_normalized_error" in metrics
+        else "event_contrast_relative_error"
+    )
+    contrast_limit = f"{contrast_metric}_max"
     checks = {
         "peak_amplitude_relative_error": "peak_amplitude_relative_error_max",
         "peak_time_error_samples": "peak_time_error_samples_max",
         "response_mean_relative_error": "response_mean_relative_error_max",
-        "event_contrast_relative_error": "event_contrast_relative_error_max",
+        contrast_metric: contrast_limit,
     }
     return metrics["event_disposition"] == "complete" and all(
         metrics[metric] is not None and metrics[metric] <= limits[limit]
@@ -55,7 +65,37 @@ def _passes(metrics: dict[str, Any], limits: dict[str, float]) -> bool:
     )
 
 
-def _jitter_results(protocol: dict[str, Any]) -> list[dict[str, Any]]:
+def _measure(
+    time: np.ndarray,
+    truth: np.ndarray,
+    observed: np.ndarray,
+    reconstructed: np.ndarray,
+    *,
+    event_time: float,
+    rate_hz: float,
+    contrast_denominator: str,
+) -> dict[str, Any]:
+    metrics = asdict(
+        reconstruction_metrics(
+            time,
+            truth,
+            observed,
+            reconstructed,
+            event_time=event_time,
+            rate_hz=rate_hz,
+            contrast_denominator=contrast_denominator,  # type: ignore[arg-type]
+        )
+    )
+    if contrast_denominator == "peak_amplitude":
+        metrics["event_contrast_peak_normalized_error"] = metrics.pop(
+            "event_contrast_relative_error"
+        )
+    return metrics
+
+
+def _jitter_results(
+    protocol: dict[str, Any], contrast_denominator: str
+) -> list[dict[str, Any]]:
     output = []
     acquisition = protocol["acquisition"]
     limits = protocol["acceptance"]
@@ -99,15 +139,14 @@ def _jitter_results(protocol: dict[str, Any]) -> list[dict[str, Any]]:
                                 right,
                             )
                             observed = source[nearest]
-                        metrics = asdict(
-                            reconstruction_metrics(
-                                target,
-                                truth,
-                                observed,
-                                np.ones(len(target), dtype=bool),
-                                event_time=event_time,
-                                rate_hz=rate,
-                            )
+                        metrics = _measure(
+                            target,
+                            truth,
+                            observed,
+                            np.ones(len(target), dtype=bool),
+                            event_time=event_time,
+                            rate_hz=rate,
+                            contrast_denominator=contrast_denominator,
                         )
                         output.append(
                             {
@@ -124,7 +163,9 @@ def _jitter_results(protocol: dict[str, Any]) -> list[dict[str, Any]]:
     return output
 
 
-def _missing_results(protocol: dict[str, Any]) -> list[dict[str, Any]]:
+def _missing_results(
+    protocol: dict[str, Any], contrast_denominator: str
+) -> list[dict[str, Any]]:
     output = []
     acquisition = protocol["acquisition"]
     perturbations = protocol["perturbations"]
@@ -157,15 +198,14 @@ def _missing_results(protocol: dict[str, Any]) -> list[dict[str, Any]]:
                             observed[row] = observed[max(row - 1, 0)]
                         else:
                             observed[missing] = np.nan
-                        metrics = asdict(
-                            reconstruction_metrics(
-                                time,
-                                truth,
-                                observed,
-                                missing,
-                                event_time=event_time,
-                                rate_hz=rate,
-                            )
+                        metrics = _measure(
+                            time,
+                            truth,
+                            observed,
+                            missing,
+                            event_time=event_time,
+                            rate_hz=rate,
+                            contrast_denominator=contrast_denominator,
                         )
                         output.append(
                             {
@@ -204,15 +244,14 @@ def _missing_results(protocol: dict[str, Any]) -> list[dict[str, Any]]:
                                 observed[missing] = np.nan
                             else:
                                 observed = np.interp(time, source_time, source)
-                            metrics = asdict(
-                                reconstruction_metrics(
-                                    time,
-                                    truth,
-                                    observed,
-                                    missing,
-                                    event_time=event_time,
-                                    rate_hz=rate,
-                                )
+                            metrics = _measure(
+                                time,
+                                truth,
+                                observed,
+                                missing,
+                                event_time=event_time,
+                                rate_hz=rate,
+                                contrast_denominator=contrast_denominator,
                             )
                             output.append(
                                 {
@@ -238,9 +277,17 @@ def _missing_results(protocol: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def main() -> None:
-    protocol_path = Path("benchmarks/transient-gap-protocol-v0.1.json")
-    protocol = _load_protocol(protocol_path)
-    scenarios = _jitter_results(protocol) + _missing_results(protocol)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--version", choices=tuple(PROTOCOL_HASHES), default="v0.1")
+    args = parser.parse_args()
+    suffix = args.version
+    protocol_path = Path(f"benchmarks/transient-gap-protocol-{suffix}.json")
+    protocol_hash = PROTOCOL_HASHES[suffix]
+    protocol = _load_protocol(protocol_path, protocol_hash)
+    contrast_denominator = "peak_amplitude" if suffix == "v0.1.1" else "truth_contrast"
+    scenarios = _jitter_results(protocol, contrast_denominator) + _missing_results(
+        protocol, contrast_denominator
+    )
     conditions = np.asarray(["a", "a", "b", "b"])
     dispositions = np.asarray(
         ["complete", "complete", "complete", "response_intersects_gap"]
@@ -254,8 +301,8 @@ def main() -> None:
             "failed": sum(not item["passed"] for item in rows),
         }
     body = {
-        "schema_version": "transient-gap-results-v0.1",
-        "protocol_sha256": PROTOCOL_SHA256,
+        "schema_version": f"transient-gap-results-{suffix}",
+        "protocol_sha256": protocol_hash,
         "scenario_count": len(scenarios),
         "summaries": summaries,
         "condition_dependent_exclusion_warning": condition_exclusion_warning(
@@ -266,7 +313,7 @@ def main() -> None:
     fingerprint = hashlib.sha256(
         json.dumps(body, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
-    output = Path("benchmarks/transient-gap-results-v0.1.json")
+    output = Path(f"benchmarks/transient-gap-results-{suffix}.json")
     output.write_text(
         json.dumps({**body, "result_sha256": fingerprint}, indent=2, sort_keys=True)
         + "\n"
