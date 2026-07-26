@@ -1,0 +1,797 @@
+{
+  "acceptance": {
+    "all_methods_execute_all_sessions": true,
+    "all_sources_match_frozen_hashes": true,
+    "asls_comparator_agreement_is_descriptive_only": true,
+    "comparator_event_delta_correlation_min": 0.99,
+    "comparator_event_delta_normalized_mad_max": 0.05,
+    "comparator_trace_correlation_case_min": 0.95,
+    "comparator_trace_correlation_median_min": 0.995,
+    "comparator_trace_normalized_rmse_median_max": 0.1,
+    "complete_event_fraction_min": 0.99,
+    "finite_baseline_fraction_min": 0.99,
+    "nearest_source_distance_max_fraction_of_interval": 0.25
+  },
+  "cohort_manifest_sha256": "38197a26ab4804131423a9650a473a11e2b14f09ac2877875b574f2770d894e6",
+  "event_selection": "exact usable feedback events from frozen valid intervals; no minimum condition count and no population inference",
+  "event_windows_s": {
+    "baseline": [
+      -1.0,
+      0.0
+    ],
+    "response": [
+      0.0,
+      0.5
+    ]
+  },
+  "held_out_basis": "24 sessions excluded from v0.3 solely for insufficient balanced events; their fluorescence columns were not loaded by v0.3.2",
+  "interpretation": [
+    "The raw-compatible methods isolate distortion introduced by regularization.",
+    "Agreement between AsLS and another baseline is not ground truth.",
+    "These behaviorally imbalanced sessions support engineering validation only.",
+    "Retain every session and failure; do not tune after aggregate access."
+  ],
+  "methods": {
+    "primary": "regularized_asls_divide",
+    "raw_compatible_comparators": [
+      "double_exponential_divide",
+      "published_rolling_divide"
+    ],
+    "regularized_comparators": [
+      "double_exponential_divide",
+      "published_rolling_divide"
+    ]
+  },
+  "metrics": {
+    "asls_sensitivity_descriptive": [
+      "baseline correlation and normalized RMSE against each comparator",
+      "event-delta correlation and normalized median absolute difference",
+      "session contrast sign agreement where both conditions occur"
+    ],
+    "engineering": [
+      "source integrity",
+      "method execution",
+      "finite baseline fraction",
+      "event coverage",
+      "interpolation distance"
+    ],
+    "regularization_fidelity": [
+      "raw-versus-regularized corrected-trace correlation",
+      "raw-versus-regularized corrected-trace normalized RMSE",
+      "raw-versus-regularized event-delta correlation",
+      "raw-versus-regularized event-delta normalized median absolute difference"
+    ]
+  },
+  "outcome_access_at_freeze": "source files hashed; only prior timestamp/include and behavioral condition counts available; no fluorescence values loaded",
+  "protocol_sha256": "f7a448ee82779d1332dea86f748536bb36a3f1845d116dcd2b7f8f56ea9f7bcf",
+  "regularization": {
+    "max_gap_factor": 1.5,
+    "method": "linear",
+    "rate_hz": "median",
+    "retain_source_arrays": true
+  },
+  "schema_version": "ibl-regularized-asls-protocol-v0.1",
+  "sessions": [
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "0cf7bf7c-2f3c-4bdc-b48d-955dcecab644",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "8f0b0b9c3807ff211ca403aa292842b4396ad8fb0211e5b0266b8bb8a047a234",
+          "size_bytes": 5187320
+        },
+        "trials": {
+          "sha256": "fd6d222d8a9e2e437db0f938916e26bee5425d62fbf79e309f88c8c975c01891",
+          "size_bytes": 26423
+        }
+      },
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 295,
+      "valid_time_intervals": [
+        [
+          -9.053130363162177,
+          4124.580478493162
+        ]
+      ]
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "1120da3b-e8e3-4d22-b1fe-9c49c0d38c42",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "6ba4717ce68ad35fec584d6c041b5ad697c4acc704c45cdf0d21709b37fd9dc5",
+          "size_bytes": 7297643
+        },
+        "trials": {
+          "sha256": "648a76bf6b777cf7a4dd3c12e1a56b717005195cee1196a4a5b774d360705a0b",
+          "size_bytes": 24088
+        }
+      },
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2",
+      "usable_correct": 18,
+      "usable_incorrect": 227,
+      "valid_time_intervals": [
+        [
+          -2290.120581240835,
+          3466.5911474253376
+        ]
+      ]
+    },
+    {
+      "date": "2022-03-30",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "1242037a-750c-425a-b3f6-f5a62c246133",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "4700ea2b80397b61803276156d191516f6603f6377ea1f4d870530ec2474e809",
+          "size_bytes": 4672807
+        },
+        "trials": {
+          "sha256": "b37acd1ce4bd22ee5d780c103e41d69026a82ba4d9084c1cf0fa9fe781c5d2e8",
+          "size_bytes": 24458
+        }
+      },
+      "subject": "fip_28",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 258,
+      "valid_time_intervals": [
+        [
+          -55.29125554399583,
+          3535.2599896456054
+        ]
+      ]
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "174a0663-2e6d-484b-864c-167d18d3f2fb",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "70c22b3f450dca22452e6603196b2d7a1a81db90ad3e25f4b252e568bcb07d80",
+          "size_bytes": 4455165
+        },
+        "trials": {
+          "sha256": "4e3302c037357e0011645154053beb3740b76ebed75cd1933b18fff750331d5d",
+          "size_bytes": 24808
+        }
+      },
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 263,
+      "valid_time_intervals": [
+        [
+          -13.924666567746002,
+          3611.634035349206
+        ]
+      ]
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "1efcd958-1985-448f-9a6b-91c3d43c2a42",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "a94a6777e8ccb91539a1372df11f4ea73ebdb47db3c13519574f7d5ec6a30ebd",
+          "size_bytes": 4221801
+        },
+        "trials": {
+          "sha256": "32cc82c1a06e36c430cbd565166c59124abfbc9798fe7904d76d8dab675e709b",
+          "size_bytes": 24604
+        }
+      },
+      "subject": "fip_41",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 262,
+      "valid_time_intervals": [
+        [
+          7.540764982382973,
+          3590.1405712701585
+        ]
+      ]
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "25c059c6-4ca3-4bf1-921f-b654a5f85af1",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "157711063a64d18c814b442a9f1f3b049881bd51c560fc9bf77b2d624475f4a0",
+          "size_bytes": 4486246
+        },
+        "trials": {
+          "sha256": "d7b7844a8643ca29a7601da81ac4ea2e75adf5335cb52ca7df82708a86abd6d2",
+          "size_bytes": 24458
+        }
+      },
+      "subject": "fip_39",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 257,
+      "valid_time_intervals": [
+        [
+          2.9199528492550755,
+          3563.461949105177
+        ]
+      ]
+    },
+    {
+      "date": "2022-11-18",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "3c69cb31-7ab4-4d03-a96b-815603759213",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "fc00dd2c93595de40bef5c5e04744af78494bff3790f65a4a1f73d96764306f9",
+          "size_bytes": 4691362
+        },
+        "trials": {
+          "sha256": "866297b9de58960f9d69f675d3b29bcce9c93be03bc5e494e7d454bf9a87dcbf",
+          "size_bytes": 24852
+        }
+      },
+      "subject": "fip_37",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 264,
+      "valid_time_intervals": [
+        [
+          -78.59948495664034,
+          3638.643662138607
+        ]
+      ]
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "4027cc92-19e5-4312-98a6-c43db0c23c91",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "ef0767caee781537f8ff94db59d7d1043b63e0186b443d77a6bf2b75ea02422b",
+          "size_bytes": 4554357
+        },
+        "trials": {
+          "sha256": "4ed7a5334991f01fee89a3caa050c664ef7916488508066ce3834ebb6b5d9c23",
+          "size_bytes": 24362
+        }
+      },
+      "subject": "fip_40",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 255,
+      "valid_time_intervals": [
+        [
+          11.321647597853072,
+          3502.9706306286944
+        ]
+      ]
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "42d1a5bf-1de4-41c4-bbd2-1a1345ba81ad",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "19b330d0d4a166a4d50d65757cd0a73e28168f397f8fa2cae39b082a29559b8f",
+          "size_bytes": 4280644
+        },
+        "trials": {
+          "sha256": "109d616b3c9cce035d0b3cf9d718a0e8e541ecf6e2b711f2b99875918c88c81e",
+          "size_bytes": 24066
+        }
+      },
+      "subject": "fip_42",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 254,
+      "valid_time_intervals": [
+        [
+          -50.364472734248025,
+          3484.6612971952004
+        ]
+      ]
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "447a1fcb-c057-4f08-8f83-37ac7871acd0",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "1fa63e1486b8fc64400c7f741f26ed3e3aaee2846ef2d88ea69aa0300c9905d1",
+          "size_bytes": 4474572
+        },
+        "trials": {
+          "sha256": "1985eace62f03a47e53fce7f6db81d2579ae4dc7bca58e2a526160657c935096",
+          "size_bytes": 24453
+        }
+      },
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2",
+      "usable_correct": 15,
+      "usable_incorrect": 236,
+      "valid_time_intervals": [
+        [
+          -8.572457496246056,
+          3517.7310159150043
+        ]
+      ]
+    },
+    {
+      "date": "2022-05-18",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "4774f467-2989-4e70-bba1-8568f7a954ce",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "915248ad7640a7ae4f7ffb7a801bc3d30a1317a2397e29c88cbeca01843500a8",
+          "size_bytes": 5596298
+        },
+        "trials": {
+          "sha256": "af81ef5f3e938b342616d9a706aac82fe5534c437fad59b2467a27152ca30312",
+          "size_bytes": 27704
+        }
+      },
+      "subject": "fip_31",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 316,
+      "valid_time_intervals": [
+        [
+          -86.697627381543,
+          4350.268853729534
+        ]
+      ]
+    },
+    {
+      "date": "2022-04-07",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "64143389-16b4-4160-bdd6-065392df6fed",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "12c9f1e8dfbe68aebe3711c332a7a26f2bb07514246105a0a334dfb40d1aebf1",
+          "size_bytes": 4526137
+        },
+        "trials": {
+          "sha256": "62c86231706bd1a51793a64f111284ff9a58a6169c1a5652d1c3756d568e63fe",
+          "size_bytes": 16690
+        }
+      },
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2",
+      "usable_correct": 93,
+      "usable_incorrect": 10,
+      "valid_time_intervals": [
+        [
+          -66.53568985584295,
+          3421.0067186088004
+        ]
+      ]
+    },
+    {
+      "date": "2022-05-18",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "6f4411f3-f7b2-491b-b1a2-118dfc6cf283",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "b5c7329c5f45d0ff7e28a52c465d9b4e7d46e0068cbcd3068e7e84e5b7b80cad",
+          "size_bytes": 4338493
+        },
+        "trials": {
+          "sha256": "8ef79960664616448f509c7225e66fd1d0424faf3c8715207827fe8d453a2338",
+          "size_bytes": 23074
+        }
+      },
+      "subject": "fip_30",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 236,
+      "valid_time_intervals": [
+        [
+          -25.53692382317722,
+          3241.8501594072554
+        ]
+      ]
+    },
+    {
+      "date": "2022-05-17",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "7be63997-b185-4cfd-897a-e298a1116f62",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "488474e8bbbd9a8367deaafaf325351f40fe1a0bd1720b8012f33fa2d8cf8d56",
+          "size_bytes": 4206841
+        },
+        "trials": {
+          "sha256": "6798301856addfbfb1e07471d9a008796d2600d69124645cd64cac5680aeab8d",
+          "size_bytes": 22897
+        }
+      },
+      "subject": "fip_32",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 233,
+      "valid_time_intervals": [
+        [
+          -26.14967159675065,
+          3190.0095964306565
+        ]
+      ]
+    },
+    {
+      "date": "2022-05-16",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "ac96ec97-79e7-4fa7-966d-588155089580",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "bb542d1c89636aed5a2c7430ab1b9f167f94836adb6440b5a29b77b6451551db",
+          "size_bytes": 4343499
+        },
+        "trials": {
+          "sha256": "8708622dbd120c46b3eb70497c1fb03a5bc70239b79dc56a25018de2becc4d6f",
+          "size_bytes": 23389
+        }
+      },
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 242,
+      "valid_time_intervals": [
+        [
+          -14.027467413573449,
+          3317.5611494695345
+        ]
+      ]
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "b13c005f-48d4-4444-80c8-6ea59be80c0f",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "495733962cc7299abc141662e9142aa1b6a95ab6179809668e4f72ef288fad94",
+          "size_bytes": 4559118
+        },
+        "trials": {
+          "sha256": "c60cb3fe44a7264c09c8e5ae475a87e925a046c487e7536cec91b581d6364291",
+          "size_bytes": 24604
+        }
+      },
+      "subject": "fip_35",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 261,
+      "valid_time_intervals": [
+        [
+          -12.127548062214256,
+          3577.395177798271
+        ]
+      ]
+    },
+    {
+      "date": "2022-11-19",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "c12751cf-626d-4cb7-b7cc-5e8fc1bf52db",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "3803835ebdbb81b0f3a494ea9857a276ec09365bec659ba0f84c66a38f3ecf12",
+          "size_bytes": 4101790
+        },
+        "trials": {
+          "sha256": "018ad796c0a375fddb95e0f32268869e019ff601b3a467bf7ce62000c9773e06",
+          "size_bytes": 23775
+        }
+      },
+      "subject": "fip_38",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 248,
+      "valid_time_intervals": [
+        [
+          -96.3372962474243,
+          3415.066313976622
+        ]
+      ]
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "cb367875-3afa-4a26-b4fe-4c39bd0f5fd4",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "1eb49515edb94a1614ec6d00d05f13e94f58b98d8860716c7565f7d28f727dd7",
+          "size_bytes": 4026365
+        },
+        "trials": {
+          "sha256": "e6664f522042da71f0a2d8ab02da978fe4dace87df54c19f382ba8d25f78bd79",
+          "size_bytes": 24015
+        }
+      },
+      "subject": "fip_26",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 253,
+      "valid_time_intervals": [
+        [
+          -0.4499479603838825,
+          3473.2459072631427
+        ]
+      ]
+    },
+    {
+      "date": "2022-06-10",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "cf718114-1275-4331-bf03-1cbece7b58ef",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "6935d97f082d06d65a5ce56e18c0a9ab512a7b0c87c9dab925d12bbb56162268",
+          "size_bytes": 407681
+        },
+        "trials": {
+          "sha256": "1dee4debd93d39c44bae9589af484a5e014496fdeda747f03a0a8e9f16563d49",
+          "size_bytes": 11820
+        }
+      },
+      "subject": "fip_33",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2",
+      "usable_correct": 23,
+      "usable_incorrect": 5,
+      "valid_time_intervals": [
+        [
+          -7.923675042247847,
+          199.38765432376223
+        ]
+      ]
+    },
+    {
+      "date": "2022-04-11",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "dc4b7809-3832-4deb-b2ff-862b1c7e2299",
+      "source": {
+        "roi": {
+          "sha256": "b9add12ff2c08afc8073064babc4491b9282a158c8d75cab2072ea9b1d6b2d85",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "c6afd1d57a10bf54d72df959f5063f3b09816ecfa2bdb633f78840d93b087154",
+          "size_bytes": 2187713
+        },
+        "trials": {
+          "sha256": "0f697256eccd9f9269f08d3de0cd151a29dea0201e3d0f780394c7e79d220c56",
+          "size_bytes": 32002
+        }
+      },
+      "subject": "fip_29",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld6.4.2",
+      "usable_correct": 319,
+      "usable_incorrect": 13,
+      "valid_time_intervals": [
+        [
+          4.632773382607773,
+          1607.2473825816485
+        ]
+      ]
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "e1d95d70-4d91-44f7-b5d6-95bb28452468",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "394e82e8150e27a787dc15e4f4ba7d9fc4f2b4d74cfd9cdf0ddd2aeae31f2214",
+          "size_bytes": 4531762
+        },
+        "trials": {
+          "sha256": "419357d281616b3d293e6a067ee481e87c23151b18d3663772104c2a58a45872",
+          "size_bytes": 24559
+        }
+      },
+      "subject": "fip_36",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 257,
+      "valid_time_intervals": [
+        [
+          27.96511120614671,
+          3554.228770527778
+        ]
+      ]
+    },
+    {
+      "date": "2022-11-17",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "f020005e-a138-4f84-8d8d-da12a464e5a9",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "16bc0cc5bf0e6cab232f7aaaa6582589e463dfd287378381d4c41785f3f7ec5f",
+          "size_bytes": 4495938
+        },
+        "trials": {
+          "sha256": "c4d3172ddad76bc8b6d1dd6b6ee356bcf04f926edffd9d059d6064e20069e733",
+          "size_bytes": 25851
+        }
+      },
+      "subject": "fip_34",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedB_6.4.2",
+      "usable_correct": 13,
+      "usable_incorrect": 260,
+      "valid_time_intervals": [
+        [
+          -17.827496164363254,
+          3653.144095725146
+        ]
+      ]
+    },
+    {
+      "date": "2022-03-29",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "f9661c29-a2d6-4d44-bceb-7713ef24890f",
+      "source": {
+        "roi": {
+          "sha256": "baecc3ec33563fc1250b6fdfd5bbef748fcf6f2710ba266b2a61449d92951af4",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "3564a3717788d0d60f797992c3fa3ad61111e15ccf99df58223cb8fb90ab74ec",
+          "size_bytes": 4315752
+        },
+        "trials": {
+          "sha256": "3c09635e66452d35c1c7abb4d2f72bc816a3b3418aa8a2b0900cbd195e96da01",
+          "size_bytes": 25044
+        }
+      },
+      "subject": "fip_27",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 265,
+      "valid_time_intervals": [
+        [
+          51.450961903699366,
+          3678.147513089912
+        ]
+      ]
+    },
+    {
+      "date": "2023-04-13",
+      "lab": "wittenlab",
+      "sampling_rate_hz": 50,
+      "session": "fa392bd5-9734-4476-bcd5-42679a86396a",
+      "source": {
+        "roi": {
+          "sha256": "b3f8bd3af22ec1b933b0d3b16f373d1a43363357507b369a8b7bada278a3eb8c",
+          "size_bytes": 2670
+        },
+        "signal": {
+          "sha256": "9b1bfca1f9e31b0e042a2b4e63a5aa323c4e6b21755f7364277cec5ee7690faf",
+          "size_bytes": 4736563
+        },
+        "trials": {
+          "sha256": "ac5947fc43134f27ba61915414a8208c03eaef8b24b02931079ba43e1233764c",
+          "size_bytes": 25146
+        }
+      },
+      "subject": "fip_43",
+      "task_protocol": "_iblrig_tasks_FPChoiceWorld_unconditionedA_6.4.2",
+      "usable_correct": 0,
+      "usable_incorrect": 269,
+      "valid_time_intervals": [
+        [
+          31.665896904481137,
+          3712.5465734321488
+        ]
+      ]
+    }
+  ],
+  "status": "frozen_before_held_out_fluorescence_access"
+}
