@@ -107,6 +107,11 @@ and a failed timestamp-aligned reconstruction; see
 The prospective 18-animal IBL expansion stopped at its frozen readiness gate because
 the new sessions lack labelled reference-channel rows; see
 [`docs/ibl-feedback-prospective-v0.2.md`](docs/ibl-feedback-prospective-v0.2.md).
+The follow-up
+[`channel-provenance audit`](docs/ibl-new-cohort-channel-provenance-v0.1.md)
+establishes that the held-out recordings are signal-only; the proposed v0.3
+workflow remains an explicitly non-normative
+[`design draft`](docs/drafts/ibl-feedback-signal-only-v0.3-design.md).
 The follow-up baseline-fidelity and normalization study is in
 [`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
 

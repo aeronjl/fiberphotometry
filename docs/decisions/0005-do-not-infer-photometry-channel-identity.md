@@ -49,4 +49,9 @@ channel.
 
 ## Evidence added later
 
-None.
+The producing `ibllib` version (2.38.0) explicitly maps wavelength 0 to “No LED
+ON”, and the associated study methods describe 470-nm-only acquisition with no
+isosbestic channel. The public archive does not expose the raw channel-map files,
+but the two independent primary sources agree. The paired-reference route is
+therefore closed unless new raw or corrected metadata appear. See the
+[channel-provenance audit](../ibl-new-cohort-channel-provenance-v0.1.md).

@@ -56,3 +56,10 @@ Any analysis of the 18 new animals requires a v0.3 protocol with one of two form
 The second option cannot be described as a held-out replication of the original
 nine-universe analysis because it changes every correction workflow and its
 identifiability assumptions.
+
+The subsequent [channel-provenance audit](ibl-new-cohort-channel-provenance-v0.1.md)
+found that the study methods explicitly describe 470-nm-only acquisition and that
+the producing extractor maps wavelength 0 to no-LED frames. The first route is
+therefore closed on current evidence. A
+[signal-only v0.3 design](drafts/ibl-feedback-signal-only-v0.3-design.md) is being
+developed separately and has not yet been frozen or executed.

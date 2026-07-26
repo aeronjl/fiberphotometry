@@ -70,7 +70,8 @@
 - [x] Specification-curve plot API and frozen IBL figure
 - [x] Prospective, new-animal-gated IBL expansion protocol
 - [x] Refresh held-out IBL manifest (gate failed: no labelled reference channels)
-- [ ] Resolve new-cohort IBL channel provenance or freeze a signal-only v0.3
+- [x] Resolve new-cohort IBL channel provenance (470-nm-only acquisition)
+- [ ] Implement the published rolling baseline and freeze signal-only IBL v0.3
 - [x] Pilot power sensitivity ranges
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
