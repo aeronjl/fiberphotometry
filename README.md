@@ -41,6 +41,8 @@ The first DANDI and IBL numerical findings are in
 The expanded channel-QC audit and frozen seven-scenario preprocessing benchmark
 are reported in [`docs/ibl-qc-cohort-v0.1.md`](docs/ibl-qc-cohort-v0.1.md) and
 [`benchmarks/results-v0.2.md`](benchmarks/results-v0.2.md).
+The event-aware diagnostic follow-up, including a retained failed lag detector,
+is in [`benchmarks/results-v0.3.md`](benchmarks/results-v0.3.md).
 
 The scientific scope and competing methods are documented in
 [`docs/scientific-design.md`](docs/scientific-design.md). The existing-tool audit is
@@ -72,6 +74,17 @@ corrected = reference_dff(recording)
 qc = assess_recording(recording)
 epochs = align_events(corrected, [10, 20, 30], window=(-2, 5), rate=10)
 ```
+
+Event-aware QC requires the experimental event times rather than guessing them:
+
+```python
+from fiberphotometry import assess_event_confounds
+
+event_qc = assess_event_confounds(recording, [10, 20, 30])
+```
+
+Diagnostic figures are optional: install with `uv sync --extra plots`, then use
+`fiberphotometry.plotting.plot_event_diagnostics`.
 
 ## Development
 

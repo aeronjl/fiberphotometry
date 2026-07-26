@@ -17,11 +17,12 @@
 - [ ] Resampling with explicit interpolation provenance
 - [ ] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators
-- [ ] Reference contamination and lag diagnostics
+- [x] Event-correlated reference diagnostic benchmarked against confounds
+- [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)
 - [x] Initial three-scenario benchmark report with retained failure
 - [x] Seven-scenario v0.2 benchmark with retained failures
 - [x] Twelve-session, four-animal IBL channel-QC audit
-- [ ] Diagnostic plots that expose rather than conceal failures
+- [x] Initial raw/peri-event/corrected diagnostic plot API
 
 ## Phase 2 — interoperability
 

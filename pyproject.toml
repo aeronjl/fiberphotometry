@@ -22,6 +22,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+plots = ["matplotlib>=3.9"]
 nwb = [
     "ndx-fiber-photometry>=0.2.3",
     "pynwb>=3.0",

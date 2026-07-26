@@ -1,0 +1,16 @@
+{
+  "acceptance": {
+    "clean_false_warnings": false,
+    "event_locked_motion_detected": true,
+    "lagged_reference_detected": false,
+    "reference_contamination_detected": true
+  },
+  "all_acceptance_met": false,
+  "protocol": "v0.3",
+  "summaries": {
+    "clean_linear": {"event_effect_sd_median": -0.08755, "best_lag_s_median": 0.075, "lag_warning_runs": 8},
+    "event_locked_motion": {"event_effect_sd_median": 1.25130, "event_warning_runs": 20},
+    "lagged_reference": {"event_effect_sd_median": -0.07301, "best_lag_s_median": 0.075, "lag_warning_runs": 8},
+    "reference_contamination": {"event_effect_sd_median": 0.82438, "event_warning_runs": 20}
+  }
+}

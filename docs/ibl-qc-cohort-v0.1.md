@@ -27,10 +27,31 @@ clipping, repeated acquisition values, or upstream processing; the metric is a
 screening flag rather than a diagnosis. Sampling interval CV ranged from 0.00075
 to 0.00538.
 
+## Flat-step follow-up
+
+A focused rerun distinguished two patterns. All affected signals had very low
+unique-value fractions (0.025–0.94%), and flat runs were short (2–7 adjacent
+pairs), strongly supporting finite digitisation/quantisation rather than long
+dropouts or exclusion-mask boundaries.
+
+Four channels also had mostly simultaneous reference plateaus. The two `fip_13`
+DMS channels had 96.7–98.2% flat reference steps and 96.8–98.4% of their signal
+plateaus coincided with reference plateaus. The `fip_16` middle DLS channel showed
+the same pattern at 82.8% and 84.0%. Conversely, the `fip_16` middle NAcc signal
+had 13.1% flat steps but only 2.2% coincided with reference plateaus, indicating
+channel-local quantisation.
+
+These are repeated values already present in the public ALF table, not values
+created by the adapter's missingness mask. The evidence cannot distinguish
+hardware digitisation from upstream table processing without raw acquisition
+files. Compact results are in
+[`benchmarks/ibl-flat-step-investigation-v0.1.json`](../benchmarks/ibl-flat-step-investigation-v0.1.json).
+
 The aggregate machine-readable result is
 [`benchmarks/ibl-qc-cohort-v0.1.json`](../benchmarks/ibl-qc-cohort-v0.1.json).
 Regenerate the full per-channel output with:
 
 ```bash
 uv run --group ibl-validation python scripts/validate_ibl_qc_cohort.py
+uv run --group ibl-validation python scripts/investigate_ibl_flat_steps.py
 ```

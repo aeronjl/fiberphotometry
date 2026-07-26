@@ -1,0 +1,21 @@
+{
+  "sessions": 4,
+  "channels": 12,
+  "findings": {
+    "longest_flat_run_samples_range": [2, 7],
+    "signal_unique_fraction_range": [0.0002534, 0.0094208],
+    "high_shared_flat_channels": [
+      {"subject": "fip_13", "phase": "middle", "channel": "DMS", "reference_flat_fraction": 0.9823, "shared_fraction": 0.9838},
+      {"subject": "fip_13", "phase": "late", "channel": "DMS", "reference_flat_fraction": 0.9669, "shared_fraction": 0.9680},
+      {"subject": "fip_16", "phase": "middle", "channel": "DMS", "reference_flat_fraction": 0.5443, "shared_fraction": 0.5651},
+      {"subject": "fip_16", "phase": "middle", "channel": "DLS", "reference_flat_fraction": 0.8279, "shared_fraction": 0.8397}
+    ],
+    "highest_channel_local_flat_fraction": {
+      "subject": "fip_16",
+      "phase": "middle",
+      "channel": "NAcc",
+      "signal_flat_fraction": 0.1307,
+      "shared_fraction": 0.0217
+    }
+  }
+}
