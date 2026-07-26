@@ -329,3 +329,32 @@ def test_cli_preflight_blocks_structurally_incompatible_asls(tmp_path) -> None:
     manifest = json.loads((tmp_path / "artifacts" / "manifest.json").read_text())
     assert manifest["status"] == "failed"
     assert "structurally incompatible" in manifest["error"]
+
+
+def test_cli_explicit_regularization_makes_jittered_asls_compatible(tmp_path) -> None:
+    project_path = _project(tmp_path)
+    project_path.write_text(
+        project_path.read_text()
+        .replace('kind = "reference"', 'kind = "signal_only"')
+        .replace('method = "irls"', 'method = "asls"')
+        .replace(
+            'normalization = "divide"',
+            'normalization = "divide"\nresample_rate_hz = "median"\n'
+            "resample_max_gap_factor = 1.5",
+        )
+    )
+    recording = tmp_path / "data" / "recording-1.csv"
+    recording.write_text(recording.read_text().replace("0.050,", "0.051,", 1))
+    preflight_path = tmp_path / "preflight.json"
+
+    assert main(["inspect", str(project_path), "--output", str(preflight_path)]) == 0
+    compatibility = json.loads(preflight_path.read_text())["pipeline_compatibility"]
+    assert compatibility["status"] == "compatible"
+    assert not compatibility["outcome_values_accessed"]
+    assert main(["run", str(project_path)]) == 0
+
+    result = json.loads((tmp_path / "artifacts" / "analysis.json").read_text())
+    operation = result["processing_lineage"][0]["operations"][0]
+    assert operation["kind"] == "resample"
+    assert operation["rate_policy"] == "median"
+    assert operation["max_gap_factor"] == 1.5

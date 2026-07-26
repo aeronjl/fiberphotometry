@@ -81,8 +81,60 @@ def assess_pipeline_compatibility(
         )
         for index, operation in enumerate(operations):
             if isinstance(operation, ResampleOperation):
-                regular = True
-                rate = operation.rate_hz
+                valid_resampling = True
+                if operation.rate_hz != "median" and operation.rate_hz <= 0:
+                    valid_resampling = False
+                    issues.append(
+                        CompatibilityIssue(
+                            "invalid_resampling_rate",
+                            session,
+                            index,
+                            "resampling rate must be positive or 'median'",
+                        )
+                    )
+                if operation.max_gap_s is not None and operation.max_gap_s <= 0:
+                    valid_resampling = False
+                    issues.append(
+                        CompatibilityIssue(
+                            "invalid_resampling_gap",
+                            session,
+                            index,
+                            "max_gap_s must be positive",
+                        )
+                    )
+                if (
+                    operation.max_gap_s is not None
+                    and operation.max_gap_factor is not None
+                ):
+                    valid_resampling = False
+                    issues.append(
+                        CompatibilityIssue(
+                            "ambiguous_resampling_gap_policy",
+                            session,
+                            index,
+                            "declare max_gap_s or max_gap_factor, not both",
+                        )
+                    )
+                if (
+                    operation.max_gap_factor is not None
+                    and operation.max_gap_factor <= 1
+                ):
+                    valid_resampling = False
+                    issues.append(
+                        CompatibilityIssue(
+                            "invalid_resampling_gap_factor",
+                            session,
+                            index,
+                            "max_gap_factor must be greater than one",
+                        )
+                    )
+                if valid_resampling:
+                    regular = True
+                    rate = (
+                        1 / float(np.median(intervals))
+                        if operation.rate_hz == "median"
+                        else operation.rate_hz
+                    )
             elif isinstance(operation, LowpassFilterOperation):
                 if operation.cutoff_hz >= rate / 2:
                     issues.append(

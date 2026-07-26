@@ -67,3 +67,22 @@ def test_signal_only_config_selects_units_explicitly() -> None:
 
     assert study.preprocessing.output_variable == "baseline_subtracted"
     assert study.preprocessing.units == "acquired fluorescence"
+
+
+def test_signal_only_config_declares_regularization_before_asls() -> None:
+    raw = Path("examples/feedback-analysis.toml").read_text()
+    raw = raw.replace('kind = "reference"', 'kind = "signal_only"')
+    raw = raw.replace('method = "irls"', 'method = "asls"')
+    raw = raw.replace(
+        'normalization = "divide"',
+        'normalization = "divide"\nresample_rate_hz = "median"\n'
+        "resample_max_gap_factor = 1.5",
+    )
+
+    config = EventAnalysisConfig.from_toml(raw)
+    study = config.build(_sessions(reference=False))
+
+    assert config.resample_rate_hz == "median"
+    assert config.resample_max_gap_factor == 1.5
+    assert study.preprocessing.operations[0].kind == "resample"
+    assert study.preprocessing.operations[1].kind == "baseline_dff"

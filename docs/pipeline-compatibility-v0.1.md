@@ -25,5 +25,10 @@ the declared workflow omitted something mechanically required—for example, an
 explicit regularization operation before AsLS on jittered timestamps. Adding such
 an operation changes the workflow and must be prospective when outcomes matter.
 
+The prospective median-rate and relative-gap policy is specified in
+[irregular sampling v0.1](irregular-sampling-v0.1.md). A declared resampling
+operation before AsLS satisfies the structural clock requirement, while its
+interpolation diagnostics and scientific validation remain separately visible.
+
 The distinction is governed by
 [SDR-0009](decisions/0009-separate-structural-incompatibility-from-scientific-failure.md).

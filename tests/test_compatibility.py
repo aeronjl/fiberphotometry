@@ -10,6 +10,7 @@ from fiberphotometry import (
     PipelineSpec,
     QualityGateSpec,
     RecordingInput,
+    ResampleOperation,
     StudyDesign,
     Unit,
     assess_pipeline_compatibility,
@@ -82,3 +83,16 @@ def test_compatibility_detects_asls_irregularity_without_reading_values() -> Non
     assert one.status == "incompatible"
     assert one.issues[0].code == "asls_requires_regular_sampling"
     assert not one.outcome_values_accessed
+
+    regularized = _spec(
+        table,
+        design,
+        estimand,
+        (
+            ResampleOperation(rate_hz="median", max_gap_factor=1.5),
+            BaselineDFFOperation("asls", normalization="both"),
+        ),
+    )
+    report = assess_pipeline_compatibility(regularized, inputs(first))
+    assert report.status == "compatible"
+    assert not report.outcome_values_accessed

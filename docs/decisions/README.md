@@ -38,6 +38,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0008](0008-open-metadata-versioned-readiness-profile.md) | Accepted | Preserve open metadata while versioning readiness profiles |
 | [SDR-0009](0009-separate-structural-incompatibility-from-scientific-failure.md) | Accepted | Preflight structural incompatibility without accessing outcomes |
 | [SDR-0010](0010-mixed-models-are-sensitivity-summaries.md) | Accepted | Report scalar mixed models as secondary sensitivity summaries |
+| [SDR-0011](0011-regularize-irregular-clocks-prospectively.md) | Accepted | Regularize irregular clocks only through prospective, auditable policy |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

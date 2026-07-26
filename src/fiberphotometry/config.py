@@ -30,6 +30,8 @@ class EventAnalysisConfig:
     preprocessing_method: str
     normalization: Literal["divide", "subtract"] = "divide"
     rolling_window_s: float = 60.0
+    resample_rate_hz: float | Literal["median"] | None = None
+    resample_max_gap_factor: float | None = None
     baseline: tuple[float, float] = (-0.5, 0.0)
     response: tuple[float, float] = (0.0, 0.5)
     randomized: bool | None = False
@@ -80,7 +82,14 @@ class EventAnalysisConfig:
         _reject_unknown(channel, {"name"}, "channel")
         _reject_unknown(
             preprocessing,
-            {"kind", "method", "normalization", "rolling_window_s"},
+            {
+                "kind",
+                "method",
+                "normalization",
+                "rolling_window_s",
+                "resample_rate_hz",
+                "resample_max_gap_factor",
+            },
             "preprocessing",
         )
         _reject_unknown(windows, {"baseline", "response"}, "event_windows")
@@ -100,6 +109,31 @@ class EventAnalysisConfig:
         method = str(_required(preprocessing, "method"))
         normalization = str(preprocessing.get("normalization", "divide"))
         _validate_preprocessing(kind, method, normalization)
+        resample_rate_raw = preprocessing.get("resample_rate_hz")
+        if resample_rate_raw is None:
+            resample_rate_hz: float | Literal["median"] | None = None
+        elif resample_rate_raw == "median":
+            resample_rate_hz = "median"
+        elif isinstance(resample_rate_raw, int | float):
+            resample_rate_hz = float(resample_rate_raw)
+            if resample_rate_hz <= 0:
+                raise ValueError("preprocessing.resample_rate_hz must be positive")
+        else:
+            raise ValueError(
+                "preprocessing.resample_rate_hz must be positive or 'median'"
+            )
+        gap_factor_raw = preprocessing.get("resample_max_gap_factor")
+        resample_max_gap_factor = (
+            None if gap_factor_raw is None else float(gap_factor_raw)
+        )
+        if resample_max_gap_factor is not None and resample_max_gap_factor <= 1:
+            raise ValueError(
+                "preprocessing.resample_max_gap_factor must be greater than one"
+            )
+        if resample_rate_hz is None and resample_max_gap_factor is not None:
+            raise ValueError(
+                "preprocessing.resample_max_gap_factor requires resample_rate_hz"
+            )
         intent = str(_required(inference, "intent"))
         if intent not in {"confirmatory", "exploratory", "descriptive"}:
             raise ValueError("inference.intent is invalid")
@@ -127,6 +161,8 @@ class EventAnalysisConfig:
             preprocessing_method=method,
             normalization=normalization,  # type: ignore[arg-type]
             rolling_window_s=float(preprocessing.get("rolling_window_s", 60.0)),
+            resample_rate_hz=resample_rate_hz,
+            resample_max_gap_factor=resample_max_gap_factor,
             baseline=_window(windows, "baseline"),
             response=_window(windows, "response"),
             randomized=randomized,
@@ -166,6 +202,8 @@ class EventAnalysisConfig:
                 method=self.preprocessing_method,  # type: ignore[arg-type]
                 normalization=self.normalization,
                 rolling_window_s=self.rolling_window_s,
+                resample_rate_hz=self.resample_rate_hz,
+                resample_max_gap_factor=self.resample_max_gap_factor,
             )
         )
         return EventAnalysis(

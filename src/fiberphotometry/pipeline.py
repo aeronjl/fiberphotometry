@@ -43,10 +43,11 @@ class PreprocessingSpec:
 
 @dataclass(frozen=True)
 class ResampleOperation:
-    """Linear resampling with an optional maximum bridgeable source gap."""
+    """Prospective linear regularization with an explicit gap policy."""
 
-    rate_hz: float
+    rate_hz: float | Literal["median"]
     max_gap_s: float | None = None
+    max_gap_factor: float | None = None
     kind: Literal["resample"] = field(default="resample", init=False)
 
 
@@ -274,7 +275,10 @@ def _preprocess(recording: xr.Dataset, spec: PipelineSpec) -> xr.Dataset:
     for operation in spec.preprocessing:
         if isinstance(operation, ResampleOperation):
             output = resample_recording(
-                output, rate_hz=operation.rate_hz, max_gap_s=operation.max_gap_s
+                output,
+                rate_hz=operation.rate_hz,
+                max_gap_s=operation.max_gap_s,
+                max_gap_factor=operation.max_gap_factor,
             )
         elif isinstance(operation, LowpassFilterOperation):
             output = lowpass_filter(

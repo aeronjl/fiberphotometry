@@ -219,6 +219,35 @@ def test_resampling_retains_source_and_does_not_bridge_large_gap() -> None:
     assert operation["time_only_boolean_method"] == "nearest"
 
 
+def test_median_rate_regularization_reports_jitter_and_preserves_smooth_signal() -> (
+    None
+):
+    regular_time = np.arange(0, 20, 0.02)
+    jitter = 0.0001 * np.sin(np.arange(len(regular_time)) * 0.7)
+    irregular_time = regular_time + jitter
+    signal = np.sin(2 * np.pi * 0.5 * irregular_time)
+    recording = make_recording(
+        time=irregular_time,
+        signal=signal,
+        subject="m",
+        session="jittered",
+    )
+
+    result = resample_recording(recording, rate_hz="median", max_gap_factor=1.5)
+
+    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    expected = np.sin(2 * np.pi * 0.5 * result.time.values)
+    error = np.sqrt(np.nanmean((result.signal.values[:, 0] - expected) ** 2))
+    assert error < 5e-5
+    assert operation["rate_policy"] == "median"
+    assert operation["rate_hz"] == pytest.approx(50, rel=0.01)
+    assert operation["max_gap_factor"] == 1.5
+    assert operation["resolved_max_gap_s"] == pytest.approx(0.03, rel=0.01)
+    assert operation["source_interval_cv"] > 0
+    assert operation["gap_masked_target_fraction"] == 0
+    assert operation["nearest_source_distance_max_s"] < 0.002
+
+
 def test_lowpass_retains_input_and_reports_edge_handling() -> None:
     time = np.arange(0, 10, 0.01)
     low = np.sin(2 * np.pi * time)

@@ -186,6 +186,9 @@ v0.3.1 and v0.3.2 amendments and completed 383-session execution are reported in
 the [`v0.3.2 results`](docs/ibl-feedback-signal-only-results-v0.3.2.md).
 The follow-up baseline-fidelity and normalization study is in
 [`docs/control-free-benchmark-v0.2.md`](docs/control-free-benchmark-v0.2.md).
+Prospective median-rate regularization for jittered clocks, including gap and
+interpolation-distance provenance, is documented in
+[`docs/irregular-sampling-v0.1.md`](docs/irregular-sampling-v0.1.md).
 
 The experimental inference schema keeps arbitrary observation metadata open
 while explicitly declaring units, nesting, factor assignment, estimands, and

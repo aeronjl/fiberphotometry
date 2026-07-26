@@ -82,6 +82,20 @@ calculates each within-session contrast first and weights complete sessions equa
 within animal. Omitting it retains observation-pooled weighting for backward
 compatibility; the choice is serialized in the estimand.
 
+For jittered signal-only recordings, regularization must be explicit and ordered
+before methods such as AsLS:
+
+```toml
+[analysis.preprocessing]
+kind = "signal_only"
+method = "asls"
+normalization = "divide"
+resample_rate_hz = "median"
+resample_max_gap_factor = 1.5
+```
+
+The source arrays and timestamp diagnostics remain in the processing lineage.
+
 ## Current boundary
 
 v0.1 handles the categorical, within-animal scalar event contrast supported by

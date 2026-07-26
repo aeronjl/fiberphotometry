@@ -15,6 +15,10 @@
 - [x] Channel-level validity, dropout, repeated-extreme, and flat-step QC
 - [x] Sampling-rate and gap diagnostics
 - [x] Resampling with explicit interpolation provenance
+- [x] Session-adaptive median-rate regularization and gap diagnostics
+- [x] Frozen smooth-signal irregular-clock fidelity benchmark
+- [ ] Sharp-transient, missing-run, and event-boundary resampling benchmark
+- [ ] New held-out real-data regularized-AsLS comparison
 - [x] Filter API with edge-effect reporting
 - [ ] Bleaching models and control-free baseline comparators
   - [x] Experimental double-exponential and AsLS signal-only APIs

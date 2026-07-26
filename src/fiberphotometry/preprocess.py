@@ -203,8 +203,9 @@ def baseline_dff(
 def resample_recording(
     recording: xr.Dataset,
     *,
-    rate_hz: float,
+    rate_hz: float | Literal["median"],
     max_gap_s: float | None = None,
+    max_gap_factor: float | None = None,
 ) -> xr.Dataset:
     """Linearly resample time-channel variables while retaining source arrays.
 
@@ -212,10 +213,14 @@ def resample_recording(
     The original arrays remain available on the separate ``source_time`` axis.
     """
     validate_recording(recording)
-    if rate_hz <= 0:
-        raise ValueError("rate_hz must be positive")
+    if rate_hz != "median" and rate_hz <= 0:
+        raise ValueError("rate_hz must be positive or 'median'")
     if max_gap_s is not None and max_gap_s <= 0:
         raise ValueError("max_gap_s must be positive when provided")
+    if max_gap_factor is not None and max_gap_factor <= 1:
+        raise ValueError("max_gap_factor must be greater than one when provided")
+    if max_gap_s is not None and max_gap_factor is not None:
+        raise ValueError("declare max_gap_s or max_gap_factor, not both")
     if "source_time" in recording.coords:
         raise ValueError("recording has already been resampled")
     unsupported = [
@@ -229,7 +234,13 @@ def resample_recording(
         raise ValueError(f"cannot resample unsupported time variables: {unsupported}")
 
     source_time = np.asarray(recording.time.values, dtype=float)
-    step = 1 / rate_hz
+    source_intervals = np.diff(source_time)
+    median_interval = float(np.median(source_intervals))
+    resolved_rate_hz = 1 / median_interval if rate_hz == "median" else rate_hz
+    resolved_max_gap_s = (
+        max_gap_factor * median_interval if max_gap_factor is not None else max_gap_s
+    )
+    step = 1 / resolved_rate_hz
     target_time = np.arange(source_time[0], source_time[-1] + step / 2, step)
     target_time = target_time[target_time <= source_time[-1]]
     output = xr.Dataset(
@@ -253,9 +264,9 @@ def resample_recording(
                 right,
             )
             resampled_mask = source_mask[nearest]
-            if max_gap_s is not None:
+            if resolved_max_gap_s is not None:
                 for gap_left, gap_right in pairwise(source_time):
-                    if gap_right - gap_left > max_gap_s:
+                    if gap_right - gap_left > resolved_max_gap_s:
                         resampled_mask[
                             (target_time > gap_left) & (target_time < gap_right)
                         ] = False
@@ -279,24 +290,48 @@ def resample_recording(
                 left=np.nan,
                 right=np.nan,
             )
-            if max_gap_s is not None:
+            if resolved_max_gap_s is not None:
                 for left, right in pairwise(valid_time):
-                    if right - left > max_gap_s:
+                    if right - left > resolved_max_gap_s:
                         resampled[
                             (target_time > left) & (target_time < right), channel
                         ] = np.nan
         output[name] = (("time", "channel"), resampled)
         output[f"source_{name}"] = (("source_time", "channel"), source.copy())
     output.attrs["processing_stage"] = "resampled"
+    nearest_right = np.searchsorted(source_time, target_time, side="left")
+    nearest_right = np.clip(nearest_right, 0, len(source_time) - 1)
+    nearest_left = np.maximum(nearest_right - 1, 0)
+    nearest_distance = np.minimum(
+        np.abs(target_time - source_time[nearest_left]),
+        np.abs(source_time[nearest_right] - target_time),
+    )
+    gap_mask = np.zeros(len(target_time), dtype=bool)
+    if resolved_max_gap_s is not None:
+        for left, right in pairwise(source_time):
+            if right - left > resolved_max_gap_s:
+                gap_mask |= (target_time > left) & (target_time < right)
     _append_operation(
         output,
         {
             "kind": "resample",
             "method": "linear",
-            "rate_hz": rate_hz,
+            "rate_policy": rate_hz,
+            "rate_hz": resolved_rate_hz,
             "max_gap_s": max_gap_s,
+            "max_gap_factor": max_gap_factor,
+            "resolved_max_gap_s": resolved_max_gap_s,
             "source_samples": len(source_time),
             "output_samples": len(target_time),
+            "source_interval_cv": float(
+                np.std(source_intervals) / np.mean(source_intervals)
+            ),
+            "source_median_interval_s": median_interval,
+            "source_max_interval_s": float(np.max(source_intervals)),
+            "target_to_source_rate_ratio": resolved_rate_hz * median_interval,
+            "gap_masked_target_fraction": float(np.mean(gap_mask)),
+            "nearest_source_distance_p95_s": float(np.quantile(nearest_distance, 0.95)),
+            "nearest_source_distance_max_s": float(np.max(nearest_distance)),
             "time_only_boolean_method": "nearest",
         },
     )

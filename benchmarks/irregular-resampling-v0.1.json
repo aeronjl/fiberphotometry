@@ -1,0 +1,172 @@
+{
+  "acceptance": {
+    "normalized_rmse_max": 0.01,
+    "scope": "smooth sinusoids at 0.2, 1, and 3 Hz"
+  },
+  "all_passed": true,
+  "policy": {
+    "max_gap_factor": 1.5,
+    "method": "linear",
+    "rate_hz": "median"
+  },
+  "result_sha256": "fac767938a2d6ca0232b69312d0b455771bf54e5c58bbe7448d90568cc9bab32",
+  "scenarios": [
+    {
+      "jitter_fraction": 0.005,
+      "normalized_rmse": 1.131735342160011e-05,
+      "passed": true,
+      "resampling_diagnostics": {
+        "gap_masked_target_fraction": 0.0,
+        "kind": "resample",
+        "max_gap_factor": 1.5,
+        "max_gap_s": null,
+        "method": "linear",
+        "nearest_source_distance_max_s": 0.0008741610581992632,
+        "nearest_source_distance_p95_s": 0.0007480972646071392,
+        "output_samples": 1199,
+        "rate_hz": 19.999786473175337,
+        "rate_policy": "median",
+        "resolved_max_gap_s": 0.07500080073414139,
+        "source_interval_cv": 0.002457706426755678,
+        "source_max_interval_s": 0.0501737943547127,
+        "source_median_interval_s": 0.05000053382276093,
+        "source_samples": 1200,
+        "target_to_source_rate_ratio": 1.0,
+        "time_only_boolean_method": "nearest"
+      },
+      "signal_frequency_hz": 0.2,
+      "source_rate_hz": 20.0
+    },
+    {
+      "jitter_fraction": 0.005,
+      "normalized_rmse": 0.0002832320262662222,
+      "passed": true,
+      "resampling_diagnostics": {
+        "gap_masked_target_fraction": 0.0,
+        "kind": "resample",
+        "max_gap_factor": 1.5,
+        "max_gap_s": null,
+        "method": "linear",
+        "nearest_source_distance_max_s": 0.0008741610581992632,
+        "nearest_source_distance_p95_s": 0.0007480972646071392,
+        "output_samples": 1199,
+        "rate_hz": 19.999786473175337,
+        "rate_policy": "median",
+        "resolved_max_gap_s": 0.07500080073414139,
+        "source_interval_cv": 0.002457706426755678,
+        "source_max_interval_s": 0.0501737943547127,
+        "source_median_interval_s": 0.05000053382276093,
+        "source_samples": 1200,
+        "target_to_source_rate_ratio": 1.0,
+        "time_only_boolean_method": "nearest"
+      },
+      "signal_frequency_hz": 1.0,
+      "source_rate_hz": 20.0
+    },
+    {
+      "jitter_fraction": 0.005,
+      "normalized_rmse": 0.0024805697798506742,
+      "passed": true,
+      "resampling_diagnostics": {
+        "gap_masked_target_fraction": 0.0,
+        "kind": "resample",
+        "max_gap_factor": 1.5,
+        "max_gap_s": null,
+        "method": "linear",
+        "nearest_source_distance_max_s": 0.0008741610581992632,
+        "nearest_source_distance_p95_s": 0.0007480972646071392,
+        "output_samples": 1199,
+        "rate_hz": 19.999786473175337,
+        "rate_policy": "median",
+        "resolved_max_gap_s": 0.07500080073414139,
+        "source_interval_cv": 0.002457706426755678,
+        "source_max_interval_s": 0.0501737943547127,
+        "source_median_interval_s": 0.05000053382276093,
+        "source_samples": 1200,
+        "target_to_source_rate_ratio": 1.0,
+        "time_only_boolean_method": "nearest"
+      },
+      "signal_frequency_hz": 3.0,
+      "source_rate_hz": 20.0
+    },
+    {
+      "jitter_fraction": 0.005,
+      "normalized_rmse": 3.987993336360676e-06,
+      "passed": true,
+      "resampling_diagnostics": {
+        "gap_masked_target_fraction": 0.0,
+        "kind": "resample",
+        "max_gap_factor": 1.5,
+        "max_gap_s": null,
+        "method": "linear",
+        "nearest_source_distance_max_s": 0.000716981241275505,
+        "nearest_source_distance_p95_s": 0.0006234621672842166,
+        "output_samples": 3000,
+        "rate_hz": 50.00051811136346,
+        "rate_policy": "median",
+        "resolved_max_gap_s": 0.029999689136403163,
+        "source_interval_cv": 0.002457526712442873,
+        "source_max_interval_s": 0.020069517767254297,
+        "source_median_interval_s": 0.01999979275760211,
+        "source_samples": 3000,
+        "target_to_source_rate_ratio": 1.0,
+        "time_only_boolean_method": "nearest"
+      },
+      "signal_frequency_hz": 0.2,
+      "source_rate_hz": 50.0
+    },
+    {
+      "jitter_fraction": 0.005,
+      "normalized_rmse": 9.983942748067287e-05,
+      "passed": true,
+      "resampling_diagnostics": {
+        "gap_masked_target_fraction": 0.0,
+        "kind": "resample",
+        "max_gap_factor": 1.5,
+        "max_gap_s": null,
+        "method": "linear",
+        "nearest_source_distance_max_s": 0.000716981241275505,
+        "nearest_source_distance_p95_s": 0.0006234621672842166,
+        "output_samples": 3000,
+        "rate_hz": 50.00051811136346,
+        "rate_policy": "median",
+        "resolved_max_gap_s": 0.029999689136403163,
+        "source_interval_cv": 0.002457526712442873,
+        "source_max_interval_s": 0.020069517767254297,
+        "source_median_interval_s": 0.01999979275760211,
+        "source_samples": 3000,
+        "target_to_source_rate_ratio": 1.0,
+        "time_only_boolean_method": "nearest"
+      },
+      "signal_frequency_hz": 1.0,
+      "source_rate_hz": 50.0
+    },
+    {
+      "jitter_fraction": 0.005,
+      "normalized_rmse": 0.000893455792423878,
+      "passed": true,
+      "resampling_diagnostics": {
+        "gap_masked_target_fraction": 0.0,
+        "kind": "resample",
+        "max_gap_factor": 1.5,
+        "max_gap_s": null,
+        "method": "linear",
+        "nearest_source_distance_max_s": 0.000716981241275505,
+        "nearest_source_distance_p95_s": 0.0006234621672842166,
+        "output_samples": 3000,
+        "rate_hz": 50.00051811136346,
+        "rate_policy": "median",
+        "resolved_max_gap_s": 0.029999689136403163,
+        "source_interval_cv": 0.002457526712442873,
+        "source_max_interval_s": 0.020069517767254297,
+        "source_median_interval_s": 0.01999979275760211,
+        "source_samples": 3000,
+        "target_to_source_rate_ratio": 1.0,
+        "time_only_boolean_method": "nearest"
+      },
+      "signal_frequency_hz": 3.0,
+      "source_rate_hz": 50.0
+    }
+  ],
+  "schema_version": "irregular-resampling-v0.1"
+}

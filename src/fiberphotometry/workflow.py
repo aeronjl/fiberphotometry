@@ -21,6 +21,7 @@ from fiberphotometry.pipeline import (
     QualityGateSpec,
     RecordingInput,
     ReferenceDFFOperation,
+    ResampleOperation,
     run_pipeline,
 )
 from fiberphotometry.planning import AnalysisPlan, create_analysis_plan
@@ -83,15 +84,28 @@ class Preprocessing:
         method: Literal["double_exponential", "asls", "rolling_mean"],
         normalization: Literal["divide", "subtract"] = "divide",
         rolling_window_s: float = 60.0,
+        resample_rate_hz: float | Literal["median"] | None = None,
+        resample_max_gap_factor: float | None = None,
     ) -> Preprocessing:
         """Apply a declared signal-only baseline without claiming artefact removal."""
         variable: Literal["dff", "baseline_subtracted"] = (
             "dff" if normalization == "divide" else "baseline_subtracted"
         )
         units = "ΔF/F" if normalization == "divide" else "acquired fluorescence"
+        regularization: tuple[PreprocessingOperation, ...] = (
+            (
+                ResampleOperation(
+                    rate_hz=resample_rate_hz,
+                    max_gap_factor=resample_max_gap_factor,
+                ),
+            )
+            if resample_rate_hz is not None
+            else ()
+        )
         return cls(
             f"{method.replace('_', ' ')} ({normalization})",
             (
+                *regularization,
                 BaselineDFFOperation(
                     method=method,
                     normalization=normalization,
