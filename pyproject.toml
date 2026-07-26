@@ -38,6 +38,7 @@ dev = [
   "ruff>=0.11",
 ]
 ibl-validation = ["one-api==3.5.2"]
+stats-validation = ["statsmodels>=0.14.5"]
 
 [project.urls]
 Repository = "https://github.com/aeronjl/fiberphotometry"

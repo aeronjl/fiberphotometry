@@ -42,6 +42,7 @@ def test_hierarchical_bootstrap_preserves_resampled_animal_copies() -> None:
         design,
         estimand,
         ResamplingPlan(("animal", "event")),
+        interval_method="percentile",
         draws=200,
         seed=9,
     )

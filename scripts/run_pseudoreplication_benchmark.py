@@ -71,6 +71,7 @@ def _run_study(seed: int) -> dict[str, float | bool | int]:
         design,
         estimand,
         ResamplingPlan(("animal", "event")),
+        interval_method="percentile",
         draws=400,
         seed=seed + 10_000,
     )

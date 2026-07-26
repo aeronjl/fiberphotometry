@@ -92,6 +92,8 @@ exchangeability. See
 [`docs/inference-design-v0.1.md`](docs/inference-design-v0.1.md).
 The first frozen inference benchmark demonstrates the pseudoreplication failure
 of trial-level resampling in [`benchmarks/results-v0.4.md`](benchmarks/results-v0.4.md).
+Broader scalar interval calibration and independent MixedLM point-estimate parity
+are reported in [`benchmarks/results-v0.5.md`](benchmarks/results-v0.5.md).
 
 ## Development
 

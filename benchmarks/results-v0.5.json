@@ -1,0 +1,18 @@
+{
+  "acceptance": {
+    "at_least_one_method_each_scenario": true,
+    "bca_minimum_coverage": true
+  },
+  "all_acceptance_met": true,
+  "coverage": {
+    "between_12_balanced": {"basic": 0.9, "bca": 0.9, "percentile": 0.875},
+    "between_12_imbalanced": {"basic": 0.875, "bca": 0.875, "percentile": 0.875},
+    "between_12_missing": {"basic": 0.85, "bca": 0.9, "percentile": 0.9},
+    "between_24_balanced": {"basic": 0.95, "bca": 0.95, "percentile": 0.95},
+    "within_12_paired": {"basic": 0.975, "bca": 1.0, "percentile": 0.975}
+  },
+  "default_eligible_methods": ["percentile", "basic", "bca"],
+  "draws_per_study": 250,
+  "protocol": "v0.5",
+  "studies_per_scenario": 40
+}

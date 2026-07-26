@@ -45,7 +45,10 @@ and missing-data models are rejected or deferred rather than guessed.
   means. Unit-level aggregation prevents animals with more trials from silently
   receiving more population weight.
 
-Both operations are experimental. Percentile bootstrap intervals and Monte
-Carlo permutation p-values are returned with the random seed and full sampled
-distribution; no multiple-comparison correction or time-resolved simultaneous
-interval is implied.
+Both operations are experimental. Percentile, basic, and BCa intervals are
+available and must be selected explicitly; Monte Carlo permutation p-values and exact paired sign-flip tests are
+supported. Results retain the random seed and full sampled distribution. Paired
+inference rejects incomplete units instead of silently dropping them. No
+multiple-comparison correction or time-resolved simultaneous interval is
+implied. Calibration results are in
+[`benchmarks/results-v0.5.md`](../benchmarks/results-v0.5.md).

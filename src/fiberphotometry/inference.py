@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from itertools import pairwise
+from itertools import pairwise, product
+from statistics import NormalDist
 from typing import Literal
 
 import numpy as np
@@ -44,6 +45,7 @@ class BootstrapResult:
     confidence_interval: tuple[float, float]
     distribution: NDArray[np.float64]
     seed: int
+    interval_method: str
 
 
 @dataclass(frozen=True)
@@ -60,6 +62,7 @@ def hierarchical_bootstrap(
     estimand: Estimand,
     plan: ResamplingPlan,
     *,
+    interval_method: Literal["percentile", "basic", "bca"],
     draws: int = 2000,
     seed: int = 0,
 ) -> BootstrapResult:
@@ -79,10 +82,36 @@ def hierarchical_bootstrap(
         [_estimate(table, design, estimand, rows, groups) for rows, groups in sampled]
     )
     estimate = _estimate(table, design, estimand, np.arange(len(table)))
-    interval = np.nanquantile(distribution, [0.025, 0.975])
-    return BootstrapResult(
-        estimate, (float(interval[0]), float(interval[1])), distribution, seed
+    interval = _bootstrap_interval(
+        table, design, estimand, distribution, estimate, interval_method
     )
+    return BootstrapResult(
+        estimate,
+        (float(interval[0]), float(interval[1])),
+        distribution,
+        seed,
+        interval_method,
+    )
+
+
+def exact_sign_flip_test(
+    table: ObservationTable,
+    design: StudyDesign,
+    estimand: Estimand,
+    *,
+    exchangeability_unit: str,
+) -> PermutationResult:
+    """Enumerate the exact paired sign-flip null distribution (at most 20 units)."""
+    validate_design(table, design).raise_for_errors()
+    unit = _unit_column(design, exchangeability_unit)
+    differences = _unit_differences(table, design, estimand, unit)
+    if len(differences) > 20:
+        raise ValueError("exact sign-flip enumeration is limited to 20 units")
+    signs = np.asarray(list(product([-1, 1], repeat=len(differences))))
+    null = np.mean(signs * differences, axis=1)
+    observed = float(np.mean(differences))
+    p_value = float(np.mean(np.abs(null) >= abs(observed)))
+    return PermutationResult(observed, p_value, null, seed=0)
 
 
 def permutation_test(
@@ -236,14 +265,59 @@ def _unit_differences(
 ) -> NDArray[np.float64]:
     units = table.values(unit_column)
     differences = []
+    incomplete = []
     for unit in dict.fromkeys(units.tolist()):
         rows = np.flatnonzero(units == unit)
         value = _estimate(table, design, estimand, rows)
         if np.isfinite(value):
             differences.append(value)
+        else:
+            incomplete.append(unit)
+    if incomplete:
+        raise ValueError(
+            "paired inference requires both contrast levels for every unit; "
+            f"incomplete units: {incomplete!r}"
+        )
     if len(differences) < 2:
         raise ValueError("sign-flip inference requires at least two complete units")
     return np.asarray(differences)
+
+
+def _bootstrap_interval(
+    table: ObservationTable,
+    design: StudyDesign,
+    estimand: Estimand,
+    distribution: NDArray[np.float64],
+    estimate: float,
+    method: str,
+) -> NDArray[np.float64]:
+    finite = distribution[np.isfinite(distribution)]
+    if method == "percentile":
+        return np.asarray(np.quantile(finite, [0.025, 0.975]), dtype=np.float64)
+    quantiles = np.quantile(finite, [0.025, 0.975])
+    if method == "basic":
+        return np.asarray([2 * estimate - quantiles[1], 2 * estimate - quantiles[0]])
+    if method != "bca":
+        raise ValueError("interval_method must be 'percentile', 'basic', or 'bca'")
+    unit_column = _unit_column(design, estimand.aggregation_unit)
+    units = table.values(unit_column)
+    jackknife = []
+    for unit in dict.fromkeys(units.tolist()):
+        rows = np.flatnonzero(units != unit)
+        jackknife.append(_estimate(table, design, estimand, rows))
+    jackknife_values = np.asarray(jackknife)
+    mean = float(np.nanmean(jackknife_values))
+    centered = mean - jackknife_values
+    denominator = 6 * float(np.nansum(centered**2)) ** 1.5
+    acceleration = float(np.nansum(centered**3) / denominator) if denominator else 0.0
+    proportion = float(np.clip(np.mean(finite < estimate), 1e-6, 1 - 1e-6))
+    normal = NormalDist()
+    bias = normal.inv_cdf(proportion)
+    adjusted = []
+    for probability in (0.025, 0.975):
+        z = normal.inv_cdf(probability)
+        adjusted.append(normal.cdf(bias + (bias + z) / (1 - acceleration * (bias + z))))
+    return np.asarray(np.quantile(finite, adjusted), dtype=np.float64)
 
 
 def _shuffled_estimate(

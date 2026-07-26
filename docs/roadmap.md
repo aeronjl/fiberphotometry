@@ -41,7 +41,8 @@
 - [x] Experimental animal-level hierarchical bootstrap
 - [x] Experimental design-aware sign-flip and label permutations
 - [x] Frozen pseudoreplication benchmark contrasting trial and animal resampling
-- [ ] Independent numerical parity for scalar inference
+- [x] Initial independent MixedLM point-estimate parity
+- [ ] Independent interval and unbalanced mixed-model parity
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [ ] Pointwise versus simultaneous interval reporting

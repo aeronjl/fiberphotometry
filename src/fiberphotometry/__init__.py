@@ -14,6 +14,7 @@ from fiberphotometry.inference import (
     Estimand,
     PermutationPlan,
     ResamplingPlan,
+    exact_sign_flip_test,
     hierarchical_bootstrap,
     permutation_test,
 )
@@ -33,6 +34,7 @@ __all__ = [
     "align_events",
     "assess_event_confounds",
     "assess_recording",
+    "exact_sign_flip_test",
     "hierarchical_bootstrap",
     "make_recording",
     "permutation_test",
