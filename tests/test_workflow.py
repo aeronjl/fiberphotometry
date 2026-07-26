@@ -6,6 +6,7 @@ import pytest
 from fiberphotometry import (
     EventAnalysis,
     EventSession,
+    PeriEventInferenceSpec,
     Preprocessing,
     make_recording,
 )
@@ -145,7 +146,28 @@ def test_scientist_workflow_reports_incomplete_preprocessing_windows() -> None:
 
     assert result.coverage.total.gated == 20
     assert result.coverage.total.complete == 19
-    assert dict(result.coverage.preprocessing_dispositions) == {
-        "event_inside_gap": 1
-    }
+    assert dict(result.coverage.preprocessing_dispositions) == {"event_inside_gap": 1}
     assert "condition_dependent_completion_retention" in result.coverage.warnings
+
+
+def test_scientist_workflow_can_add_animal_level_timecourse() -> None:
+    study = EventAnalysis(
+        _sessions(),
+        numerator="correct",
+        denominator="incorrect",
+        channel="DMS",
+        preprocessing=Preprocessing.reference(),
+        timecourse=PeriEventInferenceSpec(draws=100, seed=4),
+    )
+    plan = study.plan()
+
+    result = study.run(acknowledged_assumptions=plan.required_assumptions)
+
+    assert result.timecourse is not None
+    assert result.timecourse.animal_count == 4
+    assert len(result.timecourse.relative_time) == 61
+    assert json.loads(result.to_json())["timecourse"]["seed"] == 4
+    html = result.to_html()
+    assert "Animal-level peri-event contrast" in html
+    assert "simultaneous band covers the whole declared window" in html
+    assert "whole-window significance test" in html

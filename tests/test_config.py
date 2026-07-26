@@ -22,6 +22,9 @@ def test_toml_config_builds_and_runs_reproducibly() -> None:
     assert artifact["data_summary"] == {"animals": 4, "sessions": 4, "events": 20}
     assert len(artifact["quality_reports"]) == 4
     assert artifact["processing_lineage"][0]["operations"][0]["kind"] == "reference_dff"
+    assert artifact["timecourse"]["draws"] == 500
+    assert first.timecourse is not None
+    assert first.timecourse.animal_count == 4
 
 
 def test_toml_config_rejects_unknown_keys_and_invalid_methods() -> None:

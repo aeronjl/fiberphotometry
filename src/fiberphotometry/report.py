@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from html import escape
 from typing import TYPE_CHECKING
 
@@ -91,6 +91,7 @@ def render_event_analysis_report(result: EventAnalysisResult) -> str:
         else ""
     )
     coverage_section = _event_coverage_section(result)
+    timecourse_section = _timecourse_section(result)
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -142,6 +143,8 @@ def render_event_analysis_report(result: EventAnalysisResult) -> str:
     {evidence_plot}
   </section>
 
+  {timecourse_section}
+
   {coverage_section}
 
   <section>
@@ -172,6 +175,129 @@ def render_event_analysis_report(result: EventAnalysisResult) -> str:
 </main>
 </body>
 </html>"""
+
+
+def _timecourse_section(result: EventAnalysisResult) -> str:
+    inference = result.timecourse
+    if inference is None:
+        return ""
+    time = np.asarray(inference.relative_time, dtype=float)
+    estimate = np.asarray(inference.estimate, dtype=float)
+    pointwise_lower = np.asarray(inference.pointwise_lower, dtype=float)
+    pointwise_upper = np.asarray(inference.pointwise_upper, dtype=float)
+    simultaneous_lower = np.asarray(inference.simultaneous_lower, dtype=float)
+    simultaneous_upper = np.asarray(inference.simultaneous_upper, dtype=float)
+    finite_bounds = np.concatenate(
+        (
+            estimate[np.isfinite(estimate)],
+            simultaneous_lower[np.isfinite(simultaneous_lower)],
+            simultaneous_upper[np.isfinite(simultaneous_upper)],
+        )
+    )
+    low, high = float(np.min(finite_bounds)), float(np.max(finite_bounds))
+    padding = max((high - low) * 0.12, 1e-6)
+    low -= padding
+    high += padding
+    width, height = 760, 280
+    left, right, top, bottom = 54, 18, 14, 36
+
+    def x(value: float) -> float:
+        return float(
+            left + (value - time[0]) / (time[-1] - time[0]) * (width - left - right)
+        )
+
+    def y(value: float) -> float:
+        return top + (high - value) / (high - low) * (height - top - bottom)
+
+    simultaneous = _band_paths(time, simultaneous_lower, simultaneous_upper, x, y)
+    pointwise = _band_paths(time, pointwise_lower, pointwise_upper, x, y)
+    line = _line_paths(time, estimate, x, y)
+    zero = (
+        f'<line x1="{left}" y1="{y(0):.2f}" x2="{width - right}" '
+        f'y2="{y(0):.2f}" class="zero-line"/>'
+        if low <= 0 <= high
+        else ""
+    )
+    event = (
+        f'<line x1="{x(0):.2f}" y1="{top}" x2="{x(0):.2f}" '
+        f'y2="{height - bottom}" class="event-line"/>'
+        if time[0] <= 0 <= time[-1]
+        else ""
+    )
+    warning_markup = (
+        "".join(
+            f'<span class="warning-chip">{escape(item)}</span>'
+            for item in inference.warnings
+        )
+        if inference.warnings
+        else '<span class="quiet-chip">Stable animal support</span>'
+    )
+    confidence = f"{inference.confidence:.0%}"
+    return f"""<section>
+    <div class="section-head"><div><p class="eyebrow">TIME-COURSE INFERENCE</p>
+    <h2>Animal-level peri-event contrast</h2></div>
+    <p>{escape(confidence)} pointwise intervals describe individual times; the
+    simultaneous band covers the whole declared window.</p></div>
+    <div class="timecourse-legend"><span class="legend-estimate">Estimate</span>
+    <span class="legend-pointwise">Pointwise</span>
+    <span class="legend-simultaneous">Simultaneous</span></div>
+    <div class="timecourse-plot"><svg viewBox="0 0 {width} {height}" role="img"
+    aria-label="Animal-level contrast with pointwise and simultaneous confidence bands">
+    {zero}{event}<g class="simultaneous-band">{simultaneous}</g>
+    <g class="pointwise-band">{pointwise}</g><g class="timecourse-estimate">{line}</g>
+    <text x="{left}" y="{height - 8}" class="axis-label">{time[0]:g} s</text>
+    <text x="{width - right}" y="{height - 8}" text-anchor="end"
+    class="axis-label">{time[-1]:g} s</text></svg></div>
+    <div class="chips coverage-warnings">{warning_markup}</div>
+    <p class="coverage-dispositions">Equal session-condition means were formed
+    within each animal before {inference.animal_count} animal curves were resampled
+    {inference.draws:,} times (seed {inference.seed}). The pointwise band is not a
+    whole-window significance test.</p></section>"""
+
+
+def _line_paths(
+    time: np.ndarray,
+    values: np.ndarray,
+    x: Callable[[float], float],
+    y: Callable[[float], float],
+) -> str:
+    finite = np.isfinite(values)
+    changes = np.diff(np.concatenate(([False], finite, [False])).astype(int))
+    paths = []
+    for start, stop in zip(
+        np.flatnonzero(changes == 1), np.flatnonzero(changes == -1), strict=True
+    ):
+        points = " ".join(
+            f"{x(time[index]):.2f},{y(values[index]):.2f}"
+            for index in range(start, stop)
+        )
+        paths.append(f'<polyline points="{points}"/>')
+    return "".join(paths)
+
+
+def _band_paths(
+    time: np.ndarray,
+    lower: np.ndarray,
+    upper: np.ndarray,
+    x: Callable[[float], float],
+    y: Callable[[float], float],
+) -> str:
+    finite = np.isfinite(lower) & np.isfinite(upper)
+    changes = np.diff(np.concatenate(([False], finite, [False])).astype(int))
+    paths = []
+    for start, stop in zip(
+        np.flatnonzero(changes == 1), np.flatnonzero(changes == -1), strict=True
+    ):
+        forward = [
+            f"{x(time[index]):.2f},{y(upper[index]):.2f}"
+            for index in range(start, stop)
+        ]
+        backward = [
+            f"{x(time[index]):.2f},{y(lower[index]):.2f}"
+            for index in range(stop - 1, start - 1, -1)
+        ]
+        paths.append(f'<polygon points="{" ".join((*forward, *backward))}"/>')
+    return "".join(paths)
 
 
 def _event_coverage_section(result: EventAnalysisResult) -> str:
@@ -613,6 +739,16 @@ font:600 28px/1 Charter,Georgia,serif;font-variant-numeric:tabular-nums}.coverag
 justify-content:flex-start;margin-bottom:12px}.coverage-dispositions{color:var(--secondary);font-size:12px;
 margin-bottom:20px}.coverage-detail{margin-top:14px}.coverage-detail summary{
 color:var(--secondary);font-size:12px;font-weight:600;padding-top:6px}
+.timecourse-plot{max-width:100%;overflow-x:auto}.timecourse-plot svg{display:block;width:100%;
+min-width:560px}.simultaneous-band polygon{fill:rgba(22,122,80,.10)}.pointwise-band polygon{
+fill:rgba(22,122,80,.20)}.timecourse-estimate polyline{fill:none;stroke:var(--gcamp);
+stroke-width:2}.event-line{stroke:var(--secondary);stroke-width:1;stroke-dasharray:5 4}
+.axis-label{fill:var(--muted);font:11px ui-monospace,SFMono-Regular,monospace}
+.timecourse-legend{display:flex;gap:16px;margin-bottom:8px;color:var(--secondary);font-size:11px}
+.timecourse-legend span:before{content:"";display:inline-block;width:18px;height:8px;margin-right:6px;
+border-radius:2px}.legend-estimate:before{background:var(--gcamp);height:2px!important;
+vertical-align:middle}.legend-pointwise:before{background:rgba(22,122,80,.20)}
+.legend-simultaneous:before{background:rgba(22,122,80,.10)}
 .operation-grid{display:grid;gap:8px}.operation{display:grid;grid-template-columns:32px 1fr auto;
 align-items:start;background:var(--paper);border-radius:7px;padding:12px}.operation>span{font:600 11px
 ui-monospace,monospace;color:var(--gcamp)}.operation p{font-size:12px;color:var(--secondary);

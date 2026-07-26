@@ -108,6 +108,9 @@ analysis failures before preprocessing runs.
 An opt-in [scalar mixed-model summary](docs/scalar-mixed-model-v0.1.md) provides a
 separate event-level sensitivity analysis with explicit convergence and variance
 diagnostics; it does not silently replace the primary animal-level estimand.
+An optional [animal-level peri-event evidence lane](docs/peri-event-inference-v0.1.md)
+reports separate pointwise and whole-window simultaneous confidence bands without
+treating trials as independent replicates.
 
 For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The

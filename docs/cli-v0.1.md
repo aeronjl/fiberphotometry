@@ -62,6 +62,12 @@ directory. The exact TOML bytes receive a project SHA-256. Recording and event
 files retain separate hashes, ensuring a configuration edit and a data edit remain
 distinguishable provenance events.
 
+An optional `[timecourse]` table enables the same animal-level peri-event lane as
+the Python API. It declares `window`, `rate_hz`, `confidence`, `draws`, and `seed`;
+the resulting JSON and HTML keep pointwise and simultaneous bands distinct. See
+[`examples/feedback-analysis.toml`](../examples/feedback-analysis.toml) and the
+[peri-event inference contract](peri-event-inference-v0.1.md).
+
 NWB export is opt-in because valid files require metadata the library must not
 invent. Each session declares a timezone-aware `session_start_time`; `[nwb]`
 declares `session_description` and an identifier prefix. Each file contains raw

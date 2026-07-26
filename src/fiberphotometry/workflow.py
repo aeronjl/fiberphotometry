@@ -17,6 +17,7 @@ from fiberphotometry.coverage import (
     assess_event_coverage,
 )
 from fiberphotometry.design import Factor, ObservationTable, StudyDesign, Unit
+from fiberphotometry.events import align_events
 from fiberphotometry.inference import Contrast, Estimand
 from fiberphotometry.pipeline import (
     BaselineDFFOperation,
@@ -31,6 +32,11 @@ from fiberphotometry.pipeline import (
     run_pipeline,
 )
 from fiberphotometry.planning import AnalysisPlan, create_analysis_plan
+from fiberphotometry.timecourse import (
+    PeriEventInferenceResult,
+    PeriEventInferenceSpec,
+    infer_peri_event_contrast,
+)
 
 T = TypeVar("T")
 
@@ -159,6 +165,7 @@ class EventAnalysisResult:
     title: str
     preprocessing: Preprocessing
     coverage: EventCoverageReport
+    timecourse: PeriEventInferenceResult | None = None
     configuration_fingerprint: str | None = None
 
     def to_json(self) -> str:
@@ -176,6 +183,11 @@ class EventAnalysisResult:
             ),
             "configuration_sha256": self.configuration_fingerprint,
             "event_coverage": json.loads(self.coverage.to_json()),
+            "timecourse": (
+                json.loads(self.timecourse.to_json())
+                if self.timecourse is not None
+                else None
+            ),
             "data_summary": {
                 "animals": len(animals),
                 "sessions": len(sessions),
@@ -233,6 +245,7 @@ class EventAnalysis:
     intent: Literal["confirmatory", "exploratory", "descriptive"] = "exploratory"
     blocking_warnings: tuple[str, ...] = ()
     contrast_unit: Literal["session"] | None = None
+    timecourse: PeriEventInferenceSpec | None = None
     configuration_fingerprint: str | None = None
 
     def __post_init__(self) -> None:
@@ -282,6 +295,7 @@ class EventAnalysis:
             self.title,
             self.preprocessing,
             self._coverage(pipeline),
+            self._timecourse(pipeline),
             self.configuration_fingerprint,
         )
 
@@ -406,6 +420,63 @@ class EventAnalysis:
                     )
                 )
         return assess_event_coverage(tuple(records))
+
+    def _timecourse(self, pipeline: PipelineResult) -> PeriEventInferenceResult | None:
+        if self.timecourse is None:
+            return None
+        matrices = []
+        animals: list[str] = []
+        sessions: list[str] = []
+        conditions: list[str] = []
+        processed_index = 0
+        for session in self.sessions:
+            if not any(session.eligible):
+                continue
+            recording = pipeline.processed_recordings[processed_index]
+            processed_index += 1
+            event_times = _selected(session.event_times, session.eligible)
+            event_ids = _selected(session.event_ids, session.eligible)
+            aligned = align_events(
+                recording,
+                event_times,
+                window=self.timecourse.window,
+                rate=self.timecourse.rate_hz,
+                variable=self.preprocessing.output_variable,
+                event_ids=event_ids,
+            )
+            matches = np.flatnonzero(
+                np.asarray(recording.channel.values) == self.channel
+            )
+            channel_index = int(matches[0])
+            matrices.append(
+                np.asarray(aligned.values[:, :, channel_index], dtype=float)
+            )
+            count = sum(session.eligible)
+            animals.extend([str(session.recording.attrs["subject"])] * count)
+            sessions.extend([str(session.recording.attrs["session"])] * count)
+            conditions.extend(_selected(session.conditions, session.eligible))
+        values = np.concatenate(matrices, axis=0)
+        relative_time = np.linspace(
+            self.timecourse.window[0],
+            self.timecourse.window[1],
+            round(
+                (self.timecourse.window[1] - self.timecourse.window[0])
+                * self.timecourse.rate_hz
+            )
+            + 1,
+        )
+        return infer_peri_event_contrast(
+            values,
+            relative_time,
+            animals=tuple(animals),
+            sessions=tuple(sessions),
+            conditions=tuple(conditions),
+            numerator=self.numerator,
+            denominator=self.denominator,
+            confidence=self.timecourse.confidence,
+            draws=self.timecourse.draws,
+            seed=self.timecourse.seed,
+        )
 
 
 def _selected(values: Sequence[T], eligible: Sequence[bool]) -> tuple[T, ...]:

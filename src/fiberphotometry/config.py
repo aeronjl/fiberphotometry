@@ -9,6 +9,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Literal
 
+from fiberphotometry.timecourse import PeriEventInferenceSpec
 from fiberphotometry.workflow import (
     EventAnalysis,
     EventAnalysisResult,
@@ -40,6 +41,7 @@ class EventAnalysisConfig:
     blocking_warnings: tuple[str, ...] = ()
     scalar_mixed_model: bool = False
     contrast_unit: Literal["session"] | None = None
+    timecourse: PeriEventInferenceSpec | None = None
     schema_version: str = "1"
 
     @classmethod
@@ -66,6 +68,7 @@ class EventAnalysisConfig:
                 "preprocessing",
                 "event_windows",
                 "inference",
+                "timecourse",
                 "quality",
             },
             "root",
@@ -77,6 +80,7 @@ class EventAnalysisConfig:
         preprocessing = _table(payload, "preprocessing")
         windows = _table(payload, "event_windows")
         inference = _table(payload, "inference")
+        timecourse = _table(payload, "timecourse", required=False)
         quality = _table(payload, "quality", required=False)
         _reject_unknown(contrast, {"factor", "numerator", "denominator"}, "contrast")
         _reject_unknown(channel, {"name"}, "channel")
@@ -105,6 +109,11 @@ class EventAnalysisConfig:
             "inference",
         )
         _reject_unknown(quality, {"blocking_warnings"}, "quality")
+        _reject_unknown(
+            timecourse,
+            {"enabled", "window", "rate_hz", "confidence", "draws", "seed"},
+            "timecourse",
+        )
         kind = str(_required(preprocessing, "kind"))
         method = str(_required(preprocessing, "method"))
         normalization = str(preprocessing.get("normalization", "divide"))
@@ -151,6 +160,7 @@ class EventAnalysisConfig:
         contrast_unit = inference.get("contrast_unit")
         if contrast_unit not in {None, "session"}:
             raise ValueError("inference.contrast_unit must be 'session' when supplied")
+        timecourse_spec = _timecourse(timecourse)
         return cls(
             title=str(payload.get("title", "Fiber photometry event contrast")),
             numerator=str(_required(contrast, "numerator")),
@@ -176,6 +186,7 @@ class EventAnalysisConfig:
             ),
             scalar_mixed_model=scalar_mixed_model,
             contrast_unit=contrast_unit,
+            timecourse=timecourse_spec,
         )
 
     @property
@@ -220,6 +231,7 @@ class EventAnalysisConfig:
             intent=self.intent,
             blocking_warnings=self.blocking_warnings,
             contrast_unit=self.contrast_unit,
+            timecourse=self.timecourse,
             configuration_fingerprint=self.fingerprint,
         )
 
@@ -261,6 +273,24 @@ def _window(payload: dict[str, Any], name: str) -> tuple[float, float]:
     if window[0] >= window[1]:
         raise ValueError(f"event_windows.{name} must be increasing")
     return window
+
+
+def _timecourse(payload: dict[str, Any]) -> PeriEventInferenceSpec | None:
+    if not payload or payload.get("enabled", True) is False:
+        return None
+    enabled = payload.get("enabled", True)
+    if not isinstance(enabled, bool):
+        raise ValueError("timecourse.enabled must be boolean")
+    window_raw = payload.get("window", [-1.0, 2.0])
+    if not isinstance(window_raw, list) or len(window_raw) != 2:
+        raise ValueError("timecourse.window must contain exactly two numbers")
+    return PeriEventInferenceSpec(
+        window=(float(window_raw[0]), float(window_raw[1])),
+        rate_hz=float(payload.get("rate_hz", 20.0)),
+        confidence=float(payload.get("confidence", 0.95)),
+        draws=int(payload.get("draws", 2000)),
+        seed=int(payload.get("seed", 0)),
+    )
 
 
 def _strings(value: object, name: str) -> tuple[str, ...]:

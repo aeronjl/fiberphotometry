@@ -58,6 +58,17 @@ For lower-level or non-workflow integrations, construct `EventCoverageRecord`
 objects and call `assess_event_coverage` directly. This audit requires only event
 routing and missingness metadata; it does not calculate or inspect effect sizes.
 
+## Optional time-resolved evidence
+
+Add `timecourse=PeriEventInferenceSpec(...)` to `EventAnalysis` to estimate the
+condition contrast across a declared peri-event window. Events are reduced to
+equal-weighted session means and then animal contrast curves before bootstrap
+inference. The report shows both local pointwise intervals and a wider simultaneous
+band for the whole window; they are never presented as interchangeable.
+
+See [animal-level peri-event inference](peri-event-inference-v0.1.md) for the full
+aggregation, uncertainty, missing-support, and interpretation contract.
+
 `Preprocessing.signal_only(...)` provides the same surface for explicitly declared
 control-free workflows. Signal-only recordings receive only the QC metrics that
 can actually be identified from one channel; the report never invents reference

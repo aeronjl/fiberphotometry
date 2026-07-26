@@ -85,7 +85,7 @@
 - [x] Pilot power sensitivity ranges
 - [x] Opt-in scalar mixed-model sensitivity summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
-- [ ] Pointwise versus simultaneous interval reporting
+- [x] Animal-level peri-event pointwise and simultaneous interval reporting
 
 ## Phase 4 — adoption
 

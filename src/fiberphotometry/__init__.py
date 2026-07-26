@@ -134,6 +134,11 @@ from fiberphotometry.project import (
     load_project_config,
 )
 from fiberphotometry.qc import assess_recording, assess_signal_recording
+from fiberphotometry.timecourse import (
+    PeriEventInferenceResult,
+    PeriEventInferenceSpec,
+    infer_peri_event_contrast,
+)
 from fiberphotometry.workflow import (
     EventAnalysis,
     EventAnalysisResult,
@@ -177,6 +182,8 @@ __all__ = [
     "MultiverseSpec",
     "NWBExportConfig",
     "ObservationTable",
+    "PeriEventInferenceResult",
+    "PeriEventInferenceSpec",
     "PermutationPlan",
     "PipelineCompatibility",
     "PipelineResult",
@@ -232,6 +239,7 @@ __all__ = [
     "export_project_nwb",
     "fit_scalar_mixed_model",
     "hierarchical_bootstrap",
+    "infer_peri_event_contrast",
     "inspect_loaded_tabular_input",
     "inspect_tabular_input",
     "inspect_tabular_recording",
