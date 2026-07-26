@@ -12,12 +12,14 @@ from fiberphotometry.events import align_events, summarize_event_windows
 from fiberphotometry.inference import (
     Contrast,
     Estimand,
+    InferenceRecommendation,
     PermutationPlan,
     ResamplingPlan,
     TIntervalResult,
     exact_sign_flip_test,
     hierarchical_bootstrap,
     permutation_test,
+    recommend_inference,
     unit_t_interval,
 )
 from fiberphotometry.model import make_recording, validate_recording
@@ -28,6 +30,7 @@ __all__ = [
     "Contrast",
     "Estimand",
     "Factor",
+    "InferenceRecommendation",
     "ObservationTable",
     "PermutationPlan",
     "ResamplingPlan",
@@ -41,6 +44,7 @@ __all__ = [
     "hierarchical_bootstrap",
     "make_recording",
     "permutation_test",
+    "recommend_inference",
     "reference_dff",
     "summarize_event_windows",
     "unit_t_interval",

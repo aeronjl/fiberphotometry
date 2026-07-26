@@ -58,6 +58,11 @@ means. These encode stronger distributional assumptions than randomization
 inference but showed appropriate finite-sample Gaussian coverage in
 [`benchmarks/results-v0.7.md`](../benchmarks/results-v0.7.md).
 
+`recommend_inference()` is advisory and never executes a test. It uses declared
+assignment and aggregation levels but requires `randomized=True`, `False`, or
+`None`; it never infers randomization from balanced-looking data. Exact tests are
+recommended only when both the design claim and supported enumeration permit it.
+
 Missingness requires an estimand decision. The observed-data contrast describes
 available events; a complete-data contrast requires assumptions or a model for
 unobserved outcomes. The library does not relabel observed-data coverage as

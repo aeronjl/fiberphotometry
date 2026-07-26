@@ -22,3 +22,7 @@ two-sided 5% test. It does show why adding trials cannot replace adding animals.
 The public API now provides Welch and paired-t intervals on declared unit means.
 Paired randomized designs should still prefer exact sign flipping when its
 exchangeability assumption is justified.
+
+Public Welch and paired results reproduce SciPy estimates, p-values, and
+confidence intervals to floating-point precision; see
+[`scipy-t-parity-v0.1.json`](scipy-t-parity-v0.1.json).

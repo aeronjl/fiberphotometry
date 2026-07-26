@@ -48,6 +48,8 @@
 - [x] Four-animal IBL event-table/design integration
 - [x] Animal-level Welch and paired-t interval comparators
 - [x] Frozen conditional power grid from 6–30 animals per condition
+- [x] Conservative design-aware scalar inference recommender
+- [x] Independent SciPy parity for Welch and paired intervals
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [ ] Pointwise versus simultaneous interval reporting

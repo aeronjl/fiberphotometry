@@ -1,0 +1,7 @@
+{
+  "comparisons": [
+    {"estimate_difference": 0.0, "interval_max_difference": 0.0, "method": "welch", "p_value_difference": 0.0},
+    {"estimate_difference": 1.1102230246251565e-16, "interval_max_difference": 5.551115123125783e-17, "method": "paired", "p_value_difference": 2.202285662861181e-20}
+  ],
+  "pass": true
+}

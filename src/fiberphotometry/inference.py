@@ -68,6 +68,58 @@ class TIntervalResult:
     method: str
 
 
+@dataclass(frozen=True)
+class InferenceRecommendation:
+    primary: str
+    alternatives: tuple[str, ...]
+    rationale: str
+    warnings: tuple[str, ...]
+
+
+def recommend_inference(
+    table: ObservationTable,
+    design: StudyDesign,
+    estimand: Estimand,
+    *,
+    randomized: bool | None,
+) -> InferenceRecommendation:
+    """Recommend supported scalar methods without inferring randomization."""
+    validate_design(table, design).raise_for_errors()
+    assignment = _factor_assignment_unit(design, estimand.contrast.factor)
+    aggregation = estimand.aggregation_unit
+    unit_count = len(set(table.values(_unit_column(design, aggregation)).tolist()))
+    warnings = []
+    if randomized is None:
+        warnings.append("randomization_status_unspecified")
+    if assignment == aggregation:
+        if randomized:
+            return InferenceRecommendation(
+                "assignment_unit_permutation",
+                ("welch_t",),
+                "factor labels were randomized between independent aggregation units",
+                tuple(warnings),
+            )
+        return InferenceRecommendation(
+            "welch_t",
+            ("experimental_stratified_bootstrap",),
+            "factor is assigned between independent aggregation units",
+            tuple(warnings),
+        )
+    if randomized and unit_count <= 20:
+        return InferenceRecommendation(
+            "exact_sign_flip",
+            ("paired_t",),
+            "factor varies within aggregation units and exact enumeration is feasible",
+            tuple(warnings),
+        )
+    return InferenceRecommendation(
+        "paired_t" if not randomized else "monte_carlo_sign_flip",
+        ("experimental_hierarchical_bootstrap",),
+        "factor varies within aggregation units",
+        tuple(warnings),
+    )
+
+
 def unit_t_interval(
     table: ObservationTable,
     design: StudyDesign,
