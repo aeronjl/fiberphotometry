@@ -52,9 +52,13 @@ estimands differ:
 Each estimator is crossed with the three already-declared response windows,
 yielding six divisive and six subtractive universes. Results may be compared for
 sign, interval overlap, and influence, but must not be pooled across unit families.
-The paper's ±30 s rolling-baseline dF/F should be included as a faithful published
-workflow comparator, producing three additional divisive universes. It is a
-comparator, not automatically the package default.
+The paper's ±30 s rolling-baseline dF/F is implemented as a faithful published
+workflow comparator, producing three additional divisive universes. Inspection of
+the released analysis code established the exact regular-data semantics: rounded
+frame rate, a 60-second sample-count window, centred alignment, and full-window
+boundary NaNs. The package additionally splits timestamp gaps and records that
+safety extension in provenance. It is a comparator, not automatically the package
+default.
 
 Every universe must record baseline parameters, edge handling, effective sampling
 rate, missingness, retained events, and failures. The 20-Hz minority must not
@@ -75,14 +79,12 @@ inherit sample-count parameters calibrated at 50 Hz.
 
 ## Required work before freezing
 
-1. Implement and test the exact ±30 s centred rolling-baseline comparator,
-   including boundaries, gaps, and 20/50-Hz fixtures.
-2. Confirm that the IBL adapter can expose labelled 470-nm samples without assigning
+1. Confirm that the IBL adapter can expose labelled 470-nm samples without assigning
    reference semantics to wavelength-0 rows.
-3. Write a machine-readable v0.3 protocol and validate all universe combinations
+2. Write a machine-readable v0.3 protocol and validate all universe combinations
    without loading condition-specific fluorescence summaries.
-4. Generate and commit the new outcome-blind cohort manifest.
-5. Freeze thresholds, seeds, exclusions, reporting language, and stop rules before
+3. Generate and commit the new outcome-blind cohort manifest.
+4. Freeze thresholds, seeds, exclusions, reporting language, and stop rules before
    computing the first correct-minus-incorrect contrast.
 
 ## Stop rules

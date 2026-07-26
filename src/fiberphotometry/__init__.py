@@ -39,6 +39,7 @@ from fiberphotometry.multiverse import (
     run_multiverse,
 )
 from fiberphotometry.pipeline import (
+    BaselineDFFOperation,
     EventSummarySpec,
     LowpassFilterOperation,
     PipelineResult,
@@ -69,6 +70,7 @@ from fiberphotometry.qc import assess_recording
 __all__ = [
     "AnalysisPlan",
     "AnalysisResult",
+    "BaselineDFFOperation",
     "ChoiceRef",
     "CompatibilityRule",
     "Contrast",

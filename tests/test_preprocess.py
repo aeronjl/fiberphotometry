@@ -84,6 +84,58 @@ def test_asls_smoothness_scales_with_sampling_rate() -> None:
     assert operation["effective_smoothness"] == pytest.approx(1.6e9)
 
 
+@pytest.mark.parametrize("rate_hz", [20, 50])
+def test_rolling_mean_matches_published_pandas_semantics(rate_hz: int) -> None:
+    pd = pytest.importorskip("pandas")
+    time = np.arange(0, 80, 1 / rate_hz)
+    signal = 2 + 0.1 * np.sin(time / 10)
+    recording = make_recording(time=time, signal=signal, subject="m", session="s")
+
+    result = baseline_dff(recording, method="rolling_mean", rolling_window_s=60)
+
+    window_samples = 60 * rate_hz
+    expected = pd.Series(signal).rolling(window_samples, center=True).mean().to_numpy()
+    assert np.allclose(result.fitted_baseline.values[:, 0], expected, equal_nan=True)
+    assert np.count_nonzero(np.isfinite(result.dff.values[:, 0])) == (
+        len(time) - window_samples + 1
+    )
+    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    assert operation["window_samples"] == window_samples
+    assert operation["boundary_policy"] == "full_window_only"
+
+
+def test_rolling_mean_does_not_bridge_timestamp_gaps() -> None:
+    first = np.arange(0, 40, 0.05)
+    second = np.arange(50, 90, 0.05)
+    time = np.concatenate([first, second])
+    signal = np.concatenate([np.ones_like(first), np.full_like(second, 3.0)])
+    recording = make_recording(time=time, signal=signal, subject="m", session="s")
+
+    result = baseline_dff(recording, method="rolling_mean", rolling_window_s=20)
+
+    first_baseline = result.fitted_baseline.sel(time=20, method="nearest").item()
+    second_baseline = result.fitted_baseline.sel(time=70, method="nearest").item()
+    assert first_baseline == pytest.approx(1)
+    assert second_baseline == pytest.approx(3)
+    assert np.isnan(result.fitted_baseline.sel(time=39.95, method="nearest").item())
+    assert np.isnan(result.fitted_baseline.sel(time=50, method="nearest").item())
+    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    assert operation["gap_policy"] == "split_finite_runs"
+
+
+def test_rolling_mean_short_runs_are_retained_as_failures() -> None:
+    time = np.arange(0, 10, 0.05)
+    recording = make_recording(
+        time=time, signal=np.ones_like(time), subject="m", session="s"
+    )
+
+    result = baseline_dff(recording, method="rolling_mean", rolling_window_s=60)
+
+    assert np.all(np.isnan(result.dff.values))
+    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    assert operation["failed_short_runs"] == 1
+
+
 def test_reference_dff_recovers_known_linear_baseline() -> None:
     time = np.arange(100, dtype=float)
     reference = 1 + 0.01 * time

@@ -18,7 +18,12 @@ from fiberphotometry.design import (
 )
 from fiberphotometry.events import summarize_event_windows
 from fiberphotometry.planning import AnalysisPlan, AnalysisResult, execute_analysis_plan
-from fiberphotometry.preprocess import lowpass_filter, reference_dff, resample_recording
+from fiberphotometry.preprocess import (
+    baseline_dff,
+    lowpass_filter,
+    reference_dff,
+    resample_recording,
+)
 from fiberphotometry.qc import RecordingQC, assess_recording
 
 
@@ -60,8 +65,28 @@ class ReferenceDFFOperation:
     kind: Literal["reference_dff"] = field(default="reference_dff", init=False)
 
 
+@dataclass(frozen=True)
+class BaselineDFFOperation:
+    """Signal-only baseline correction with explicit normalization semantics."""
+
+    method: Literal["double_exponential", "asls", "rolling_mean"]
+    normalization: Literal["divide", "subtract"] = "divide"
+    variable: str = "signal"
+    min_tau_s: float = 5.0
+    asls_smoothness: float = 1e8
+    asls_asymmetry: float = 0.01
+    max_iterations: int = 20
+    asls_reference_rate_hz: float = 20.0
+    rolling_window_s: float = 60.0
+    rolling_gap_factor: float = 1.5
+    kind: Literal["baseline_dff"] = field(default="baseline_dff", init=False)
+
+
 PreprocessingOperation: TypeAlias = (
-    ResampleOperation | LowpassFilterOperation | ReferenceDFFOperation
+    ResampleOperation
+    | LowpassFilterOperation
+    | ReferenceDFFOperation
+    | BaselineDFFOperation
 )
 
 
@@ -255,6 +280,20 @@ def _preprocess(recording: xr.Dataset, spec: PipelineSpec) -> xr.Dataset:
                 method=operation.method,
                 max_iterations=operation.max_iterations,
                 tolerance=operation.tolerance,
+            )
+        elif isinstance(operation, BaselineDFFOperation):
+            output = baseline_dff(
+                output,
+                method=operation.method,
+                normalization=operation.normalization,
+                variable=operation.variable,
+                min_tau_s=operation.min_tau_s,
+                asls_smoothness=operation.asls_smoothness,
+                asls_asymmetry=operation.asls_asymmetry,
+                max_iterations=operation.max_iterations,
+                asls_reference_rate_hz=operation.asls_reference_rate_hz,
+                rolling_window_s=operation.rolling_window_s,
+                rolling_gap_factor=operation.rolling_gap_factor,
             )
         else:
             raise TypeError(f"unsupported preprocessing operation: {operation!r}")

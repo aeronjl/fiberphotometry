@@ -28,18 +28,24 @@ def baseline_dff(
     max_iterations: int = 20,
     normalization: Literal["divide", "subtract"] = "divide",
     asls_reference_rate_hz: float = 20.0,
+    rolling_window_s: float = 60.0,
+    rolling_gap_factor: float = 1.5,
 ) -> xr.Dataset:
     """Estimate a signal-only baseline and divide or subtract with provenance.
 
     ``double_exponential`` fits a non-negative offset plus two non-negative
     exponential decays using robust nonlinear least squares. ``asls`` estimates a
-    smooth lower envelope with asymmetric least squares. Neither method can identify
-    motion or event-locked artefact from a single fluorescence channel. Division
-    creates ``dff``; subtraction creates ``baseline_subtracted`` in acquired units.
+    smooth lower envelope with asymmetric least squares. ``rolling_mean`` reproduces
+    a centred, full-window sample-count rolling mean, while splitting timestamp gaps.
+    Neither method can identify motion or event-locked artefact from a single
+    fluorescence channel. Division creates ``dff``; subtraction creates
+    ``baseline_subtracted`` in acquired units.
     """
     validate_recording(recording)
-    if method not in {"double_exponential", "asls"}:
-        raise ValueError("method must be 'double_exponential' or 'asls'")
+    if method not in {"double_exponential", "asls", "rolling_mean"}:
+        raise ValueError(
+            "method must be 'double_exponential', 'asls', or 'rolling_mean'"
+        )
     if variable not in recording:
         raise ValueError(f"recording does not contain baseline variable {variable!r}")
     if recording[variable].dims != ("time", "channel"):
@@ -56,6 +62,10 @@ def baseline_dff(
         raise ValueError("normalization must be 'divide' or 'subtract'")
     if asls_reference_rate_hz <= 0:
         raise ValueError("asls_reference_rate_hz must be positive")
+    if rolling_window_s <= 0:
+        raise ValueError("rolling_window_s must be positive")
+    if rolling_gap_factor <= 1:
+        raise ValueError("rolling_gap_factor must be greater than one")
 
     time = np.asarray(recording.time.values, dtype=float)
     intervals = np.diff(time)
@@ -69,11 +79,25 @@ def baseline_dff(
     baseline = np.full_like(source, np.nan)
     parameters = np.full((source.shape[1], 5), np.nan)
     failed_runs = 0
+    max_gap_s = rolling_gap_factor * float(np.median(intervals))
+    rolling_intervals = intervals[intervals <= max_gap_s]
+    rolling_sampling_rate_hz = round(1 / float(np.mean(rolling_intervals)))
+    rolling_window_samples = max(1, int(rolling_window_s * rolling_sampling_rate_hz))
     for channel in range(source.shape[1]):
-        for start, stop in _finite_runs(np.isfinite(source[:, channel])):
+        finite = np.isfinite(source[:, channel])
+        runs = (
+            _finite_time_runs(finite, time, max_gap_s=max_gap_s)
+            if method == "rolling_mean"
+            else _finite_runs(finite)
+        )
+        for start, stop in runs:
             run_time = time[start:stop]
             run_values = source[start:stop, channel]
-            minimum_samples = 6 if method == "double_exponential" else 3
+            minimum_samples = {
+                "double_exponential": 6,
+                "asls": 3,
+                "rolling_mean": rolling_window_samples,
+            }[method]
             if len(run_values) < minimum_samples:
                 failed_runs += 1
                 continue
@@ -82,12 +106,16 @@ def baseline_dff(
                     run_time, run_values, min_tau_s
                 )
                 parameters[channel] = fitted_parameters
-            else:
+            elif method == "asls":
                 fitted = _fit_asls(
                     run_values,
                     smoothness=effective_smoothness,
                     asymmetry=asls_asymmetry,
                     max_iterations=max_iterations,
+                )
+            else:
+                fitted = _fit_centered_rolling_mean(
+                    run_values, window_samples=rolling_window_samples
                 )
             baseline[start:stop, channel] = fitted
 
@@ -136,7 +164,7 @@ def baseline_dff(
                 "max_tau_s": "10 * run_duration",
             }
         )
-    else:
+    elif method == "asls":
         operation.update(
             {
                 "smoothness": asls_smoothness,
@@ -145,6 +173,22 @@ def baseline_dff(
                 "sampling_rate_hz": sampling_rate_hz,
                 "asymmetry": asls_asymmetry,
                 "max_iterations": max_iterations,
+            }
+        )
+    else:
+        operation.update(
+            {
+                "window_s": rolling_window_s,
+                "window_samples": rolling_window_samples,
+                "sampling_rate_hz": rolling_sampling_rate_hz,
+                "frame_rate_rounding": "round(1 / mean_contiguous_interval)",
+                "center": True,
+                "minimum_periods": rolling_window_samples,
+                "boundary_policy": "full_window_only",
+                "gap_policy": "split_finite_runs",
+                "max_gap_s": max_gap_s,
+                "gap_factor": rolling_gap_factor,
+                "published_comparator": "Pan-Vazquez et al. 2024",
             }
         )
     output.attrs["processing_stage"] = "baseline_corrected"
@@ -398,6 +442,37 @@ def _finite_runs(values: NDArray[np.bool_]) -> list[tuple[int, int]]:
     padded = np.concatenate([[False], values, [False]])
     edges = np.flatnonzero(padded[1:] != padded[:-1])
     return list(zip(edges[::2].tolist(), edges[1::2].tolist(), strict=True))
+
+
+def _finite_time_runs(
+    finite: NDArray[np.bool_],
+    time: NDArray[np.float64],
+    *,
+    max_gap_s: float,
+) -> list[tuple[int, int]]:
+    """Return finite runs, additionally splitting across timestamp gaps."""
+    gap_starts = np.flatnonzero(np.diff(time) > max_gap_s) + 1
+    boundaries = {0, len(finite), *gap_starts.tolist()}
+    output: list[tuple[int, int]] = []
+    ordered = sorted(boundaries)
+    for segment_start, segment_stop in pairwise(ordered):
+        for start, stop in _finite_runs(finite[segment_start:segment_stop]):
+            output.append((segment_start + start, segment_start + stop))
+    return output
+
+
+def _fit_centered_rolling_mean(
+    values: NDArray[np.float64], *, window_samples: int
+) -> NDArray[np.float64]:
+    """Match pandas' centred full-window rolling mean without a runtime dependency."""
+    baseline = np.full_like(values, np.nan)
+    cumulative = np.concatenate([[0.0], np.cumsum(values, dtype=np.float64)])
+    means = (
+        cumulative[window_samples:] - cumulative[:-window_samples]
+    ) / window_samples
+    first_center = window_samples // 2
+    baseline[first_center : first_center + len(means)] = means
+    return baseline
 
 
 def _append_operation(recording: xr.Dataset, operation: dict[str, object]) -> None:

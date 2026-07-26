@@ -4,6 +4,7 @@ from dataclasses import replace
 import numpy as np
 
 from fiberphotometry import (
+    BaselineDFFOperation,
     Contrast,
     Estimand,
     EventSummarySpec,
@@ -145,3 +146,25 @@ def test_schema_v2_executes_tagged_preprocessing_sequence() -> None:
     ]
     assert "source_signal" in result.processed_recordings[0]
     assert "prefilter_signal" in result.processed_recordings[0]
+
+
+def test_schema_v2_executes_signal_only_rolling_comparator() -> None:
+    spec = replace(
+        _spec(),
+        preprocessing=(
+            BaselineDFFOperation(
+                method="rolling_mean", normalization="divide", rolling_window_s=4
+            ),
+        ),
+        schema_version="2",
+    )
+
+    result = run_pipeline(spec, _inputs())
+
+    assert result.inference_executed
+    operation = json.loads(
+        result.processed_recordings[0].attrs["fiberphotometry_baseline_dff"]
+    )
+    assert operation["method"] == "rolling_mean"
+    assert operation["window_s"] == 4
+    assert operation["published_comparator"] == "Pan-Vazquez et al. 2024"
