@@ -1,22 +1,31 @@
 from test_t_inference import paired_table
 
-from fiberphotometry import create_analysis_plan, welch_power_sensitivity
+from fiberphotometry import (
+    create_analysis_plan,
+    execute_analysis_plan,
+    welch_power_sensitivity,
+)
 
 
 def test_analysis_plan_requires_acknowledgements() -> None:
     table, design, estimand = paired_table()
-    draft = create_analysis_plan(table, design, estimand, randomized=True)
+    draft = create_analysis_plan(
+        table, design, estimand, randomized=True, intent="confirmatory"
+    )
     ready = create_analysis_plan(
         table,
         design,
         estimand,
         randomized=True,
+        intent="confirmatory",
         acknowledged_assumptions=draft.required_assumptions,
     )
 
     assert not draft.executable
     assert ready.executable
     assert '"schema_version": "1"' in ready.to_json()
+    assert type(ready).from_json(ready.to_json()) == ready
+    assert execute_analysis_plan(ready, table, design).engine == "exact"
 
 
 def test_power_sensitivity_exposes_pilot_uncertainty() -> None:

@@ -25,8 +25,10 @@ from fiberphotometry.inference import (
 from fiberphotometry.model import make_recording, validate_recording
 from fiberphotometry.planning import (
     AnalysisPlan,
+    AnalysisResult,
     PowerSensitivity,
     create_analysis_plan,
+    execute_analysis_plan,
     welch_power_sensitivity,
 )
 from fiberphotometry.preprocess import reference_dff
@@ -34,6 +36,7 @@ from fiberphotometry.qc import assess_recording
 
 __all__ = [
     "AnalysisPlan",
+    "AnalysisResult",
     "Contrast",
     "Estimand",
     "Factor",
@@ -50,6 +53,7 @@ __all__ = [
     "assess_recording",
     "create_analysis_plan",
     "exact_sign_flip_test",
+    "execute_analysis_plan",
     "hierarchical_bootstrap",
     "make_recording",
     "permutation_test",

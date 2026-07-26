@@ -4,11 +4,18 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass
+from typing import Literal
 
 from scipy.stats import nct, t
 
 from fiberphotometry.design import ObservationTable, StudyDesign
-from fiberphotometry.inference import Estimand, recommend_inference
+from fiberphotometry.inference import (
+    Contrast,
+    Estimand,
+    exact_sign_flip_test,
+    recommend_inference,
+    unit_t_interval,
+)
 
 
 @dataclass(frozen=True)
@@ -18,7 +25,31 @@ class AnalysisPlan:
     required_assumptions: tuple[str, ...]
     acknowledged_assumptions: tuple[str, ...]
     executable: bool
+    intent: Literal["confirmatory", "exploratory", "descriptive"]
     schema_version: str = "1"
+
+    def to_json(self) -> str:
+        return json.dumps(asdict(self), indent=2, sort_keys=True)
+
+    @classmethod
+    def from_json(cls, value: str) -> AnalysisPlan:
+        payload = json.loads(value)
+        if payload.get("schema_version") != "1":
+            raise ValueError("unsupported analysis-plan schema version")
+        payload["estimand"]["contrast"] = Contrast(**payload["estimand"]["contrast"])
+        payload["estimand"] = Estimand(**payload["estimand"])
+        payload["required_assumptions"] = tuple(payload["required_assumptions"])
+        payload["acknowledged_assumptions"] = tuple(payload["acknowledged_assumptions"])
+        return cls(**payload)
+
+
+@dataclass(frozen=True)
+class AnalysisResult:
+    plan: AnalysisPlan
+    estimate: float
+    confidence_interval: tuple[float, float] | None
+    p_value: float
+    engine: str
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -39,6 +70,7 @@ def create_analysis_plan(
     estimand: Estimand,
     *,
     randomized: bool | None,
+    intent: Literal["confirmatory", "exploratory", "descriptive"],
     acknowledged_assumptions: tuple[str, ...] = (),
 ) -> AnalysisPlan:
     """Create a non-executable plan until every method assumption is acknowledged."""
@@ -51,7 +83,37 @@ def create_analysis_plan(
         required_assumptions=required,
         acknowledged_assumptions=acknowledged,
         executable=set(required) <= set(acknowledged),
+        intent=intent,
     )
+
+
+def execute_analysis_plan(
+    plan: AnalysisPlan, table: ObservationTable, design: StudyDesign
+) -> AnalysisResult:
+    """Execute only acknowledged, currently supported scalar plans."""
+    if not plan.executable:
+        raise ValueError("analysis plan is not executable; acknowledge all assumptions")
+    if plan.method in {"welch_t", "paired_t"}:
+        result = unit_t_interval(
+            table,
+            design,
+            plan.estimand,
+            mode="welch" if plan.method == "welch_t" else "paired",
+        )
+        return AnalysisResult(
+            plan, result.estimate, result.confidence_interval, result.p_value, "scipy"
+        )
+    if plan.method == "exact_sign_flip":
+        exact_result = exact_sign_flip_test(
+            table,
+            design,
+            plan.estimand,
+            exchangeability_unit=plan.estimand.aggregation_unit,
+        )
+        return AnalysisResult(
+            plan, exact_result.estimate, None, exact_result.p_value, "exact"
+        )
+    raise ValueError(f"execution is not implemented for method {plan.method!r}")
 
 
 def welch_power_sensitivity(
