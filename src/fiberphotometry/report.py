@@ -90,6 +90,7 @@ def render_event_analysis_report(result: EventAnalysisResult) -> str:
         if result.configuration_fingerprint is not None
         else ""
     )
+    coverage_section = _event_coverage_section(result)
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -141,6 +142,8 @@ def render_event_analysis_report(result: EventAnalysisResult) -> str:
     {evidence_plot}
   </section>
 
+  {coverage_section}
+
   <section>
     <div class="section-head"><div><p class="eyebrow">QUALITY CONTROL</p>
     <h2>Acquisition integrity by session</h2></div>
@@ -169,6 +172,72 @@ def render_event_analysis_report(result: EventAnalysisResult) -> str:
 </main>
 </body>
 </html>"""
+
+
+def _event_coverage_section(result: EventAnalysisResult) -> str:
+    coverage = result.coverage
+    total = coverage.total
+    condition_rows = "".join(
+        f"<tr><td>{escape(condition)}</td><td>{counts.candidate}</td>"
+        f"<td>{counts.gated}</td><td>{counts.complete}</td>"
+        f"<td>{counts.gate_retention:.1%}</td>"
+        f"<td>{counts.completion_retention:.1%}</td></tr>"
+        for condition, counts in coverage.conditions
+    )
+    stratum_rows = "".join(
+        f"<tr><td>{kind}</td><td>{escape(item.name)}</td>"
+        f"<td>{item.total.candidate}</td><td>{item.total.gated}</td>"
+        f"<td>{item.total.complete}</td>"
+        f"<td>{item.condition_gate_retention_difference:.1%}</td>"
+        f"<td>{item.condition_completion_retention_difference:.1%}</td></tr>"
+        for kind, strata in (
+            ("Animal", coverage.animals),
+            ("Session", coverage.sessions),
+        )
+        for item in strata
+    )
+    warning_markup = (
+        "".join(
+            f'<span class="warning-chip">{escape(warning)}</span>'
+            for warning in coverage.warnings
+        )
+        if coverage.warnings
+        else '<span class="quiet-chip">No differential retention</span>'
+    )
+    gate_dispositions = (
+        ", ".join(f"{name}: {count}" for name, count in coverage.gate_dispositions)
+        or "none"
+    )
+    preprocessing_dispositions = (
+        ", ".join(
+            f"{name}: {count}" for name, count in coverage.preprocessing_dispositions
+        )
+        or "none"
+    )
+    return f"""<section>
+    <div class="section-head"><div><p class="eyebrow">EVENT COVERAGE</p>
+    <h2>Which events reached the estimate?</h2></div>
+    <p>Candidate, eligibility-gated, and complete denominators remain separate.</p></div>
+    <div class="coverage-chain">
+      <div><span>Candidate</span><strong>{total.candidate}</strong></div>
+      <div><span>Gated</span><strong>{total.gated}</strong>
+      <small>{total.gate_retention:.1%} of candidates</small></div>
+      <div><span>Complete</span><strong>{total.complete}</strong>
+      <small>{total.completion_retention:.1%} of gated</small></div>
+    </div>
+    <div class="chips coverage-warnings">{warning_markup}</div>
+    <p class="coverage-dispositions"><strong>Gate exclusions:</strong>
+    {escape(gate_dispositions)} · <strong>Incomplete after preprocessing:</strong>
+    {escape(preprocessing_dispositions)}</p>
+    <h3>By condition</h3>
+    <div class="table-wrap"><table><thead><tr><th>Condition</th><th>Candidate</th>
+    <th>Gated</th><th>Complete</th><th>Gate retention</th>
+    <th>Completion retention</th></tr></thead><tbody>{condition_rows}</tbody></table></div>
+    <details class="coverage-detail"><summary>Animal and session detail</summary>
+    <div class="table-wrap"><table><thead><tr><th>Level</th><th>Name</th>
+    <th>Candidate</th><th>Gated</th><th>Complete</th><th>Condition gate Δ</th>
+    <th>Condition completion Δ</th></tr></thead><tbody>{stratum_rows}</tbody></table></div>
+    </details></section>"""
 
 
 def render_multiverse_report(
@@ -537,6 +606,13 @@ padding:0 14px;border-left:1px solid var(--line)}.lane-counts dd{font-size:18px}
 color:var(--muted);font:600 10px/1.2 ui-monospace,monospace;letter-spacing:.08em;
 text-transform:uppercase;padding:9px 10px;border-bottom:1px solid var(--line)}td{padding:10px;
 border-bottom:1px solid var(--soft);font-variant-numeric:tabular-nums}tr:last-child td{border:0}
+.coverage-chain{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.coverage-chain>div{display:grid;gap:3px;background:var(--paper);border-radius:7px;padding:14px}
+.coverage-chain span,.coverage-chain small{color:var(--muted);font-size:11px}.coverage-chain strong{
+font:600 28px/1 Charter,Georgia,serif;font-variant-numeric:tabular-nums}.coverage-warnings{
+justify-content:flex-start;margin-bottom:12px}.coverage-dispositions{color:var(--secondary);font-size:12px;
+margin-bottom:20px}.coverage-detail{margin-top:14px}.coverage-detail summary{
+color:var(--secondary);font-size:12px;font-weight:600;padding-top:6px}
 .operation-grid{display:grid;gap:8px}.operation{display:grid;grid-template-columns:32px 1fr auto;
 align-items:start;background:var(--paper);border-radius:7px;padding:12px}.operation>span{font:600 11px
 ui-monospace,monospace;color:var(--gcamp)}.operation p{font-size:12px;color:var(--secondary);
@@ -550,7 +626,8 @@ gap:16px}code{font-family:ui-monospace,SFMono-Regular,monospace;overflow-wrap:an
 @media(max-width:680px){main{margin-top:24px}.report-head,.section-head,.evidence-trace{display:block}
 .status{display:inline-block;margin-top:12px}.finding{grid-template-columns:1fr}.study-counts{margin-top:24px}
 .study-counts div:first-child{border-left:0;padding-left:0}.estimate{font-size:42px}.chips{justify-content:flex-start;
-margin-top:16px}.assumptions{grid-template-columns:1fr}h1{font-size:34px}section{padding:18px}}
+margin-top:16px}.assumptions{grid-template-columns:1fr}.coverage-chain{grid-template-columns:1fr}
+h1{font-size:34px}section{padding:18px}}
 @media(max-width:680px){.lane-head{display:block}.lane-counts{margin-top:16px}
 .lane-counts div:first-child{border-left:0;padding-left:0}}
 @media print{body{background:#fff}main{width:100%;margin:0}section{break-inside:avoid}.status{border:1px solid currentColor}}

@@ -6,10 +6,16 @@ import json
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Literal, TypeVar
 
+import numpy as np
 import xarray as xr
 
+from fiberphotometry.coverage import (
+    EventCoverageRecord,
+    EventCoverageReport,
+    assess_event_coverage,
+)
 from fiberphotometry.design import Factor, ObservationTable, StudyDesign, Unit
 from fiberphotometry.inference import Contrast, Estimand
 from fiberphotometry.pipeline import (
@@ -26,6 +32,8 @@ from fiberphotometry.pipeline import (
 )
 from fiberphotometry.planning import AnalysisPlan, create_analysis_plan
 
+T = TypeVar("T")
+
 
 @dataclass(frozen=True)
 class EventSession:
@@ -35,6 +43,8 @@ class EventSession:
     event_times: tuple[float, ...]
     conditions: tuple[str, ...]
     event_ids: tuple[str, ...]
+    eligible: tuple[bool, ...]
+    exclusion_reasons: tuple[str, ...]
 
     @classmethod
     def from_arrays(
@@ -44,6 +54,8 @@ class EventSession:
         conditions: Sequence[str],
         *,
         event_ids: Sequence[str] | None = None,
+        eligible: Sequence[bool] | None = None,
+        exclusion_reasons: Sequence[str] | None = None,
     ) -> EventSession:
         """Create a session with stable generated event IDs when none are supplied."""
         times = tuple(float(value) for value in event_times)
@@ -55,7 +67,28 @@ class EventSession:
         identifiers = tuple(str(value) for value in (event_ids or generated_ids))
         if len(identifiers) != len(times):
             raise ValueError("event_ids must match event_times")
-        return cls(recording, times, labels, identifiers)
+        eligibility_values = eligible if eligible is not None else [True] * len(times)
+        eligibility = tuple(bool(value) for value in eligibility_values)
+        if len(eligibility) != len(times):
+            raise ValueError("eligible must match event_times")
+        reasons = tuple(
+            str(value)
+            for value in (
+                exclusion_reasons
+                if exclusion_reasons is not None
+                else ["eligibility_gate"] * len(times)
+            )
+        )
+        if len(reasons) != len(times):
+            raise ValueError("exclusion_reasons must match event_times")
+        excluded = (
+            reason
+            for include, reason in zip(eligibility, reasons, strict=True)
+            if not include
+        )
+        if any(not reason.strip() for reason in excluded):
+            raise ValueError("ineligible events require an exclusion reason")
+        return cls(recording, times, labels, identifiers, eligibility, reasons)
 
 
 @dataclass(frozen=True)
@@ -125,6 +158,7 @@ class EventAnalysisResult:
     spec: PipelineSpec
     title: str
     preprocessing: Preprocessing
+    coverage: EventCoverageReport
     configuration_fingerprint: str | None = None
 
     def to_json(self) -> str:
@@ -141,6 +175,7 @@ class EventAnalysisResult:
                 json.loads(analysis.to_json()) if analysis is not None else None
             ),
             "configuration_sha256": self.configuration_fingerprint,
+            "event_coverage": json.loads(self.coverage.to_json()),
             "data_summary": {
                 "animals": len(animals),
                 "sessions": len(sessions),
@@ -205,7 +240,14 @@ class EventAnalysis:
             raise ValueError("analysis requires at least one event session")
         if self.numerator == self.denominator:
             raise ValueError("contrast levels must differ")
-        levels = {label for session in self.sessions for label in session.conditions}
+        levels = {
+            label
+            for session in self.sessions
+            for label, eligible in zip(
+                session.conditions, session.eligible, strict=True
+            )
+            if eligible
+        }
         missing = {self.numerator, self.denominator} - levels
         if missing:
             raise ValueError(f"contrast levels absent from sessions: {sorted(missing)}")
@@ -233,11 +275,13 @@ class EventAnalysis:
             message = "unacknowledged analysis assumptions: " + ", ".join(missing)
             raise ValueError(message)
         inputs = self._inputs()
+        pipeline = run_pipeline(spec, inputs)
         return EventAnalysisResult(
-            run_pipeline(spec, inputs),
+            pipeline,
             spec,
             self.title,
             self.preprocessing,
+            self._coverage(pipeline),
             self.configuration_fingerprint,
         )
 
@@ -265,17 +309,18 @@ class EventAnalysis:
         return tuple(
             RecordingInput(
                 session.recording,
-                session.event_times,
-                session.event_ids,
+                _selected(session.event_times, session.eligible),
+                _selected(session.event_ids, session.eligible),
                 {
                     "animal": [str(session.recording.attrs["subject"])]
-                    * len(session.event_times),
+                    * sum(session.eligible),
                     "session": [str(session.recording.attrs["session"])]
-                    * len(session.event_times),
-                    self.factor_name: session.conditions,
+                    * sum(session.eligible),
+                    self.factor_name: _selected(session.conditions, session.eligible),
                 },
             )
             for session in self.sessions
+            if any(session.eligible)
         )
 
     def _design(self) -> StudyDesign:
@@ -308,10 +353,62 @@ class EventAnalysis:
             "event_response": [],
         }
         for session in self.sessions:
-            count = len(session.event_times)
-            columns["event_id"].extend(session.event_ids)
+            count = sum(session.eligible)
+            columns["event_id"].extend(_selected(session.event_ids, session.eligible))
             columns["animal"].extend([str(session.recording.attrs["subject"])] * count)
             columns["session"].extend([str(session.recording.attrs["session"])] * count)
-            columns[self.factor_name].extend(session.conditions)
+            columns[self.factor_name].extend(
+                _selected(session.conditions, session.eligible)
+            )
             columns["event_response"].extend([0.0] * count)
         return ObservationTable.from_columns(columns)
+
+    def _coverage(self, pipeline: PipelineResult) -> EventCoverageReport:
+        records: list[EventCoverageRecord] = []
+        summary_index = 0
+        for session in self.sessions:
+            dispositions: list[str] = []
+            if any(session.eligible):
+                summary = pipeline.event_summaries[summary_index]
+                recording = pipeline.processed_recordings[summary_index]
+                matches = np.flatnonzero(
+                    np.asarray(recording.channel.values) == self.channel
+                )
+                channel_index = int(matches[0])
+                dispositions = np.asarray(
+                    summary.event_disposition.values[:, channel_index], dtype=str
+                ).tolist()
+                summary_index += 1
+            eligible_index = 0
+            animal = str(session.recording.attrs["subject"])
+            session_id = str(session.recording.attrs["session"])
+            for event_id, condition, eligible, reason in zip(
+                session.event_ids,
+                session.conditions,
+                session.eligible,
+                session.exclusion_reasons,
+                strict=True,
+            ):
+                if eligible:
+                    disposition = dispositions[eligible_index]
+                    eligible_index += 1
+                else:
+                    disposition = reason
+                records.append(
+                    EventCoverageRecord(
+                        event_id,
+                        condition,
+                        animal,
+                        session_id,
+                        eligible,
+                        eligible and disposition == "complete",
+                        disposition,
+                    )
+                )
+        return assess_event_coverage(tuple(records))
+
+
+def _selected(values: Sequence[T], eligible: Sequence[bool]) -> tuple[T, ...]:
+    return tuple(
+        value for value, include in zip(values, eligible, strict=True) if include
+    )

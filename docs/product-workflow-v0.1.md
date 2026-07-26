@@ -28,6 +28,36 @@ result = study.run(acknowledged_assumptions=plan.required_assumptions)
 result.write_html("feedback-report.html")
 ```
 
+## Event coverage is a first-class result
+
+`EventSession` can retain candidate events that an eligibility rule excludes.
+Supply an `eligible` mask and a reason for every excluded event; only eligible
+events enter preprocessing and inference, while all candidates remain in the
+coverage audit:
+
+```python
+session = EventSession.from_arrays(
+    recording,
+    event_times,
+    conditions,
+    eligible=passes_declared_gate,
+    exclusion_reasons=gate_reasons,
+)
+result = study.run(acknowledged_assumptions=plan.required_assumptions)
+print(result.coverage.total)
+```
+
+The typed `EventCoverageReport` separates candidate, eligibility-gated, and
+complete-after-preprocessing counts. It reports retention by condition and within
+every animal and session, preserves gate and preprocessing dispositions, and
+warns about any differential retention. The same complete structure appears under
+`event_coverage` in JSON. The HTML report presents the three-stage denominator and
+keeps animal/session detail expandable.
+
+For lower-level or non-workflow integrations, construct `EventCoverageRecord`
+objects and call `assess_event_coverage` directly. This audit requires only event
+routing and missingness metadata; it does not calculate or inspect effect sizes.
+
 `Preprocessing.signal_only(...)` provides the same surface for explicitly declared
 control-free workflows. Signal-only recordings receive only the QC metrics that
 can actually be identified from one channel; the report never invents reference

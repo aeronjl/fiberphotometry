@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pytest
 
@@ -79,3 +81,71 @@ def test_scientist_workflow_supports_signal_only_qc() -> None:
     assert "reference" not in result.pipeline.processed_recordings[0]
     quality_json = result.pipeline.quality_reports[0].to_json()
     assert "signal_reference_correlation" not in quality_json
+
+
+def test_scientist_workflow_reports_candidate_gate_and_complete_events() -> None:
+    sessions = []
+    for session in _sessions():
+        sessions.append(
+            EventSession.from_arrays(
+                session.recording,
+                session.event_times,
+                session.conditions,
+                event_ids=session.event_ids,
+                eligible=[False, True, True, True, True],
+                exclusion_reasons=["recording_edge"] * 5,
+            )
+        )
+    study = EventAnalysis(
+        tuple(sessions),
+        numerator="correct",
+        denominator="incorrect",
+        channel="DMS",
+        preprocessing=Preprocessing.reference(),
+    )
+    plan = study.plan()
+
+    result = study.run(acknowledged_assumptions=plan.required_assumptions)
+
+    assert result.coverage.total.candidate == 20
+    assert result.coverage.total.gated == 16
+    assert result.coverage.total.complete == 16
+    assert dict(result.coverage.gate_dispositions) == {"recording_edge": 4}
+    assert "condition_dependent_gate_retention" in result.coverage.warnings
+    payload = json.loads(result.to_json())
+    assert payload["event_coverage"]["total"]["candidate"] == 20
+    html = result.to_html()
+    assert "Which events reached the estimate?" in html
+    assert "recording_edge: 4" in html
+    assert "Condition gate Δ" in html
+
+
+def test_scientist_workflow_reports_incomplete_preprocessing_windows() -> None:
+    sessions = list(_sessions())
+    first = sessions[0]
+    recording = first.recording.copy(deep=True)
+    response = (recording.time.values >= 50.0) & (recording.time.values < 50.5)
+    recording["signal"].values[response, 0] = np.nan
+    sessions[0] = EventSession.from_arrays(
+        recording,
+        first.event_times,
+        first.conditions,
+        event_ids=first.event_ids,
+    )
+    study = EventAnalysis(
+        tuple(sessions),
+        numerator="correct",
+        denominator="incorrect",
+        channel="DMS",
+        preprocessing=Preprocessing.reference(),
+    )
+    plan = study.plan()
+
+    result = study.run(acknowledged_assumptions=plan.required_assumptions)
+
+    assert result.coverage.total.gated == 20
+    assert result.coverage.total.complete == 19
+    assert dict(result.coverage.preprocessing_dispositions) == {
+        "event_inside_gap": 1
+    }
+    assert "condition_dependent_completion_retention" in result.coverage.warnings

@@ -9,6 +9,13 @@ from fiberphotometry.compatibility import (
     assess_pipeline_compatibility,
 )
 from fiberphotometry.config import EventAnalysisConfig
+from fiberphotometry.coverage import (
+    EventCoverageCounts,
+    EventCoverageRecord,
+    EventCoverageReport,
+    EventCoverageStratum,
+    assess_event_coverage,
+)
 from fiberphotometry.design import (
     Factor,
     ObservationTable,
@@ -149,6 +156,10 @@ __all__ = [
     "EventAnalysis",
     "EventAnalysisConfig",
     "EventAnalysisResult",
+    "EventCoverageCounts",
+    "EventCoverageRecord",
+    "EventCoverageReport",
+    "EventCoverageStratum",
     "EventSession",
     "EventSummarySpec",
     "Factor",
@@ -206,6 +217,7 @@ __all__ = [
     "UniverseResult",
     "align_events",
     "assess_event_confounds",
+    "assess_event_coverage",
     "assess_metadata_completeness",
     "assess_multiverse_compatibility",
     "assess_pipeline_compatibility",
