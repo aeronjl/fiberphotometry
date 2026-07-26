@@ -1,0 +1,13 @@
+{
+  "acceptance": {
+    "hierarchical_false_positive_rate": true,
+    "hierarchical_improvement": true,
+    "pseudoreplication_challenge": true
+  },
+  "all_acceptance_met": true,
+  "draws_per_study": 400,
+  "hierarchical_false_positive_rate": 0.12,
+  "naive_false_positive_rate": 0.79,
+  "protocol": "v0.4",
+  "studies": 100
+}

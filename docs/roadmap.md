@@ -37,9 +37,11 @@
 
 ## Phase 3 — inference
 
-- [ ] Typed experimental-design representation
-- [ ] Animal-level hierarchical bootstrap
-- [ ] Design-aware permutation schemes
+- [x] Typed, versioned experimental-design representation
+- [x] Experimental animal-level hierarchical bootstrap
+- [x] Experimental design-aware sign-flip and label permutations
+- [x] Frozen pseudoreplication benchmark contrasting trial and animal resampling
+- [ ] Independent numerical parity for scalar inference
 - [ ] Scalar mixed-model summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [ ] Pointwise versus simultaneous interval reporting

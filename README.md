@@ -86,6 +86,13 @@ event_qc = assess_event_confounds(recording, [10, 20, 30])
 Diagnostic figures are optional: install with `uv sync --extra plots`, then use
 `fiberphotometry.plotting.plot_event_diagnostics`.
 
+The experimental inference schema keeps arbitrary observation metadata open
+while explicitly declaring units, nesting, factor assignment, estimands, and
+exchangeability. See
+[`docs/inference-design-v0.1.md`](docs/inference-design-v0.1.md).
+The first frozen inference benchmark demonstrates the pseudoreplication failure
+of trial-level resampling in [`benchmarks/results-v0.4.md`](benchmarks/results-v0.4.md).
+
 ## Development
 
 Python and dependencies are managed by `uv`:
