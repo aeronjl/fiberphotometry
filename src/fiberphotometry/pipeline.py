@@ -24,7 +24,12 @@ from fiberphotometry.preprocess import (
     reference_dff,
     resample_recording,
 )
-from fiberphotometry.qc import RecordingQC, assess_recording
+from fiberphotometry.qc import (
+    RecordingQC,
+    SignalRecordingQC,
+    assess_recording,
+    assess_signal_recording,
+)
 
 
 @dataclass(frozen=True)
@@ -141,7 +146,7 @@ class PipelineResult:
 
     processed_recordings: tuple[xr.Dataset, ...]
     event_summaries: tuple[xr.Dataset, ...]
-    quality_reports: tuple[RecordingQC, ...]
+    quality_reports: tuple[RecordingQC | SignalRecordingQC, ...]
     observation_table: ObservationTable
     blocked_by: tuple[str, ...]
     analysis: AnalysisResult | None
@@ -176,7 +181,7 @@ def run_pipeline(
     }
     processed: list[xr.Dataset] = []
     summaries: list[xr.Dataset] = []
-    reports: list[RecordingQC] = []
+    reports: list[RecordingQC | SignalRecordingQC] = []
     blocked: list[str] = []
 
     for item in inputs:
@@ -191,7 +196,11 @@ def run_pipeline(
             if len(values) != event_count:
                 raise ValueError(f"column {name!r} must match event_times")
 
-        report = assess_recording(item.recording)
+        report = (
+            assess_recording(item.recording)
+            if "reference" in item.recording
+            else assess_signal_recording(item.recording)
+        )
         channel_index = _channel_index(item.recording, spec.event_summary.channel)
         checked = (
             report.channels

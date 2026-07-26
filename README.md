@@ -52,7 +52,33 @@ Consequential project judgments are indexed in
 [`docs/decisions/README.md`](docs/decisions/README.md), with non-normative work in
 progress kept separately under [`docs/drafts/`](docs/drafts/).
 
-## Prototype API
+## First product workflow
+
+The scientist-facing API now turns labelled sessions into an auditable event
+contrast and self-contained HTML evidence report:
+
+```python
+from fiberphotometry import EventAnalysis, EventSession, Preprocessing
+
+session = EventSession.from_arrays(recording, event_times, conditions)
+study = EventAnalysis(
+    (session,),
+    numerator="correct",
+    denominator="incorrect",
+    channel="DMS",
+    preprocessing=Preprocessing.reference(method="irls"),
+)
+plan = study.plan()
+result = study.run(acknowledged_assumptions=plan.required_assumptions)
+result.write_html("feedback-report.html")
+```
+
+See [the workflow guide](docs/product-workflow-v0.1.md) and the runnable
+[`event_analysis_report.py`](examples/event_analysis_report.py). The explicit
+planning step is intentional: execution cannot silently accept inferential
+assumptions on the scientist's behalf.
+
+## Lower-level API
 
 ```python
 import numpy as np

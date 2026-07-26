@@ -51,6 +51,36 @@ class RecordingQC:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
 
 
+@dataclass(frozen=True)
+class SignalChannelQC:
+    """Diagnostics available when no independent reference channel exists."""
+
+    channel: str
+    samples: int
+    finite_fraction: float
+    longest_valid_segment_s: float
+    extreme_repeat_fraction: float
+    flat_step_fraction: float
+    warnings: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class SignalRecordingQC:
+    """Recording-wide signal-only QC without invented reference metrics."""
+
+    subject: str
+    session: str
+    samples: int
+    estimated_rate_hz: float
+    sampling_interval_cv: float
+    large_gap_count: int
+    channels: tuple[SignalChannelQC, ...]
+
+    def to_json(self) -> str:
+        """Return deterministic machine-readable QC output."""
+        return json.dumps(asdict(self), indent=2, sort_keys=True)
+
+
 def assess_recording(recording: xr.Dataset) -> RecordingQC:
     """Calculate transparent QC metrics without changing or rejecting samples."""
     validate_recording(recording)
@@ -76,6 +106,49 @@ def assess_recording(recording: xr.Dataset) -> RecordingQC:
         sampling_interval_cv=interval_cv,
         large_gap_count=gap_count,
         channels=channels,
+    )
+
+
+def assess_signal_recording(recording: xr.Dataset) -> SignalRecordingQC:
+    """Calculate diagnostics that do not require a reference channel."""
+    validate_recording(recording)
+    time = np.asarray(recording.time.values, dtype=float)
+    intervals = np.diff(time)
+    median_interval = float(np.median(intervals))
+    channels = []
+    for index, name in enumerate(recording.channel.values):
+        signal = np.asarray(recording.signal.values[:, index], dtype=float)
+        finite = np.isfinite(signal)
+        finite_values = signal[finite]
+        finite_fraction = float(finite.mean())
+        extreme_fraction = _extreme_repeat_fraction(finite_values)
+        flat_fraction = _flat_step_fraction(finite_values)
+        warnings = []
+        if finite_fraction < 0.8:
+            warnings.append("low_valid_fraction")
+        if extreme_fraction > 0.01:
+            warnings.append("repeated_extreme_values")
+        if flat_fraction > 0.01:
+            warnings.append("flat_steps")
+        channels.append(
+            SignalChannelQC(
+                str(name),
+                len(signal),
+                finite_fraction,
+                _longest_true_run(finite) * median_interval,
+                extreme_fraction,
+                flat_fraction,
+                tuple(warnings),
+            )
+        )
+    return SignalRecordingQC(
+        subject=str(recording.attrs["subject"]),
+        session=str(recording.attrs["session"]),
+        samples=recording.sizes["time"],
+        estimated_rate_hz=1 / median_interval,
+        sampling_interval_cv=float(np.std(intervals) / np.mean(intervals)),
+        large_gap_count=int(np.sum(intervals > 1.5 * median_interval)),
+        channels=tuple(channels),
     )
 
 

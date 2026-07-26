@@ -81,6 +81,12 @@
 
 ## Phase 4 — adoption
 
+- [x] First scientist-facing event-analysis workflow
+- [x] Self-contained HTML evidence report with animal/QC/provenance views
+- [ ] Declarative configuration file for no-code-rewrite reruns
+- [ ] Report support for complete multiverse robustness results
+- [ ] Polished public-data tutorial from import to report
+- [ ] Usability review with practicing photometry scientists
 - [ ] External reproduction by two laboratories
 - [ ] Stable schema and deprecation policy
 - [x] First versioned public benchmark protocol and results

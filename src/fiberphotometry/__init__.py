@@ -65,7 +65,13 @@ from fiberphotometry.preprocess import (
     reference_dff,
     resample_recording,
 )
-from fiberphotometry.qc import assess_recording
+from fiberphotometry.qc import assess_recording, assess_signal_recording
+from fiberphotometry.workflow import (
+    EventAnalysis,
+    EventAnalysisResult,
+    EventSession,
+    Preprocessing,
+)
 
 __all__ = [
     "AnalysisPlan",
@@ -78,6 +84,9 @@ __all__ = [
     "DecisionNode",
     "DecisionSummary",
     "Estimand",
+    "EventAnalysis",
+    "EventAnalysisResult",
+    "EventSession",
     "EventSummarySpec",
     "Factor",
     "InferenceRecommendation",
@@ -91,6 +100,7 @@ __all__ = [
     "PipelineResult",
     "PipelineSpec",
     "PowerSensitivity",
+    "Preprocessing",
     "PreprocessingSpec",
     "QualityGateSpec",
     "RecordingInput",
@@ -105,6 +115,7 @@ __all__ = [
     "align_events",
     "assess_event_confounds",
     "assess_recording",
+    "assess_signal_recording",
     "baseline_dff",
     "create_analysis_plan",
     "exact_sign_flip_test",
