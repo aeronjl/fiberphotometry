@@ -99,7 +99,7 @@
   - [ ] Formal interval-coverage calibration and simultaneous kernel bands
   - [ ] Design-matrix alternatives in reproducible robustness multiverses
 - [x] Validated longitudinal neural-summary handoff to Unspool
-- [ ] Frozen cross-package public IBL learning-trajectory benchmark
+- [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
 - [ ] Long-duration tonic/phasic analysis
 - [ ] Spontaneous transient detection with local-baseline sensitivity analysis
 - [ ] Multi-site/multi-color paired and conditional association workflows

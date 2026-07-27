@@ -40,6 +40,15 @@ pooled coefficient shapes.
 
 [Open the public event-kernel reproduction](dandi-000971-event-kernel.md)
 
+## Public IBL longitudinal neural–behavioral forecast
+
+Compose FiberPhotometry's checksum-verified session neural summaries with
+Unspool's cohort-forward behavioral validation. The retained result shows that the
+previous session's coarse DMS feedback contrast does not improve prediction in the
+declared future session.
+
+[Open the cross-package longitudinal tutorial](ibl-unspool-longitudinal.md)
+
 ## Literature reproductions to add
 
 The capability audit identifies the next examples needed for field coverage:

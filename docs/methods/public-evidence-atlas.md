@@ -57,6 +57,21 @@ or [read the frozen result](../dandi-000971-tutorial-results-v0.1.md).
 
 [Read and reproduce the event-kernel analysis](../tutorials/dandi-000971-event-kernel.md).
 
+## Does a previous-session neural summary improve behavioral forecasting?
+
+<figure class="doc-figure doc-figure--wide">
+  <img src="../../assets/ibl-unspool-longitudinal-v0.1.svg" alt="Animal-level future-session log-loss differences for a session-progress behavioral model versus the same model augmented by the previous session DMS feedback contrast. The differences vary around zero and the mean interval crosses zero.">
+  <figcaption><strong>The first cross-package neural predictor did not help.</strong> A coarse prior-session DMS contrast slightly worsened the mean held-out log loss, with substantial animal heterogeneity and an interval spanning zero.</figcaption>
+</figure>
+
+- **Public source:** 216 checksum-verified sessions from the 18-animal IBL cohort.
+- **Question:** incremental prediction of correctness in one future session.
+- **Validation unit:** a common held-out session within each animal; scoring and bootstrap are animal-balanced.
+- **Use it to learn:** the FiberPhotometry-to-Unspool handoff, lagged predictors, and retained negative forecasts.
+- **Do not conclude:** that DMS dopamine is unrelated to learning or that alternative neural summaries would fail.
+
+[Read the longitudinal neural–behavioral forecast](../tutorials/ibl-unspool-longitudinal.md).
+
 ## How to read this atlas
 
 An empirical figure earns a place here only when its page names the source data,

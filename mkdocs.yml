@@ -81,6 +81,7 @@ nav:
       - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
       - Event-kernel simulation: tutorials/event-kernel-simulation.md
       - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md
+      - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
   - Data and interoperability:
       - Metadata readiness: metadata-completeness-v0.1.md
       - NWB and DANDI integration: dandi-001084-integration.md
