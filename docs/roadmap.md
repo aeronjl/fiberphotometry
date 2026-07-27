@@ -102,6 +102,8 @@
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
 - [ ] Long-duration tonic/phasic analysis
 - [x] Experimental spontaneous transient detection with local-baseline sensitivity analysis
+  - [x] Prospective three-animal public dLight construct validation with retained detector disagreement
+  - [ ] Raw-signal and manual-annotation validation across two sensors/acquisition systems
 - [ ] Multi-site/multi-color paired and conditional association workflows
 
 ## Phase 4 — adoption

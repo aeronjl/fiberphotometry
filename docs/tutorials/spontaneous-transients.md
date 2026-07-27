@@ -90,6 +90,9 @@ The 30-second bins are useful for plotting how event rate changes through a long
 session. They remain **descriptive transient summaries**. Do not relabel them as
 tonic neurotransmitter concentration without an independently justified model.
 
-Next, this tutorial will be rerun on a frozen public NWB recording with the raw
-sensor/reference provenance retained, and the complete universe ledger will be
-published even if the alternatives disagree.
+The first public-data pass is now complete. Read the
+[DANDI:000251 retained result](../dandi-000251-transient-results-v0.1.md): the
+universes disagree strongly, and only three of eight show enrichment in the
+pre-existing post-teleport response window. Because those files contain archived
+dF/F rather than raw reference channels, raw-preprocessing and manual-annotation
+validation remain open.

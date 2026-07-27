@@ -80,6 +80,7 @@ nav:
       - Public IBL event report: tutorials/ibl-feedback-report.md
       - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
       - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
+      - Public transient validation: dandi-000251-transient-results-v0.1.md
       - Event-kernel simulation: tutorials/event-kernel-simulation.md
       - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
       - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md

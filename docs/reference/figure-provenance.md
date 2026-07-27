@@ -34,6 +34,7 @@ uv run --group docs python scripts/plot_documentation_figures.py
 | `dandi-000971-reward-multiverse-v0.1.svg` | Frozen eight-universe animal-level robustness result generated from the committed DANDI 000971 result JSON |
 | `ibl-unspool-longitudinal-v0.1.svg` | Frozen 18-animal cohort-forward IBL result; animal scores and bootstrap interval generated from the committed cross-package result JSON |
 | `dandi-000971-event-kernels-v0.2.png` | Checksum-pinned public DANDI 000971 benchmark; pooled DMS/DLS kernels and grouped-jackknife sensitivity intervals |
+| `dandi-000251-transient-robustness-v0.1.png` | Checksum-pinned DANDI 000251 result artifact; all eight frozen detector universes and retained cross-universe disagreement |
 | `ibl-feedback-signal-only-subtract-v0.3.2.svg` | Frozen IBL signal-only multiverse result for subtraction workflows |
 | `ibl-feedback-signal-only-divide-v0.3.2.svg` | Frozen IBL signal-only multiverse result for division workflows |
 | `ibl-feedback-specification-curve-v0.1.svg` | Frozen nine-universe IBL feedback specification curve |

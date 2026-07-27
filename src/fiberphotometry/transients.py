@@ -128,19 +128,22 @@ def detect_transients(
             if len(run) < 3:
                 continue
             previous_peak_time: float | None = None
+            run_time = time[run]
             candidates, _ = find_peaks(signal[run], distance=minimum_distance)
             run_scale = _robust_scale(signal[run])
             for relative_peak in candidates:
                 peak = int(run[relative_peak])
-                baseline_rows = run[
-                    (
-                        time[run]
-                        >= time[peak]
-                        - chosen.baseline_gap_s
-                        - chosen.baseline_duration_s
-                    )
-                    & (time[run] < time[peak] - chosen.baseline_gap_s)
-                ]
+                baseline_start = (
+                    time[peak] - chosen.baseline_gap_s - chosen.baseline_duration_s
+                )
+                baseline_stop = time[peak] - chosen.baseline_gap_s
+                baseline_left = int(
+                    np.searchsorted(run_time, baseline_start, side="left")
+                )
+                baseline_right = int(
+                    np.searchsorted(run_time, baseline_stop, side="left")
+                )
+                baseline_rows = run[baseline_left:baseline_right]
                 if len(baseline_rows) < 2:
                     exclusions.append(
                         TransientExclusion(
@@ -157,7 +160,9 @@ def detect_transients(
                         )
                     )
                     continue
-                threshold = _threshold(time, signal, run, peak, chosen, run_scale)
+                threshold = _threshold(
+                    time, signal, run, run_time, peak, chosen, run_scale
+                )
                 if amplitude < threshold:
                     exclusions.append(
                         TransientExclusion(
@@ -165,7 +170,9 @@ def detect_transients(
                         )
                     )
                     continue
-                crossings = _half_height_crossings(time, signal, run, peak, baseline)
+                crossings = _half_height_crossings(
+                    time, signal, run, peak, int(relative_peak), baseline
+                )
                 if crossings is None:
                     exclusions.append(
                         TransientExclusion(
@@ -178,10 +185,10 @@ def detect_transients(
                     auc = float("nan")
                 else:
                     onset, offset, left_row, right_row = crossings
-                    integration_rows = run[(run >= left_row) & (run <= right_row)]
                     auc = float(
                         np.trapezoid(
-                            signal[integration_rows] - baseline, time[integration_rows]
+                            signal[left_row : right_row + 1] - baseline,
+                            time[left_row : right_row + 1],
                         )
                     )
                 previous = (
@@ -265,6 +272,7 @@ def _threshold(
     time: np.ndarray,
     signal: np.ndarray,
     run: np.ndarray,
+    run_time: np.ndarray,
     peak: int,
     spec: TransientDetectionSpec,
     run_scale: float,
@@ -274,7 +282,9 @@ def _threshold(
     scale = run_scale
     if spec.threshold_mode == "rolling_mad":
         half = spec.noise_window_s / 2
-        local = run[(time[run] >= time[peak] - half) & (time[run] <= time[peak] + half)]
+        left = int(np.searchsorted(run_time, time[peak] - half, side="left"))
+        right = int(np.searchsorted(run_time, time[peak] + half, side="right"))
+        local = run[left:right]
         if len(local) >= 3:
             scale = _robust_scale(signal[local])
     return float(spec.threshold * scale)
@@ -285,20 +295,22 @@ def _half_height_crossings(
     signal: np.ndarray,
     run: np.ndarray,
     peak: int,
+    position: int,
     baseline: float,
 ) -> tuple[float, float, int, int] | None:
     target = baseline + (float(signal[peak]) - baseline) / 2
-    position = int(np.flatnonzero(run == peak)[0])
-    left_candidates = np.flatnonzero(signal[run[:position]] <= target)
-    right_candidates = np.flatnonzero(signal[run[position + 1 :]] <= target)
-    if not len(left_candidates) or not len(right_candidates):
+    left_low_position = position - 1
+    while left_low_position >= 0 and signal[run[left_low_position]] > target:
+        left_low_position -= 1
+    right_low_position = position + 1
+    while right_low_position < len(run) and signal[run[right_low_position]] > target:
+        right_low_position += 1
+    if left_low_position < 0 or right_low_position >= len(run):
         return None
-    left_low_position = int(left_candidates[-1])
     left_low = int(run[left_low_position])
     left_high = int(run[left_low_position + 1])
-    right_low_position = position + int(right_candidates[0])
-    right_high = int(run[right_low_position])
-    right_low = int(run[right_low_position + 1])
+    right_high = int(run[right_low_position - 1])
+    right_low = int(run[right_low_position])
     onset = _interpolate_crossing(time, signal, left_low, left_high, target)
     offset = _interpolate_crossing(time, signal, right_high, right_low, target)
     return onset, offset, left_low, right_low
