@@ -50,4 +50,7 @@ materialization in any successor schema.
 
 ## Evidence added later
 
-None yet.
+On 2026-07-27, signal-only recipes were added while preserving this record's
+requirements for names, rationales, explicit references, and outcome-blind
+materialization. Output-variable coupling and unit separation are governed by
+[SDR-0017](0017-couple-preprocessing-outputs-and-separate-units.md).

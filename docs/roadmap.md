@@ -96,7 +96,8 @@
 - [x] CLI export of raw/processed signals, events, QC, and provenance to NWB
 - [x] Unit-safe grouped report for complete multiverse robustness results
 - [x] Configuration-driven multiverse preflight, execution, and evidence bundle
-- [ ] Extend project multiverses to signal-only preprocessing recipe families
+- [x] Extend project multiverses to signal-only preprocessing recipe families
+- [ ] Add per-unit-lane practical-effect thresholds and machine-readable summaries
 - [x] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [x] Canonical raw-NWB to animal-level robustness tutorial

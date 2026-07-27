@@ -27,6 +27,7 @@ from fiberphotometry.metadata import (
 from fiberphotometry.mixed import fit_scalar_mixed_model
 from fiberphotometry.multiverse import (
     MultiverseReportGroup,
+    MultiverseResult,
     MultiverseSpec,
     materialize_multiverse,
     run_multiverse,
@@ -227,16 +228,7 @@ def run_project_multiverse(
         )
         raise ValueError(error)
     result = run_multiverse(spec, loaded.inputs)
-    compatible_ids = tuple(
-        universe.universe_id
-        for universe in result.universes
-        if universe.status != "incompatible"
-    )
-    groups = (
-        MultiverseReportGroup(
-            "Declared reference-corrected workflows", "ΔF/F", compatible_ids
-        ),
-    )
+    groups = _multiverse_report_groups(project, result)
     artifacts = {
         "metadata.json": metadata,
         "preflight.json": preflight,
@@ -254,6 +246,42 @@ def run_project_multiverse(
         output_directory / "manifest.json", _manifest(project, status, hashes)
     )
     return output_directory.resolve()
+
+
+def _multiverse_report_groups(
+    project: ProjectConfig, result: MultiverseResult
+) -> tuple[MultiverseReportGroup, ...]:
+    config = project.multiverse
+    if config is None:
+        raise ValueError("project does not declare a [multiverse] configuration")
+    unit_groups = config.preprocessing_unit_groups()
+    if unit_groups:
+        return tuple(
+            MultiverseReportGroup.from_choice(
+                result,
+                name=(
+                    "Divisive normalization"
+                    if units == "ΔF/F"
+                    else "Subtractive normalization"
+                ),
+                units=units,
+                node="preprocessing",
+                alternatives=alternatives,
+            )
+            for units, alternatives in unit_groups.items()
+        )
+    compatible_ids = tuple(
+        universe.universe_id
+        for universe in result.universes
+        if universe.status != "incompatible"
+    )
+    units = (
+        "acquired fluorescence"
+        if project.analysis.preprocessing_kind == "signal_only"
+        and project.analysis.normalization == "subtract"
+        else "ΔF/F"
+    )
+    return (MultiverseReportGroup("Declared workflows", units, compatible_ids),)
 
 
 def _manifest(

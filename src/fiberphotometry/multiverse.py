@@ -25,15 +25,29 @@ from fiberphotometry.pipeline import (
 )
 from fiberphotometry.planning import AnalysisPlan
 
+
+@dataclass(frozen=True)
+class PreprocessingOutcomeSpec:
+    """Coupled preprocessing and event-summary output for one workflow family."""
+
+    preprocessing: PreprocessingSpec | tuple[PreprocessingOperation, ...]
+    event_summary: EventSummarySpec
+
+
 DecisionValue: TypeAlias = (
     PreprocessingSpec
     | tuple[PreprocessingOperation, ...]
     | QualityGateSpec
     | EventSummarySpec
     | AnalysisPlan
+    | PreprocessingOutcomeSpec
 )
 DecisionTarget = Literal[
-    "preprocessing", "quality_gate", "event_summary", "analysis_plan"
+    "preprocessing",
+    "quality_gate",
+    "event_summary",
+    "analysis_plan",
+    "preprocessing_outcome",
 ]
 UniverseStatus = Literal["success", "blocked", "failed", "incompatible"]
 
@@ -374,6 +388,7 @@ def _validate_value(target: DecisionTarget, value: DecisionValue) -> None:
         "quality_gate": QualityGateSpec,
         "event_summary": EventSummarySpec,
         "analysis_plan": AnalysisPlan,
+        "preprocessing_outcome": PreprocessingOutcomeSpec,
     }
     if target == "preprocessing":
         if not isinstance(value, (PreprocessingSpec, tuple)):
@@ -393,6 +408,14 @@ def _apply_choice(
         return replace(pipeline, event_summary=value)
     if target == "analysis_plan" and isinstance(value, AnalysisPlan):
         return replace(pipeline, analysis_plan=value)
+    if target == "preprocessing_outcome" and isinstance(
+        value, PreprocessingOutcomeSpec
+    ):
+        return replace(
+            pipeline,
+            preprocessing=value.preprocessing,
+            event_summary=value.event_summary,
+        )
     raise TypeError(f"alternative value does not match target {target!r}")
 
 

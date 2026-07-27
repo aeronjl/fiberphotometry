@@ -118,7 +118,8 @@ The source arrays and timestamp diagnostics remain in the processing lineage.
 An optional `[multiverse]` section declares named scientific alternatives rather
 than anonymous parameter arrays. Each alternative requires a rationale, and one
 alternative per decision must be selected as the reference workflow. This first
-schema supports reference-correction recipes and response windows:
+schema supports reference-correction recipes, signal-only baseline recipes, and
+response windows:
 
 ```toml
 [multiverse]
@@ -157,11 +158,41 @@ The scientific estimand, design, baseline, and inference plan remain fixed acros
 this first configuration surface. A structurally incompatible universe blocks
 execution before outcome access and remains visible in `preflight.json`.
 
+Signal-only alternatives use the same named-recipe structure. Operations are
+materialized in scientific order: resampling, optional low-pass filtering, then
+baseline estimation. Recipes can select `double_exponential`, `asls`, or
+`rolling_mean`; divisive and subtractive normalizations may coexist:
+
+```toml
+[[multiverse.preprocessing]]
+name = "regularized_asls"
+rationale = "Test a smooth asymmetric baseline on an explicit regular clock."
+kind = "signal_only"
+method = "asls"
+normalization = "divide"
+resample_rate_hz = "median"
+resample_max_gap_factor = 1.5
+lowpass_hz = 3.0
+
+[[multiverse.preprocessing]]
+name = "rolling_subtract"
+rationale = "Test dependence on divisive versus subtractive normalization."
+kind = "signal_only"
+method = "rolling_mean"
+normalization = "subtract"
+rolling_window_s = 60.0
+```
+
+The primary analysis must also be `signal_only`; a multiverse does not silently
+change the acquisition model. Reports partition ΔF/F and acquired-fluorescence
+estimates into separate evidence lanes. A single `smallest_effect` is rejected
+when alternatives span units because no one threshold is meaningful in both.
+
 ## Current boundary
 
 v0.1 handles the categorical, within-animal scalar event contrast supported by
 `EventAnalysis`, with either schema-first tabular files or explicitly mapped TDT
-blocks. Multiverse configuration currently varies reference preprocessing and
-response windows; it does not yet expose arbitrary designs or signal-only recipe
-families. Those features should extend the typed library contracts rather than
-accumulate command-specific behavior.
+blocks. Multiverse configuration currently varies reference preprocessing,
+signal-only baseline recipes, normalization, and response windows. It does not
+yet expose arbitrary designs, method-specific AsLS penalty choices, or per-lane
+practical-effect thresholds.

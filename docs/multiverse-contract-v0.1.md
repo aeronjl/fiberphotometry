@@ -19,6 +19,10 @@ robustness analysis, not a search over outcomes or a substitute for replication.
 - Successful, QC-blocked, incompatible, non-finite, and failed universes are all
   retained. Execution failure cannot improve the reported robustness fraction.
 - Random seeds remain part of the materialized analysis plan.
+- Coupled preprocessing/output choices are atomic: selecting subtractive
+  normalization also selects its acquired-fluorescence event-summary variable.
+- Estimates with different units occupy separate report lanes and never share a
+  displayed range or median. One practical-effect threshold cannot span units.
 
 ## Interpretation
 

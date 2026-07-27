@@ -175,6 +175,66 @@ response = [0.0, 0.25]
     )
 
 
+def _declare_signal_only_multiverse(project: Path) -> None:
+    project.write_text(
+        project.read_text().replace(
+            'kind = "reference"\nmethod = "irls"',
+            'kind = "signal_only"\nmethod = "rolling_mean"',
+        )
+        + """
+
+[multiverse]
+schema_version = "1"
+intent = "exploratory"
+reference_preprocessing = "rolling_divide"
+reference_response_window = "half_second"
+
+[[multiverse.preprocessing]]
+name = "rolling_divide"
+rationale = "Estimate slow drift with a rolling baseline and divide."
+kind = "signal_only"
+method = "rolling_mean"
+normalization = "divide"
+rolling_window_s = 4.0
+
+[[multiverse.preprocessing]]
+name = "rolling_subtract"
+rationale = "Test dependence on divisive versus subtractive normalization."
+kind = "signal_only"
+method = "rolling_mean"
+normalization = "subtract"
+rolling_window_s = 4.0
+
+[[multiverse.preprocessing]]
+name = "regularized_asls"
+rationale = "Test an asymmetric smooth baseline on an explicit regular clock."
+kind = "signal_only"
+method = "asls"
+normalization = "divide"
+resample_rate_hz = "median"
+resample_max_gap_factor = 1.5
+lowpass_hz = 3.0
+
+[[multiverse.preprocessing]]
+name = "double_exponential"
+rationale = "Test a parametric bleaching trajectory."
+kind = "signal_only"
+method = "double_exponential"
+normalization = "divide"
+
+[[multiverse.response_windows]]
+name = "half_second"
+rationale = "Match the primary event definition."
+response = [0.0, 0.5]
+
+[[multiverse.response_windows]]
+name = "quarter_second"
+rationale = "Test sensitivity to an early-response definition."
+response = [0.0, 0.25]
+"""
+    )
+
+
 def test_cli_inspects_and_runs_complete_tabular_project(tmp_path, capsys) -> None:
     project_path = _project(tmp_path)
     preflight_path = tmp_path / "preflight-only.json"
@@ -254,6 +314,63 @@ def test_cli_rejects_structurally_incompatible_multiverse_before_run(
     assert statuses == {"compatible", "incompatible"}
     assert "before outcome access" in capsys.readouterr().err
     assert not (tmp_path / "artifacts" / "multiverse.json").exists()
+
+
+def test_cli_runs_signal_only_recipes_in_unit_safe_report_lanes(tmp_path) -> None:
+    project_path = _project(tmp_path)
+    _declare_signal_only_multiverse(project_path)
+    output = tmp_path / "signal-only"
+
+    assert main(["multiverse", str(project_path), "--output-dir", str(output)]) == 0
+
+    result = json.loads((output / "multiverse.json").read_text())
+    html = (output / "robustness.html").read_text()
+    assert result["summary"]["total_universes"] == 8
+    assert result["summary"]["successful_universes"] >= 4
+    assert "Divisive normalization" in html
+    assert "Subtractive normalization" in html
+    assert "Parallel evidence lanes preserve unit" in html
+    for universe in result["universes"]:
+        preprocessing = next(
+            choice["alternative"]
+            for choice in universe["choices"]
+            if choice["node"] == "preprocessing"
+        )
+        variable = universe["pipeline"]["event_summary"]["variable"]
+        assert variable == (
+            "baseline_subtracted" if preprocessing == "rolling_subtract" else "dff"
+        )
+        if preprocessing == "regularized_asls":
+            assert [
+                operation["kind"] for operation in universe["pipeline"]["preprocessing"]
+            ] == ["resample", "lowpass_filter", "baseline_dff"]
+
+
+def test_signal_only_multiverse_rejects_implicit_gap_regularization(tmp_path) -> None:
+    project_path = _project(tmp_path)
+    _declare_signal_only_multiverse(project_path)
+    project_path.write_text(
+        project_path.read_text().replace('resample_rate_hz = "median"\n', "")
+    )
+
+    assert main(["inspect", str(project_path)]) == 2
+
+
+def test_signal_only_multiverse_rejects_effect_threshold_across_units(
+    tmp_path, capsys
+) -> None:
+    project_path = _project(tmp_path)
+    _declare_signal_only_multiverse(project_path)
+    project_path.write_text(
+        project_path.read_text().replace(
+            '[multiverse]\nschema_version = "1"\nintent = "exploratory"\n',
+            '[multiverse]\nschema_version = "1"\n'
+            'intent = "exploratory"\nsmallest_effect = 0.01\n',
+        )
+    )
+
+    assert main(["inspect", str(project_path)]) == 2
+    assert "cannot span" in capsys.readouterr().err
 
 
 def test_cli_requires_multiverse_declaration(tmp_path, capsys) -> None:

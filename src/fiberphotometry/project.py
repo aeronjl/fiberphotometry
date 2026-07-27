@@ -33,12 +33,15 @@ from fiberphotometry.multiverse import (
     DecisionAlternative,
     DecisionNode,
     MultiverseSpec,
+    PreprocessingOutcomeSpec,
 )
 from fiberphotometry.pipeline import (
+    BaselineDFFOperation,
     LowpassFilterOperation,
     PipelineSpec,
     RecordingInput,
     ReferenceDFFOperation,
+    ResampleOperation,
 )
 from fiberphotometry.workflow import EventAnalysis, EventSession
 
@@ -73,12 +76,61 @@ class NWBExportConfig:
 
 @dataclass(frozen=True)
 class MultiversePreprocessingAlternative:
-    """One named, justified reference-correction recipe."""
+    """One named, justified preprocessing recipe with explicit output units."""
 
     name: str
     rationale: str
+    kind: str
     method: str
+    normalization: str = "divide"
     lowpass_hz: float | None = None
+    rolling_window_s: float = 60.0
+    resample_rate_hz: float | str | None = None
+    resample_max_gap_factor: float | None = None
+
+    @property
+    def output_variable(self) -> str:
+        return (
+            "baseline_subtracted"
+            if self.kind == "signal_only" and self.normalization == "subtract"
+            else "dff"
+        )
+
+    @property
+    def units(self) -> str:
+        return (
+            "acquired fluorescence"
+            if self.output_variable == "baseline_subtracted"
+            else "ΔF/F"
+        )
+
+    def operations(self) -> tuple[Any, ...]:
+        operations: list[Any] = []
+        if self.resample_rate_hz is not None:
+            operations.append(
+                ResampleOperation(
+                    rate_hz=cast(Any, self.resample_rate_hz),
+                    max_gap_factor=self.resample_max_gap_factor,
+                )
+            )
+        if self.lowpass_hz is not None:
+            variables = (
+                ("signal", "reference") if self.kind == "reference" else ("signal",)
+            )
+            operations.append(
+                LowpassFilterOperation(self.lowpass_hz, variables=variables)
+            )
+        if self.kind == "reference":
+            operations.append(ReferenceDFFOperation(method=cast(Any, self.method)))
+        else:
+            operations.append(
+                BaselineDFFOperation(
+                    method=cast(Any, self.method),
+                    normalization=cast(Any, self.normalization),
+                    rolling_window_s=self.rolling_window_s,
+                )
+            )
+        return tuple(operations)
 
 
 @dataclass(frozen=True)
@@ -112,18 +164,17 @@ class ProjectMultiverseConfig:
             nodes.append(
                 DecisionNode(
                     "preprocessing",
-                    "preprocessing",
+                    "preprocessing_outcome",
                     tuple(
                         DecisionAlternative(
                             item.name,
                             item.rationale,
-                            (
-                                *(
-                                    (LowpassFilterOperation(item.lowpass_hz),)
-                                    if item.lowpass_hz is not None
-                                    else ()
+                            PreprocessingOutcomeSpec(
+                                item.operations(),
+                                replace(
+                                    base.event_summary,
+                                    variable=item.output_variable,
                                 ),
-                                ReferenceDFFOperation(method=cast(Any, item.method)),
                             ),
                         )
                         for item in self.preprocessing
@@ -151,9 +202,14 @@ class ProjectMultiverseConfig:
             references.append(
                 ChoiceRef("response_window", cast(str, self.reference_response_window))
             )
+        # Event-window choices update the base summary first; the coupled
+        # preprocessing choice then fixes the output variable and units last.
+        ordered_nodes = tuple(
+            sorted(nodes, key=lambda node: node.target == "preprocessing_outcome")
+        )
         return MultiverseSpec(
             base,
-            tuple(nodes),
+            ordered_nodes,
             (),
             tuple(references),
             cast(Any, self.intent),
@@ -161,6 +217,13 @@ class ProjectMultiverseConfig:
             direction=cast(Any, self.direction),
             leave_one_unit_out=self.leave_one_animal_out,
         )
+
+    def preprocessing_unit_groups(self) -> dict[str, tuple[str, ...]]:
+        """Return alternative labels partitioned by scientifically compatible units."""
+        groups: dict[str, list[str]] = {}
+        for alternative in self.preprocessing:
+            groups.setdefault(alternative.units, []).append(alternative.name)
+        return {units: tuple(names) for units, names in groups.items()}
 
 
 @dataclass(frozen=True)
@@ -575,14 +638,10 @@ def _multiverse_config(
     )
     if value.get("schema_version") != "1":
         raise ValueError("unsupported multiverse schema_version")
-    preprocessing = _multiverse_preprocessing(value.get("preprocessing", []))
+    preprocessing = _multiverse_preprocessing(value.get("preprocessing", []), analysis)
     windows = _multiverse_windows(value.get("response_windows", []))
     if not preprocessing and not windows:
         raise ValueError("multiverse requires preprocessing or response_windows")
-    if preprocessing and analysis.preprocessing_kind != "reference":
-        raise ValueError(
-            "multiverse.preprocessing currently requires reference preprocessing"
-        )
     reference_preprocessing = _multiverse_reference(
         value, "reference_preprocessing", preprocessing
     )
@@ -608,6 +667,10 @@ def _multiverse_config(
                 "multiverse.smallest_effect must be finite and nonnegative"
             )
         smallest_effect = float(smallest_raw)
+    if smallest_effect is not None and len({item.units for item in preprocessing}) > 1:
+        raise ValueError(
+            "multiverse.smallest_effect cannot span preprocessing output units"
+        )
     leave_one_out = value.get("leave_one_animal_out", False)
     if not isinstance(leave_one_out, bool):
         raise ValueError("multiverse.leave_one_animal_out must be boolean")
@@ -624,7 +687,7 @@ def _multiverse_config(
 
 
 def _multiverse_preprocessing(
-    value: object,
+    value: object, analysis: EventAnalysisConfig
 ) -> tuple[MultiversePreprocessingAlternative, ...]:
     if not isinstance(value, list):
         raise ValueError("multiverse.preprocessing must be an array of tables")
@@ -633,27 +696,81 @@ def _multiverse_preprocessing(
         section = f"multiverse.preprocessing[{index}]"
         if not isinstance(item, dict):
             raise ValueError(f"{section} must be a TOML table")
-        _reject_unknown(item, {"name", "rationale", "method", "lowpass_hz"}, section)
+        _reject_unknown(
+            item,
+            {
+                "name",
+                "rationale",
+                "kind",
+                "method",
+                "normalization",
+                "lowpass_hz",
+                "rolling_window_s",
+                "resample_rate_hz",
+                "resample_max_gap_factor",
+            },
+            section,
+        )
+        kind = item.get("kind", analysis.preprocessing_kind)
+        if kind not in {"reference", "signal_only"}:
+            raise ValueError(f"{section}.kind is invalid")
+        if kind != analysis.preprocessing_kind:
+            raise ValueError(
+                f"{section}.kind must match primary analysis preprocessing kind"
+            )
         method = _nonempty_string(item, "method", section)
-        if method not in {"irls", "ols"}:
-            raise ValueError(f"{section}.method must be 'irls' or 'ols'")
+        valid_methods = (
+            {"irls", "ols"}
+            if kind == "reference"
+            else {"double_exponential", "asls", "rolling_mean"}
+        )
+        if method not in valid_methods:
+            raise ValueError(f"{section}.method is invalid for {kind} preprocessing")
+        normalization = item.get("normalization", analysis.normalization)
+        if normalization not in {"divide", "subtract"}:
+            raise ValueError(f"{section}.normalization is invalid")
+        if kind == "reference" and "normalization" in item:
+            raise ValueError(
+                f"{section}.normalization is only valid for signal_only recipes"
+            )
         cutoff_raw = item.get("lowpass_hz")
-        cutoff = None
-        if cutoff_raw is not None:
-            if (
-                not isinstance(cutoff_raw, int | float)
-                or isinstance(cutoff_raw, bool)
-                or not math.isfinite(float(cutoff_raw))
-                or float(cutoff_raw) <= 0
-            ):
-                raise ValueError(f"{section}.lowpass_hz must be finite and positive")
-            cutoff = float(cutoff_raw)
+        cutoff = _optional_positive_number(cutoff_raw, f"{section}.lowpass_hz")
+        rolling_window = _positive_number(
+            item.get("rolling_window_s", analysis.rolling_window_s),
+            f"{section}.rolling_window_s",
+        )
+        resample_raw = item.get("resample_rate_hz")
+        if resample_raw is None:
+            resample_rate: float | str | None = None
+        elif resample_raw == "median":
+            resample_rate = "median"
+        else:
+            resample_rate = _positive_number(
+                resample_raw, f"{section}.resample_rate_hz"
+            )
+        gap = _optional_positive_number(
+            item.get("resample_max_gap_factor"),
+            f"{section}.resample_max_gap_factor",
+        )
+        if gap is not None and gap <= 1:
+            raise ValueError(
+                f"{section}.resample_max_gap_factor must be greater than one"
+            )
+        if gap is not None and resample_rate is None:
+            raise ValueError(
+                f"{section}.resample_max_gap_factor requires resample_rate_hz"
+            )
         output.append(
             MultiversePreprocessingAlternative(
-                _nonempty_string(item, "name", section),
-                _nonempty_string(item, "rationale", section),
-                method,
-                cutoff,
+                name=_nonempty_string(item, "name", section),
+                rationale=_nonempty_string(item, "rationale", section),
+                kind=str(kind),
+                method=method,
+                normalization=str(normalization),
+                lowpass_hz=cutoff,
+                rolling_window_s=rolling_window,
+                resample_rate_hz=resample_rate,
+                resample_max_gap_factor=gap,
             )
         )
     _validate_multiverse_alternatives(output, "multiverse.preprocessing")
@@ -699,6 +816,21 @@ def _validate_multiverse_alternatives(value: list[Any], section: str) -> None:
     names = [item.name for item in value]
     if len(names) != len(set(names)):
         raise ValueError(f"{section} names must be unique")
+
+
+def _positive_number(value: object, name: str) -> float:
+    if (
+        not isinstance(value, int | float)
+        or isinstance(value, bool)
+        or not math.isfinite(float(value))
+        or float(value) <= 0
+    ):
+        raise ValueError(f"{name} must be finite and positive")
+    return float(value)
+
+
+def _optional_positive_number(value: object, name: str) -> float | None:
+    return None if value is None else _positive_number(value, name)
 
 
 def _multiverse_reference(
