@@ -531,6 +531,154 @@ def test_publication_verification_rejects_manifest_tampering(tmp_path, capsys) -
     assert "does not match manifest bytes" in capsys.readouterr().err
 
 
+def _archive_metadata(path) -> None:
+    path.write_text(
+        json.dumps(
+            {
+                "artifact_type": "fiberphotometry_archive_metadata",
+                "schema_version": "1",
+                "title": "Reproducible reward photometry analysis",
+                "description": "Analysis evidence, provenance, and results.",
+                "creators": [
+                    {
+                        "name": "Laffere, Aeron",
+                        "affiliation": "University of Example",
+                        "orcid": "0000-0002-1825-0097",
+                    }
+                ],
+                "publication_date": "2026-07-27",
+                "publisher": "Zenodo",
+                "license": "cc-by-4.0",
+                "keywords": ["fiber photometry", "reproducibility"],
+                "related_identifiers": [
+                    {"identifier": "10.1234/example", "relation": "IsSupplementTo"}
+                ],
+                "resource_type": "Dataset",
+                "language": "en",
+            }
+        )
+    )
+
+
+def test_cli_creates_reproducible_repository_archive(tmp_path, capsys) -> None:
+    project_path = _project(tmp_path)
+    output = tmp_path / "results"
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+    capsys.readouterr()
+    metadata = tmp_path / "archive-metadata.json"
+    _archive_metadata(metadata)
+    first = tmp_path / "deposit-a.zip"
+    second = tmp_path / "deposit-b.zip"
+    assert (
+        main(
+            [
+                "archive",
+                str(output),
+                "--metadata",
+                str(metadata),
+                "--output",
+                str(first),
+            ]
+        )
+        == 0
+    )
+    first_result = json.loads(capsys.readouterr().out)
+    assert (
+        main(
+            [
+                "archive",
+                str(output),
+                "--metadata",
+                str(metadata),
+                "--output",
+                str(second),
+            ]
+        )
+        == 0
+    )
+    second_result = json.loads(capsys.readouterr().out)
+    assert first_result["sha256"] == second_result["sha256"]
+    assert first.read_bytes() == second.read_bytes()
+
+    import zipfile
+
+    with zipfile.ZipFile(first) as archive:
+        names = set(archive.namelist())
+        assert {
+            "archive-metadata.json",
+            "archive-manifest.json",
+            "datacite.json",
+            ".zenodo.json",
+        } <= names
+        assert "evidence/manifest.json" in names
+        assert (
+            json.loads(archive.read("datacite.json"))["data"]["attributes"][
+                "publicationYear"
+            ]
+            == 2026
+        )
+        assert (
+            json.loads(archive.read(".zenodo.json"))["creators"][0]["orcid"]
+            == "0000-0002-1825-0097"
+        )
+    assert main(["verify-archive", str(first)]) == 0
+    assert json.loads(capsys.readouterr().out)["status"] == "complete"
+
+
+def test_archive_rejects_invalid_orcid_and_tampering(tmp_path, capsys) -> None:
+    project_path = _project(tmp_path)
+    output = tmp_path / "results"
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+    capsys.readouterr()
+    metadata = tmp_path / "archive-metadata.json"
+    _archive_metadata(metadata)
+    value = json.loads(metadata.read_text())
+    value["creators"][0]["orcid"] = "0000-0002-1825-0098"
+    metadata.write_text(json.dumps(value))
+    archive = tmp_path / "deposit.zip"
+    assert (
+        main(
+            [
+                "archive",
+                str(output),
+                "--metadata",
+                str(metadata),
+                "--output",
+                str(archive),
+            ]
+        )
+        == 2
+    )
+    assert "ORCID is invalid" in capsys.readouterr().err
+
+    _archive_metadata(metadata)
+    assert (
+        main(
+            [
+                "archive",
+                str(output),
+                "--metadata",
+                str(metadata),
+                "--output",
+                str(archive),
+            ]
+        )
+        == 0
+    )
+    capsys.readouterr()
+    import zipfile
+
+    rewritten = tmp_path / "tampered.zip"
+    with zipfile.ZipFile(archive) as source, zipfile.ZipFile(rewritten, "w") as target:
+        for info in source.infolist():
+            content = source.read(info.filename)
+            if info.filename == "evidence/analysis.json":
+                content += b"\n"
+            target.writestr(info, content)
+    assert main(["verify-archive", str(rewritten)]) == 2
+    assert "checksum mismatch" in capsys.readouterr().err
+
+
 def test_cli_rejects_structurally_incompatible_multiverse_before_run(
     tmp_path, capsys
 ) -> None:

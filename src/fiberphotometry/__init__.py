@@ -2,6 +2,15 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
+from fiberphotometry.archive import (
+    ArchiveCreator,
+    ArchiveMetadata,
+    ArchivePackage,
+    ArchiveRelatedIdentifier,
+    create_archive_package,
+    load_archive_metadata,
+    verify_archive_package,
+)
 from fiberphotometry.comparison import (
     BundleComparison,
     EvidenceDifference,
@@ -179,6 +188,10 @@ except PackageNotFoundError:  # pragma: no cover - source tree without installat
 __all__ = [
     "AnalysisPlan",
     "AnalysisResult",
+    "ArchiveCreator",
+    "ArchiveMetadata",
+    "ArchivePackage",
+    "ArchiveRelatedIdentifier",
     "BaselineDFFOperation",
     "BundleComparison",
     "ChoiceRef",
@@ -275,6 +288,7 @@ __all__ = [
     "condition_exclusion_warning",
     "condition_reconstruction_warning",
     "create_analysis_plan",
+    "create_archive_package",
     "exact_sign_flip_test",
     "execute_analysis_plan",
     "export_project_multiverse_nwb",
@@ -285,6 +299,7 @@ __all__ = [
     "inspect_loaded_tabular_input",
     "inspect_tabular_input",
     "inspect_tabular_recording",
+    "load_archive_metadata",
     "load_project_config",
     "load_tabular_events",
     "load_tabular_input",
@@ -306,6 +321,7 @@ __all__ = [
     "unit_t_interval",
     "validate_design",
     "validate_recording",
+    "verify_archive_package",
     "verify_publication_manifest",
     "welch_power_sensitivity",
 ]

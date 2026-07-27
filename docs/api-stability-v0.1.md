@@ -16,6 +16,7 @@ package root. Its machine-readable declaration is
 - verified project evidence reading from manifest directories and NWB files;
 - semantic cross-bundle comparison and reproducibility reporting;
 - detached OpenSSH publication signing and allowed-signers verification;
+- validated, deterministic repository/DOI archival packaging and verification;
 - the direct event-coverage and peri-event inference entry points.
 
 Within a `0.1.x` line, supported names will not be removed or have required

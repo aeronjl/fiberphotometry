@@ -20,6 +20,13 @@ and `schema_version = "1"`, governed by
 [`schemas/publication-manifest-attestation-v1.schema.json`](../schemas/publication-manifest-attestation-v1.schema.json).
 Its detached `.sig` file uses the OpenSSH SSHSIG format.
 
+Archival deposits use `artifact_type = "fiberphotometry_archive_metadata"` and
+`schema_version = "1"`, governed by
+[`schemas/archive-metadata-v1.schema.json`](../schemas/archive-metadata-v1.schema.json).
+One validated source record generates repository-specific `datacite.json` and
+`.zenodo.json` projections; the ZIP checksum inventory is recorded separately in
+`archive-manifest.json`.
+
 The nested event-coverage and peri-event inference records each carry their own
 `schema_version = "1"`. Analysis plans, study designs, project configuration, and
 pipeline specifications retain their existing explicit versions. Provenance

@@ -13,6 +13,10 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, cast
 
+from fiberphotometry.archive import (
+    create_archive_package,
+    verify_archive_package,
+)
 from fiberphotometry.comparison import compare_project_evidence
 from fiberphotometry.compatibility import (
     MultiverseCompatibility,
@@ -88,6 +92,18 @@ def main(argv: Sequence[str] | None = None) -> int:
                 args.bundle, allowed_signers=args.allowed_signers
             )
             print(verification.to_json())
+            return 0
+        if args.command == "archive":
+            package = create_archive_package(
+                args.bundle,
+                metadata=args.metadata,
+                output=args.output,
+                overwrite=args.force,
+            )
+            print(package.to_json())
+            return 0
+        if args.command == "verify-archive":
+            print(verify_archive_package(args.archive).to_json())
             return 0
         project = load_project_config(args.project)
         loaded = project.load()
@@ -589,6 +605,21 @@ def _parser() -> argparse.ArgumentParser:
         required=True,
         help="OpenSSH allowed_signers trust file",
     )
+    archive = subparsers.add_parser(
+        "archive", help="create a validated repository-ready deposit ZIP"
+    )
+    archive.add_argument("bundle", type=Path, help="complete artifact directory")
+    archive.add_argument(
+        "--metadata", type=Path, required=True, help="archive metadata JSON"
+    )
+    archive.add_argument("--output", type=Path, required=True, help="output .zip path")
+    archive.add_argument(
+        "--force", action="store_true", help="replace an existing archive"
+    )
+    verify_archive = subparsers.add_parser(
+        "verify-archive", help="verify an archival package and its inventory"
+    )
+    verify_archive.add_argument("archive", type=Path, help="deposit .zip path")
     return parser
 
 

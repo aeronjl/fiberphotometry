@@ -8,6 +8,10 @@ from pathlib import Path
 from typing import Any, cast
 
 SUPPORTED_API_V0_1 = (
+    "ArchiveCreator",
+    "ArchiveMetadata",
+    "ArchivePackage",
+    "ArchiveRelatedIdentifier",
     "BundleComparison",
     "EventAnalysis",
     "EventAnalysisConfig",
@@ -34,9 +38,11 @@ SUPPORTED_API_V0_1 = (
     "assess_event_coverage",
     "artifact_schema",
     "compare_project_evidence",
+    "create_archive_package",
     "export_project_nwb",
     "infer_peri_event_contrast",
     "load_project_config",
+    "load_archive_metadata",
     "load_tabular_input",
     "load_tdt_input",
     "make_recording",
@@ -44,6 +50,7 @@ SUPPORTED_API_V0_1 = (
     "sign_publication_manifest",
     "validate_recording",
     "verify_publication_manifest",
+    "verify_archive_package",
 )
 
 EXPERIMENTAL_API_V0_1 = (
@@ -60,6 +67,7 @@ EXPERIMENTAL_API_V0_1 = (
 )
 
 ARTIFACT_SCHEMAS_V0_1 = {
+    "fiberphotometry_archive_metadata": "archive-metadata-v1.schema.json",
     "evidence_bundle_comparison": "evidence-bundle-comparison-v1.schema.json",
     "event_analysis_result": "event-analysis-result-v1.schema.json",
     "multiverse_lane_summary": "multiverse-lane-summary-v1.schema.json",

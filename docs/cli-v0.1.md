@@ -170,6 +170,48 @@ The identity and namespace are signed. A readable self-signature is insufficient
 the identity must match a trusted key in `allowed_signers`. See the
 [publication signing contract](publication-signing-v0.1.md).
 
+## Creating a DOI/repository deposit
+
+Create one strict metadata record (all fields are required; optional values use
+empty arrays or `null`):
+
+```json
+{
+  "artifact_type": "fiberphotometry_archive_metadata",
+  "schema_version": "1",
+  "title": "Reward photometry analysis evidence",
+  "description": "Analysis, provenance, QC, and robustness results.",
+  "creators": [
+    {
+      "name": "Laffere, Aeron",
+      "affiliation": "Example University",
+      "orcid": "0000-0002-1825-0097"
+    }
+  ],
+  "publication_date": "2026-07-27",
+  "publisher": "Zenodo",
+  "license": "cc-by-4.0",
+  "keywords": ["fiber photometry", "reproducibility"],
+  "related_identifiers": [],
+  "resource_type": "Dataset",
+  "language": "en"
+}
+```
+
+Then create and independently verify a deterministic deposit:
+
+```bash
+uv run fiberphotometry archive artifacts \
+  --metadata archive-metadata.json \
+  --output reward-analysis-deposit.zip
+uv run fiberphotometry verify-archive reward-analysis-deposit.zip
+```
+
+The archive contains verified evidence, a checksum inventory, the neutral source
+metadata, and generated DataCite and Zenodo metadata. It is not uploaded or
+published automatically. See the
+[archival deposition contract](archive-deposition-v0.1.md).
+
 `inspect` validates data without bypassing the analysis contract. `run` still
 fails when required assumptions are not recorded, contrast levels are absent,
 input roles are ambiguous, reference data are unavailable, or a schema is invalid.
