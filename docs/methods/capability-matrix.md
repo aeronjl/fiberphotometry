@@ -15,12 +15,12 @@ experiment belongs in one package.
 | Hemodynamic and spectral crosstalk correction | **Gap** | Requires wavelength-aware mixing model and controls |
 | Multi-color spectral unmixing | **Gap** | Extend channel metadata and mixing diagnostics |
 | Event alignment and window summaries | **Supported** | Retains events, sessions and animals |
-| Interval/bout alignment and normalized progress | **Experimental / partial** | Typed intervals, explicit onset/offset and progress exist; add merge/split/filter rules and duration kernels |
+| Interval/bout alignment and normalized progress | **Experimental / partial** | Typed intervals, explicit onset/offset, aligned duration values, and first-class progress kernels exist; add merge/split/filter and overlap policies |
 | Animal-level scalar inference | **Supported/experimental** | t intervals supported; resampling and mixed models experimental |
 | Whole-waveform intervals | **Supported** | Animal-level pointwise and simultaneous bands |
 | Published waveform bootstrap/permutation parity | **Partial** | Related animal-level resampling exists; add an explicit literature reproduction and estimand comparison |
 | Trial-level functional mixed models | **Planned** | `fastFMM` bridge and numerical-parity fixtures |
-| Behavioral/event-kernel GLMs | **Experimental** | Full-FIR and raised-cosine kernels, explicit within-session event-history modulation, validity masks, grouped validation, conditional jackknife intervals, gap-safe diagnostics and named whole-model multiverses; add duration/contribution families and formal interval coverage |
+| Behavioral/event-kernel GLMs | **Experimental** | Full-FIR, raised-cosine, history, duration-modulated, and normalized-progress kernels with validity masks, grouped validation, conditional jackknife intervals, gap-safe diagnostics and named whole-model multiverses; add contribution summaries and formal interval coverage |
 | Longitudinal learning trajectories | **Interoperable / experimental** | Validated neural-summary handoff to Unspool; public cross-package benchmark still required |
 | Across-session photometry comparability | **Gap** | Add expression/coupling/baseline diagnostics and explicit refusal states before Unspool handoff |
 | Single-signal autocorrelation, PSD and spectrograms | **Gap** | Add gap-aware, detrending-explicit time/frequency results and public state fixture |

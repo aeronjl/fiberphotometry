@@ -41,6 +41,9 @@ development versions until the first public release.
 - Typed current and lagged event-value modulation for event-kernel models, with
   session-local history, recovery fixtures, multiverse comparison, and a worked
   tutorial.
+- First-class variable-duration behavior encoding with aligned edge/duration
+  inputs, normalized-progress bases, full-denominator fitting, grouped uncertainty,
+  multiverse comparison, recovery fixtures, and a worked tutorial.
 
 ### Scientific status
 

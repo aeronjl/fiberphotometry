@@ -313,6 +313,22 @@ def test_moseq_bouts_preserve_duration_and_expose_edges() -> None:
     assert annotations.intervals[0].stop_s == 1.5
     assert annotations.event_times()["groom"] == (1.5,)
     assert annotations.event_times(edge="offset")["groom"] == (2.5,)
+    inputs = annotations.interval_encoding_inputs()
+    assert inputs.events["rear"] == (0.0, 2.5)
+    assert inputs.event_values["rear"]["duration_s"] == (1.5, 0.5)
+    assert inputs.intervals["rear"] == ((0.0, 1.5), (2.5, 3.0))
+
+    session = EncodingSession.from_arrays(
+        subject="mouse-1",
+        session="day-1",
+        time=np.arange(0.0, 3.0, 0.5),
+        response=np.zeros(6),
+        events=inputs.events,
+        event_values=inputs.event_values,
+        intervals=inputs.intervals,
+    )
+    assert session.event_values["groom"]["duration_s"] == (1.0,)
+    assert session.intervals["groom"] == ((1.5, 2.5),)
 
 
 def test_boris_points_states_and_normalized_progress_feed_encoding() -> None:

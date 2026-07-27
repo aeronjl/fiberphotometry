@@ -681,6 +681,17 @@ class BehaviorInterval:
 
 
 @dataclass(frozen=True)
+class IntervalEncodingInputs:
+    """Aligned interval edges, durations and physical bounds for encoding models."""
+
+    events: Mapping[str, tuple[float, ...]]
+    event_values: Mapping[str, Mapping[str, tuple[float, ...]]]
+    intervals: Mapping[str, tuple[tuple[float, float], ...]]
+    edge: Literal["onset", "offset"]
+    schema_version: str = "1"
+
+
+@dataclass(frozen=True)
 class BehaviorAnnotations:
     """Point events and intervals discovered by an external behavior tool."""
 
@@ -775,6 +786,44 @@ class BehaviorAnnotations:
             source_artifact=self.source_artifact,
             clock_synchronization_ids=self.clock_synchronization_ids,
         )
+
+    def interval_encoding_inputs(
+        self,
+        *,
+        edge: Literal["onset", "offset"] = "onset",
+    ) -> IntervalEncodingInputs:
+        """Return aligned interval edges, duration values and physical bounds."""
+
+        if edge not in {"onset", "offset"}:
+            raise ValueError("interval encoding edge must be 'onset' or 'offset'")
+        labels = sorted({interval.label for interval in self.intervals})
+        events: dict[str, tuple[float, ...]] = {}
+        event_values: dict[str, Mapping[str, tuple[float, ...]]] = {}
+        intervals: dict[str, tuple[tuple[float, float], ...]] = {}
+        for label in labels:
+            selected = [item for item in self.intervals if item.label == label]
+            by_edge = sorted(
+                selected,
+                key=(
+                    (lambda item: (item.start_s, item.stop_s))
+                    if edge == "onset"
+                    else (lambda item: (item.stop_s, item.start_s))
+                ),
+            )
+            events[label] = tuple(
+                item.start_s if edge == "onset" else item.stop_s for item in by_edge
+            )
+            event_values[label] = {
+                "duration_s": tuple(item.stop_s - item.start_s for item in by_edge)
+            }
+            intervals[label] = tuple(
+                (item.start_s, item.stop_s)
+                for item in sorted(
+                    selected,
+                    key=lambda item: (item.start_s, item.stop_s),
+                )
+            )
+        return IntervalEncodingInputs(events, event_values, intervals, edge)
 
 
 def pose_from_deeplabcut(

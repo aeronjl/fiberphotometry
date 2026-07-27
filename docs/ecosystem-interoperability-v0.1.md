@@ -51,6 +51,12 @@ an onset analysis does not silently become the only representation of the data.
 `normalized_progress()` maps samples inside a declared bout to zero-to-one progress
 while the source interval retains its physical duration.
 
+For inference, `interval_encoding_inputs()` returns aligned edge events,
+`duration_s` values, and physical bounds. `ProgressKernelSpec` then evaluates
+normalized progress only inside each bout while retaining outside-bout samples as
+zero-valued design rows. This avoids turning absence of a behavior into missing
+data.
+
 ## Clock, identity, confidence and units
 
 Interoperability is valid only when these fields remain explicit:
@@ -204,7 +210,7 @@ and the separate [Unspool contract](unspool-interoperability-v0.1.md).
 |---|---|---|
 | P0 | complete real-file matrix: current DeepLabCut and Keypoint-MoSeq remain missing; official SLEAP and BORIS fixtures now pass | adapter validation in FiberPhotometry |
 | P1 | direct `ndx-pose` read/write path and NWB round trip | FiberPhotometry I/O |
-| P1 | first-class duration, amplitude and normalized-progress kernels | FiberPhotometry inference |
+| P1 | interval merge/split/filter, contextual-label and overlap policies | FiberPhotometry inference |
 | P1 | multi-animal identity-switch diagnostics at the neural-alignment boundary | source-tool QC plus FiberPhotometry preflight |
 | P1 | versioned behavioral interchange artifact with hashes and confidence semantics | shared package after a second consumer adopts it |
 | P2 | adapters for SimBA, B-SOiD and user-supplied state probabilities | thin FiberPhotometry adapters |

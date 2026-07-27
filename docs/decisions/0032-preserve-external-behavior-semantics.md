@@ -57,3 +57,10 @@ the source tool. Longitudinal behavioral modelling remains in Unspool under
 Revisit after real-file fixtures cover two versions of each source format, after
 Unspool or another peer package needs the same behavior boundary, or if a community
 standard supersedes these types.
+
+## Evidence added later
+
+[SDR-0038](0038-model-variable-duration-behavior-with-physical-intervals-and-progress.md)
+closed the first duration/progress-kernel gap with an aligned interval bundle and a
+full-denominator normalized-progress design. Merge/split/filter and overlap policies
+remain open.

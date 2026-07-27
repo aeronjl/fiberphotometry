@@ -8,6 +8,8 @@ from fiberphotometry.encoding import (
     EncodingSession,
     EventKernelSpec,
     EventModulationSpec,
+    LinearProgressBasisSpec,
+    ProgressKernelSpec,
     RaisedCosineBasisSpec,
 )
 from fiberphotometry.encoding_multiverse import (
@@ -243,6 +245,65 @@ def test_trial_history_kernel_is_a_named_common_evidence_alternative() -> None:
     assert history_result is not None
     assert history_result.event_kernels[1].modulation is not None
     assert history_result.event_kernels[1].modulation.lag_events == 1
+
+
+def test_progress_kernel_is_a_named_common_evidence_alternative() -> None:
+    sessions = tuple(
+        EncodingSession.from_arrays(
+            subject=session.subject,
+            session=session.session,
+            time=session.time,
+            response=session.response,
+            events=session.events,
+            continuous_covariates=session.continuous_covariates,
+            intervals={
+                "cue-state": tuple(
+                    (float(start), float(start + 0.5))
+                    for start in session.events["cue"]
+                )
+            },
+        )
+        for session in _sessions()
+    )
+    cue = EventKernelSpec("cue", (0.0, 0.4))
+    progress = ProgressKernelSpec(
+        "cue-state-progress",
+        source_interval="cue-state",
+        basis=LinearProgressBasisSpec(functions=3),
+    )
+    spec = EncodingMultiverseSpec(
+        alternatives=(
+            EncodingModelAlternative("cue-only", "Point-event model.", _model(cue)),
+            EncodingModelAlternative(
+                "cue-plus-progress",
+                "Add within-state normalized progress.",
+                EncodingModelSpec(
+                    event_kernels=(cue,),
+                    progress_kernels=(progress,),
+                    alpha_grid=(0.1, 1.0),
+                    folds=3,
+                    minimum_session_coverage=0.8,
+                ),
+            ),
+        ),
+        reference="cue-only",
+        intent="exploratory",
+    )
+
+    result = run_encoding_multiverse(sessions, spec)
+    comparison = next(
+        item for item in result.comparisons if item.name == "cue-plus-progress"
+    )
+    progress_result = next(
+        item.model_result
+        for item in result.universes
+        if item.name == "cue-plus-progress"
+    )
+
+    assert comparison.status == "direct_predictive_comparison"
+    assert comparison.exact_same_observations is True
+    assert progress_result is not None
+    assert progress_result.progress_kernels[0].source_interval == "cue-state"
 
 
 def test_retains_failed_alternative_without_improving_summary() -> None:

@@ -8,6 +8,8 @@ from fiberphotometry.encoding import (
     EncodingSession,
     EventKernelSpec,
     EventModulationSpec,
+    LinearProgressBasisSpec,
+    ProgressKernelSpec,
     RaisedCosineBasisSpec,
     _build_design,
     _residual_metrics,
@@ -96,7 +98,7 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert len(held_out) == len(set(held_out))
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "event_kernel_encoding_result"
-    assert payload["schema_version"] == "6"
+    assert payload["schema_version"] == "7"
     assert result.validity.total_observations == 16 * 400
     assert result.validity.retained_observations == result.observations
     assert result.validity.excluded_observations == 0
@@ -585,6 +587,153 @@ def test_event_modulation_rejects_ambiguous_or_missing_event_values() -> None:
     )
     with pytest.raises(ValueError, match="must be strictly increasing"):
         fit_event_kernel_model(sessions, spec)
+
+
+def test_recovers_normalized_progress_without_excluding_outside_bout_time() -> None:
+    rng = np.random.default_rng(733)
+    sessions = []
+    centers = np.linspace(0.0, 1.0, 4)
+    truth = np.asarray([0.2, 0.9, 1.1, 0.35])
+    for animal in range(8):
+        time = np.arange(0.0, 60.0, 0.1)
+        starts = np.arange(3.0, 53.0, 5.0)
+        durations = np.asarray([1.2, 2.0, 3.0, 1.6, 2.4] * 2)
+        intervals = tuple(
+            (float(start), float(start + duration))
+            for start, duration in zip(starts, durations, strict=True)
+        )
+        response = rng.normal(0.0, 0.04, len(time))
+        for start, stop in intervals:
+            inside = (time >= start) & (time < stop)
+            progress = (time[inside] - start) / (stop - start)
+            response[inside] += np.interp(progress, centers, truth)
+        sessions.append(
+            EncodingSession.from_arrays(
+                subject=f"mouse-{animal}",
+                session="day-0",
+                time=time,
+                response=response,
+                events={},
+                intervals={"rear": intervals},
+            )
+        )
+    spec = EncodingModelSpec(
+        event_kernels=(),
+        progress_kernels=(
+            ProgressKernelSpec(
+                "rear-progress",
+                source_interval="rear",
+                basis=LinearProgressBasisSpec(functions=4, evaluation_points=101),
+            ),
+        ),
+        alpha_grid=(0.0, 0.1),
+        folds=4,
+    )
+
+    result = fit_event_kernel_model(tuple(sessions), spec)
+    kernel = result.progress_kernels[0]
+
+    assert result.validity.retained_fraction == 1.0
+    assert kernel.source_interval == "rear"
+    assert kernel.intervals == 80
+    assert kernel.progress[0] == 0.0
+    assert kernel.progress[-1] == 1.0
+    assert np.interp(centers, kernel.progress, kernel.coefficient) == pytest.approx(
+        truth, abs=0.03
+    )
+    assert len(kernel.basis.coefficient) == 4
+    assert len(result.kernel_uncertainty.progress_kernels[0].standard_error) == 101
+    selected = next(
+        item for item in result.cross_validation if item.alpha == result.selected_alpha
+    )
+    assert selected.mean_r_squared > 0.9
+
+
+def test_progress_design_is_zero_outside_bouts_and_rejects_ambiguity() -> None:
+    sessions = tuple(
+        EncodingSession.from_arrays(
+            subject=f"mouse-{index}",
+            session="day-0",
+            time=np.arange(7.0),
+            response=np.arange(7.0),
+            events={},
+            intervals={"rear": ((1.0, 4.0),)},
+        )
+        for index in range(2)
+    )
+    spec = EncodingModelSpec(
+        event_kernels=(),
+        group_by="session",
+        folds=2,
+        progress_kernels=(
+            ProgressKernelSpec(
+                "rear",
+                basis=LinearProgressBasisSpec(functions=2),
+            ),
+        ),
+    )
+    design = _build_design(sessions, spec)
+
+    assert design.values[:7].toarray()[[0, 4, 5, 6]].tolist() == [
+        [0.0, 0.0],
+        [0.0, 0.0],
+        [0.0, 0.0],
+        [0.0, 0.0],
+    ]
+    assert np.sum(design.values[:7].toarray()[1:4], axis=1) == pytest.approx(np.ones(3))
+
+    overlapping = tuple(
+        EncodingSession.from_arrays(
+            subject=f"mouse-{index}",
+            session="day-0",
+            time=np.arange(7.0),
+            response=np.arange(7.0),
+            events={},
+            intervals={"rear": ((1.0, 4.0), (3.0, 5.0))},
+        )
+        for index in range(2)
+    )
+    with pytest.raises(ValueError, match="overlapping interval 'rear'"):
+        fit_event_kernel_model(overlapping, spec)
+
+    out_of_support = tuple(
+        EncodingSession.from_arrays(
+            subject=f"mouse-{index}",
+            session="day-0",
+            time=np.arange(7.0),
+            response=np.arange(7.0),
+            events={},
+            intervals={"rear": ((-1.0, 2.0),)},
+        )
+        for index in range(2)
+    )
+    with pytest.raises(ValueError, match="extends beyond session"):
+        fit_event_kernel_model(out_of_support, spec)
+
+    unsupported_spec = EncodingModelSpec(
+        event_kernels=(),
+        group_by="session",
+        folds=2,
+        progress_kernels=(
+            ProgressKernelSpec(
+                "rear",
+                basis=LinearProgressBasisSpec(functions=3),
+            ),
+        ),
+    )
+    one_sample = tuple(
+        EncodingSession.from_arrays(
+            subject=f"mouse-{index}",
+            session="day-0",
+            time=np.arange(7.0),
+            response=np.arange(7.0),
+            events={},
+            intervals={"rear": ((1.0, 2.0),)},
+        )
+        for index in range(2)
+    )
+    with pytest.raises(ValueError, match="progress components have no retained"):
+        fit_event_kernel_model(one_sample, unsupported_spec)
 
 
 def test_residual_metrics_do_not_bridge_excluded_spans() -> None:
