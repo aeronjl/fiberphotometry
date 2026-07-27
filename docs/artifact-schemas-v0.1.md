@@ -11,6 +11,10 @@ Grouped robustness execution also emits `artifact_type =
 Its magnitudes and practical-effect thresholds are scoped to explicit unit lanes;
 it contains no pooled cross-unit median or range.
 
+Cross-bundle reports emit `artifact_type = "evidence_bundle_comparison"` and
+`schema_version = "1"`, governed by
+[`schemas/evidence-bundle-comparison-v1.schema.json`](../schemas/evidence-bundle-comparison-v1.schema.json).
+
 The nested event-coverage and peri-event inference records each carry their own
 `schema_version = "1"`. Analysis plans, study designs, project configuration, and
 pipeline specifications retain their existing explicit versions. Provenance

@@ -6,6 +6,7 @@ import numpy as np
 import pytest
 
 from fiberphotometry.cli import main
+from fiberphotometry.comparison import compare_project_evidence
 from fiberphotometry.project import TabularProjectConfig
 from fiberphotometry.results import read_project_evidence
 
@@ -358,6 +359,66 @@ def test_evidence_reader_rejects_manifest_path_traversal(tmp_path) -> None:
         read_project_evidence(bundle)
 
 
+def test_evidence_comparison_ignores_only_volatile_run_provenance(tmp_path) -> None:
+    project_path = _project(tmp_path)
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    assert main(["run", str(project_path), "--output-dir", str(first)]) == 0
+    assert main(["run", str(project_path), "--output-dir", str(second)]) == 0
+
+    comparison = compare_project_evidence(
+        read_project_evidence(first), read_project_evidence(second)
+    )
+
+    assert comparison.comparable is True
+    assert comparison.same_project is True
+    assert comparison.scientifically_equivalent is True
+    assert comparison.byte_identical is False
+    assert {item.category for item in comparison.differences} <= {"provenance"}
+    assert "Scientific result:** reproduced" in comparison.to_markdown()
+    report = tmp_path / "comparison.md"
+    assert main(["compare", str(first), str(second), "--output", str(report)]) == 0
+    assert "Scientific result:** reproduced" in report.read_text()
+
+
+def test_evidence_comparison_detects_changed_data_and_outcome(tmp_path) -> None:
+    project_path = _project(tmp_path)
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    assert main(["run", str(project_path), "--output-dir", str(first)]) == 0
+    recording = tmp_path / "data" / "recording-1.csv"
+    values = np.genfromtxt(recording, delimiter=",", names=True)
+    response = ((values["time"] >= 6) & (values["time"] < 6.5)) | (
+        (values["time"] >= 10) & (values["time"] < 10.5)
+    )
+    values["signal"][response] += 0.1
+    np.savetxt(
+        recording,
+        np.column_stack((values["time"], values["signal"], values["reference"])),
+        delimiter=",",
+        header="time,signal,reference",
+        comments="",
+    )
+    assert main(["run", str(project_path), "--output-dir", str(second)]) == 0
+
+    comparison = compare_project_evidence(
+        read_project_evidence(first), read_project_evidence(second)
+    )
+
+    assert comparison.same_project is True
+    assert comparison.scientifically_equivalent is False
+    assert {item.category for item in comparison.differences} & {
+        "data",
+        "outcome",
+        "quality",
+    }
+    report = tmp_path / "comparison.json"
+    assert main(["compare", str(first), str(second), "--output", str(report)]) == 0
+    payload = json.loads(report.read_text())
+    assert payload["artifact_type"] == "evidence_bundle_comparison"
+    assert payload["scientifically_equivalent"] is False
+
+
 def test_cli_rejects_structurally_incompatible_multiverse_before_run(
     tmp_path, capsys
 ) -> None:
@@ -654,6 +715,10 @@ def test_cli_exports_multiverse_provenance_without_duplicate_signals(tmp_path) -
     assert nwb_bundle.manifest_verified is None
     assert nwb_bundle.multiverse is not None
     assert nwb_bundle.robustness_summary is not None
+    cross_format = compare_project_evidence(read_project_evidence(output), nwb_bundle)
+    assert cross_format.byte_identical is None
+    assert cross_format.same_project is True
+    assert cross_format.scientifically_equivalent is True
 
 
 def test_complete_metadata_profile_is_publication_ready(tmp_path) -> None:

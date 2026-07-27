@@ -13,6 +13,7 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, cast
 
+from fiberphotometry.comparison import compare_project_evidence
 from fiberphotometry.compatibility import (
     MultiverseCompatibility,
     PipelineCompatibility,
@@ -42,6 +43,7 @@ from fiberphotometry.project import (
     SessionSource,
     load_project_config,
 )
+from fiberphotometry.results import read_project_evidence
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -49,6 +51,25 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "compare":
+            comparison = compare_project_evidence(
+                read_project_evidence(args.left),
+                read_project_evidence(args.right),
+                absolute_tolerance=args.absolute_tolerance,
+                relative_tolerance=args.relative_tolerance,
+            )
+            if args.output is None:
+                print(comparison.to_markdown(), end="")
+            else:
+                destination = Path(args.output).resolve()
+                content = (
+                    comparison.to_json()
+                    if destination.suffix.lower() == ".json"
+                    else comparison.to_markdown()
+                )
+                _atomic_write(destination, content)
+                print(f"Comparison written to {destination}")
+            return 0
         project = load_project_config(args.project)
         loaded = project.load()
         if args.command == "inspect":
@@ -506,6 +527,27 @@ def _parser() -> argparse.ArgumentParser:
         "--output-dir",
         type=Path,
         help="override the project output directory",
+    )
+    compare = subparsers.add_parser(
+        "compare",
+        help="compare two result directories or NWB evidence files",
+    )
+    compare.add_argument("left", type=Path, help="first evidence source")
+    compare.add_argument("right", type=Path, help="second evidence source")
+    compare.add_argument(
+        "--absolute-tolerance",
+        type=float,
+        default=0.0,
+        help="absolute numeric tolerance",
+    )
+    compare.add_argument(
+        "--relative-tolerance",
+        type=float,
+        default=0.0,
+        help="relative numeric tolerance",
+    )
+    compare.add_argument(
+        "--output", type=Path, help="write Markdown or JSON based on the extension"
     )
     return parser
 

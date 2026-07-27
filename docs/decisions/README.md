@@ -49,6 +49,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0019](0019-reject-irrelevant-parameters-and-declare-incompatibility.md) | Accepted | Reject irrelevant parameters and declare incompatibility prospectively |
 | [SDR-0020](0020-store-one-reference-signal-and-the-complete-multiverse-ledger.md) | Accepted | Store one reference signal and the complete multiverse ledger |
 | [SDR-0021](0021-verify-directory-bundles-and-mark-standalone-nwb-trust.md) | Accepted | Verify directory bundles and mark standalone NWB trust |
+| [SDR-0022](0022-separate-byte-identity-from-scientific-reproduction.md) | Accepted | Separate byte identity from scientific reproduction |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

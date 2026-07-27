@@ -2,6 +2,11 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
+from fiberphotometry.comparison import (
+    BundleComparison,
+    EvidenceDifference,
+    compare_project_evidence,
+)
 from fiberphotometry.compatibility import (
     CompatibilityIssue,
     MultiverseCompatibility,
@@ -169,6 +174,7 @@ __all__ = [
     "AnalysisPlan",
     "AnalysisResult",
     "BaselineDFFOperation",
+    "BundleComparison",
     "ChoiceRef",
     "CompatibilityIssue",
     "CompatibilityRule",
@@ -186,6 +192,7 @@ __all__ = [
     "EventCoverageStratum",
     "EventSession",
     "EventSummarySpec",
+    "EvidenceDifference",
     "EvidenceFile",
     "Factor",
     "InferenceRecommendation",
@@ -256,6 +263,7 @@ __all__ = [
     "assess_recording",
     "assess_signal_recording",
     "baseline_dff",
+    "compare_project_evidence",
     "condition_exclusion_warning",
     "condition_reconstruction_warning",
     "create_analysis_plan",

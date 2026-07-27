@@ -123,6 +123,21 @@ metadata, preflight, and QC. Because a standalone file has no external expected
 hash, `manifest_verified` is `None` rather than an unsupported claim of integrity.
 See the [evidence reader contract](evidence-reader-v0.1.md).
 
+Compare any two readable bundles from the command line:
+
+```bash
+uv run fiberphotometry compare artifacts-a artifacts-b
+uv run fiberphotometry compare artifacts-a session.nwb \
+  --absolute-tolerance 1e-8 --output reproducibility.json
+```
+
+Markdown is printed by default. An `.json` destination writes the versioned
+machine artifact; other extensions receive Markdown. Comparison reports byte
+identity, project fingerprint agreement, scientific comparability, and semantic
+differences classified as configuration, specification, data, quality, outcome,
+execution, or provenance. See the
+[reproducibility comparison contract](reproducibility-comparison-v0.1.md).
+
 `inspect` validates data without bypassing the analysis contract. `run` still
 fails when required assumptions are not recorded, contrast levels are absent,
 input roles are ambiguous, reference data are unavailable, or a schema is invalid.

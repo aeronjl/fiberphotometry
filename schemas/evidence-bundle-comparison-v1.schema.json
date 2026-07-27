@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/evidence-bundle-comparison-v1.schema.json",
+  "title": "FiberPhotometry evidence bundle comparison v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "left_source",
+    "right_source",
+    "left_kind",
+    "right_kind",
+    "comparable",
+    "byte_identical",
+    "same_project",
+    "scientifically_equivalent",
+    "absolute_tolerance",
+    "relative_tolerance",
+    "differences",
+    "truncated",
+    "artifact_type",
+    "schema_version"
+  ],
+  "properties": {
+    "left_source": {"type": "string"},
+    "right_source": {"type": "string"},
+    "left_kind": {"enum": ["analysis", "multiverse", "incomplete"]},
+    "right_kind": {"enum": ["analysis", "multiverse", "incomplete"]},
+    "comparable": {"type": "boolean"},
+    "byte_identical": {"type": ["boolean", "null"]},
+    "same_project": {"type": "boolean"},
+    "scientifically_equivalent": {"type": "boolean"},
+    "absolute_tolerance": {"type": "number", "minimum": 0},
+    "relative_tolerance": {"type": "number", "minimum": 0},
+    "differences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["category", "path", "left", "right"],
+        "properties": {
+          "category": {
+            "enum": [
+              "configuration",
+              "specification",
+              "data",
+              "quality",
+              "outcome",
+              "execution",
+              "provenance"
+            ]
+          },
+          "path": {"type": "string"},
+          "left": {},
+          "right": {}
+        }
+      }
+    },
+    "truncated": {"type": "boolean"},
+    "artifact_type": {"const": "evidence_bundle_comparison"},
+    "schema_version": {"const": "1"}
+  }
+}

@@ -36,3 +36,7 @@ v0.1 APIs. Unknown manifest schema versions and malformed record types are rejec
 rather than guessed. The reader returns decoded JSON mappings rather than
 reconstructing mutable execution objects, keeping archival inspection separate
 from rerunning an analysis.
+
+Use `compare_project_evidence(left, right)` to compare two loaded bundles. A
+directory and an NWB file can be scientifically equivalent even though byte
+identity is undefined across formats.

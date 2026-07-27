@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, cast
 
 SUPPORTED_API_V0_1 = (
+    "BundleComparison",
     "EventAnalysis",
     "EventAnalysisConfig",
     "EventAnalysisResult",
@@ -17,6 +18,7 @@ SUPPORTED_API_V0_1 = (
     "EventCoverageStratum",
     "EventSession",
     "EvidenceFile",
+    "EvidenceDifference",
     "PeriEventInferenceResult",
     "PeriEventInferenceSpec",
     "Preprocessing",
@@ -29,6 +31,7 @@ SUPPORTED_API_V0_1 = (
     "TabularRecordingSchema",
     "assess_event_coverage",
     "artifact_schema",
+    "compare_project_evidence",
     "export_project_nwb",
     "infer_peri_event_contrast",
     "load_project_config",
@@ -53,6 +56,7 @@ EXPERIMENTAL_API_V0_1 = (
 )
 
 ARTIFACT_SCHEMAS_V0_1 = {
+    "evidence_bundle_comparison": "evidence-bundle-comparison-v1.schema.json",
     "event_analysis_result": "event-analysis-result-v1.schema.json",
     "multiverse_lane_summary": "multiverse-lane-summary-v1.schema.json",
     "event_coverage": "embedded schema_version 1",
