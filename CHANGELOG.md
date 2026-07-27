@@ -32,6 +32,9 @@ development versions until the first public release.
 - Experimental matched-pulse affine clock synchronization with explicit residual,
   drift, pulse-count, span and extrapolation thresholds; pose, covariate and
   annotation transformations retain a stable synchronization evidence ID.
+- Experimental named event-kernel model multiverses with stable pre-fit IDs,
+  retained failures, exact sample-index fingerprints, and held-out score deltas
+  only for models fitted to common evidence.
 
 ### Scientific status
 

@@ -89,11 +89,14 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert len(held_out) == len(set(held_out))
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "event_kernel_encoding_result"
-    assert payload["schema_version"] == "3"
+    assert payload["schema_version"] == "4"
     assert result.validity.total_observations == 16 * 400
     assert result.validity.retained_observations == result.observations
     assert result.validity.excluded_observations == 0
     assert result.validity.retained_fraction == 1.0
+    assert all(
+        len(item.retained_index_fingerprint) == 64 for item in result.validity.sessions
+    )
     uncertainty = {
         kernel.name: kernel for kernel in result.kernel_uncertainty.event_kernels
     }

@@ -37,6 +37,14 @@ implementation-validation companion to the public-data example below.
 
 [Open the event-kernel simulation](event-kernel-simulation.md)
 
+## Event-kernel model multiverse
+
+Compare named cue, reward and motion design specifications under one fixed
+animal-held-out validation policy. Score deltas are only reported when models use
+the exact same retained timestamps, and failed designs remain in the ledger.
+
+[Open the model-multiverse method](../event-kernel-multiverse-v0.1.md)
+
 ## Public DANDI event-kernel reproduction
 
 Fit joint active-poke and reward-increment kernels to DMS and DLS recordings from

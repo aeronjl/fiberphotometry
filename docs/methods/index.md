@@ -69,7 +69,10 @@ and [worked simulation](../tutorials/event-kernel-simulation.md).
 The [public DANDI reproduction](../tutorials/dandi-000971-event-kernel.md)
 retains weak animal-held-out prediction and shows why the method remains
 experimental. It now includes conditional grouped-jackknife kernel intervals and
-session-safe held-out residual diagnostics.
+session-safe held-out residual diagnostics. The
+[model-multiverse workflow](../event-kernel-multiverse-v0.1.md) compares named
+whole-design alternatives, retains failures, and permits score deltas only on
+identical retained timestamps.
 
 Basis, trial-history, duration/amplitude, and predictor-family contribution
 alternatives remain planned, as do simultaneous kernel intervals and formal

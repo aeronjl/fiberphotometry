@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass, field
+from hashlib import sha256
 from typing import Literal
 
 import numpy as np
@@ -232,6 +233,7 @@ class EncodingSessionCoverage:
     invalid_response: int
     invalid_by_covariate: Mapping[str, int]
     contiguous_retained_runs: int
+    retained_index_fingerprint: str
 
 
 @dataclass(frozen=True)
@@ -269,7 +271,7 @@ class EncodingModelResult:
     artifact_type: Literal["event_kernel_encoding_result"] = (
         "event_kernel_encoding_result"
     )
-    schema_version: str = "3"
+    schema_version: str = "4"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -460,6 +462,9 @@ def _build_design(
             invalid_response=int(np.sum(~response_valid)),
             invalid_by_covariate=invalid_by_covariate,
             contiguous_retained_runs=run_count,
+            retained_index_fingerprint=sha256(
+                np.asarray(retained, dtype=np.uint8).tobytes()
+            ).hexdigest(),
         )
         if retained_count < spec.minimum_session_observations:
             raise ValueError(
