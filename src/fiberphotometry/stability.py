@@ -30,6 +30,7 @@ SUPPORTED_API_V0_1 = (
     "ProjectEvidenceBundle",
     "PublicationAttestation",
     "PublicationVerification",
+    "ZenodoDraftReceipt",
     "TDTBlockSchema",
     "TDTProjectConfig",
     "TabularEventSchema",
@@ -39,6 +40,7 @@ SUPPORTED_API_V0_1 = (
     "artifact_schema",
     "compare_project_evidence",
     "create_archive_package",
+    "create_zenodo_draft",
     "export_project_nwb",
     "infer_peri_event_contrast",
     "load_project_config",
@@ -74,6 +76,7 @@ ARTIFACT_SCHEMAS_V0_1 = {
     "publication_manifest_attestation": (
         "publication-manifest-attestation-v1.schema.json"
     ),
+    "zenodo_draft_receipt": "zenodo-draft-receipt-v1.schema.json",
     "event_coverage": "embedded schema_version 1",
     "peri_event_inference": "embedded schema_version 1",
 }

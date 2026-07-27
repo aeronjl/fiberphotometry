@@ -212,6 +212,18 @@ metadata, and generated DataCite and Zenodo metadata. It is not uploaded or
 published automatically. See the
 [archival deposition contract](archive-deposition-v0.1.md).
 
+Upload the verified package as an unpublished sandbox draft:
+
+```bash
+export ZENODO_SANDBOX_TOKEN="..."
+uv run fiberphotometry zenodo-draft reward-analysis-deposit.zip
+```
+
+The JSON receipt records the environment, draft ID and URL, archive and project
+fingerprints, filename, byte size, and `submitted = false`; it contains no token.
+Production draft creation requires `--production`. FiberPhotometry exposes no DOI
+publication action.
+
 `inspect` validates data without bypassing the analysis contract. `run` still
 fails when required assumptions are not recorded, contrast levels are absent,
 input roles are ambiguous, reference data are unavailable, or a schema is invalid.

@@ -104,6 +104,7 @@
 - [x] Add cross-bundle comparison and reproducibility-diff reporting
 - [x] Add signed publication manifests and detached verification
 - [x] Add release/DOI deposition packaging and archival metadata validation
+  - [x] Add a sandbox-first Zenodo draft upload and validation adapter
 - [x] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [x] Canonical raw-NWB to animal-level robustness tutorial

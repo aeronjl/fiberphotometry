@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/zenodo-draft-receipt-v1.schema.json",
+  "title": "FiberPhotometry Zenodo draft receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["deposition_id", "environment", "filename", "file_size", "archive_sha256", "project_sha256", "html_url", "submitted", "state", "artifact_type", "schema_version"],
+  "properties": {
+    "deposition_id": {"type": "integer", "minimum": 1},
+    "environment": {"enum": ["sandbox", "production"]},
+    "filename": {"type": "string", "minLength": 1},
+    "file_size": {"type": "integer", "minimum": 0},
+    "archive_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "project_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "html_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "submitted": {"const": false},
+    "state": {"const": "unsubmitted"},
+    "artifact_type": {"const": "zenodo_draft_receipt"},
+    "schema_version": {"const": "1"}
+  }
+}

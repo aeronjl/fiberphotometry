@@ -61,6 +61,14 @@ def test_archive_metadata_has_a_normative_schema() -> None:
     )
 
 
+def test_zenodo_draft_receipt_has_a_normative_schema() -> None:
+    schema = fiberphotometry.artifact_schema("zenodo_draft_receipt")
+
+    assert schema["additionalProperties"] is False
+    assert schema["properties"]["submitted"]["const"] is False
+    assert schema["properties"]["state"]["const"] == "unsubmitted"
+
+
 def test_unknown_or_embedded_schema_is_not_guessed() -> None:
     for artifact_type in ("missing", "event_coverage"):
         try:

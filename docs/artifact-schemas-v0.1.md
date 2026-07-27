@@ -27,6 +27,12 @@ One validated source record generates repository-specific `datacite.json` and
 `.zenodo.json` projections; the ZIP checksum inventory is recorded separately in
 `archive-manifest.json`.
 
+Successful repository handoff emits `artifact_type = "zenodo_draft_receipt"` and
+`schema_version = "1"`, governed by
+[`schemas/zenodo-draft-receipt-v1.schema.json`](../schemas/zenodo-draft-receipt-v1.schema.json).
+The fixed `submitted = false` and `state = "unsubmitted"` fields make the safety
+boundary machine-checkable.
+
 The nested event-coverage and peri-event inference records each carry their own
 `schema_version = "1"`. Analysis plans, study designs, project configuration, and
 pipeline specifications retain their existing explicit versions. Provenance

@@ -179,6 +179,7 @@ from fiberphotometry.workflow import (
     EventSession,
     Preprocessing,
 )
+from fiberphotometry.zenodo import ZenodoDraftReceipt, create_zenodo_draft
 
 try:
     __version__ = version("fiberphotometry")
@@ -273,6 +274,7 @@ __all__ = [
     "Unit",
     "UniverseCompatibility",
     "UniverseResult",
+    "ZenodoDraftReceipt",
     "__version__",
     "align_events",
     "artifact_schema",
@@ -289,6 +291,7 @@ __all__ = [
     "condition_reconstruction_warning",
     "create_analysis_plan",
     "create_archive_package",
+    "create_zenodo_draft",
     "exact_sign_flip_test",
     "execute_analysis_plan",
     "export_project_multiverse_nwb",

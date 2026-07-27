@@ -52,6 +52,7 @@ from fiberphotometry.publication import (
     verify_publication_manifest,
 )
 from fiberphotometry.results import read_project_evidence
+from fiberphotometry.zenodo import create_zenodo_draft
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -104,6 +105,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
         if args.command == "verify-archive":
             print(verify_archive_package(args.archive).to_json())
+            return 0
+        if args.command == "zenodo-draft":
+            receipt = create_zenodo_draft(
+                args.archive,
+                token_env=args.token_env,
+                production=args.production,
+            )
+            print(receipt.to_json())
             return 0
         project = load_project_config(args.project)
         loaded = project.load()
@@ -620,6 +629,19 @@ def _parser() -> argparse.ArgumentParser:
         "verify-archive", help="verify an archival package and its inventory"
     )
     verify_archive.add_argument("archive", type=Path, help="deposit .zip path")
+    zenodo = subparsers.add_parser(
+        "zenodo-draft", help="upload an archive as an unpublished Zenodo draft"
+    )
+    zenodo.add_argument("archive", type=Path, help="validated deposit .zip path")
+    zenodo.add_argument(
+        "--token-env",
+        help="environment variable containing the access token",
+    )
+    zenodo.add_argument(
+        "--production",
+        action="store_true",
+        help="create a production draft instead of a sandbox draft",
+    )
     return parser
 
 

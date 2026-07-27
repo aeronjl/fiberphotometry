@@ -52,3 +52,24 @@ checksum mismatches, malformed source metadata, incomplete evidence, evidence
 manifest failures, and disagreement between archive and project fingerprints.
 Signature authorization remains a separate step requiring the verifier's own
 `allowed_signers` trust file.
+
+## Zenodo draft handoff
+
+After local review, upload the ZIP to a Zenodo sandbox draft:
+
+```bash
+export ZENODO_SANDBOX_TOKEN="..."
+uv run fiberphotometry zenodo-draft reward-analysis-deposit.zip
+```
+
+The token is read from `ZENODO_SANDBOX_TOKEN`, never accepted as a command-line
+value or placed in a URL. `--token-env NAME` selects a different environment
+variable. The adapter validates the ZIP before contacting Zenodo, sends metadata,
+streams the file, and retrieves the draft again to confirm its title and
+unpublished status. It accepts response and upload links only on the selected
+Zenodo HTTPS host.
+
+Sandbox is the default. `--production` creates a draft at `zenodo.org`, but there
+is intentionally no publish command or publish API call. Production uses the
+separate `ZENODO_TOKEN` variable by default. Review the returned HTML draft URL
+and publish through an independently authorized human step.

@@ -170,6 +170,8 @@ def create_archive_package(
         raise ValueError("archival packaging requires a verified artifact directory")
     if evidence.status != "complete":
         raise ValueError("archival packaging requires a complete evidence bundle")
+    if evidence.kind == "incomplete":
+        raise ValueError("archival packaging requires analysis or multiverse evidence")
     record = (
         load_archive_metadata(metadata)
         if not isinstance(metadata, ArchiveMetadata)
