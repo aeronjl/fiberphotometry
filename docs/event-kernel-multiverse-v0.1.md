@@ -112,11 +112,15 @@ alternatives are available, but coefficients under unlike coding or bases should
 not be pooled into one magnitude range; compare reconstructed physical-lag curves
 and held-out prediction. Variable-duration progress kernels are also available;
 their dimensionless curves should not be pooled with physical-lag curves. The
-immediate extension is predictor-family contribution summaries. It must preserve
-the fixed validation policy, exact-denominator evidence and retained failures
-established here.
+separate [predictor-family contribution layer](predictor-family-contributions-v0.1.md)
+now turns explicitly declared literal subsets into paired held-out sensitivity
+summaries. It preserves the fixed validation policy, exact-denominator evidence and
+retained failures established here; broader multiverse alternatives remain
+descriptive rather than being mislabeled as family contributions.
 
 The general rationale follows the
 [multiverse scientific contract](multiverse-contract-v0.1.md). Event-kernel-specific
 rules are recorded in
 [SDR-0035](decisions/0035-compare-event-kernel-models-only-on-common-evidence.md).
+Family-drop interpretation is governed by
+[SDR-0039](decisions/0039-treat-predictor-family-drops-as-paired-predictive-sensitivity.md).

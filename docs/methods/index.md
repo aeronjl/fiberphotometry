@@ -76,8 +76,10 @@ identical retained timestamps.
 
 Full-FIR and raised-cosine bases, explicit within-session event history, duration
 modulation, and normalized-progress kernels are available as named alternatives.
-Predictor-family contribution summaries remain planned, as do simultaneous kernel
-intervals and formal coverage calibration. See the
+The [predictor-family contribution workflow](../predictor-family-contributions-v0.1.md)
+adds strictly paired full-versus-reduced held-out comparisons while rejecting
+changed predictors, tuning policies, or denominators. Simultaneous kernel intervals
+and formal coverage calibration remain planned. See the
 [previous-outcome tutorial](../tutorials/event-kernel-history.md) and
 [variable-duration tutorial](../tutorials/variable-duration-kernels.md).
 

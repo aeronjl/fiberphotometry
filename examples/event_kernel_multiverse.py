@@ -12,7 +12,10 @@ from fiberphotometry import (
     EncodingMultiverseSpec,
     EncodingSession,
     EventKernelSpec,
+    PredictorFamilyContributionSpec,
+    PredictorFamilyDropSpec,
     RaisedCosineBasisSpec,
+    assess_predictor_family_contributions,
     run_encoding_multiverse,
 )
 
@@ -107,6 +110,30 @@ def run() -> None:
             comparison.status,
             comparison.alternative_mean_r_squared,
             comparison.delta_mean_r_squared,
+        )
+    contributions = assess_predictor_family_contributions(
+        result,
+        PredictorFamilyContributionSpec(
+            full_model="cue-reward-motion",
+            families=(
+                PredictorFamilyDropSpec(
+                    family="movement",
+                    reduced_model="cue-and-reward",
+                    removed_predictors=("motion",),
+                    rationale="Ask whether movement improves held-out prediction.",
+                ),
+            ),
+        ),
+    )
+    Path("predictor-family-contribution-result.json").write_text(
+        contributions.to_json()
+    )
+    for comparison in contributions.comparisons:
+        print(
+            comparison.family,
+            comparison.status,
+            comparison.delta_mean_r_squared,
+            comparison.group_interval,
         )
 
 

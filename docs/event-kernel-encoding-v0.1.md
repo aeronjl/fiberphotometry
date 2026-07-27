@@ -212,8 +212,10 @@ and selected the largest declared ridge penalty. This validates execution and
 failure transparency, not scientific sufficiency. Its v0.2 rerun found substantial
 held-out residual autocorrelation and wide group-sensitivity intervals. The next
 step is to use the model-multiverse boundary for a newly specified expanded design,
-then add predictor-family contribution summaries and formal interval-coverage
-calibration.
+then use paired
+[predictor-family contribution summaries](predictor-family-contributions-v0.1.md)
+where literal reduced models are scientifically justified. Formal interval-coverage
+calibration remains outstanding.
 
 See the [worked simulation](tutorials/event-kernel-simulation.md) and
 [model-multiverse workflow](event-kernel-multiverse-v0.1.md). The grouped

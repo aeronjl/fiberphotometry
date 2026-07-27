@@ -44,6 +44,9 @@ development versions until the first public release.
 - First-class variable-duration behavior encoding with aligned edge/duration
   inputs, normalized-progress bases, full-denominator fitting, grouped uncertainty,
   multiverse comparison, recovery fixtures, and a worked tutorial.
+- Paired predictor-family held-out contribution summaries over declared encoding
+  multiverses, with literal-subset validation, exact-denominator safeguards,
+  per-group deltas, conditional sensitivity intervals, and non-causal guidance.
 
 ### Scientific status
 
