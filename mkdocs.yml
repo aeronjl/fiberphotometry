@@ -71,6 +71,7 @@ nav:
       - Experimental design and inference: inference-design-v0.1.md
       - Peri-event inference: peri-event-inference-v0.1.md
       - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
+      - Event-kernel model multiverses: event-kernel-multiverse-v0.1.md
       - Spontaneous transients: spontaneous-transients-v0.1.md
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
@@ -84,6 +85,7 @@ nav:
       - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
       - Public transient validation: dandi-000251-transient-results-v0.1.md
       - Event-kernel simulation: tutorials/event-kernel-simulation.md
+      - Event-kernel model multiverse: event-kernel-multiverse-v0.1.md
       - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
       - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md
       - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md

@@ -82,10 +82,12 @@ response samples. Non-finite values are invalid regardless of the supplied mask.
 Only covariates named in the model specification contribute to its complete-case
 mask.
 
-The result artifact schema v3 contains an `EncodingValidityReport`. Its per-session
+The result artifact schema v4 contains an `EncodingValidityReport`. Its per-session
 records make the model denominator auditable and distinguish invalid response
 samples from invalid samples for each selected covariate. Counts can overlap: the
-overall excluded count is the union, not the sum of reason counts.
+overall excluded count is the union, not the sum of reason counts. Each record also
+contains a fingerprint of the exact retained sample indices so robustness workflows
+can distinguish equal counts from genuinely identical denominators.
 
 Complete-case fitting is deliberately conservative and does not claim that data
 are missing completely at random. If missingness relates to behavior or signal
@@ -128,10 +130,12 @@ retained slightly negative mean animal-held-out prediction in both modeled regio
 and selected the largest declared ridge penalty. This validates execution and
 failure transparency, not scientific sufficiency. Its v0.2 rerun found substantial
 held-out residual autocorrelation and wide group-sensitivity intervals. The next
-step is a newly specified expanded or nested regularization design and explicit
-design-matrix multiverses, followed by formal interval-coverage calibration.
+step is to use the model-multiverse boundary for a newly specified expanded design,
+then add basis/history/duration families and formal interval-coverage calibration.
 
 See the [worked simulation](tutorials/event-kernel-simulation.md) and
+[model-multiverse workflow](event-kernel-multiverse-v0.1.md). The grouped
+validation policy is recorded in
 [SDR-0027](decisions/0027-hold-out-complete-groups-for-event-kernel-models.md).
 The promotion decision is recorded in
 [SDR-0028](decisions/0028-retain-weak-event-kernel-validation.md). The validity

@@ -110,7 +110,7 @@
   - [x] Conditional grouped-jackknife kernel intervals and out-of-fold residual diagnostics
   - [x] Validity-mask-aware complete-case fitting with coverage evidence and gap-safe residual diagnostics
   - [ ] Formal interval-coverage calibration and simultaneous kernel bands
-  - [ ] Design-matrix alternatives in reproducible robustness multiverses
+  - [x] Named whole-spec design alternatives in reproducible robustness multiverses
   - [ ] Basis, trial-history, duration/amplitude, and predictor-family contribution alternatives
 - [x] Validated longitudinal neural-summary handoff to Unspool
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
