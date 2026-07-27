@@ -45,8 +45,9 @@ the source tool. Longitudinal behavioral modelling remains in Unspool under
 
 - Scientists can compose familiar behavior tools with photometry without changing
   the source tools or installing them as FiberPhotometry dependencies.
-- The initial API is experimental. Official SLEAP and BORIS files now provide the
-  first parity fixtures; DeepLabCut and Keypoint-MoSeq remain schema-generated.
+- The initial API is experimental. Official SLEAP and BORIS files plus
+  writer-contract DeepLabCut 3.0.0 and Keypoint-MoSeq 0.6.8 files now provide a
+  complete one-version parity matrix without conflating fixture provenance.
 - Clock synchronisation, validity-mask-aware encoding, `ndx-pose`, multi-animal
   identity audits and duration kernels remain visible product gaps.
 - A boundary may be extracted into a shared ecosystem package only after it has an

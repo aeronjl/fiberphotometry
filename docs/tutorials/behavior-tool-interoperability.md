@@ -142,9 +142,22 @@ boris = annotations_from_boris_tabular_file(
 ```
 
 Blank or POINT rows remain point events. START/STOP pairs become positive-duration
-intervals. Aggregated exports remain available through `annotations_from_boris()`
-with explicit behavior/type/start/stop column mappings. The analyst then chooses
-onset, offset, duration or progress according to the scientific question.
+intervals. Aggregated CSV/TSV files can be read directly without first building a
+column mapping:
+
+```python
+from fiberphotometry import annotations_from_boris_aggregated_file
+
+aggregated = annotations_from_boris_aggregated_file(
+    "mouse-07-day-04-aggregated.tsv",
+    subject="mouse-07",
+    session="day-04",
+    source_subject="mouse-07",
+)
+```
+
+The analyst then chooses onset, offset, duration or progress according to the
+scientific question.
 
 ## 5. Align a pose covariate without bridging missing spans
 
@@ -285,9 +298,10 @@ the learning clock, behavioral model and prospective session validation. See the
 The test suite proves structural composition for native-shaped arrays and tables:
 identity selection, axis declaration, confidence masks, gap protection, bout
 durations, point/state distinctions, normalized progress, and longitudinal keys.
-Checksum-pinned official SLEAP and BORIS files now pass semantic parity checks.
-DeepLabCut and Keypoint-MoSeq still use documented-schema files generated during
-tests. Synthetic tests verify known affine offset/drift recovery and refusal of
+Checksum-pinned current DeepLabCut, Keypoint-MoSeq, SLEAP and BORIS files now pass
+semantic parity checks. The validation matrix distinguishes official payloads from
+writer-contract artifacts with declared synthetic values. Synthetic tests verify
+known affine offset/drift recovery and refusal of
 bad pulse evidence, but a real synchronization record is still missing. None of
 this proves acquisition-specific clock accuracy, multi-animal identity stability,
 or a biological result. See the

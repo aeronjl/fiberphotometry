@@ -61,12 +61,12 @@
   - [x] Typed pose, continuous-covariate, point-event and interval boundaries
   - [x] Native-shaped DeepLabCut, SLEAP, Keypoint-MoSeq and BORIS adapters
   - [x] Executable cross-tool composition tutorial and explicit gap register
-  - [ ] Versioned real-file fixtures and numerical-parity matrix
+  - [x] Versioned real-file fixtures and numerical-parity matrix
     - [x] Official checksum-pinned SLEAP legacy Analysis HDF5 fixture
     - [x] Official checksum-pinned BORIS tabular CSV fixture
-    - [ ] Current DeepLabCut single- and multi-animal prediction fixtures
-    - [ ] Current Keypoint-MoSeq `results.h5` fixture
-    - [ ] Current SLEAP standard-preset and BORIS aggregated fixtures
+    - [x] Current DeepLabCut single- and multi-animal writer-contract fixtures
+    - [x] Current Keypoint-MoSeq `results.h5` writer-contract fixture
+    - [x] Current SLEAP standard-preset and BORIS aggregated fixtures
   - [ ] Direct `ndx-pose` NWB round trip
   - [x] Typed affine clock-synchronization evidence, drift diagnostics and refusal thresholds
 - [x] Versioned metadata completeness and analysis/NWB/publication readiness report

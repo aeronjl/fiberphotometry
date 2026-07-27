@@ -4,38 +4,46 @@ This report separates three different claims that are easy to conflate:
 
 1. an adapter accepts an in-memory array shaped like a source tool;
 2. a file reader accepts the source tool's documented on-disk schema; and
-3. a checksum-pinned file produced or retained by the upstream project passes a
-   semantic parity test.
+3. a checksum-pinned file serialized by a pinned upstream writer passes a
+   semantic parity test; and
+4. an official upstream artifact passes without recreating its payload.
 
-Only the third is a real-file fixture result. It still validates file semantics,
-not a biological analysis.
+The last two are real-file fixture results, but they carry different provenance.
+A writer-contract artifact validates current serialization with declared values;
+an official artifact additionally tests a payload retained by the source project.
+Neither validates a biological analysis.
 
 ## Compatibility matrix
 
 | Source | In-memory boundary | File reader | Upstream fixture | Current evidence |
 |---|---|---|---|---|
-| DeepLabCut | MultiIndex scorer/bodypart/x-y-likelihood; multi-animal identity may be selected explicitly | prediction CSV and pandas HDF5 | **Missing** | documented three- and four-row header schemas are generated in tests; likelihood range and identity ambiguity are checked |
-| SLEAP | standard and MATLAB-compatible Analysis HDF5 axis orders | Analysis HDF5 with stored or explicitly declared dimensions | **Pass: official legacy format-v1 HDF5** | coordinates and point scores match the pinned three-frame upstream artifact |
-| Keypoint-MoSeq | frame-level integer syllable sequence to duration-preserving bouts | `results.h5/<recording>/syllable` | **Missing** | the documented HDF5 hierarchy is generated in tests; bout boundaries and aligned duration/progress encoding inputs are checked |
-| BORIS | aggregated POINT/STATE columns | tabular CSV with metadata preamble and START/STOP pairing | **Pass: official BORIS test export** | explicit subject selection and three paired state intervals match the pinned upstream artifact |
+| DeepLabCut | MultiIndex scorer/bodypart/x-y-likelihood; multi-animal identity may be selected explicitly | prediction CSV and pandas HDF5 | **Pass: v3.0.0 single/multi writer contract** | exact `save_data` HDF5 key/table contract; likelihood range and mandatory identity selection are checked |
+| SLEAP | standard and MATLAB-compatible Analysis HDF5 axis orders | Analysis HDF5 with stored or explicitly declared dimensions | **Pass: official legacy plus current standard export** | legacy scores/axes and a real 1,100-frame SLP exported by sleap-io 0.9.2 both pass |
+| Keypoint-MoSeq | frame-level integer syllable sequence to duration-preserving bouts | `results.h5/<recording>/syllable` | **Pass: 0.6.8 writer contract** | pinned `save_hdf5` output preserves syllables and exact bout boundaries |
+| BORIS | aggregated POINT/STATE columns | aggregated CSV/TSV plus tabular CSV with START/STOP pairing | **Pass: official tabular and aggregated exports** | explicit subject/observation selection preserves both point events and state intervals |
 | Unspool | canonical trial-level column handoff | optional `Study` construction | **Pass: public cross-package benchmark** | explicit chronology, retained neural columns, fingerprint and prospective fold composition |
 | Clock synchronization | explicit one-to-one source/target pulse pairs | versioned JSON evidence artifact | **Synthetic only** | known affine offset/drift recovery, residual and drift refusal, bounded extrapolation, and pose/covariate/annotation composition are tested |
 
-The two missing upstream fixtures remain provisional. A schema-generated HDF5 file
-does not prove that a current DeepLabCut or Keypoint-MoSeq release writes every
-field exactly as expected.
+No adapter in this matrix now relies only on an in-test schema facsimile. The
+DeepLabCut and Keypoint-MoSeq files are deliberately labelled writer-contract
+artifacts because their values were declared for the test; SLEAP and BORIS also
+have official upstream payloads.
 
 ## Pinned artifacts
 
 | Tool | Upstream artifact | Commit | SHA-256 |
 |---|---|---|---|
 | SLEAP | [`small_robot...analysis.h5`](https://github.com/talmolab/sleap/blob/8ab323e060d827adc03e629122723aa54e1ca950/tests/data/hdf5_format_v1/small_robot.000_small_robot_3_frame.analysis.h5) | `8ab323e060d8` | `21446732fe6a…6f82de` |
+| SLEAP | [`centered_pair_predictions.slp`](https://github.com/talmolab/sleap-io/blob/80bbcd9c3b005a7616c14b875b761071f10ecde6/tests/data/slp/centered_pair_predictions.slp), exported with 0.9.2 standard preset | `80bbcd9c3b00` | `ff7af9f57d68…4fd3` |
+| DeepLabCut | v3.0.0 `save_data` single- and multi-animal writer-contract files | `cdc87245bfa7` | `5b9e9baba3ef…74e1`, `9d744d672adc…fb0c` |
+| Keypoint-MoSeq | 0.6.8 `save_hdf5` writer-contract `results.h5` | `3f0307548686` | `d9adcb6b096e…0969` |
 | BORIS | [`test_export_events_tabular.csv`](https://github.com/olivierfriard/BORIS/blob/1f6149f68e7c4df28d92fb50a8f8a38ed7a377d2/tests/files/test_export_events_tabular.csv) | `1f6149f68e7c` | `54554a4c9cc3…7131442` |
+| BORIS | [`test_export_aggregated_events_test_full_1.tsv`](https://github.com/olivierfriard/BORIS/blob/e7aadfd25a5311b76bc6357921da81d28cfce9ec/tests/files/test_export_aggregated_events_test_full_1.tsv) | `e7aadfd25a53` | `1eeb914f1b7a…a6e5a` |
 
-The complete source URLs, repository heads, checksums, notes and licenses live in
-`tests/fixtures/interoperability/manifest.json`. The SLEAP fixture retains its
-BSD-3-Clause-Clear terms. The BORIS fixture retains its GPL-3.0-only terms, is used
-only for tests, and is excluded from the package wheel.
+The complete source URLs, repository heads, checksums, generation qualifications,
+notes and licenses live in `tests/fixtures/interoperability/manifest.json`.
+BORIS fixtures retain GPL-3.0-only terms, are used only for tests, and are excluded
+from the package wheel.
 
 ## What the real files changed
 
@@ -60,21 +68,30 @@ pose = pose_from_sleap_analysis_h5(
 )
 ```
 
-Newer `sleap-io` files can carry JSON dimension names on the `tracks` and score
-datasets; those are read automatically.
+The current 0.9.2 standard-preset export carries JSON dimension names on the
+`tracks` and score datasets; the 1,100-frame fixture confirms they are read
+automatically. Exporting the upstream SLP also exposed a sleap-io provenance JSON
+failure for `Path` values; fixture generation string-normalized provenance only.
 
 ### BORIS has two useful export shapes
 
-The original in-memory adapter covers aggregated events, where STATE rows already
-contain start and stop. The official upstream fixture is instead a tabular export:
-it contains a metadata preamble, then individual START and STOP rows. The file
-reader locates the semantic header, requires explicit selection when multiple
-subjects are present, pairs rows by behavior, and rejects unmatched or consecutive
-state boundaries.
+BORIS has two native file readers. A tabular export contains a metadata preamble,
+then individual START and STOP rows; its reader locates the semantic header, pairs
+rows by behavior, and rejects invalid boundaries. An aggregated CSV/TSV contains
+one complete POINT or STATE event per row; its reader preserves that distinction
+directly. Both require explicit selection when observations or subjects are
+ambiguous.
 
 ```python
 annotations = annotations_from_boris_tabular_file(
     path,
+    subject="canonical-mouse-1",
+    session="observation-1",
+    source_subject="subject1",
+)
+
+aggregated = annotations_from_boris_aggregated_file(
+    aggregated_path,
     subject="canonical-mouse-1",
     session="observation-1",
     source_subject="subject1",
@@ -86,12 +103,10 @@ positive-duration intervals.
 
 ## Remaining validation work
 
-1. Obtain or generate a redistributable prediction file using a pinned current
-   DeepLabCut release, including one multi-animal file.
-2. Obtain a redistributable `results.h5` produced by a pinned current
-   Keypoint-MoSeq release, including any syllable reindexing provenance.
-3. Add a current `sleap-io` standard-preset fixture alongside the legacy one.
-4. Add a BORIS aggregated-export file containing both POINT and STATE events.
-5. Exercise all four against photometry timestamps with a real synchronization
+1. Add a second released version for each writer so format drift becomes an
+   executable compatibility claim rather than a one-version snapshot.
+2. Add a model-produced Keypoint-MoSeq result retaining syllable-reindexing and
+   fitted-model provenance; the current fixture validates serialization only.
+3. Exercise all four against photometry timestamps with a real synchronization
    record; synthetic affine recovery and file parity do not validate
    acquisition-specific clock alignment.
