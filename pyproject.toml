@@ -41,6 +41,10 @@ dev = [
   "ruff>=0.11",
   "scipy-stubs>=1.14",
 ]
+docs = [
+    "mkdocs-material>=9.6",
+    "mkdocstrings[python]>=0.29",
+]
 ibl-validation = ["one-api==3.5.2"]
 stats-validation = ["statsmodels>=0.14.5"]
 

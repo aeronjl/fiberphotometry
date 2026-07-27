@@ -4,7 +4,7 @@
 - Date: 2026-07-26
 - Decision owners: project maintainers
 - Related protocol/report:
-  [protocol v0.1](../../benchmarks/protocol-control-free-v0.1.md),
+  [protocol v0.1](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-control-free-v0.1.md),
   [report v0.1](../control-free-benchmark-v0.1.md)
 
 ## Context

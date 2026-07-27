@@ -14,7 +14,7 @@ scientific result is true.
 - [`response-sheet-v0.1.md`](response-sheet-v0.1.md): one copy per participant.
 - [`scoring-key-v0.1.md`](scoring-key-v0.1.md): expected answers and error coding;
   keep this hidden during sessions.
-- [`../../examples/grouped_multiverse_report.py`](../../examples/grouped_multiverse_report.py):
+- [`https://github.com/aeronjl/fiberphotometry/blob/main/examples/grouped_multiverse_report.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/grouped_multiverse_report.py):
   deterministic illustrative stimulus generator.
 
 Generate the frozen stimulus from the repository root:

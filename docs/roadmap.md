@@ -29,6 +29,9 @@
   - [ ] Broader independent-control validation before typed-pipeline promotion
 - [x] Event-correlated reference diagnostic benchmarked against confounds
 - [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)
+- [ ] Wavelength-aware hemodynamic correction and spectral-unmixing contract
+- [ ] Optogenetic-pulse artifact masks and recovery-window diagnostics
+- [ ] Sensor registry with kinetic, saturation, and interpretation constraints
 - [x] Initial three-scenario benchmark report with retained failure
 - [x] Seven-scenario v0.2 benchmark with retained failures
 - [x] Twelve-session, four-animal IBL channel-QC audit
@@ -49,6 +52,7 @@
   - [x] Schema-first wide CSV/TSV recording and event adapter
   - [x] Explicit TDT stream/epoc adapter through the same canonical boundary
   - [x] Checksum-pinned official real-block TDT integration fixture
+- [ ] Native Doric, Neurophotometrics, and pyPhotometry adapters
 - [x] Versioned metadata completeness and analysis/NWB/publication readiness report
 
 ## Phase 3 — inference
@@ -86,8 +90,24 @@
 - [x] Opt-in scalar mixed-model sensitivity summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [x] Animal-level peri-event pointwise and simultaneous interval reporting
+- [ ] Behavioral/event-kernel GLMs with grouped cross-validation
+- [ ] Longitudinal learning-trajectory and session-within-animal models
+- [ ] Long-duration tonic/phasic analysis
+- [ ] Spontaneous transient detection with local-baseline sensitivity analysis
+- [ ] Multi-site/multi-color paired and conditional association workflows
 
 ## Phase 4 — adoption
+
+- [x] Publishable MkDocs site with strict link and API-reference builds
+- [x] Scientist-task methods catalog and supported/experimental/planned matrix
+- [ ] Literature-shaped worked examples for each major method family
+  - [x] Event-locked public IBL analysis
+  - [x] Raw-NWB animal-level robustness analysis
+  - [ ] Behavioral event-kernel GLM
+  - [ ] Trial-level functional mixed model
+  - [ ] Long-duration tonic/phasic and spontaneous events
+  - [ ] Multi-site/multi-color association
+  - [ ] Spectral or hemodynamic correction with controls
 
 - [x] First scientist-facing event-analysis workflow
 - [x] Self-contained HTML evidence report with animal/QC/provenance views

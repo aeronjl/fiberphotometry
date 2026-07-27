@@ -8,10 +8,10 @@ Do experimental signal-only bleaching baselines recover approximately the same
 slow trend as an independently acquired 405-nm isosbestic channel in real
 dual-site recordings?
 
-The [protocol](../benchmarks/protocol-dandi-000971-control-v0.1.md) and exact
-[asset manifest](../benchmarks/dandi-000971-pilot-manifest-v0.1.json) were frozen
+The [protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-control-v0.1.md) and exact
+[asset manifest](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-pilot-manifest-v0.1.json) were frozen
 before aggregate signal execution. The compact, machine-readable
-[result](../benchmarks/dandi-000971-control-v0.1.json) retains every case.
+[result](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-control-v0.1.json) retains every case.
 
 ## Data and execution
 
@@ -23,7 +23,7 @@ digests. All exposed the expected schema, and every fitted baseline was fully
 finite after block averaging to approximately 20 Hz.
 
 The executable runner is
-[`scripts/run_dandi_000971_control_pilot.py`](../scripts/run_dandi_000971_control_pilot.py).
+[`scripts/run_dandi_000971_control_pilot.py`](https://github.com/aeronjl/fiberphotometry/blob/main/scripts/run_dandi_000971_control_pilot.py).
 It caches raw assets outside the repository, rechecks integrity on reuse, and
 generates the JSON result from the frozen manifest.
 

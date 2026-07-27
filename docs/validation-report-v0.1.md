@@ -28,7 +28,7 @@ Implications:
 - a high pooled correlation concealed a perfectly systematic discrepancy.
 
 Machine-readable result:
-[`dandi-dff-reproduction.json`](../benchmarks/dandi-dff-reproduction.json).
+[`dandi-dff-reproduction.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-dff-reproduction.json).
 
 ## IBL: real session and legacy-output reproduction
 
@@ -59,7 +59,7 @@ but it motivates channel-level fit diagnostics before reference correction is
 treated as routine.
 
 Machine-readable result:
-[`ibl-session-validation.json`](../benchmarks/ibl-session-validation.json).
+[`ibl-session-validation.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-session-validation.json).
 
 ## Scope limits
 

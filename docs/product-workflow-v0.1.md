@@ -95,7 +95,7 @@ time-series inference.
 `EventAnalysisConfig.from_toml(...)` validates a versioned analysis contract and
 binds its SHA-256 to the JSON and HTML artifacts. The file records preprocessing,
 windows, contrast, intent, randomization status, quality gates, and acknowledged
-assumptions. See [`feedback-analysis.toml`](../examples/feedback-analysis.toml).
+assumptions. See [`feedback-analysis.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/feedback-analysis.toml).
 
 The complete public-data path is documented in the
 [IBL import-to-report tutorial](tutorials/ibl-feedback-report.md).

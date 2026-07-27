@@ -1,0 +1,95 @@
+site_name: FiberPhotometry
+site_description: Auditable fiber-photometry analysis from signals to animal-level inference
+site_url: https://aeronjl.github.io/fiberphotometry/
+repo_url: https://github.com/aeronjl/fiberphotometry
+repo_name: aeronjl/fiberphotometry
+edit_uri: edit/main/docs/
+strict: true
+
+theme:
+  name: material
+  features:
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Use dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Use light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - footnotes
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - tables
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: false
+
+nav:
+  - Home: index.md
+  - Start here:
+      - Choose a workflow: getting-started/index.md
+      - First event analysis: product-workflow-v0.1.md
+      - Configuration-first CLI: cli-v0.1.md
+      - Import tabular data: tabular-import-v0.1.md
+      - Import TDT data: tdt-import-v0.1.md
+  - Methods:
+      - Methods catalog: methods/index.md
+      - Capability matrix: methods/capability-matrix.md
+      - Preprocessing and QC: pipeline-v0.1.md
+      - Irregular sampling: irregular-sampling-v0.1.md
+      - Experimental design and inference: inference-design-v0.1.md
+      - Peri-event inference: peri-event-inference-v0.1.md
+      - Robustness multiverses: multiverse-contract-v0.1.md
+      - Scalar mixed models: scalar-mixed-model-v0.1.md
+  - Worked examples:
+      - Examples overview: tutorials/index.md
+      - Public IBL event report: tutorials/ibl-feedback-report.md
+      - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
+      - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
+  - Data and interoperability:
+      - Metadata readiness: metadata-completeness-v0.1.md
+      - NWB and DANDI integration: dandi-001084-integration.md
+      - Evidence reader: evidence-reader-v0.1.md
+      - Reproducibility comparison: reproducibility-comparison-v0.1.md
+  - Publication:
+      - Sign evidence: publication-signing-v0.1.md
+      - Create DOI deposits: archive-deposition-v0.1.md
+      - Artifact schemas: artifact-schemas-v0.1.md
+  - Evidence and rationale:
+      - Literature and capability audit: literature-capability-audit-v0.1.md
+      - Scientific design: scientific-design.md
+      - Tool landscape: landscape.md
+      - Validation report: validation-report-v0.1.md
+      - Scientific decisions: decisions/README.md
+      - Roadmap: roadmap.md
+  - Reference:
+      - Python API: reference/index.md
+      - API stability: api-stability-v0.1.md
+      - Release readiness: release-readiness-v0.1.md

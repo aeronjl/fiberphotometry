@@ -62,7 +62,7 @@ Every executed operation is appended to the recording's
 `fiberphotometry_operations` JSON provenance in execution order. A v1 spec
 cannot accidentally receive a v2 tuple, and a v2 spec cannot receive the legacy
 object. Frozen numerical behavior is reported in
-[`benchmarks/results-v0.8.md`](../benchmarks/results-v0.8.md).
+[`benchmarks/results-v0.8.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/results-v0.8.md).
 
 Time-indexed Boolean acquisition masks are propagated during resampling with
 nearest-neighbor labels, retained on the source-time axis, and forced false

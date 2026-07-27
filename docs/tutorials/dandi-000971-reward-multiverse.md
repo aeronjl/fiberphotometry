@@ -14,7 +14,7 @@ to defensible preprocessing and response-window choices?
 
 It does **not** test phenotype differences, estimate phenotype prevalence, or
 independently confirm the source publication. Read the frozen
-[scientific protocol](../../benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
+[scientific protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
 before interpreting the output.
 
 ## Install
@@ -109,7 +109,7 @@ readable objects. Execution timestamps may differ; scientific specifications,
 input fingerprints, estimates, and deterministic inferential results should not.
 
 The frozen reference execution is committed under
-[`benchmarks/dandi-000971-tutorial-v0.1`](../../benchmarks/dandi-000971-tutorial-v0.1/),
+[`benchmarks/dandi-000971-tutorial-v0.1`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-tutorial-v0.1/),
 and its scientific interpretation is reported in the
 [v0.1 results](../dandi-000971-tutorial-results-v0.1.md). Read those artifacts
 before downloading the cohort if you only want to inspect the product output.

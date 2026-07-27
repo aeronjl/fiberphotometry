@@ -25,4 +25,4 @@ fingerprint is
 This is a readiness result, not a fluorescence result. No correct-minus-incorrect
 photometry contrast, interval, specification curve, or animal influence estimate
 has yet been calculated. The executable contract is in the
-[frozen protocol](../benchmarks/protocol-ibl-feedback-signal-only-v0.3.md).
+[frozen protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-feedback-signal-only-v0.3.md).

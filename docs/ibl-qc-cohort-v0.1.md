@@ -45,10 +45,10 @@ These are repeated values already present in the public ALF table, not values
 created by the adapter's missingness mask. The evidence cannot distinguish
 hardware digitisation from upstream table processing without raw acquisition
 files. Compact results are in
-[`benchmarks/ibl-flat-step-investigation-v0.1.json`](../benchmarks/ibl-flat-step-investigation-v0.1.json).
+[`benchmarks/ibl-flat-step-investigation-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-flat-step-investigation-v0.1.json).
 
 The aggregate machine-readable result is
-[`benchmarks/ibl-qc-cohort-v0.1.json`](../benchmarks/ibl-qc-cohort-v0.1.json).
+[`benchmarks/ibl-qc-cohort-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-qc-cohort-v0.1.json).
 Regenerate the full per-channel output with:
 
 ```bash

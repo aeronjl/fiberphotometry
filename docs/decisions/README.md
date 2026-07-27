@@ -53,6 +53,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0023](0023-sign-manifest-attestations-with-domain-separated-openssh.md) | Accepted | Sign manifest attestations with domain-separated OpenSSH |
 | [SDR-0024](0024-generate-deterministic-deposits-from-neutral-metadata.md) | Accepted | Generate deterministic deposits from neutral metadata |
 | [SDR-0025](0025-stop-zenodo-automation-at-validated-drafts.md) | Accepted | Stop Zenodo automation at validated drafts |
+| [SDR-0026](0026-organize-documentation-by-scientific-question.md) | Accepted | Organize documentation by scientific question |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

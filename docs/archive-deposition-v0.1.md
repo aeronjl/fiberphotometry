@@ -7,7 +7,7 @@ the command never uploads or publishes a record.
 ## Metadata contract
 
 The input `archive-metadata.json` is repository-neutral and validated against
-[`archive-metadata-v1.schema.json`](../schemas/archive-metadata-v1.schema.json).
+[`archive-metadata-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/archive-metadata-v1.schema.json).
 It requires a title, abstract-like description, at least one creator, publication
 date, publisher, license, language, and resource type. Creator ORCIDs are checked
 with the ISO 7064 checksum, not merely a text pattern. Keywords and related

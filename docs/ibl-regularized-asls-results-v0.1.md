@@ -13,7 +13,7 @@ experimental.
 The held-out sessions had been excluded from the earlier IBL v0.3 analysis solely
 because they lacked enough events in both feedback conditions. Their fluorescence
 values had not been loaded before the
-[`v0.1 protocol`](../benchmarks/protocol-ibl-regularized-asls-v0.1.md) and exact
+[`v0.1 protocol`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-regularized-asls-v0.1.md) and exact
 source hashes were frozen.
 
 ## Regularization fidelity
@@ -87,6 +87,6 @@ method and provenance, retain it as experimental, and do not promote it into a
 recommended default.
 
 The complete machine-readable result is
-[`ibl-regularized-asls-results-v0.1.json`](../benchmarks/ibl-regularized-asls-results-v0.1.json),
+[`ibl-regularized-asls-results-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-regularized-asls-results-v0.1.json),
 with fingerprint
 `ed8ec3dc071957093790599f95122e5c4b30a738c6334c06d92a232fde6b365a`.

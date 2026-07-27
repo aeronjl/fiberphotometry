@@ -8,6 +8,10 @@ inference across animals. It is being designed as a library rather than another
 closed analysis GUI: each scientific choice should be explicit, replaceable,
 recorded, and testable.
 
+**[Read the documentation](https://aeronjl.github.io/fiberphotometry/)** to choose
+a workflow by scientific question, browse supported and planned methods, and run
+worked public-data examples.
+
 > **Status:** pre-alpha research scaffold. The API and numerical methods are not
 > yet validated for scientific use.
 
@@ -248,6 +252,8 @@ uv run pytest
 uv run ruff check .
 uv run ruff format --check .
 uv run mypy
+uv sync --group docs
+uv run --group docs mkdocs serve
 ```
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing scientific methods.

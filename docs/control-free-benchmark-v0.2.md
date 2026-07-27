@@ -2,9 +2,9 @@
 
 All frozen v0.2 acceptance gates passed. The protocol was committed before
 aggregate execution in
-[`benchmarks/protocol-control-free-v0.2.md`](../benchmarks/protocol-control-free-v0.2.md),
+[`benchmarks/protocol-control-free-v0.2.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-control-free-v0.2.md),
 and all 440 runs are retained in
-[`benchmarks/control-free-v0.2.json`](../benchmarks/control-free-v0.2.json).
+[`benchmarks/control-free-v0.2.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/control-free-v0.2.json).
 
 ## Baseline fidelity
 

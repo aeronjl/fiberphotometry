@@ -12,6 +12,7 @@
 __pycache__/
 build/
 dist/
+site/
 *.egg-info/
 *.nwb
 examples/tabular_project/artifacts/

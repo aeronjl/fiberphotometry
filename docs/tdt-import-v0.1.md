@@ -50,7 +50,7 @@ block = "data/Subject-Block-1"
 
 The remainder of the project file uses the same analysis, artifact, and optional
 NWB-export sections as a tabular project. See
-[`examples/tdt-project.template.toml`](../examples/tdt-project.template.toml) for
+[`examples/tdt-project.template.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/tdt-project.template.toml) for
 a fuller editable template.
 
 ## Validation and provenance

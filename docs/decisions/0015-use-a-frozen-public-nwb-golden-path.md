@@ -4,7 +4,7 @@
 - Date: 2026-07-27
 - Decision owners: project maintainers
 - Related protocol/report:
-  [DANDI 000971 tutorial protocol](../../benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
+  [DANDI 000971 tutorial protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
 
 ## Context
 
@@ -61,4 +61,4 @@ testing shows the 2.20 GB full run blocks adoption.
 
 The frozen six-animal execution completed without source or workflow failures. See
 the [v0.1 result](../dandi-000971-tutorial-results-v0.1.md) and committed
-[evidence bundle](../../benchmarks/dandi-000971-tutorial-v0.1/).
+[evidence bundle](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-tutorial-v0.1/).

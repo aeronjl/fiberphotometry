@@ -52,7 +52,7 @@ loading and found three response series: raw fluorescence, fitted baseline, and
 processed dF/F. Each has shape 40,000 × 103. Exactly 1,000 samples per series were
 indexed; all values in those slices were finite, spanning 0.7785–34.0842 seconds.
 Channel locations were recovered from the extension table. The machine-readable
-summary is [`benchmarks/dandi-001084-validation.json`](../benchmarks/dandi-001084-validation.json).
+summary is [`benchmarks/dandi-001084-validation.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-001084-validation.json).
 
 The read emitted six compatibility warnings. The file's embedded extension stores
 several device `model` fields as text, whereas NWB 2.9 represents them as links to

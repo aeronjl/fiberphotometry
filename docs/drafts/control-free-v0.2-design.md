@@ -1,7 +1,7 @@
 # Draft: control-free benchmark v0.2 design
 
 Status: **archived design draft; non-normative**. The normative protocol is now
-[`benchmarks/protocol-control-free-v0.2.md`](../../benchmarks/protocol-control-free-v0.2.md).
+[`benchmarks/protocol-control-free-v0.2.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-control-free-v0.2.md).
 
 This note captures design reasoning before the v0.2 protocol is frozen. It may
 change and must not be read as a package guarantee.

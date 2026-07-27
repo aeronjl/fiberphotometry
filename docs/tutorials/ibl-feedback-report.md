@@ -16,7 +16,7 @@ uv sync --extra plots --group ibl-validation
 
 ## Inspect the scientific contract
 
-[`examples/feedback-analysis.toml`](../../examples/feedback-analysis.toml) declares:
+[`examples/feedback-analysis.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/feedback-analysis.toml) declares:
 
 - DMS as the selected region;
 - correct minus incorrect feedback;

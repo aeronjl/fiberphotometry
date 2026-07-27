@@ -132,5 +132,5 @@ family-wise error, power, and runtime. Failure cases must remain in the suite.
 - Jean-Richard-dit-Bressel & McNally (2025), artifact correction.
   <https://doi.org/10.1117/1.NPh.12.2.025003>
 - Simpson et al. (2024), fiber photometry primer.
-  <https://doi.org/10.1016/j.neuron.2023.11.012>
+  <https://doi.org/10.1016/j.neuron.2023.11.016>
 - Rübel et al. (2022), NWB ecosystem. <https://doi.org/10.7554/eLife.78362>

@@ -61,7 +61,7 @@ artifacts are not fabricated.
 
 ## Project file
 
-[`examples/tabular_project/project.toml`](../examples/tabular_project/project.toml)
+[`examples/tabular_project/project.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/tabular_project/project.toml)
 contains four explicit layers:
 
 1. subject/session source files;
@@ -77,7 +77,7 @@ distinguishable provenance events.
 An optional `[timecourse]` table enables the same animal-level peri-event lane as
 the Python API. It declares `window`, `rate_hz`, `confidence`, `draws`, and `seed`;
 the resulting JSON and HTML keep pointwise and simultaneous bands distinct. See
-[`examples/feedback-analysis.toml`](../examples/feedback-analysis.toml) and the
+[`examples/feedback-analysis.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/feedback-analysis.toml) and the
 [peri-event inference contract](peri-event-inference-v0.1.md).
 
 NWB export is opt-in because valid files require metadata the library must not
