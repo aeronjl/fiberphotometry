@@ -132,9 +132,9 @@
   - [ ] Merge/split/filter rules, contextual labels and overlap policies
   - [x] Duration/amplitude and progress-basis event-kernel alternatives
 - [ ] Single-signal time/frequency/state analysis
-  - [ ] Gap-aware autocorrelation and power spectral density
-  - [ ] Spectrograms with explicit detrending, edge, and missing-data evidence
-  - [ ] User-supplied state/epoch tables and animal-aware comparisons
+  - [x] Gap-aware autocorrelation and power spectral density
+  - [x] Spectrograms with explicit detrending, edge, and missing-data evidence
+  - [x] User-supplied state/epoch tables and animal-aware comparisons
   - [ ] Public sleep/state or long-duration worked example
 - [ ] Multiscale long-duration summaries without unvalidated tonic/phasic biological labels
 - [x] Experimental spontaneous transient detection with local-baseline sensitivity analysis
