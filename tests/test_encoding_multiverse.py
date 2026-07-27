@@ -7,6 +7,7 @@ from fiberphotometry.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
+    RaisedCosineBasisSpec,
 )
 from fiberphotometry.encoding_multiverse import (
     EncodingModelAlternative,
@@ -148,6 +149,42 @@ def test_equal_counts_at_different_indices_are_descriptive_only() -> None:
     assert comparison.exact_same_observations is False
     assert comparison.delta_mean_r_squared is None
     assert result.summary.descriptive_only_universes == 1
+
+
+def test_fir_and_raised_cosine_bases_compare_on_common_evidence() -> None:
+    fir = EventKernelSpec("cue", (0.0, 0.4))
+    cosine = EventKernelSpec(
+        "cue",
+        (0.0, 0.4),
+        basis=RaisedCosineBasisSpec(functions=3),
+    )
+    spec = EncodingMultiverseSpec(
+        alternatives=(
+            EncodingModelAlternative("fir", "Unconstrained lag curve.", _model(fir)),
+            EncodingModelAlternative(
+                "raised-cosine",
+                "Lower-dimensional smooth lag curve.",
+                _model(cosine),
+            ),
+        ),
+        reference="fir",
+        intent="exploratory",
+    )
+
+    result = run_encoding_multiverse(_sessions(), spec)
+    comparison = next(
+        item for item in result.comparisons if item.name == "raised-cosine"
+    )
+    cosine_result = next(
+        item.model_result for item in result.universes if item.name == "raised-cosine"
+    )
+
+    assert comparison.status == "direct_predictive_comparison"
+    assert comparison.delta_mean_r_squared is not None
+    assert cosine_result is not None
+    assert cosine_result.event_kernels[0].basis.family == "raised_cosine"
+    assert len(cosine_result.event_kernels[0].basis.coefficient) == 3
+    assert len(cosine_result.event_kernels[0].coefficient) == 5
 
 
 def test_retains_failed_alternative_without_improving_summary() -> None:

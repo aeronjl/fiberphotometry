@@ -35,6 +35,9 @@ development versions until the first public release.
 - Experimental named event-kernel model multiverses with stable pre-fit IDs,
   retained failures, exact sample-index fingerprints, and held-out score deltas
   only for models fitted to common evidence.
+- Typed full-FIR and lower-dimensional raised-cosine event-kernel bases with
+  reconstructed physical-lag curves, reconstructed grouped uncertainty, and
+  retained basis functions and weights.
 
 ### Scientific status
 

@@ -29,6 +29,33 @@ peri-event averages. Continuous predictors such as motion are standardized using
 training data only. Ridge strength is selected by mean group-wise held-out
 \(R^2\), with complete animals or complete sessions kept together.
 
+## Kernel bases
+
+The default `FIRBasisSpec` estimates one unconstrained coefficient per sampled lag,
+preserving the original behavior. A lower-dimensional smooth alternative is
+explicit:
+
+```python
+from fiberphotometry import EventKernelSpec, RaisedCosineBasisSpec
+
+cue = EventKernelSpec(
+    "cue",
+    (-1.0, 3.0),
+    basis=RaisedCosineBasisSpec(functions=8),
+)
+```
+
+Raised-cosine functions are linearly spaced across the sampled window and
+row-normalized. Their count must not exceed the number of sampled lags, and the
+resulting basis must have full column rank. This is a shape assumption and should
+be declared as an alternative, not adopted after inspecting a noisy FIR curve.
+
+Fitting occurs in basis space. Every result nevertheless reports the reconstructed
+kernel and grouped-jackknife interval on the original lag grid in seconds. It also
+stores the basis family, component labels, fitted basis weights and sampled basis
+functions. Thus plots remain physically interpretable while the exact fitted
+parameterization is reproducible.
+
 This follows the behavioral-regression use case discussed in the
 [fiber-photometry analysis primer](https://pmc.ncbi.nlm.nih.gov/articles/PMC10939905/)
 and the multi-signal Gaussian GLM presented in the
@@ -82,7 +109,7 @@ response samples. Non-finite values are invalid regardless of the supplied mask.
 Only covariates named in the model specification contribute to its complete-case
 mask.
 
-The result artifact schema v4 contains an `EncodingValidityReport`. Its per-session
+The result artifact schema v5 contains an `EncodingValidityReport`. Its per-session
 records make the model denominator auditable and distinguish invalid response
 samples from invalid samples for each selected covariate. Counts can overlap: the
 overall excluded count is the union, not the sum of reason counts. Each record also
@@ -141,3 +168,5 @@ The promotion decision is recorded in
 [SDR-0028](decisions/0028-retain-weak-event-kernel-validation.md). The validity
 policy is recorded in
 [SDR-0033](decisions/0033-retain-validity-masks-without-compressing-time.md).
+Typed basis reconstruction is governed by
+[SDR-0036](decisions/0036-reconstruct-kernels-from-explicit-typed-bases.md).

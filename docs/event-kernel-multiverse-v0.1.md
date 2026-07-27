@@ -3,7 +3,7 @@
 !!! warning "Experimental"
     This workflow compares held-out prediction across manually declared model
     specifications. It does not choose a scientifically correct model, establish
-    causal contributions, or yet generate basis/history/duration alternatives.
+    causal contributions, or yet generate history/duration alternatives.
 
 ## Scientific question
 
@@ -61,8 +61,9 @@ All alternatives must share:
 - minimum session coverage and observation thresholds.
 
 Changing those fields changes the predictive target or evidence-admission policy
-and therefore belongs in a separate multiverse. Event kernels, windows,
-continuous predictors and candidate ridge penalties may differ.
+and therefore belongs in a separate multiverse. Event kernels, windows, typed
+FIR/raised-cosine bases, continuous predictors and candidate ridge penalties may
+differ.
 
 ## Direct versus descriptive comparison
 
@@ -98,19 +99,21 @@ access.
 uv run python examples/event_kernel_multiverse.py
 ```
 
-The script compares cue-only, cue-plus-reward and cue/reward/motion models on a
-seeded eight-animal simulation. It writes
+The script compares cue-only, cue-plus-reward, cue/reward/motion and smooth
+raised-cosine models on a seeded eight-animal simulation. It writes
 `event-kernel-multiverse-result.json`, including full fitted model artifacts and
 the comparison ledger.
 
 ## Current boundary and next extensions
 
 This v0.1 surface enumerates complete model specifications rather than generating
-a factorial decision graph. Coefficients at unlike lags or in unlike bases should
-not be pooled into one magnitude range. The immediate extensions are typed basis
-families, trial-history predictors, variable-duration/progress kernels and
-predictor-family contribution summaries. Each must preserve the fixed validation
-policy, exact-denominator evidence and retained failures established here.
+a factorial decision graph. FIR and raised-cosine alternatives are available, but
+coefficients at unlike lags or in unlike bases should not be pooled into one
+magnitude range; compare reconstructed physical-lag curves and held-out prediction.
+The immediate extensions are trial-history predictors, variable-duration/progress
+kernels and predictor-family contribution summaries. Each must preserve the fixed
+validation policy, exact-denominator evidence and retained failures established
+here.
 
 The general rationale follows the
 [multiverse scientific contract](multiverse-contract-v0.1.md). Event-kernel-specific
