@@ -42,6 +42,8 @@ the original reasoning is not silently rewritten.
 | [SDR-0012](0012-protect-missing-event-windows.md) | Accepted | Protect missing event windows instead of silently reconstructing them |
 | [SDR-0013](0013-report-event-selection-before-preprocessing.md) | Accepted | Report event selection before and after preprocessing |
 | [SDR-0014](0014-resample-animals-for-peri-event-bands.md) | Accepted | Resample animals for peri-event uncertainty |
+| [SDR-0015](0015-use-a-frozen-public-nwb-golden-path.md) | Accepted | Use a frozen public NWB golden path |
+| [SDR-0016](0016-require-named-multiverse-alternatives.md) | Accepted | Require named, justified multiverse alternatives |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

@@ -14,7 +14,9 @@ from pathlib import Path
 from typing import cast
 
 from fiberphotometry.compatibility import (
+    MultiverseCompatibility,
     PipelineCompatibility,
+    assess_multiverse_compatibility,
     assess_pipeline_compatibility,
 )
 from fiberphotometry.io.nwb_project import export_project_nwb
@@ -23,6 +25,12 @@ from fiberphotometry.metadata import (
     assess_metadata_completeness,
 )
 from fiberphotometry.mixed import fit_scalar_mixed_model
+from fiberphotometry.multiverse import (
+    MultiverseReportGroup,
+    MultiverseSpec,
+    materialize_multiverse,
+    run_multiverse,
+)
 from fiberphotometry.project import (
     LoadedTabularProject,
     ProjectConfig,
@@ -53,6 +61,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             if args.output_dir is not None
             else project.output_directory
         )
+        if args.command == "multiverse":
+            artifacts = run_project_multiverse(project, loaded, output)
+            print(f"Robustness artifacts written to {artifacts}")
+            return 0
         artifacts = run_project(project, loaded, output)
         print(f"Analysis artifacts written to {artifacts}")
         return 0
@@ -181,6 +193,69 @@ def run_project(
     return output_directory.resolve()
 
 
+def run_project_multiverse(
+    project: ProjectConfig,
+    loaded: LoadedTabularProject,
+    output_directory: Path,
+) -> Path:
+    """Execute the declared project multiverse and materialize evidence artifacts."""
+    spec = _multiverse_spec(project, loaded)
+    output_directory.mkdir(parents=True, exist_ok=True)
+    completeness = assess_metadata_completeness(project, loaded)
+    preflight = _preflight_json(project, loaded, completeness)
+    metadata = completeness.to_json()
+    _atomic_write(output_directory / "preflight.json", preflight)
+    _atomic_write(output_directory / "metadata.json", metadata)
+    compatibility = _multiverse_compatibility(project, loaded)
+    incompatible = [
+        universe.universe_id
+        for universe in compatibility.universes
+        if universe.status == "incompatible"
+    ]
+    initial = {
+        "metadata.json": _text_sha256(metadata),
+        "preflight.json": _text_sha256(preflight),
+    }
+    if incompatible:
+        error = (
+            "multiverse structurally incompatible before outcome access: "
+            + ", ".join(incompatible)
+        )
+        _atomic_write(
+            output_directory / "manifest.json",
+            _manifest(project, "failed", initial, error=error),
+        )
+        raise ValueError(error)
+    result = run_multiverse(spec, loaded.inputs)
+    compatible_ids = tuple(
+        universe.universe_id
+        for universe in result.universes
+        if universe.status != "incompatible"
+    )
+    groups = (
+        MultiverseReportGroup(
+            "Declared reference-corrected workflows", "ΔF/F", compatible_ids
+        ),
+    )
+    artifacts = {
+        "metadata.json": metadata,
+        "preflight.json": preflight,
+        "multiverse.json": result.to_json(),
+        "robustness.html": result.to_grouped_html(
+            groups, title=f"{project.analysis.title}: robustness"
+        ),
+    }
+    for name, content in artifacts.items():
+        if name not in {"metadata.json", "preflight.json"}:
+            _atomic_write(output_directory / name, content)
+    hashes = {name: _text_sha256(content) for name, content in artifacts.items()}
+    status = "complete" if result.summary.successful_universes else "blocked"
+    _atomic_write(
+        output_directory / "manifest.json", _manifest(project, status, hashes)
+    )
+    return output_directory.resolve()
+
+
 def _manifest(
     project: ProjectConfig,
     status: str,
@@ -222,14 +297,32 @@ def _preflight_json(
                 "inspection": json.loads(inspection.to_json()),
             }
         )
+    payload = {
+        "schema_version": "1",
+        "project_sha256": project.fingerprint,
+        "metadata_completeness": json.loads(completeness.to_json()),
+        "pipeline_compatibility": json.loads(compatibility.to_json()),
+        "sessions": sessions,
+    }
+    if project.multiverse is not None:
+        spec = _multiverse_spec(project, loaded)
+        payload["multiverse"] = {
+            "compatibility": json.loads(
+                assess_multiverse_compatibility(spec, loaded.inputs).to_json()
+            ),
+            "universes": [
+                {
+                    "universe_id": universe.universe_id,
+                    "choices": [
+                        {"node": choice.node, "alternative": choice.alternative}
+                        for choice in universe.choices
+                    ],
+                }
+                for universe in materialize_multiverse(spec)
+            ],
+        }
     return json.dumps(
-        {
-            "schema_version": "1",
-            "project_sha256": project.fingerprint,
-            "metadata_completeness": json.loads(completeness.to_json()),
-            "pipeline_compatibility": json.loads(compatibility.to_json()),
-            "sessions": sessions,
-        },
+        payload,
         indent=2,
         sort_keys=True,
     )
@@ -243,6 +336,26 @@ def _pipeline_compatibility(
         acknowledged_assumptions=project.analysis.acknowledged_assumptions
     )
     return assess_pipeline_compatibility(spec, loaded.inputs)
+
+
+def _multiverse_spec(
+    project: ProjectConfig, loaded: LoadedTabularProject
+) -> MultiverseSpec:
+    if project.multiverse is None:
+        raise ValueError("project does not declare a [multiverse] configuration")
+    study = project.build_analysis(loaded.sessions)
+    base = study.pipeline_spec(
+        acknowledged_assumptions=project.analysis.acknowledged_assumptions
+    )
+    return project.multiverse.build(base)
+
+
+def _multiverse_compatibility(
+    project: ProjectConfig, loaded: LoadedTabularProject
+) -> MultiverseCompatibility:
+    return assess_multiverse_compatibility(
+        _multiverse_spec(project, loaded), loaded.inputs
+    )
 
 
 def _atomic_write(path: Path, content: str) -> None:
@@ -297,6 +410,16 @@ def _parser() -> argparse.ArgumentParser:
     )
     run.add_argument("project", type=Path, help="path to a project TOML file")
     run.add_argument(
+        "--output-dir",
+        type=Path,
+        help="override the project output directory",
+    )
+    multiverse = subparsers.add_parser(
+        "multiverse",
+        help="execute declared robustness workflows and write evidence artifacts",
+    )
+    multiverse.add_argument("project", type=Path, help="path to a project TOML file")
+    multiverse.add_argument(
         "--output-dir",
         type=Path,
         help="override the project output directory",

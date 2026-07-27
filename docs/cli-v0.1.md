@@ -24,6 +24,12 @@ Execute the declared workflow:
 uv run fiberphotometry run examples/tabular_project/project.toml
 ```
 
+Execute every explicitly declared robustness workflow:
+
+```bash
+uv run fiberphotometry multiverse examples/tabular_project/project.toml
+```
+
 Install the `nwb` optional dependencies when the project declares NWB output:
 
 ```bash
@@ -40,6 +46,11 @@ The configured output directory receives:
 - `manifest.json`: project identity, package version, status, and SHA-256 for every
   artifact.
 - `nwb/*.nwb`: one validated file per session when an `[nwb]` table is declared.
+
+The `multiverse` command writes `multiverse.json` and a self-contained
+`robustness.html` alongside the shared preflight, metadata, and manifest. The
+preflight materializes stable universe IDs and checks every pipeline's clock,
+channel, and operation compatibility without accessing fluorescence outcomes.
 
 Use `--output` to save an inspection or `--output-dir` to override the configured
 run destination. Writes are atomic: a failed write does not leave a partially
@@ -102,10 +113,55 @@ resample_max_gap_factor = 1.5
 
 The source arrays and timestamp diagnostics remain in the processing lineage.
 
+## Robustness configuration
+
+An optional `[multiverse]` section declares named scientific alternatives rather
+than anonymous parameter arrays. Each alternative requires a rationale, and one
+alternative per decision must be selected as the reference workflow. This first
+schema supports reference-correction recipes and response windows:
+
+```toml
+[multiverse]
+schema_version = "1"
+intent = "exploratory"
+direction = "positive"
+smallest_effect = 0.01
+leave_one_animal_out = true
+reference_preprocessing = "filtered_irls"
+reference_response_window = "half_second"
+
+[[multiverse.preprocessing]]
+name = "filtered_irls"
+rationale = "Suppress high-frequency noise before robust reference correction."
+method = "irls"
+lowpass_hz = 3.0
+
+[[multiverse.preprocessing]]
+name = "unfiltered_ols"
+rationale = "Test dependence on filtering and robust regression."
+method = "ols"
+
+[[multiverse.response_windows]]
+name = "half_second"
+rationale = "Match the primary event definition."
+response = [0.0, 0.5]
+
+[[multiverse.response_windows]]
+name = "quarter_second"
+rationale = "Test sensitivity to an early-response definition."
+response = [0.0, 0.25]
+```
+
+Every declared decision must contain at least two uniquely named alternatives.
+The scientific estimand, design, baseline, and inference plan remain fixed across
+this first configuration surface. A structurally incompatible universe blocks
+execution before outcome access and remains visible in `preflight.json`.
+
 ## Current boundary
 
 v0.1 handles the categorical, within-animal scalar event contrast supported by
 `EventAnalysis`, with either schema-first tabular files or explicitly mapped TDT
-blocks. It does not yet expose multiverse execution or arbitrary designs. Those
-features should extend the typed library contracts rather than accumulate
-command-specific behavior.
+blocks. Multiverse configuration currently varies reference preprocessing and
+response windows; it does not yet expose arbitrary designs or signal-only recipe
+families. Those features should extend the typed library contracts rather than
+accumulate command-specific behavior.

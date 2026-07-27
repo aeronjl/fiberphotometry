@@ -95,6 +95,8 @@
 - [x] CLI from tabular project configuration to preflight, JSON, and HTML artifacts
 - [x] CLI export of raw/processed signals, events, QC, and provenance to NWB
 - [x] Unit-safe grouped report for complete multiverse robustness results
+- [x] Configuration-driven multiverse preflight, execution, and evidence bundle
+- [ ] Extend project multiverses to signal-only preprocessing recipe families
 - [x] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [x] Canonical raw-NWB to animal-level robustness tutorial

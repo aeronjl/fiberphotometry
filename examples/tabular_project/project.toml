@@ -83,3 +83,33 @@ acknowledged_assumptions = [
 
 [analysis.quality]
 blocking_warnings = []
+
+[multiverse]
+schema_version = "1"
+intent = "exploratory"
+direction = "positive"
+smallest_effect = 0.01
+leave_one_animal_out = true
+reference_preprocessing = "filtered_irls"
+reference_response_window = "half_second"
+
+[[multiverse.preprocessing]]
+name = "filtered_irls"
+rationale = "Suppress high-frequency noise before robust reference correction."
+method = "irls"
+lowpass_hz = 3.0
+
+[[multiverse.preprocessing]]
+name = "unfiltered_ols"
+rationale = "Test dependence on filtering and robust regression."
+method = "ols"
+
+[[multiverse.response_windows]]
+name = "half_second"
+rationale = "Match the primary event definition."
+response = [0.0, 0.5]
+
+[[multiverse.response_windows]]
+name = "quarter_second"
+rationale = "Test sensitivity to an early-response definition."
+response = [0.0, 0.25]

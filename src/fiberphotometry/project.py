@@ -28,7 +28,18 @@ from fiberphotometry.io.tdt import (
     TDTStreamChannel,
     load_tdt_input,
 )
-from fiberphotometry.pipeline import RecordingInput
+from fiberphotometry.multiverse import (
+    ChoiceRef,
+    DecisionAlternative,
+    DecisionNode,
+    MultiverseSpec,
+)
+from fiberphotometry.pipeline import (
+    LowpassFilterOperation,
+    PipelineSpec,
+    RecordingInput,
+    ReferenceDFFOperation,
+)
 from fiberphotometry.workflow import EventAnalysis, EventSession
 
 
@@ -61,6 +72,98 @@ class NWBExportConfig:
 
 
 @dataclass(frozen=True)
+class MultiversePreprocessingAlternative:
+    """One named, justified reference-correction recipe."""
+
+    name: str
+    rationale: str
+    method: str
+    lowpass_hz: float | None = None
+
+
+@dataclass(frozen=True)
+class MultiverseWindowAlternative:
+    """One named, justified response-window definition."""
+
+    name: str
+    rationale: str
+    response: tuple[float, float]
+
+
+@dataclass(frozen=True)
+class ProjectMultiverseConfig:
+    """Project-file decisions that materialize a typed robustness multiverse."""
+
+    preprocessing: tuple[MultiversePreprocessingAlternative, ...]
+    response_windows: tuple[MultiverseWindowAlternative, ...]
+    reference_preprocessing: str | None
+    reference_response_window: str | None
+    intent: str
+    smallest_effect: float | None = None
+    direction: str = "either"
+    leave_one_animal_out: bool = False
+    schema_version: str = "1"
+
+    def build(self, base: PipelineSpec) -> MultiverseSpec:
+        """Bind declared alternatives to the already-validated primary pipeline."""
+        nodes = []
+        references = []
+        if self.preprocessing:
+            nodes.append(
+                DecisionNode(
+                    "preprocessing",
+                    "preprocessing",
+                    tuple(
+                        DecisionAlternative(
+                            item.name,
+                            item.rationale,
+                            (
+                                *(
+                                    (LowpassFilterOperation(item.lowpass_hz),)
+                                    if item.lowpass_hz is not None
+                                    else ()
+                                ),
+                                ReferenceDFFOperation(method=cast(Any, item.method)),
+                            ),
+                        )
+                        for item in self.preprocessing
+                    ),
+                )
+            )
+            references.append(
+                ChoiceRef("preprocessing", cast(str, self.reference_preprocessing))
+            )
+        if self.response_windows:
+            nodes.append(
+                DecisionNode(
+                    "response_window",
+                    "event_summary",
+                    tuple(
+                        DecisionAlternative(
+                            item.name,
+                            item.rationale,
+                            replace(base.event_summary, response=item.response),
+                        )
+                        for item in self.response_windows
+                    ),
+                )
+            )
+            references.append(
+                ChoiceRef("response_window", cast(str, self.reference_response_window))
+            )
+        return MultiverseSpec(
+            base,
+            tuple(nodes),
+            (),
+            tuple(references),
+            cast(Any, self.intent),
+            smallest_effect=self.smallest_effect,
+            direction=cast(Any, self.direction),
+            leave_one_unit_out=self.leave_one_animal_out,
+        )
+
+
+@dataclass(frozen=True)
 class LoadedTabularProject:
     sessions: tuple[EventSession, ...]
     inspections: tuple[TabularInputInspection, ...]
@@ -80,6 +183,7 @@ class TabularProjectConfig:
     analysis: EventAnalysisConfig
     metadata: dict[str, Any] = field(default_factory=dict)
     nwb: NWBExportConfig | None = None
+    multiverse: ProjectMultiverseConfig | None = None
     schema_version: str = "1"
 
     @classmethod
@@ -102,6 +206,7 @@ class TabularProjectConfig:
                 "analysis",
                 "metadata",
                 "nwb",
+                "multiverse",
             },
             "project root",
         )
@@ -128,6 +233,7 @@ class TabularProjectConfig:
             analysis=analysis,
             metadata=_metadata(payload.get("metadata")),
             nwb=nwb,
+            multiverse=_multiverse_config(payload.get("multiverse"), analysis),
         )
 
     @property
@@ -163,7 +269,9 @@ class TabularProjectConfig:
                 )
             )
             inspections.append(inspect_loaded_tabular_input(item))
-            inputs.append(item)
+            inputs.append(
+                _project_recording_input(item, source.subject, source.session)
+            )
         return LoadedTabularProject(tuple(sessions), tuple(inspections), tuple(inputs))
 
     def build_analysis(self, sessions: tuple[EventSession, ...]) -> EventAnalysis:
@@ -198,6 +306,9 @@ class TabularProjectConfig:
             "analysis": json.loads(self.analysis.to_json()),
             "metadata": self.metadata,
             "nwb": asdict(self.nwb) if self.nwb is not None else None,
+            "multiverse": asdict(self.multiverse)
+            if self.multiverse is not None
+            else None,
         }
         return json.dumps(payload, indent=2, sort_keys=True)
 
@@ -214,6 +325,7 @@ class TDTProjectConfig:
     analysis: EventAnalysisConfig
     metadata: dict[str, Any] = field(default_factory=dict)
     nwb: NWBExportConfig | None = None
+    multiverse: ProjectMultiverseConfig | None = None
     schema_version: str = "1"
 
     @classmethod
@@ -234,6 +346,7 @@ class TDTProjectConfig:
                 "analysis",
                 "metadata",
                 "nwb",
+                "multiverse",
             },
             "project root",
         )
@@ -256,6 +369,7 @@ class TDTProjectConfig:
             analysis=analysis,
             metadata=_metadata(payload.get("metadata")),
             nwb=_nwb_config(payload.get("nwb"), sources),
+            multiverse=_multiverse_config(payload.get("multiverse"), analysis),
         )
 
     @property
@@ -288,7 +402,9 @@ class TDTProjectConfig:
                 )
             )
             inspections.append(inspect_loaded_tabular_input(item))
-            inputs.append(item)
+            inputs.append(
+                _project_recording_input(item, source.subject, source.session)
+            )
         return LoadedTabularProject(tuple(sessions), tuple(inspections), tuple(inputs))
 
     def build_analysis(self, sessions: tuple[EventSession, ...]) -> EventAnalysis:
@@ -320,6 +436,9 @@ class TDTProjectConfig:
             "analysis": json.loads(self.analysis.to_json()),
             "metadata": self.metadata,
             "nwb": asdict(self.nwb) if self.nwb is not None else None,
+            "multiverse": asdict(self.multiverse)
+            if self.multiverse is not None
+            else None,
         }
         return json.dumps(payload, indent=2, sort_keys=True)
 
@@ -336,6 +455,23 @@ def load_project_config(path: str | Path) -> ProjectConfig:
     if payload.get("input_format", "tabular") == "tdt":
         return TDTProjectConfig.from_toml(source)
     return TabularProjectConfig.from_toml(source)
+
+
+def _project_recording_input(
+    item: RecordingInput, subject: str, session: str
+) -> RecordingInput:
+    """Attach declared design units while preserving arbitrary imported event fields."""
+    count = len(item.event_times)
+    return RecordingInput(
+        item.recording,
+        item.event_times,
+        item.event_ids,
+        {
+            **item.columns,
+            "animal": (subject,) * count,
+            "session": (session,) * count,
+        },
+    )
 
 
 def _session_sources(value: object, base: Path) -> tuple[TabularSessionSource, ...]:
@@ -413,6 +549,169 @@ def _tdt_session_sources(value: object, base: Path) -> tuple[TDTSessionSource, .
             )
         )
     return tuple(sources)
+
+
+def _multiverse_config(
+    value: object, analysis: EventAnalysisConfig
+) -> ProjectMultiverseConfig | None:
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise ValueError("multiverse must be a TOML table")
+    _reject_unknown(
+        value,
+        {
+            "schema_version",
+            "intent",
+            "direction",
+            "smallest_effect",
+            "leave_one_animal_out",
+            "reference_preprocessing",
+            "reference_response_window",
+            "preprocessing",
+            "response_windows",
+        },
+        "multiverse",
+    )
+    if value.get("schema_version") != "1":
+        raise ValueError("unsupported multiverse schema_version")
+    preprocessing = _multiverse_preprocessing(value.get("preprocessing", []))
+    windows = _multiverse_windows(value.get("response_windows", []))
+    if not preprocessing and not windows:
+        raise ValueError("multiverse requires preprocessing or response_windows")
+    if preprocessing and analysis.preprocessing_kind != "reference":
+        raise ValueError(
+            "multiverse.preprocessing currently requires reference preprocessing"
+        )
+    reference_preprocessing = _multiverse_reference(
+        value, "reference_preprocessing", preprocessing
+    )
+    reference_window = _multiverse_reference(
+        value, "reference_response_window", windows
+    )
+    intent = value.get("intent", analysis.intent)
+    if intent not in {"confirmatory", "exploratory", "descriptive"}:
+        raise ValueError("multiverse.intent is invalid")
+    direction = value.get("direction", "either")
+    if direction not in {"positive", "negative", "either"}:
+        raise ValueError("multiverse.direction is invalid")
+    smallest_raw = value.get("smallest_effect")
+    smallest_effect = None
+    if smallest_raw is not None:
+        if (
+            not isinstance(smallest_raw, int | float)
+            or isinstance(smallest_raw, bool)
+            or not math.isfinite(float(smallest_raw))
+            or float(smallest_raw) < 0
+        ):
+            raise ValueError(
+                "multiverse.smallest_effect must be finite and nonnegative"
+            )
+        smallest_effect = float(smallest_raw)
+    leave_one_out = value.get("leave_one_animal_out", False)
+    if not isinstance(leave_one_out, bool):
+        raise ValueError("multiverse.leave_one_animal_out must be boolean")
+    return ProjectMultiverseConfig(
+        preprocessing,
+        windows,
+        reference_preprocessing,
+        reference_window,
+        str(intent),
+        smallest_effect,
+        str(direction),
+        leave_one_out,
+    )
+
+
+def _multiverse_preprocessing(
+    value: object,
+) -> tuple[MultiversePreprocessingAlternative, ...]:
+    if not isinstance(value, list):
+        raise ValueError("multiverse.preprocessing must be an array of tables")
+    output = []
+    for index, item in enumerate(value):
+        section = f"multiverse.preprocessing[{index}]"
+        if not isinstance(item, dict):
+            raise ValueError(f"{section} must be a TOML table")
+        _reject_unknown(item, {"name", "rationale", "method", "lowpass_hz"}, section)
+        method = _nonempty_string(item, "method", section)
+        if method not in {"irls", "ols"}:
+            raise ValueError(f"{section}.method must be 'irls' or 'ols'")
+        cutoff_raw = item.get("lowpass_hz")
+        cutoff = None
+        if cutoff_raw is not None:
+            if (
+                not isinstance(cutoff_raw, int | float)
+                or isinstance(cutoff_raw, bool)
+                or not math.isfinite(float(cutoff_raw))
+                or float(cutoff_raw) <= 0
+            ):
+                raise ValueError(f"{section}.lowpass_hz must be finite and positive")
+            cutoff = float(cutoff_raw)
+        output.append(
+            MultiversePreprocessingAlternative(
+                _nonempty_string(item, "name", section),
+                _nonempty_string(item, "rationale", section),
+                method,
+                cutoff,
+            )
+        )
+    _validate_multiverse_alternatives(output, "multiverse.preprocessing")
+    return tuple(output)
+
+
+def _multiverse_windows(value: object) -> tuple[MultiverseWindowAlternative, ...]:
+    if not isinstance(value, list):
+        raise ValueError("multiverse.response_windows must be an array of tables")
+    output = []
+    for index, item in enumerate(value):
+        section = f"multiverse.response_windows[{index}]"
+        if not isinstance(item, dict):
+            raise ValueError(f"{section} must be a TOML table")
+        _reject_unknown(item, {"name", "rationale", "response"}, section)
+        response = item.get("response")
+        if (
+            not isinstance(response, list)
+            or len(response) != 2
+            or any(
+                not isinstance(point, int | float) or isinstance(point, bool)
+                for point in response
+            )
+        ):
+            raise ValueError(f"{section}.response must contain two numbers")
+        parsed = (float(response[0]), float(response[1]))
+        if not all(math.isfinite(point) for point in parsed) or parsed[0] >= parsed[1]:
+            raise ValueError(f"{section}.response must be finite and increasing")
+        output.append(
+            MultiverseWindowAlternative(
+                _nonempty_string(item, "name", section),
+                _nonempty_string(item, "rationale", section),
+                parsed,
+            )
+        )
+    _validate_multiverse_alternatives(output, "multiverse.response_windows")
+    return tuple(output)
+
+
+def _validate_multiverse_alternatives(value: list[Any], section: str) -> None:
+    if value and len(value) < 2:
+        raise ValueError(f"{section} requires at least two alternatives")
+    names = [item.name for item in value]
+    if len(names) != len(set(names)):
+        raise ValueError(f"{section} names must be unique")
+
+
+def _multiverse_reference(
+    payload: dict[str, Any], key: str, alternatives: tuple[Any, ...]
+) -> str | None:
+    if not alternatives:
+        if key in payload:
+            raise ValueError(f"multiverse.{key} requires matching alternatives")
+        return None
+    reference = _nonempty_string(payload, key, "multiverse")
+    if reference not in {item.name for item in alternatives}:
+        raise ValueError(f"multiverse.{key} names an unknown alternative")
+    return reference
 
 
 def _tdt_schema(payload: dict[str, Any]) -> TDTBlockSchema:

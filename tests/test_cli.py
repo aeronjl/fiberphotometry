@@ -137,6 +137,44 @@ blocking_warnings = []
     return project
 
 
+def _declare_multiverse(project: Path, *, cutoff_hz: float = 3.0) -> None:
+    project.write_text(
+        project.read_text()
+        + f"""
+
+[multiverse]
+schema_version = "1"
+intent = "exploratory"
+direction = "positive"
+smallest_effect = 0.001
+leave_one_animal_out = true
+reference_preprocessing = "filtered_irls"
+reference_response_window = "half_second"
+
+[[multiverse.preprocessing]]
+name = "filtered_irls"
+rationale = "Suppress high-frequency acquisition noise before robust correction."
+method = "irls"
+lowpass_hz = {cutoff_hz}
+
+[[multiverse.preprocessing]]
+name = "unfiltered_ols"
+rationale = "Test dependence on filtering and robust regression."
+method = "ols"
+
+[[multiverse.response_windows]]
+name = "half_second"
+rationale = "Match the primary event definition."
+response = [0.0, 0.5]
+
+[[multiverse.response_windows]]
+name = "quarter_second"
+rationale = "Test sensitivity to an early-response definition."
+response = [0.0, 0.25]
+"""
+    )
+
+
 def test_cli_inspects_and_runs_complete_tabular_project(tmp_path, capsys) -> None:
     project_path = _project(tmp_path)
     preflight_path = tmp_path / "preflight-only.json"
@@ -168,6 +206,61 @@ def test_cli_inspects_and_runs_complete_tabular_project(tmp_path, capsys) -> Non
         )
     assert (output / "manifest.json").is_file()
     assert "Analysis artifacts written" in capsys.readouterr().out
+
+
+def test_cli_materializes_and_runs_declared_multiverse(tmp_path, capsys) -> None:
+    project_path = _project(tmp_path)
+    _declare_multiverse(project_path)
+    preflight_path = tmp_path / "preflight.json"
+    output = tmp_path / "robustness"
+
+    assert main(["inspect", str(project_path), "--output", str(preflight_path)]) == 0
+    assert main(["multiverse", str(project_path), "--output-dir", str(output)]) == 0
+
+    preflight = json.loads(preflight_path.read_text())
+    result = json.loads((output / "multiverse.json").read_text())
+    manifest = json.loads((output / "manifest.json").read_text())
+    assert len(preflight["multiverse"]["universes"]) == 4
+    assert {
+        item["status"] for item in preflight["multiverse"]["compatibility"]["universes"]
+    } == {"compatible"}
+    assert preflight["multiverse"]["compatibility"]["outcome_values_accessed"] is False
+    assert result["summary"]["total_universes"] == 4
+    assert result["summary"]["successful_universes"] == 4
+    assert len(result["leave_one_out"]) == 4
+    assert sum(item["is_reference"] for item in result["universes"]) == 1
+    assert manifest["status"] == "complete"
+    assert set(manifest["artifacts"]) == {
+        "metadata.json",
+        "multiverse.json",
+        "preflight.json",
+        "robustness.html",
+    }
+    assert "Robustness artifacts written" in capsys.readouterr().out
+
+
+def test_cli_rejects_structurally_incompatible_multiverse_before_run(
+    tmp_path, capsys
+) -> None:
+    project_path = _project(tmp_path)
+    _declare_multiverse(project_path, cutoff_hz=100.0)
+
+    assert main(["multiverse", str(project_path)]) == 2
+
+    preflight = json.loads((tmp_path / "artifacts" / "preflight.json").read_text())
+    statuses = {
+        item["status"] for item in preflight["multiverse"]["compatibility"]["universes"]
+    }
+    assert statuses == {"compatible", "incompatible"}
+    assert "before outcome access" in capsys.readouterr().err
+    assert not (tmp_path / "artifacts" / "multiverse.json").exists()
+
+
+def test_cli_requires_multiverse_declaration(tmp_path, capsys) -> None:
+    project_path = _project(tmp_path)
+
+    assert main(["multiverse", str(project_path)]) == 2
+    assert "does not declare" in capsys.readouterr().err
 
 
 def test_cli_inspect_does_not_bypass_run_assumption_gate(tmp_path, capsys) -> None:
