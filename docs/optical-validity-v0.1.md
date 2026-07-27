@@ -161,14 +161,22 @@ from fiberphotometry import (
 )
 
 signal_channel = ChannelIdentity(
-    "dms-signal", "DMS", "dLight1.3b", "sensor", "dF/F",
+    "dms-signal",
+    "DMS",
+    "dLight1.3b",
+    "sensor",
+    "dF/F",
     excitation_wavelength_nm=470,
     emission_wavelength_nm=525,
     detector_id="detector-1",
     fiber_id="fiber-1",
 )
 reference_channel = ChannelIdentity(
-    "dms-reference", "DMS", "dLight1.3b", "isosbestic", "dF/F",
+    "dms-reference",
+    "DMS",
+    "dLight1.3b",
+    "isosbestic",
+    "dF/F",
     excitation_wavelength_nm=410,
     emission_wavelength_nm=525,
     detector_id="detector-1",
