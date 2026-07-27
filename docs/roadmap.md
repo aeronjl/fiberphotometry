@@ -108,6 +108,7 @@
 - [x] Publishable MkDocs site with strict link and API-reference builds
 - [x] Scientist-task methods catalog and supported/experimental/planned matrix
 - [ ] Literature-shaped worked examples for each major method family
+  - [x] Public-data evidence atlas linking figures to estimands, units, and limitations
   - [x] Event-locked public IBL analysis
   - [x] Raw-NWB animal-level robustness analysis
   - [ ] Behavioral event-kernel GLM

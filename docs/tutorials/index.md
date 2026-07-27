@@ -4,6 +4,10 @@ The tutorials are executable scientific narratives rather than isolated API
 snippets. Each begins with a question and records the experimental unit,
 preprocessing choices, event denominator, inferential target, and limitations.
 
+Start with the [public-data evidence atlas](../methods/public-evidence-atlas.md)
+if you want to compare the scientific outputs and evidence boundaries before
+choosing a tutorial.
+
 ## Public IBL feedback analysis
 
 Import public IBL tables, inspect event coverage, and produce fingerprinted JSON

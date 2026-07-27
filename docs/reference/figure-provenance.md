@@ -31,6 +31,7 @@ uv run --group docs python scripts/plot_documentation_figures.py
 
 | Figure | Source and claim boundary |
 |---|---|
+| `dandi-000971-reward-multiverse-v0.1.svg` | Frozen eight-universe animal-level robustness result generated from the committed DANDI 000971 result JSON |
 | `dandi-000971-event-kernels-v0.2.png` | Checksum-pinned public DANDI 000971 benchmark; pooled DMS/DLS kernels and grouped-jackknife sensitivity intervals |
 | `ibl-feedback-signal-only-subtract-v0.3.2.svg` | Frozen IBL signal-only multiverse result for subtraction workflows |
 | `ibl-feedback-signal-only-divide-v0.3.2.svg` | Frozen IBL signal-only multiverse result for division workflows |
@@ -39,6 +40,13 @@ uv run --group docs python scripts/plot_documentation_figures.py
 The surrounding result pages define the cohort, denominator, experimental unit, frozen
 protocol, and limitations. Versioned empirical figures should be regenerated only from
 their corresponding benchmark script and pinned inputs.
+
+The DANDI reward-multiverse figure can be regenerated without downloading source
+data or rerunning the scientific analysis:
+
+```bash
+uv run --group docs python scripts/plot_public_evidence_figures.py
+```
 
 ## Review checklist
 

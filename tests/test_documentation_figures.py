@@ -5,6 +5,7 @@ from xml.etree import ElementTree
 
 ROOT = Path(__file__).parents[1]
 GENERATED = {
+    "dandi-000971-reward-multiverse-v0.1.svg",
     "event-kernel-validation.svg",
     "evidence-path.svg",
     "method-question-map.svg",
