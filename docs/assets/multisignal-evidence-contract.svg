@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 520" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-signal evidence contract</title>
+  <desc id="desc">Two identified signals enter shared clock and joint continuity checks, then separate into crosstalk review, lagged association, coherence and phase, and animal-level inference.</desc>
+  <defs>
+    <linearGradient id="first" x1="0" x2="1"><stop stop-color="#7254d6"/><stop offset="1" stop-color="#9b7cf2"/></linearGradient>
+    <linearGradient id="second" x1="0" x2="1"><stop stop-color="#0b9d91"/><stop offset="1" stop-color="#55c7bc"/></linearGradient>
+    <style>
+      .heading{font:700 18px ui-sans-serif,system-ui,sans-serif;fill:#252137}
+      .body{font:500 14px ui-sans-serif,system-ui,sans-serif;fill:#615c70}
+      .small{font:600 12px ui-sans-serif,system-ui,sans-serif;fill:#706a7e;letter-spacing:.04em}
+      .box{fill:#fff;stroke:#d8d2e4;stroke-width:2;rx:14}
+      .guard{fill:#f2effa;stroke:#8d79ca;stroke-width:2;rx:14}
+      .review{fill:#fff4df;stroke:#d89a2b;stroke-width:2;rx:14}
+      .analysis{fill:#edf8f6;stroke:#36a99f;stroke-width:2;rx:14}
+      .arrow{fill:none;stroke:#aaa3b7;stroke-width:2.5;marker-end:url(#tip)}
+    </style>
+    <marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#aaa3b7"/></marker>
+  </defs>
+  <rect width="1180" height="520" rx="22" fill="#fbfaff"/>
+
+  <rect x="50" y="60" width="220" height="115" class="box"/>
+  <rect x="50" y="205" width="220" height="115" class="box"/>
+  <rect x="68" y="82" width="14" height="70" rx="7" fill="url(#first)"/>
+  <rect x="68" y="227" width="14" height="70" rx="7" fill="url(#second)"/>
+  <text x="100" y="98" class="small">FIRST CHANNEL</text>
+  <text x="100" y="126" class="heading">DMS · dLight</text>
+  <text x="100" y="150" class="body">site · sensor · color · hardware</text>
+  <text x="100" y="243" class="small">SECOND CHANNEL</text>
+  <text x="100" y="271" class="heading">NAcC · rDA</text>
+  <text x="100" y="295" class="body">site · sensor · color · hardware</text>
+
+  <path d="M270 118 C320 118 310 205 350 205" class="arrow"/>
+  <path d="M270 263 C320 263 310 215 350 215" class="arrow"/>
+  <rect x="350" y="145" width="250" height="135" class="guard"/>
+  <text x="375" y="175" class="small">SHARED EVIDENCE GATE</text>
+  <text x="375" y="208" class="heading">Clock + joint validity</text>
+  <text x="375" y="235" class="body">one time vector · gaps split both</text>
+  <text x="375" y="258" class="body">no interpolation · no hidden pairs</text>
+
+  <path d="M600 195 C650 195 650 92 700 92" class="arrow"/>
+  <path d="M600 205 C650 205 650 207 700 207" class="arrow"/>
+  <path d="M600 215 C650 215 650 322 700 322" class="arrow"/>
+
+  <rect x="700" y="40" width="270" height="105" class="review"/>
+  <text x="725" y="70" class="small">OPTICAL REVIEW</text>
+  <text x="725" y="100" class="heading">Crosstalk flags</text>
+  <text x="725" y="125" class="body">metadata · control loading · zero lag</text>
+
+  <rect x="700" y="155" width="270" height="105" class="analysis"/>
+  <text x="725" y="185" class="small">TIME DOMAIN</text>
+  <text x="725" y="215" class="heading">Lagged association</text>
+  <text x="725" y="240" class="body">covariates · pair counts · block null</text>
+
+  <rect x="700" y="270" width="270" height="105" class="analysis"/>
+  <text x="725" y="300" class="small">FREQUENCY DOMAIN</text>
+  <text x="725" y="330" class="heading">Coherence + phase</text>
+  <text x="725" y="355" class="body">complete windows · supplied states</text>
+
+  <path d="M835 375 L835 418 L1015 418" class="arrow"/>
+  <path d="M835 260 L835 405 L1015 405" class="arrow"/>
+  <rect x="930" y="390" width="210" height="90" class="guard"/>
+  <text x="955" y="420" class="small">GROUP INFERENCE</text>
+  <text x="955" y="449" class="heading">Animals, not fibers</text>
+  <text x="955" y="471" class="body">sessions aggregate first</text>
+
+  <text x="50" y="480" class="body">Association evidence remains conditional on preprocessing, controls, states, windows, and the declared pair.</text>
+</svg>

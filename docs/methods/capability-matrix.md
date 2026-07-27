@@ -29,8 +29,8 @@ experiment belongs in one package.
 | Spontaneous transient detection | **Experimental** | Separate GuPPY-, PASTa-, and prominence-compatible candidate families; gap-aware detector evidence retained |
 | Spontaneous transient quantification | **Experimental** | Non-z-scored amplitude/half-width/AUC, compound groups, exposure-adjusted session summaries; cut traces and frozen control-derived thresholds remain gaps |
 | Spontaneous transient animal-level inference | **Experimental** | Paired/independent animal bootstrap and randomization for exposure-adjusted rate, amplitude, width, and AUC contrasts |
-| Multi-site/multi-color coupling | **Gap** | Cross-channel lag, partial association and shared-event models |
-| Coherence and phase analysis | **Gap** | Implement only after single-signal spectral validation, with state conditioning and blocked uncertainty |
+| Multi-site/multi-color coupling | **Experimental** | Explicit pair/site/sensor/optical metadata; joint-validity lagged association; declared event/behavior residualization; crosstalk review flags; blocked within-session nulls and animal-level contrasts |
+| Coherence and phase analysis | **Experimental** | Window-weighted joint cross-spectra, state conditioning, explicit phase convention and band summaries; multitaper and phase uncertainty remain gaps |
 | Dense spatial multi-fiber analysis | **Gap** | Add coordinates and mouse-aware site/spatial models; avoid treating fibers as independent animals |
 | Optogenetic-stimulation artifact handling | **Gap** | Pulse masks, recovery windows and negative controls |
 | Sensor-kinetic deconvolution | **Gap / caution** | Sensor-specific forward models and identifiability diagnostics |

@@ -148,9 +148,9 @@
   - [x] Animal-aware rate and kinetic inference
   - [ ] Raw-signal and manual-annotation validation across two sensors/acquisition systems
 - [ ] Multi-site/multi-color paired and conditional association workflows
-  - [ ] Paired channel/site metadata, alignment, control, and crosstalk diagnostics
-  - [ ] Lagged and event/behavior-residualized association with blocked uncertainty
-  - [ ] State-conditioned coherence and phase after single-signal spectral validation
+  - [x] Paired channel/site metadata, alignment, control, and crosstalk diagnostics
+  - [x] Lagged and event/behavior-residualized association with blocked uncertainty
+  - [x] State-conditioned coherence and phase after single-signal spectral validation
   - [ ] Coordinate-aware mouse-level models for dense multi-fiber arrays
 
 ## Phase 4 — adoption

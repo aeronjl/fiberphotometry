@@ -29,6 +29,14 @@ estimates from an experiment. Rebuild them with:
 uv run --group docs python scripts/plot_documentation_figures.py
 ```
 
+The following hand-authored SVGs are deterministic conceptual schematics committed
+directly with their method pages:
+
+| Figure | Purpose |
+|---|---|
+| `gap-aware-spectral-contract.svg` | Show that gaps and state boundaries partition valid spectral evidence |
+| `multisignal-evidence-contract.svg` | Separate paired-signal identity, optical review, association, and animal inference |
+
 ## Public-data evidence figures
 
 | Figure | Source and claim boundary |
