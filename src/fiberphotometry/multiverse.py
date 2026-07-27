@@ -172,6 +172,24 @@ class MultiverseResult:
 
         return render_multiverse_report(self, groups, title=title)
 
+    def grouped_summary(
+        self, groups: Sequence[MultiverseReportGroup]
+    ) -> tuple[MultiverseLaneSummary, ...]:
+        """Summarize each complete unit-compatible evidence lane independently."""
+        return summarize_multiverse_groups(self, groups)
+
+    def grouped_summary_json(self, groups: Sequence[MultiverseReportGroup]) -> str:
+        """Serialize unit-local robustness summaries without pooled magnitudes."""
+        return json.dumps(
+            {
+                "artifact_type": "multiverse_lane_summary",
+                "schema_version": "1",
+                "lanes": [asdict(item) for item in self.grouped_summary(groups)],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+
     def write_grouped_html(
         self,
         path: str | Path,
@@ -194,6 +212,8 @@ class MultiverseReportGroup:
     name: str
     units: str
     universe_ids: tuple[str, ...]
+    smallest_effect: float | None = None
+    direction: Literal["positive", "negative", "either"] = "either"
 
     @classmethod
     def from_choice(
@@ -204,6 +224,8 @@ class MultiverseReportGroup:
         units: str,
         node: str,
         alternatives: Sequence[str],
+        smallest_effect: float | None = None,
+        direction: Literal["positive", "negative", "either"] = "either",
     ) -> MultiverseReportGroup:
         """Select every compatible universe matching alternatives at one node."""
         allowed = set(alternatives)
@@ -218,7 +240,119 @@ class MultiverseReportGroup:
         )
         if not identifiers:
             raise ValueError("multiverse report group selects no compatible universes")
-        return cls(name, units, identifiers)
+        return cls(name, units, identifiers, smallest_effect, direction)
+
+
+@dataclass(frozen=True)
+class MultiverseLaneSummary:
+    """Machine-readable robustness summary for one compatible measurement scale."""
+
+    name: str
+    units: str
+    universe_ids: tuple[str, ...]
+    total_universes: int
+    successful_universes: int
+    failed_universes: int
+    blocked_universes: int
+    estimate_range: tuple[float, float] | None
+    median_estimate: float | None
+    fraction_positive: float | None
+    fraction_negative: float | None
+    smallest_effect: float | None
+    direction: Literal["positive", "negative", "either"]
+    fraction_meeting_practical_effect: float | None
+
+
+def summarize_multiverse_groups(
+    result: MultiverseResult, groups: Sequence[MultiverseReportGroup]
+) -> tuple[MultiverseLaneSummary, ...]:
+    """Validate a complete partition and calculate only unit-local magnitudes."""
+    grouped = _validated_group_universes(result, groups)
+    summaries = []
+    for group in groups:
+        universes = grouped[group.name]
+        estimates = [
+            float(item.estimate)
+            for item in universes
+            if item.status == "success" and item.estimate is not None
+        ]
+        denominator = len(universes)
+        practical = (
+            [_meets_group_effect(value, group) for value in estimates]
+            if group.smallest_effect is not None
+            else None
+        )
+        summaries.append(
+            MultiverseLaneSummary(
+                group.name,
+                group.units,
+                group.universe_ids,
+                denominator,
+                len(estimates),
+                sum(item.status == "failed" for item in universes),
+                sum(item.status == "blocked" for item in universes),
+                (float(min(estimates)), float(max(estimates))) if estimates else None,
+                float(median(estimates)) if estimates else None,
+                float(np.sum(np.asarray(estimates) > 0) / denominator)
+                if denominator
+                else None,
+                float(np.sum(np.asarray(estimates) < 0) / denominator)
+                if denominator
+                else None,
+                group.smallest_effect,
+                group.direction,
+                float(np.sum(practical) / denominator)
+                if denominator and practical is not None
+                else None,
+            )
+        )
+    return tuple(summaries)
+
+
+def _validated_group_universes(
+    result: MultiverseResult, groups: Sequence[MultiverseReportGroup]
+) -> dict[str, tuple[UniverseResult, ...]]:
+    if not groups:
+        raise ValueError("grouped multiverse summary requires at least one group")
+    names = [group.name for group in groups]
+    if len(names) != len(set(names)):
+        raise ValueError("multiverse report group names must be unique")
+    known = {
+        item.universe_id for item in result.universes if item.status != "incompatible"
+    }
+    by_id = {item.universe_id: item for item in result.universes}
+    assignments: set[str] = set()
+    output = {}
+    for group in groups:
+        if not group.name.strip() or not group.units.strip():
+            raise ValueError("multiverse report groups require names and units")
+        if group.smallest_effect is not None and (
+            not np.isfinite(group.smallest_effect) or group.smallest_effect < 0
+        ):
+            raise ValueError("lane smallest_effect must be finite and nonnegative")
+        identifiers = set(group.universe_ids)
+        if len(identifiers) != len(group.universe_ids):
+            raise ValueError("a report group cannot repeat a universe")
+        if identifiers - known:
+            raise ValueError("report group names an unknown or incompatible universe")
+        if assignments & identifiers:
+            raise ValueError("compatible universes cannot appear in multiple groups")
+        assignments.update(identifiers)
+        output[group.name] = tuple(by_id[item] for item in group.universe_ids)
+    if known - assignments:
+        raise ValueError("every compatible universe must belong to exactly one group")
+    return output
+
+
+def _meets_group_effect(value: float, group: MultiverseReportGroup) -> bool:
+    threshold = group.smallest_effect
+    if threshold is None:
+        raise ValueError("lane does not declare a practical-effect threshold")
+    if group.direction == "positive":
+        return value >= threshold
+    if group.direction == "negative":
+        return value <= -threshold
+    return abs(value) >= threshold
 
 
 def materialize_multiverse(spec: MultiverseSpec) -> tuple[MaterializedUniverse, ...]:

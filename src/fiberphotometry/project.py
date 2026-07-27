@@ -143,6 +143,15 @@ class MultiverseWindowAlternative:
 
 
 @dataclass(frozen=True)
+class MultiverseEffectThreshold:
+    """A practical-effect threshold scoped to one measurement unit lane."""
+
+    units: str
+    smallest_effect: float
+    direction: str = "either"
+
+
+@dataclass(frozen=True)
 class ProjectMultiverseConfig:
     """Project-file decisions that materialize a typed robustness multiverse."""
 
@@ -154,6 +163,7 @@ class ProjectMultiverseConfig:
     smallest_effect: float | None = None
     direction: str = "either"
     leave_one_animal_out: bool = False
+    effect_thresholds: tuple[MultiverseEffectThreshold, ...] = ()
     schema_version: str = "1"
 
     def build(self, base: PipelineSpec) -> MultiverseSpec:
@@ -224,6 +234,12 @@ class ProjectMultiverseConfig:
         for alternative in self.preprocessing:
             groups.setdefault(alternative.units, []).append(alternative.name)
         return {units: tuple(names) for units, names in groups.items()}
+
+    def effect_threshold(self, units: str) -> MultiverseEffectThreshold | None:
+        """Return the declared practical-effect policy for one unit lane."""
+        return next(
+            (item for item in self.effect_thresholds if item.units == units), None
+        )
 
 
 @dataclass(frozen=True)
@@ -628,6 +644,7 @@ def _multiverse_config(
             "intent",
             "direction",
             "smallest_effect",
+            "effect_thresholds",
             "leave_one_animal_out",
             "reference_preprocessing",
             "reference_response_window",
@@ -671,18 +688,78 @@ def _multiverse_config(
         raise ValueError(
             "multiverse.smallest_effect cannot span preprocessing output units"
         )
+    effect_thresholds = _multiverse_effect_thresholds(
+        value.get("effect_thresholds", []),
+        preprocessing,
+        analysis,
+        str(direction),
+    )
+    if smallest_effect is not None and effect_thresholds:
+        raise ValueError(
+            "multiverse.smallest_effect and effect_thresholds are mutually exclusive"
+        )
     leave_one_out = value.get("leave_one_animal_out", False)
     if not isinstance(leave_one_out, bool):
         raise ValueError("multiverse.leave_one_animal_out must be boolean")
     return ProjectMultiverseConfig(
-        preprocessing,
-        windows,
-        reference_preprocessing,
-        reference_window,
-        str(intent),
-        smallest_effect,
-        str(direction),
-        leave_one_out,
+        preprocessing=preprocessing,
+        response_windows=windows,
+        reference_preprocessing=reference_preprocessing,
+        reference_response_window=reference_window,
+        intent=str(intent),
+        smallest_effect=smallest_effect,
+        direction=str(direction),
+        leave_one_animal_out=leave_one_out,
+        effect_thresholds=effect_thresholds,
+    )
+
+
+def _multiverse_effect_thresholds(
+    value: object,
+    preprocessing: tuple[MultiversePreprocessingAlternative, ...],
+    analysis: EventAnalysisConfig,
+    default_direction: str,
+) -> tuple[MultiverseEffectThreshold, ...]:
+    if not isinstance(value, list):
+        raise ValueError("multiverse.effect_thresholds must be an array of tables")
+    output = []
+    for index, item in enumerate(value):
+        section = f"multiverse.effect_thresholds[{index}]"
+        if not isinstance(item, dict):
+            raise ValueError(f"{section} must be a TOML table")
+        _reject_unknown(item, {"units", "smallest_effect", "direction"}, section)
+        direction = item.get("direction", default_direction)
+        if direction not in {"positive", "negative", "either"}:
+            raise ValueError(f"{section}.direction is invalid")
+        output.append(
+            MultiverseEffectThreshold(
+                _nonempty_string(item, "units", section),
+                _nonnegative_number(
+                    item.get("smallest_effect"), f"{section}.smallest_effect"
+                ),
+                str(direction),
+            )
+        )
+    units = [item.units for item in output]
+    if len(units) != len(set(units)):
+        raise ValueError("multiverse.effect_thresholds units must be unique")
+    if output:
+        declared_units = {item.units for item in preprocessing} or {
+            _analysis_output_units(analysis)
+        }
+        if set(units) != declared_units:
+            raise ValueError(
+                "multiverse.effect_thresholds must cover every declared unit lane"
+            )
+    return tuple(output)
+
+
+def _analysis_output_units(analysis: EventAnalysisConfig) -> str:
+    return (
+        "acquired fluorescence"
+        if analysis.preprocessing_kind == "signal_only"
+        and analysis.normalization == "subtract"
+        else "ΔF/F"
     )
 
 
@@ -826,6 +903,17 @@ def _positive_number(value: object, name: str) -> float:
         or float(value) <= 0
     ):
         raise ValueError(f"{name} must be finite and positive")
+    return float(value)
+
+
+def _nonnegative_number(value: object, name: str) -> float:
+    if (
+        not isinstance(value, int | float)
+        or isinstance(value, bool)
+        or not math.isfinite(float(value))
+        or float(value) < 0
+    ):
+        raise ValueError(f"{name} must be finite and nonnegative")
     return float(value)
 
 

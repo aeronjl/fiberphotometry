@@ -5,6 +5,12 @@ The primary scientist-facing JSON now identifies itself with
 top-level contract is
 [`schemas/event-analysis-result-v1.schema.json`](../schemas/event-analysis-result-v1.schema.json).
 
+Grouped robustness execution also emits `artifact_type =
+"multiverse_lane_summary"`, `schema_version = "1"`, governed by
+[`schemas/multiverse-lane-summary-v1.schema.json`](../schemas/multiverse-lane-summary-v1.schema.json).
+Its magnitudes and practical-effect thresholds are scoped to explicit unit lanes;
+it contains no pooled cross-unit median or range.
+
 The nested event-coverage and peri-event inference records each carry their own
 `schema_version = "1"`. Analysis plans, study designs, project configuration, and
 pipeline specifications retain their existing explicit versions. Provenance

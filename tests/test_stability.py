@@ -25,6 +25,14 @@ def test_event_analysis_schema_fixes_the_complete_top_level_ledger() -> None:
     assert schema["properties"]["schema_version"]["const"] == "1"
 
 
+def test_multiverse_lane_summary_has_a_normative_schema() -> None:
+    schema = fiberphotometry.artifact_schema("multiverse_lane_summary")
+
+    assert schema["additionalProperties"] is False
+    assert set(schema["required"]) == set(schema["properties"])
+    assert schema["properties"]["artifact_type"]["const"] == ("multiverse_lane_summary")
+
+
 def test_unknown_or_embedded_schema_is_not_guessed() -> None:
     for artifact_type in ("missing", "event_coverage"):
         try:

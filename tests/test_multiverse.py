@@ -1,3 +1,4 @@
+import json
 from dataclasses import replace
 
 import pytest
@@ -141,6 +142,8 @@ def test_grouped_report_separates_complete_unit_families(tmp_path) -> None:
             units="ΔF/F",
             node="correction",
             alternatives=("ols",),
+            smallest_effect=0.01,
+            direction="positive",
         ),
         MultiverseReportGroup.from_choice(
             result,
@@ -162,6 +165,13 @@ def test_grouped_report_separates_complete_unit_families(tmp_path) -> None:
     assert "No successful workflows in this evidence lane" in html
     assert "fixture combination is declared scientifically incoherent" in html
     assert "pooled median" not in html.lower()
+    summaries = result.grouped_summary(groups)
+    assert summaries[0].smallest_effect == 0.01
+    assert summaries[0].fraction_meeting_practical_effect == 1.0
+    assert summaries[1].fraction_meeting_practical_effect is None
+    payload = json.loads(result.grouped_summary_json(groups))
+    assert payload["schema_version"] == "1"
+    assert len(payload["lanes"]) == 2
     assert all(line == line.rstrip() for line in html.splitlines())
 
 

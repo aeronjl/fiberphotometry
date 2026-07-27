@@ -16,6 +16,7 @@ from fiberphotometry.qc import RecordingQC, SignalChannelQC, SignalRecordingQC
 
 if TYPE_CHECKING:
     from fiberphotometry.multiverse import (
+        MultiverseLaneSummary,
         MultiverseReportGroup,
         MultiverseResult,
         UniverseResult,
@@ -374,9 +375,13 @@ def render_multiverse_report(
 ) -> str:
     """Render separate evidence lanes and reject incomplete or overlapping groups."""
     grouped = _validate_multiverse_groups(result, groups)
+    summaries = {item.name: item for item in result.grouped_summary(groups)}
     compatible = [item for item in result.universes if item.status != "incompatible"]
     incompatible = [item for item in result.universes if item.status == "incompatible"]
-    lanes = "".join(_multiverse_lane(group, grouped[group.name]) for group in groups)
+    lanes = "".join(
+        _multiverse_lane(group, grouped[group.name], summaries[group.name])
+        for group in groups
+    )
     failed_count = sum(item.status == "failed" for item in compatible)
     blocked_count = sum(item.status == "blocked" for item in compatible)
     success_count = sum(item.status == "success" for item in compatible)
@@ -438,38 +443,18 @@ def render_multiverse_report(
 def _validate_multiverse_groups(
     result: MultiverseResult, groups: Sequence[MultiverseReportGroup]
 ) -> dict[str, list[UniverseResult]]:
-    if not groups:
-        raise ValueError("grouped multiverse report requires at least one group")
-    names = [group.name for group in groups]
-    if len(names) != len(set(names)):
-        raise ValueError("multiverse report group names must be unique")
-    assignments: dict[str, str] = {}
-    known = {
-        item.universe_id for item in result.universes if item.status != "incompatible"
+    from fiberphotometry.multiverse import _validated_group_universes
+
+    return {
+        name: list(universes)
+        for name, universes in _validated_group_universes(result, groups).items()
     }
-    grouped: dict[str, list[UniverseResult]] = {group.name: [] for group in groups}
-    by_id = {item.universe_id: item for item in result.universes}
-    for group in groups:
-        if not group.name.strip() or not group.units.strip():
-            raise ValueError("multiverse report groups require names and units")
-        for identifier in group.universe_ids:
-            if identifier not in known:
-                raise ValueError(
-                    "report group names an unknown or incompatible universe"
-                )
-            if identifier in assignments:
-                raise ValueError(
-                    "compatible universes cannot appear in multiple groups"
-                )
-            assignments[identifier] = group.name
-            grouped[group.name].append(by_id[identifier])
-    if known - assignments.keys():
-        raise ValueError("every compatible universe must belong to exactly one group")
-    return grouped
 
 
 def _multiverse_lane(
-    group: MultiverseReportGroup, universes: list[UniverseResult]
+    group: MultiverseReportGroup,
+    universes: list[UniverseResult],
+    summary: MultiverseLaneSummary,
 ) -> str:
     successful = [item for item in universes if item.status == "success"]
     estimates = [
@@ -483,10 +468,18 @@ def _multiverse_lane(
     failed = sum(item.status == "failed" for item in universes)
     blocked = sum(item.status == "blocked" for item in universes)
     lane_class = "evidence-lane lane-warning" if not successful else "evidence-lane"
+    practical = (
+        f" · practical-effect stability "
+        f"{summary.fraction_meeting_practical_effect:.1%} "
+        f"({group.direction}, threshold {_number(group.smallest_effect)})"
+        if summary.fraction_meeting_practical_effect is not None
+        and group.smallest_effect is not None
+        else " · no practical-effect threshold declared"
+    )
     return f"""<section class="{lane_class}"><div class="lane-head"><div>
     <p class="eyebrow">UNIT-COMPATIBLE EVIDENCE LANE</p>
     <h2>{escape(group.name)}</h2><p>{escape(group.units)} · estimate range
-    {escape(estimate_range)}</p></div><dl class="lane-counts">
+    {escape(estimate_range)}{escape(practical)}</p></div><dl class="lane-counts">
     <div><dt>Success</dt><dd>{len(successful)}</dd></div>
     <div><dt>Failed</dt><dd>{failed}</dd></div>
     <div><dt>Blocked</dt><dd>{blocked}</dd></div></dl></div>

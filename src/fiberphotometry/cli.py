@@ -11,7 +11,7 @@ import tempfile
 from collections.abc import Sequence
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 from fiberphotometry.compatibility import (
     MultiverseCompatibility,
@@ -35,6 +35,7 @@ from fiberphotometry.multiverse import (
 from fiberphotometry.project import (
     LoadedTabularProject,
     ProjectConfig,
+    ProjectMultiverseConfig,
     SessionSource,
     load_project_config,
 )
@@ -233,6 +234,7 @@ def run_project_multiverse(
         "metadata.json": metadata,
         "preflight.json": preflight,
         "multiverse.json": result.to_json(),
+        "robustness-summary.json": result.grouped_summary_json(groups),
         "robustness.html": result.to_grouped_html(
             groups, title=f"{project.analysis.title}: robustness"
         ),
@@ -257,17 +259,7 @@ def _multiverse_report_groups(
     unit_groups = config.preprocessing_unit_groups()
     if unit_groups:
         return tuple(
-            MultiverseReportGroup.from_choice(
-                result,
-                name=(
-                    "Divisive normalization"
-                    if units == "ΔF/F"
-                    else "Subtractive normalization"
-                ),
-                units=units,
-                node="preprocessing",
-                alternatives=alternatives,
-            )
+            _multiverse_choice_group(config, result, units, alternatives)
             for units, alternatives in unit_groups.items()
         )
     compatible_ids = tuple(
@@ -281,7 +273,46 @@ def _multiverse_report_groups(
         and project.analysis.normalization == "subtract"
         else "ΔF/F"
     )
-    return (MultiverseReportGroup("Declared workflows", units, compatible_ids),)
+    threshold = config.effect_threshold(units)
+    return (
+        MultiverseReportGroup(
+            "Declared workflows",
+            units,
+            compatible_ids,
+            threshold.smallest_effect
+            if threshold is not None
+            else config.smallest_effect,
+            cast(
+                Any, threshold.direction if threshold is not None else config.direction
+            ),
+        ),
+    )
+
+
+def _multiverse_choice_group(
+    config: ProjectMultiverseConfig,
+    result: MultiverseResult,
+    units: str,
+    alternatives: tuple[str, ...],
+) -> MultiverseReportGroup:
+    threshold = config.effect_threshold(units)
+    return MultiverseReportGroup.from_choice(
+        result,
+        name=(
+            "Divisive normalization" if units == "ΔF/F" else "Subtractive normalization"
+        ),
+        units=units,
+        node="preprocessing",
+        alternatives=alternatives,
+        smallest_effect=(
+            threshold.smallest_effect
+            if threshold is not None
+            else config.smallest_effect
+        ),
+        direction=cast(
+            Any, threshold.direction if threshold is not None else config.direction
+        ),
+    )
 
 
 def _manifest(

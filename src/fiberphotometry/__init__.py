@@ -90,6 +90,7 @@ from fiberphotometry.multiverse import (
     DecisionSummary,
     LeaveOneOutResult,
     MaterializedUniverse,
+    MultiverseLaneSummary,
     MultiverseReportGroup,
     MultiverseResult,
     MultiverseSpec,
@@ -98,6 +99,7 @@ from fiberphotometry.multiverse import (
     UniverseResult,
     materialize_multiverse,
     run_multiverse,
+    summarize_multiverse_groups,
 )
 from fiberphotometry.pipeline import (
     BaselineDFFOperation,
@@ -186,6 +188,7 @@ __all__ = [
     "MetadataCompletenessReport",
     "MetadataReadiness",
     "MultiverseCompatibility",
+    "MultiverseLaneSummary",
     "MultiverseReportGroup",
     "MultiverseResult",
     "MultiverseSpec",
@@ -270,6 +273,7 @@ __all__ = [
     "run_multiverse",
     "run_pipeline",
     "summarize_event_windows",
+    "summarize_multiverse_groups",
     "unit_t_interval",
     "validate_design",
     "validate_recording",

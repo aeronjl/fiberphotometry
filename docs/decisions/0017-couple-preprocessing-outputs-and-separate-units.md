@@ -48,4 +48,6 @@ before presenting practical-effect stability for mixed-normalization multiverses
 
 ## Evidence added later
 
-None yet.
+On 2026-07-27, the revisit trigger was met with typed per-lane thresholds and the
+normative `multiverse_lane_summary` artifact. Denominator and serialization policy
+are governed by [SDR-0018](0018-summarize-robustness-within-unit-lanes.md).

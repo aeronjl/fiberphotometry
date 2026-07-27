@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/multiverse-lane-summary-v1.schema.json",
+  "title": "FiberPhotometry multiverse lane summary v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifact_type", "schema_version", "lanes"],
+  "properties": {
+    "artifact_type": {"const": "multiverse_lane_summary"},
+    "schema_version": {"const": "1"},
+    "lanes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "units",
+          "universe_ids",
+          "total_universes",
+          "successful_universes",
+          "failed_universes",
+          "blocked_universes",
+          "estimate_range",
+          "median_estimate",
+          "fraction_positive",
+          "fraction_negative",
+          "smallest_effect",
+          "direction",
+          "fraction_meeting_practical_effect"
+        ],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "units": {"type": "string", "minLength": 1},
+          "universe_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "total_universes": {"type": "integer", "minimum": 1},
+          "successful_universes": {"type": "integer", "minimum": 0},
+          "failed_universes": {"type": "integer", "minimum": 0},
+          "blocked_universes": {"type": "integer", "minimum": 0},
+          "estimate_range": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "array",
+                "prefixItems": [{"type": "number"}, {"type": "number"}],
+                "minItems": 2,
+                "maxItems": 2
+              }
+            ]
+          },
+          "median_estimate": {"type": ["number", "null"]},
+          "fraction_positive": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "fraction_negative": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "smallest_effect": {"type": ["number", "null"], "minimum": 0},
+          "direction": {"enum": ["positive", "negative", "either"]},
+          "fraction_meeting_practical_effect": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    }
+  }
+}

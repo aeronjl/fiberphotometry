@@ -47,8 +47,9 @@ The configured output directory receives:
   artifact.
 - `nwb/*.nwb`: one validated file per session when an `[nwb]` table is declared.
 
-The `multiverse` command writes `multiverse.json` and a self-contained
-`robustness.html` alongside the shared preflight, metadata, and manifest. The
+The `multiverse` command writes `multiverse.json`, a unit-local
+`robustness-summary.json`, and a self-contained `robustness.html` alongside the
+shared preflight, metadata, and manifest. The
 preflight materializes stable universe IDs and checks every pipeline's clock,
 channel, and operation compatibility without accessing fluorescence outcomes.
 
@@ -188,11 +189,28 @@ change the acquisition model. Reports partition ΔF/F and acquired-fluorescence
 estimates into separate evidence lanes. A single `smallest_effect` is rejected
 when alternatives span units because no one threshold is meaningful in both.
 
+Declare a complete threshold policy with one table per unit lane:
+
+```toml
+[[multiverse.effect_thresholds]]
+units = "ΔF/F"
+smallest_effect = 0.01
+direction = "positive"
+
+[[multiverse.effect_thresholds]]
+units = "acquired fluorescence"
+smallest_effect = 25.0
+direction = "either"
+```
+
+If any lane threshold is declared, every lane must receive exactly one. The
+legacy scalar `multiverse.smallest_effect` remains valid for single-unit projects
+and is mutually exclusive with `effect_thresholds`.
+
 ## Current boundary
 
 v0.1 handles the categorical, within-animal scalar event contrast supported by
 `EventAnalysis`, with either schema-first tabular files or explicitly mapped TDT
 blocks. Multiverse configuration currently varies reference preprocessing,
 signal-only baseline recipes, normalization, and response windows. It does not
-yet expose arbitrary designs, method-specific AsLS penalty choices, or per-lane
-practical-effect thresholds.
+yet expose arbitrary designs or method-specific AsLS penalty choices.

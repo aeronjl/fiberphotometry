@@ -50,6 +50,7 @@ EXPERIMENTAL_API_V0_1 = (
 
 ARTIFACT_SCHEMAS_V0_1 = {
     "event_analysis_result": "event-analysis-result-v1.schema.json",
+    "multiverse_lane_summary": "multiverse-lane-summary-v1.schema.json",
     "event_coverage": "embedded schema_version 1",
     "peri_event_inference": "embedded schema_version 1",
 }

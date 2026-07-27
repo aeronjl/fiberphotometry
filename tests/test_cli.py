@@ -295,6 +295,7 @@ def test_cli_materializes_and_runs_declared_multiverse(tmp_path, capsys) -> None
         "multiverse.json",
         "preflight.json",
         "robustness.html",
+        "robustness-summary.json",
     }
     assert "Robustness artifacts written" in capsys.readouterr().out
 
@@ -319,17 +320,42 @@ def test_cli_rejects_structurally_incompatible_multiverse_before_run(
 def test_cli_runs_signal_only_recipes_in_unit_safe_report_lanes(tmp_path) -> None:
     project_path = _project(tmp_path)
     _declare_signal_only_multiverse(project_path)
+    project_path.write_text(
+        project_path.read_text()
+        + """
+
+[[multiverse.effect_thresholds]]
+units = "ΔF/F"
+smallest_effect = 0.001
+direction = "positive"
+
+[[multiverse.effect_thresholds]]
+units = "acquired fluorescence"
+smallest_effect = 0.001
+direction = "either"
+"""
+    )
     output = tmp_path / "signal-only"
 
     assert main(["multiverse", str(project_path), "--output-dir", str(output)]) == 0
 
     result = json.loads((output / "multiverse.json").read_text())
+    lane_summary = json.loads((output / "robustness-summary.json").read_text())
     html = (output / "robustness.html").read_text()
     assert result["summary"]["total_universes"] == 8
     assert result["summary"]["successful_universes"] >= 4
     assert "Divisive normalization" in html
     assert "Subtractive normalization" in html
     assert "Parallel evidence lanes preserve unit" in html
+    assert {lane["units"] for lane in lane_summary["lanes"]} == {
+        "ΔF/F",
+        "acquired fluorescence",
+    }
+    assert all(
+        lane["fraction_meeting_practical_effect"] is not None
+        for lane in lane_summary["lanes"]
+    )
+    assert "practical-effect stability" in html
     for universe in result["universes"]:
         preprocessing = next(
             choice["alternative"]
@@ -371,6 +397,25 @@ def test_signal_only_multiverse_rejects_effect_threshold_across_units(
 
     assert main(["inspect", str(project_path)]) == 2
     assert "cannot span" in capsys.readouterr().err
+
+
+def test_signal_only_multiverse_requires_threshold_for_every_unit_lane(
+    tmp_path, capsys
+) -> None:
+    project_path = _project(tmp_path)
+    _declare_signal_only_multiverse(project_path)
+    project_path.write_text(
+        project_path.read_text()
+        + """
+
+[[multiverse.effect_thresholds]]
+units = "ΔF/F"
+smallest_effect = 0.001
+"""
+    )
+
+    assert main(["inspect", str(project_path)]) == 2
+    assert "cover every declared unit lane" in capsys.readouterr().err
 
 
 def test_cli_requires_multiverse_declaration(tmp_path, capsys) -> None:
