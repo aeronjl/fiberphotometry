@@ -11,6 +11,14 @@ from fiberphotometry.archive import (
     load_archive_metadata,
     verify_archive_package,
 )
+from fiberphotometry.comparability import (
+    SessionComparabilityGroup,
+    SessionComparabilityIssue,
+    SessionComparabilityRecord,
+    SessionComparabilityReport,
+    SessionComparabilitySpec,
+    assess_session_comparability,
+)
 from fiberphotometry.comparison import (
     BundleComparison,
     EvidenceDifference,
@@ -446,6 +454,11 @@ __all__ = [
     "RobustnessSummary",
     "ScalarMixedModelResult",
     "ScalarMixedModelSpec",
+    "SessionComparabilityGroup",
+    "SessionComparabilityIssue",
+    "SessionComparabilityRecord",
+    "SessionComparabilityReport",
+    "SessionComparabilitySpec",
     "StudyDesign",
     "TDTBlockSchema",
     "TDTEpocEvents",
@@ -502,6 +515,7 @@ __all__ = [
     "assess_pipeline_compatibility",
     "assess_predictor_family_contributions",
     "assess_recording",
+    "assess_session_comparability",
     "assess_signal_recording",
     "baseline_dff",
     "compare_project_evidence",

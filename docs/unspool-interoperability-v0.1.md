@@ -22,6 +22,37 @@ missingness decisions are recorded. Unspool does not replace DeepLabCut, SLEAP,
 Keypoint-MoSeq or BORIS, and FiberPhotometry does not duplicate Unspool's
 longitudinal model families.
 
+## Preflight across-session comparability
+
+Before building a longitudinal table, declare one outcome-blind QC record per
+session and logical neural series. The full contract and threshold meanings are in
+[Across-session comparability](session-comparability-v0.1.md).
+
+```python
+from fiberphotometry import SessionComparabilityRecord, assess_session_comparability
+
+comparability = assess_session_comparability(
+    [
+        SessionComparabilityRecord(
+            subject="mouse-1",
+            session=session,
+            series_id="dms-dlight",
+            sensor="dLight1.3b",
+            site="DMS",
+            output_variable="dff",
+            unit="fraction",
+            preprocessing_fingerprint=recipe_sha256,
+            finite_fraction=finite_fraction,
+            event_coverage_fraction=event_coverage,
+            baseline_median=baseline_median,
+            reference_correlation=reference_correlation,
+            sampling_rate_hz=sampling_rate_hz,
+        )
+        for session in ("day-1", "day-2")
+    ]
+)
+```
+
 ## Build the handoff
 
 ```python
@@ -44,14 +75,17 @@ handoff = prepare_unspool_study(
     session="recording",
     trial="event_index",
     session_order="training_day",
+    comparability=comparability,
+    require_comparability=True,
 )
 ```
 
 `handoff.columns` is dependency-free and serializable. It retains the original
 columns, adds canonical longitudinal coordinates, records the source mapping, and
-fingerprints the complete handoff. It rejects duplicate trial keys, ambiguous
-session chronology, missing coordinates, and accidental replacement of an existing
-canonical column.
+fingerprints the complete handoff and its comparability evidence. It rejects
+duplicate trial keys, ambiguous session chronology, missing coordinates, accidental
+replacement of an existing canonical column, failed comparability, and exported
+sessions absent from the preflight.
 
 With Unspool installed, construct its immutable study directly:
 

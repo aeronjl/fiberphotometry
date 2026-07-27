@@ -10,6 +10,7 @@ from typing import Any
 
 import numpy as np
 
+from fiberphotometry.comparability import SessionComparabilityReport
 from fiberphotometry.design import ObservationTable, Scalar
 
 
@@ -20,7 +21,9 @@ class UnspoolStudyExport:
     columns: Mapping[str, tuple[Scalar, ...]]
     source_columns: Mapping[str, str]
     input_fingerprint: str
-    schema_version: str = "1"
+    comparability_fingerprint: str | None = None
+    comparability_status: str | None = None
+    schema_version: str = "2"
 
     def to_study(self) -> Any:
         """Construct an Unspool Study when the separate package is installed."""
@@ -40,6 +43,9 @@ def prepare_unspool_study(
     session: str,
     trial: str,
     session_order: str,
+    comparability: SessionComparabilityReport | None = None,
+    require_comparability: bool = False,
+    allow_comparability_warnings: bool = True,
 ) -> UnspoolStudyExport:
     """Map explicit photometry columns onto Unspool's longitudinal contract.
 
@@ -69,15 +75,47 @@ def prepare_unspool_study(
     for target, source in mapping.items():
         columns[target] = tuple(table.columns[source])
     _validate_longitudinal_keys(columns)
+    if comparability is None and require_comparability:
+        raise ValueError("Unspool export requires a session comparability report")
+    if comparability is not None:
+        comparability.require_ready(allow_warnings=allow_comparability_warnings)
+        export_sessions = frozenset(
+            (str(subject_value), str(session_value))
+            for subject_value, session_value in zip(
+                columns["subject"], columns["session"], strict=True
+            )
+        )
+        missing_sessions = sorted(export_sessions - comparability.session_keys)
+        if missing_sessions:
+            raise ValueError(
+                "session comparability does not cover Unspool sessions: "
+                f"{missing_sessions}"
+            )
     payload = {
         "columns": columns,
         "source_columns": mapping,
-        "schema_version": "1",
+        "comparability_fingerprint": (
+            comparability.input_fingerprint if comparability is not None else None
+        ),
+        "comparability_status": (
+            comparability.status if comparability is not None else None
+        ),
+        "schema_version": "2",
     }
     fingerprint = hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
-    return UnspoolStudyExport(columns, mapping, fingerprint)
+    return UnspoolStudyExport(
+        columns=columns,
+        source_columns=mapping,
+        input_fingerprint=fingerprint,
+        comparability_fingerprint=(
+            comparability.input_fingerprint if comparability is not None else None
+        ),
+        comparability_status=(
+            comparability.status if comparability is not None else None
+        ),
+    )
 
 
 def _validate_longitudinal_keys(columns: Mapping[str, tuple[Scalar, ...]]) -> None:

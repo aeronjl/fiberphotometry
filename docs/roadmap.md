@@ -125,7 +125,7 @@
     - [x] Paired held-out predictor-family contribution summaries
 - [x] Validated longitudinal neural-summary handoff to Unspool
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
-- [ ] Across-session photometry comparability diagnostics before longitudinal handoff
+- [x] Across-session photometry comparability diagnostics before longitudinal handoff
 - [ ] Interval/bout event rules and variable-duration models
   - [x] Preserve point/state distinction and physical bout duration
   - [x] Explicit onset, offset and normalized-progress projections
