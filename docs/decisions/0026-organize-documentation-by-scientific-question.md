@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related evidence: [Literature and capability audit](../literature-capability-audit-v0.1.md)
+- Related evidence: [Literature and capability audit](../literature-capability-audit-v0.2.md)
 
 ## Context
 

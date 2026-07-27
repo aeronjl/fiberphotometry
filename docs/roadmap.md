@@ -53,6 +53,18 @@
   - [x] Explicit TDT stream/epoc adapter through the same canonical boundary
   - [x] Checksum-pinned official real-block TDT integration fixture
 - [ ] Native Doric, Neurophotometrics, and pyPhotometry adapters
+- [ ] Behavioral ecosystem adapters
+  - [x] Typed pose, continuous-covariate, point-event and interval boundaries
+  - [x] Native-shaped DeepLabCut, SLEAP, Keypoint-MoSeq and BORIS adapters
+  - [x] Executable cross-tool composition tutorial and explicit gap register
+  - [ ] Versioned real-file fixtures and numerical-parity matrix
+    - [x] Official checksum-pinned SLEAP legacy Analysis HDF5 fixture
+    - [x] Official checksum-pinned BORIS tabular CSV fixture
+    - [ ] Current DeepLabCut single- and multi-animal prediction fixtures
+    - [ ] Current Keypoint-MoSeq `results.h5` fixture
+    - [ ] Current SLEAP standard-preset and BORIS aggregated fixtures
+  - [ ] Direct `ndx-pose` NWB round trip
+  - [x] Typed affine clock-synchronization evidence, drift diagnostics and refusal thresholds
 - [x] Versioned metadata completeness and analysis/NWB/publication readiness report
 
 ## Phase 3 — inference
@@ -96,15 +108,36 @@
   - [x] Ground-truth recovery fixture and executable simulation tutorial
   - [x] Public-data literature reproduction with a frozen design and retained weak validation
   - [x] Conditional grouped-jackknife kernel intervals and out-of-fold residual diagnostics
+  - [x] Validity-mask-aware complete-case fitting with coverage evidence and gap-safe residual diagnostics
   - [ ] Formal interval-coverage calibration and simultaneous kernel bands
   - [ ] Design-matrix alternatives in reproducible robustness multiverses
+  - [ ] Basis, trial-history, duration/amplitude, and predictor-family contribution alternatives
 - [x] Validated longitudinal neural-summary handoff to Unspool
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
-- [ ] Long-duration tonic/phasic analysis
+- [ ] Across-session photometry comparability diagnostics before longitudinal handoff
+- [ ] Interval/bout event rules and variable-duration models
+  - [x] Preserve point/state distinction and physical bout duration
+  - [x] Explicit onset, offset and normalized-progress projections
+  - [ ] Merge/split/filter rules, contextual labels and overlap policies
+  - [ ] Duration/amplitude and progress-basis event-kernel alternatives
+- [ ] Single-signal time/frequency/state analysis
+  - [ ] Gap-aware autocorrelation and power spectral density
+  - [ ] Spectrograms with explicit detrending, edge, and missing-data evidence
+  - [ ] User-supplied state/epoch tables and animal-aware comparisons
+  - [ ] Public sleep/state or long-duration worked example
+- [ ] Multiscale long-duration summaries without unvalidated tonic/phasic biological labels
 - [x] Experimental spontaneous transient detection with local-baseline sensitivity analysis
   - [x] Prospective three-animal public dLight construct validation with retained detector disagreement
+  - [ ] Separate candidate detection from quantification on non-z-scored dF/F
+  - [ ] Named GuPPY, PASTa, and prominence-compatible detector families
+  - [ ] Baseline/control-derived frozen thresholds, compound events, and cut-waveform QC
+  - [ ] Animal-aware rate and kinetic inference
   - [ ] Raw-signal and manual-annotation validation across two sensors/acquisition systems
 - [ ] Multi-site/multi-color paired and conditional association workflows
+  - [ ] Paired channel/site metadata, alignment, control, and crosstalk diagnostics
+  - [ ] Lagged and event/behavior-residualized association with blocked uncertainty
+  - [ ] State-conditioned coherence and phase after single-signal spectral validation
+  - [ ] Coordinate-aware mouse-level models for dense multi-fiber arrays
 
 ## Phase 4 — adoption
 
@@ -117,6 +150,7 @@
   - [ ] Behavioral event-kernel GLM
     - [x] Ground-truth implementation tutorial
     - [x] Public-data literature reproduction with retained negative held-out R²
+    - [x] Cross-tool pose/state/annotation interoperability tutorial
   - [ ] Trial-level functional mixed model
   - [ ] Long-duration tonic/phasic and spontaneous events
   - [ ] Multi-site/multi-color association

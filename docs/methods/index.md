@@ -32,6 +32,9 @@ See [preprocessing and QC](../pipeline-v0.1.md) and
 - **Experimental:** design-aware hierarchical bootstrap, permutation procedures,
   and scalar mixed-model sensitivity summaries.
 - **Planned:** trial-level functional mixed models through `fastFMM`.
+- **Experimental:** typed point/interval annotations, explicit onset/offset
+  projection, and normalized progress for variable-duration behavior.
+- **Gap:** interval merge/split/filter policies and duration/amplitude kernels.
 
 See [the scientist-facing workflow](../product-workflow-v0.1.md) and
 [peri-event inference](../peri-event-inference-v0.1.md).
@@ -44,7 +47,20 @@ See [the scientist-facing workflow](../product-workflow-v0.1.md) and
 
 See [robustness multiverses](../multiverse-contract-v0.1.md).
 
-## Ask continuous, longitudinal, or network questions
+## Detect and quantify spontaneous events
+
+**Experimental:** [spontaneous transient detection and long-window descriptive
+summaries](../spontaneous-transients-v0.1.md) expose named threshold and local-
+baseline alternatives, protect acquisition gaps, retain rejected candidates, and
+have a prospective public three-animal sensitivity audit.
+
+This is not yet parity with the GuPPY, PASTa, or prominence methods. Detection
+and quantification cannot yet use separate signal scales; compound events,
+control-derived frozen thresholds, cut-waveform QC, and animal-aware rate/kinetic
+inference remain gaps. Long-window bins are descriptive and do not label slow
+fluorescence as a biological tonic component.
+
+## Explain overlapping events and behavior
 
 **Experimental:** behavioral event-kernel encoding jointly estimates overlapping
 event responses and continuous covariates, with complete animals or sessions held
@@ -55,22 +71,37 @@ retains weak animal-held-out prediction and shows why the method remains
 experimental. It now includes conditional grouped-jackknife kernel intervals and
 session-safe held-out residual diagnostics.
 
+Basis, trial-history, duration/amplitude, and predictor-family contribution
+alternatives remain planned, as do simultaneous kernel intervals and formal
+coverage calibration.
+
+## Ask long-duration, state, longitudinal, or network questions
+
 The remaining questions are scientifically important but **not yet first-class
 workflows**:
 
+- autocorrelation, power spectra, spectrograms, and state/epoch-conditioned
+  summaries;
 - native behavioral learning-trajectory models; use the experimental
   [Unspool interoperability contract](../unspool-interoperability-v0.1.md) instead;
-- biological tonic/phasic decomposition across hours or days;
-- multi-site or multi-color coupling and network analyses;
+- across-session photometry comparability before handing summaries to Unspool;
+- multiscale long-duration descriptions without assuming a biological
+  tonic/phasic decomposition;
+- confound-aware multi-site or multi-color association, coherence, phase, and
+  coordinate-aware dense-array models;
 - sensor-kinetic deconvolution or concentration calibration.
 
 The [capability matrix](capability-matrix.md) explains why these gaps matter and
 which should enter the roadmap.
 
-**Experimental:** [spontaneous transient detection and long-window descriptive
-summaries](../spontaneous-transients-v0.1.md) expose named threshold and local-
-baseline alternatives, protect acquisition gaps, and retain rejected candidates.
-They do not label slow fluorescence as a biological tonic component.
+Behavior/pose/state discovery stays outside core. The experimental
+[behavioral ecosystem boundary](../ecosystem-interoperability-v0.1.md) now consumes
+native-shaped DeepLabCut, SLEAP, Keypoint-MoSeq and BORIS outputs as typed pose,
+continuous-covariate, point-event and interval objects. Unspool remains the peer
+package for longitudinal behavioral models.
+Explicit paired pulses can establish a shared time coordinate through the
+[experimental clock synchronization contract](../clock-synchronization-v0.1.md);
+cross-clock interpolation remains forbidden.
 
 ## Interpret and publish
 

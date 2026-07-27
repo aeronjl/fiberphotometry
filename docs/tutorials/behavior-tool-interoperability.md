@@ -1,0 +1,280 @@
+# Compose pose, behavioral states and photometry
+
+## Scientific question
+
+How can a scientist ask whether a photometry signal relates to movement, an
+automatically discovered behavioral bout, or a manually annotated event without
+reimplementing behavior analysis inside FiberPhotometry?
+
+This tutorial composes native-shaped outputs from DeepLabCut, SLEAP,
+Keypoint-MoSeq and BORIS with the photometry event-kernel and Unspool handoff
+boundaries. The complete executable synthetic example is
+[`examples/behavior_interoperability.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/behavior_interoperability.py).
+
+!!! warning "Synchronisation is scientific evidence"
+    The source snippets retain the `video` clock. Section 5 estimates and validates
+    its mapping to `photometry` from explicit paired pulses. Renaming both clocks
+    `acquisition` is not a valid mapping.
+
+## 1. Preserve pose confidence
+
+DeepLabCut prediction CSV and pandas HDF5 files contain hierarchical columns.
+Select the scorer, individual and body part explicitly when more than one is
+present. Install the lightweight file dependencies with
+`uv add "fiberphotometry[behavior]"`.
+
+```python
+from fiberphotometry import pose_from_deeplabcut_file
+
+nose = pose_from_deeplabcut_file(
+    "mouse-07-day-04DLC.h5",
+    subject="mouse-07",
+    session="day-04",
+    keypoint="nose",
+    scorer="DLC_resnet50_project",
+    fps=30.0,
+    clock_id="video",
+)
+nose_speed = nose.speed(minimum_confidence=0.9)
+```
+
+`nose_speed.valid` is false for a displacement whenever either endpoint is missing
+or below the declared likelihood threshold. Coordinates are not silently filled.
+If a camera calibration is available, pass its declared conversion as
+`coordinate_scale` and give the corresponding `output_unit`.
+
+```python
+nose_speed_cm = nose.speed(
+    minimum_confidence=0.9,
+    coordinate_scale=0.042,
+    output_unit="cm/s",
+)
+```
+
+This scalar conversion is appropriate only for a spatially uniform calibration.
+Perspective-distorted or three-dimensional arenas require the relevant geometric
+calibration upstream.
+
+## 2. Read SLEAP without guessing axes
+
+SLEAP's Analysis HDF5 may use a MATLAB-compatible or Python-native array order.
+The file reader uses stored dimension metadata when present. Older files omit it,
+so supply `dims` rather than guessing from array size.
+
+```python
+from fiberphotometry import pose_from_sleap_analysis_h5
+
+nose = pose_from_sleap_analysis_h5(
+    "mouse-07-day-04.analysis.h5",
+    node="nose",
+    # Omit for current files that store dimension metadata.
+    dims=("track", "xy", "node", "frame"),
+    subject="mouse-07",
+    session="day-04",
+    track=0,
+    fps=30.0,
+    clock_id="video",
+)
+```
+
+Do not assume a SLEAP point score is a probability. The pinned legacy upstream
+fixture contains scores above one; the threshold must be appropriate to the
+producing model and version.
+
+This tutorial chooses one track. A social experiment should make track identity a
+declared part of its design and audit identity switches before neural inference.
+
+## 3. Keep MoSeq bouts as intervals
+
+Keypoint-MoSeq's extracted result contains one syllable value per video frame.
+Run-length encoding turns consecutive equal states into bouts without discarding
+duration.
+
+```python
+from fiberphotometry import annotations_from_moseq_results_h5
+
+moseq = annotations_from_moseq_results_h5(
+    "moseq-project/model-a/results.h5",
+    recording="mouse-07-day-04",
+    subject="mouse-07",
+    session="day-04",
+    fps=30.0,
+    labels={0: "pause", 1: "rear"},
+    clock_id="video",
+)
+rear_onsets = moseq.event_times(edge="onset")["rear"]
+rear_offsets = moseq.event_times(edge="offset")["rear"]
+```
+
+The human-readable labels are study metadata, not a claim that syllable 1 has a
+universal biological meaning. Preserve the fitted model, any reindexing operation,
+and its version beside the analysis.
+
+For a variable-duration analysis, retain physical time and add progress rather than
+replacing time:
+
+```python
+rear_progress_on_video_grid = moseq.normalized_progress(video_time, label="rear")
+```
+
+## 4. Keep BORIS point and state annotations distinct
+
+For a BORIS tabular CSV, the file reader skips the observation metadata preamble,
+selects one source subject, and pairs START/STOP rows.
+
+```python
+from fiberphotometry import annotations_from_boris_tabular_file
+
+boris = annotations_from_boris_tabular_file(
+    "mouse-07-day-04-boris.csv",
+    subject="mouse-07",
+    session="day-04",
+    source_subject="mouse-07",
+    clock_id="video",
+)
+```
+
+Blank or POINT rows remain point events. START/STOP pairs become positive-duration
+intervals. Aggregated exports remain available through `annotations_from_boris()`
+with explicit behavior/type/start/stop column mappings. The analyst then chooses
+onset, offset, duration or progress according to the scientific question.
+
+## 5. Align a pose covariate without bridging missing spans
+
+Fit the clock mapping before interpolation. Pulse correspondence is explicit: the
+function never guesses which pulses match.
+
+```python
+from fiberphotometry import (
+    ClockPulseMatches,
+    ClockSynchronizationSpec,
+    fit_clock_synchronization,
+)
+
+synchronization = fit_clock_synchronization(
+    ClockPulseMatches.from_arrays(
+        source_clock_id="video",
+        target_clock_id="photometry",
+        source_time_s=video_sync_pulses,
+        target_time_s=photometry_sync_pulses,
+        match_labels=sync_pulse_ids,
+    ),
+    ClockSynchronizationSpec(
+        maximum_absolute_residual_s=0.002,
+        maximum_drift_ppm=250,
+        minimum_matches=4,
+        minimum_source_span_s=recording_duration_s * 0.8,
+    ),
+)
+
+nose_speed = synchronization.synchronize_covariate(nose_speed)
+moseq = synchronization.synchronize_annotations(moseq)
+boris = synchronization.synchronize_annotations(boris)
+```
+
+The thresholds above are illustrative, not defaults for all acquisition systems.
+Choose them before neural outcome analysis from acquisition precision and the
+smallest timing difference the study aims to interpret. By default, transforming
+data outside the first and last matched source pulses is refused.
+
+```python
+aligned_speed = nose_speed.aligned_to(
+    photometry_time,
+    target_clock_id="photometry",
+    max_gap_s=2 / 30,
+)
+```
+
+The returned `BehaviorCovariate` carries both aligned values and an aligned
+validity mask. It is invalid outside pose support, across low-confidence samples
+and across gaps larger than `max_gap_s`. `align_to()` remains available when only
+the numeric array is needed, but `aligned_to()` is the loss-aware route into a
+model. Do not use a global fill that bridges long occlusions.
+
+For a complete synthetic session, point/bout onsets and a continuous movement
+covariate compose directly:
+
+```python
+from fiberphotometry import EncodingSession
+
+session = EncodingSession.from_arrays(
+    subject="mouse-07",
+    session="day-04",
+    time=photometry_time,
+    response=processed_photometry,
+    events={
+        **moseq.event_times(edge="onset"),
+        **boris.event_times(edge="onset"),
+    },
+    continuous_covariates={"nose_speed": aligned_speed.values},
+    continuous_covariate_validity={"nose_speed": aligned_speed.valid},
+)
+```
+
+Event names must not collide when dictionaries are composed; prefix labels such as
+`moseq:rear` and `boris:rear` if they represent different operational definitions.
+The event-kernel fitter combines response and selected-covariate masks using
+complete cases without changing the time grid or bridging excluded spans. Its
+result reports every session's retained denominator and exclusion reasons. Set a
+prospective coverage floor appropriate to the study rather than relying only on
+the default:
+
+```python
+from fiberphotometry import EncodingModelSpec, EventKernelSpec, fit_event_kernel_model
+
+spec = EncodingModelSpec(
+    event_kernels=(EventKernelSpec("rear", (-1.0, 3.0)),),
+    continuous_covariates=("nose_speed",),
+    minimum_session_coverage=0.8,
+)
+result = fit_event_kernel_model(all_sessions, spec)
+print(result.validity.retained_fraction)
+```
+
+Reason counts can overlap—for example, one timestamp may have both an invalid
+response and invalid pose—whereas `excluded_observations` is their union. Grouped
+validation and inference still follow the
+[event-kernel method contract](../event-kernel-encoding-v0.1.md).
+
+## 6. Pass neural summaries to Unspool
+
+After FiberPhotometry estimates a declared trial- or session-level neural quantity,
+attach it to explicit longitudinal coordinates.
+
+```python
+from fiberphotometry import ObservationTable, prepare_unspool_study
+
+summaries = ObservationTable.from_columns(
+    {
+        "animal": ["mouse-07", "mouse-07"],
+        "recording": ["day-04", "day-05"],
+        "trial_index": [0, 0],
+        "training_day": [3, 4],
+        "rear_response": [0.12, 0.18],
+    }
+handoff = prepare_unspool_study(
+    summaries,
+    subject="animal",
+    session="recording",
+    trial="trial_index",
+    session_order="training_day",
+)
+study = handoff.to_study()
+```
+
+FiberPhotometry owns how `rear_response` was extracted and audited. Unspool owns
+the learning clock, behavioral model and prospective session validation. See the
+[public cross-package IBL example](ibl-unspool-longitudinal.md).
+
+## What this example proves—and does not
+
+The test suite proves structural composition for native-shaped arrays and tables:
+identity selection, axis declaration, confidence masks, gap protection, bout
+durations, point/state distinctions, normalized progress, and longitudinal keys.
+Checksum-pinned official SLEAP and BORIS files now pass semantic parity checks.
+DeepLabCut and Keypoint-MoSeq still use documented-schema files generated during
+tests. Synthetic tests verify known affine offset/drift recovery and refusal of
+bad pulse evidence, but a real synchronization record is still missing. None of
+this proves acquisition-specific clock accuracy, multi-animal identity stability,
+or a biological result. See the
+[validation matrix](../interoperability-validation-v0.1.md).

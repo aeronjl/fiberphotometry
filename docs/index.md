@@ -22,6 +22,8 @@ parameters, and uncertainty throughout the analysis.
 | Analyze CSV/TSV exports without rewriting code | [Configuration-first CLI](cli-v0.1.md) |
 | Import a TDT block | [TDT import](tdt-import-v0.1.md) |
 | Work from public NWB data | [DANDI tutorial](tutorials/dandi-000971-reward-multiverse.md) |
+| Combine DeepLabCut, SLEAP, MoSeq or BORIS with photometry | [Behavioral ecosystem tutorial](tutorials/behavior-tool-interoperability.md) |
+| Model neural summaries across learning | [Unspool interoperability](unspool-interoperability-v0.1.md) |
 | Compare reasonable preprocessing choices | [Robustness multiverses](multiverse-contract-v0.1.md) |
 | Choose an inferential method | [Methods catalog](methods/index.md) |
 | See what the package cannot yet do | [Capability matrix](methods/capability-matrix.md) |

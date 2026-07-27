@@ -27,10 +27,11 @@ behavior could silently produce an invalid scientific result.
 ## Experimental surface
 
 Control-free baselines, regularization policy, multiverse execution, scalar mixed
-models, and lower-level resampling functions remain experimental. Representative
-names are listed in `EXPERIMENTAL_API_V0_1`; the label applies to the method family,
-not only those symbols. Experimental APIs retain provenance and tests but may
-change between minor releases when validation exposes a scientific problem.
+models, behavioral ecosystem adapters, matched-pulse clock synchronization, and
+lower-level resampling functions remain experimental. Representative names are
+listed in `EXPERIMENTAL_API_V0_1`; the label applies to the method family, not only
+those symbols. Experimental APIs retain provenance and tests but may change
+between minor releases when validation exposes a scientific problem.
 
 Diagnostic and integration-specific modules that are neither listed as supported
 nor documented as experimental are internal-for-stability purposes despite being

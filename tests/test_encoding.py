@@ -89,7 +89,11 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert len(held_out) == len(set(held_out))
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "event_kernel_encoding_result"
-    assert payload["schema_version"] == "2"
+    assert payload["schema_version"] == "3"
+    assert result.validity.total_observations == 16 * 400
+    assert result.validity.retained_observations == result.observations
+    assert result.validity.excluded_observations == 0
+    assert result.validity.retained_fraction == 1.0
     uncertainty = {
         kernel.name: kernel for kernel in result.kernel_uncertainty.event_kernels
     }
@@ -214,3 +218,169 @@ def test_residual_diagnostics_detect_autocorrelation_and_reset_sessions() -> Non
     assert metrics[-1] == pytest.approx(
         expected_difference_sum / float(boundary_residual @ boundary_residual)
     )
+
+
+def test_covariate_validity_is_reported_and_does_not_compress_time() -> None:
+    masked_sessions = []
+    for session in _simulated_sessions():
+        valid = np.ones(len(session.time), dtype=bool)
+        valid[100:120] = False
+        masked_sessions.append(
+            EncodingSession.from_arrays(
+                subject=session.subject,
+                session=session.session,
+                time=session.time,
+                response=session.response,
+                events=session.events,
+                continuous_covariates=session.continuous_covariates,
+                continuous_covariate_validity={"motion": valid},
+            )
+        )
+    result = fit_event_kernel_model(
+        masked_sessions,
+        EncodingModelSpec(
+            event_kernels=(EventKernelSpec("cue", (-0.1, 0.3)),),
+            continuous_covariates=("motion",),
+            alpha_grid=(0.0, 0.1),
+            group_by="animal",
+            folds=4,
+            minimum_session_coverage=0.9,
+        ),
+    )
+
+    assert result.validity.total_observations == 16 * 400
+    assert result.validity.retained_observations == 16 * 380
+    assert result.validity.excluded_observations == 16 * 20
+    assert result.validity.retained_fraction == pytest.approx(0.95)
+    assert result.observations == result.validity.retained_observations
+    assert all(
+        item.invalid_by_covariate == {"motion": 20} for item in result.validity.sessions
+    )
+    assert all(item.contiguous_retained_runs == 2 for item in result.validity.sessions)
+
+    design = _build_design(
+        tuple(masked_sessions),
+        EncodingModelSpec(
+            event_kernels=(EventKernelSpec("cue", (0.0, 0.1)),),
+            continuous_covariates=("motion",),
+            minimum_session_coverage=0.9,
+        ),
+    )
+    first_session = design.sessions == "mouse-0/day-0"
+    assert len(set(design.residual_segments[first_session].tolist())) == 2
+
+
+def test_response_and_covariate_masks_combine_without_double_counting() -> None:
+    sessions = []
+    for animal in range(2):
+        time = np.arange(10.0)
+        response = np.arange(10.0) + animal
+        response[2] = np.nan
+        response_valid = np.ones(10, dtype=bool)
+        response_valid[3] = False
+        motion_valid = np.ones(10, dtype=bool)
+        motion_valid[3:5] = False
+        sessions.append(
+            EncodingSession.from_arrays(
+                subject=f"mouse-{animal}",
+                session="day-0",
+                time=time,
+                response=response,
+                response_valid=response_valid,
+                events={"cue": (7.0,)},
+                continuous_covariates={"motion": np.arange(10.0)},
+                continuous_covariate_validity={"motion": motion_valid},
+            )
+        )
+    result = fit_event_kernel_model(
+        sessions,
+        EncodingModelSpec(
+            event_kernels=(EventKernelSpec("cue", (0.0, 1.0)),),
+            continuous_covariates=("motion",),
+            folds=2,
+            minimum_session_coverage=0.5,
+        ),
+    )
+
+    coverage = result.validity.sessions[0]
+    assert coverage.invalid_response == 2
+    assert coverage.invalid_by_covariate == {"motion": 2}
+    assert coverage.excluded_observations == 3
+    assert coverage.retained_observations == 7
+
+
+def test_session_coverage_floor_rejects_unexpected_data_loss() -> None:
+    sessions = []
+    for animal in range(2):
+        time = np.arange(10.0)
+        valid = np.zeros(10, dtype=bool)
+        valid[:4] = True
+        sessions.append(
+            EncodingSession.from_arrays(
+                subject=f"mouse-{animal}",
+                session="day-0",
+                time=time,
+                response=np.arange(10.0),
+                events={"cue": (1.0,)},
+                continuous_covariates={"motion": np.arange(10.0)},
+                continuous_covariate_validity={"motion": valid},
+            )
+        )
+    spec = EncodingModelSpec(
+        event_kernels=(EventKernelSpec("cue", (0.0, 1.0)),),
+        continuous_covariates=("motion",),
+        minimum_session_coverage=0.5,
+    )
+    with pytest.raises(ValueError, match=r"retains 40\.0%"):
+        fit_event_kernel_model(sessions, spec)
+
+
+def test_rejects_event_lags_with_no_retained_support() -> None:
+    sessions = []
+    for animal in range(2):
+        time = np.arange(10.0)
+        valid = np.ones(10, dtype=bool)
+        valid[2] = False
+        sessions.append(
+            EncodingSession.from_arrays(
+                subject=f"mouse-{animal}",
+                session="day-0",
+                time=time,
+                response=np.arange(10.0) + animal,
+                events={"cue": (1.0,)},
+                continuous_covariates={"motion": np.arange(10.0)},
+                continuous_covariate_validity={"motion": valid},
+            )
+        )
+    spec = EncodingModelSpec(
+        event_kernels=(EventKernelSpec("cue", (0.0, 1.0)),),
+        continuous_covariates=("motion",),
+        folds=2,
+        minimum_session_coverage=0.8,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=r"event lags have no retained observations: cue@1s",
+    ):
+        fit_event_kernel_model(sessions, spec)
+
+
+def test_residual_metrics_do_not_bridge_excluded_spans() -> None:
+    observed = np.asarray([0.0, 1.0, 100.0, 101.0])
+    predicted = np.zeros(4)
+    compressed = _residual_metrics(
+        observed,
+        predicted,
+        np.asarray(["session"] * 4),
+    )
+    protected = _residual_metrics(
+        observed,
+        predicted,
+        np.asarray(["run-0", "run-0", "run-1", "run-1"]),
+    )
+
+    assert compressed[-1] is not None
+    assert protected[-1] is not None
+    assert protected[-1] < compressed[-1]
+    assert protected[-1] == pytest.approx(2.0 / float(observed @ observed))

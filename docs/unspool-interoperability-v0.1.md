@@ -15,6 +15,13 @@ provenance while adding the four explicit coordinates required by
 `unspool.Study`: subject, session, trial, and session order. Chronology is never
 inferred from row order or session names.
 
+Pose trajectories and behavioral bouts enter through the separate
+[behavioral ecosystem contract](ecosystem-interoperability-v0.1.md). They become
+declared neural predictors or summaries here only after confidence, clock and
+missingness decisions are recorded. Unspool does not replace DeepLabCut, SLEAP,
+Keypoint-MoSeq or BORIS, and FiberPhotometry does not duplicate Unspool's
+longitudinal model families.
+
 ## Build the handoff
 
 ```python

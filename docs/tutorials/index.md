@@ -55,6 +55,15 @@ declared future session.
 
 [Open the cross-package longitudinal tutorial](ibl-unspool-longitudinal.md)
 
+## Pose and behavior-tool interoperability
+
+Compose DeepLabCut or SLEAP pose confidence, Keypoint-MoSeq bouts, and BORIS
+point/state annotations with photometry covariates and events. The tutorial then
+passes declared neural summaries to Unspool without duplicating longitudinal
+behavior models.
+
+[Open the ecosystem interoperability tutorial](behavior-tool-interoperability.md)
+
 ## Literature reproductions to add
 
 The capability audit identifies the next examples needed for field coverage:

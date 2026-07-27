@@ -49,23 +49,35 @@ At minimum, compare `global_mad` and `rolling_mad`, more than one defensible MAD
 multiplier, and `median` versus `minimum` local baselines. The scientific result
 should include changes in event count as well as downstream effect estimates.
 
-The defaults are close to common published choices, but are not endorsed as
-universally optimal. PASTa motivates adaptive pre-peak baselines and reports event
-amplitude, duration, AUC, frequency, and inter-event intervals. GuPPy motivates a
-15-second moving window and MAD-based detection. Individual studies also use
-fixed z-score or prominence rules, underscoring the need to record alternatives.
+The defaults are close to some common published choices, but are not endorsed as
+universally optimal. This implementation is **not** a reproduction of GuPPY,
+PASTa, or the Wallace prominence method:
+
+- GuPPY removes high-amplitude events before estimating its moving MAD baseline;
+- PASTa also offers a last-local-minimum baseline, compound-event handling, and
+  thresholds derived from declared baseline/control periods;
+- Wallace et al. use z-scoring only to locate candidates, apply prominence, and
+  then return to non-z-scored dF/F for kinetic quantification.
+
+`detect_transients()` currently detects and quantifies the same input variable.
+Do not use a z-scored input to claim interpretable changes in event amplitude or
+kinetics across conditions. Until separate detection and quantification streams
+are implemented, use non-z-scored dF/F and treat method comparisons as
+sensitivity evidence rather than detector validation.
 
 ## Current boundaries
 
-This increment does not yet identify compound events, deconvolve sensor kinetics,
-assign events to neurotransmitter release episodes, or infer a biological
-tonic/phasic decomposition. Those require separate ground truth and interpretation
-tests.
+This increment does not yet identify compound events, export cut waveforms,
+separate detection from quantification, fit animal-aware rate/kinetic models,
+deconvolve sensor kinetics, assign events to neurotransmitter release episodes,
+or infer a biological tonic/phasic decomposition. Those require separate ground
+truth and interpretation tests.
 
 ## Sources
 
-- Bruno et al., [PASTa: flexible photometry analysis including spontaneous
+- Donka et al., [PASTa: flexible photometry analysis including spontaneous
   transients](https://pmc.ncbi.nlm.nih.gov/articles/PMC12224222/)
 - Sherathiya et al., [GuPPy: a Python toolbox for fiber photometry
   analysis](https://pmc.ncbi.nlm.nih.gov/articles/PMC8688475/)
+- Wallace et al., [The z-scored data are not the data](https://pmc.ncbi.nlm.nih.gov/articles/PMC13245556/)
 - Markowitz et al., [Wideband dopamine dynamics](https://pmc.ncbi.nlm.nih.gov/articles/PMC11526850/)

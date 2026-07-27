@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "captured_at": "2026-07-27",
+  "fixtures": [
+    {
+      "file": "sleap-small-robot.analysis.h5",
+      "tool": "SLEAP",
+      "fixture_kind": "official_upstream_test_artifact",
+      "repository": "https://github.com/talmolab/sleap",
+      "upstream_path": "tests/data/hdf5_format_v1/small_robot.000_small_robot_3_frame.analysis.h5",
+      "file_commit": "8ab323e060d827adc03e629122723aa54e1ca950",
+      "repository_head_at_capture": "369b77280790cc025d8d3af8cdf00c6ba48ef6f9",
+      "sha256": "21446732fe6a9efabf6456e4f154de911ee091aca0fa0c74718f12d4316f82de",
+      "license": "BSD-3-Clause-Clear",
+      "notes": "Legacy Analysis HDF5 without dimension attributes; explicit MATLAB-compatible axis order is required. Point scores include values above one."
+    },
+    {
+      "file": "boris-test-export-events-tabular.csv",
+      "tool": "BORIS",
+      "fixture_kind": "official_upstream_test_artifact",
+      "repository": "https://github.com/olivierfriard/BORIS",
+      "upstream_path": "tests/files/test_export_events_tabular.csv",
+      "file_commit": "1f6149f68e7c4df28d92fb50a8f8a38ed7a377d2",
+      "repository_head_at_capture": "e7aadfd25a5311b76bc6357921da81d28cfce9ec",
+      "sha256": "54554a4c9cc31f7bea29579e5436facefa0b1c0efb15b12ec700ba04d7131442",
+      "license": "GPL-3.0-only",
+      "notes": "Official tabular export with metadata preamble, two subjects, and paired START/STOP state rows. Test-only and not included in the package wheel."
+    }
+  ],
+  "schema_generated_coverage": [
+    {
+      "tool": "DeepLabCut",
+      "formats": ["prediction CSV", "prediction HDF5"],
+      "reason": "The official main repository contains labelled-data HDF5 files but no lightweight prediction artifact with likelihood columns. Tests generate the documented MultiIndex schema and remain provisional."
+    },
+    {
+      "tool": "Keypoint-MoSeq",
+      "formats": ["results HDF5"],
+      "reason": "The official repository and documentation define recording/syllable datasets but publish no small stable result artifact. Tests generate that documented hierarchy and remain provisional."
+    }
+  ]
+}

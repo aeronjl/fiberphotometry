@@ -40,7 +40,10 @@ result = fit_event_kernel_model(sessions, spec)
 The command writes `event-kernel-result.json`. The artifact contains the selected
 penalty, all candidate-penalty fold scores, exact held-out animal identities,
 estimated lag coordinates and coefficients, continuous-covariate scaling, and
-sample/session/animal counts.
+sample/session/animal counts. Its validity report also records the complete-case
+policy, coverage thresholds, total/retained/excluded denominators, and per-session
+exclusion evidence. This planted example has no exclusions; real behavior-aligned
+models should inspect that report before interpreting coefficients.
 
 ## What success means
 

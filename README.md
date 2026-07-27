@@ -33,6 +33,8 @@ This project aims to provide:
 - a canonical labelled representation for signals, events, subjects, and sessions;
 - modular preprocessing with complete parameter and provenance records;
 - acquisition adapters at the boundary, including NWB and TDT blocks;
+- typed interoperability with pose, state-discovery, ethogram, and longitudinal
+  behavior packages rather than duplicate behavior-analysis implementations;
 - schema-first CSV/TSV recording and event import with source fingerprints;
 - event alignment that preserves the nested experimental design;
 - several clearly labelled inferential approaches rather than one hidden default;
@@ -97,6 +99,16 @@ inferred from column order or filenames.
 TDT blocks use the same boundary through an
 [explicit stream and epoc mapping](docs/tdt-import-v0.1.md). Store names, channel
 indices, and epoc meanings are declared by the scientist rather than guessed.
+
+The experimental [behavioral ecosystem boundary](docs/ecosystem-interoperability-v0.1.md)
+preserves DeepLabCut and SLEAP pose confidence, Keypoint-MoSeq bout duration, and
+BORIS point/state semantics. Its
+[clock synchronization boundary](docs/clock-synchronization-v0.1.md) maps explicit
+paired acquisition pulses with drift and residual refusal thresholds. The worked
+[interoperability tutorial](docs/tutorials/behavior-tool-interoperability.md) then
+passes declared neural summaries to Unspool for longitudinal modeling. The
+[compatibility matrix](docs/interoperability-validation-v0.1.md) distinguishes
+schema-generated tests from checksum-pinned official source-tool fixtures.
 
 The [configuration-first CLI](docs/cli-v0.1.md) now takes a complete tabular
 project through preflight, analysis, fingerprinted JSON, and a self-contained HTML

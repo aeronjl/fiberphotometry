@@ -1,0 +1,59 @@
+# SDR-0032: Preserve external behavior semantics at typed boundaries
+
+- Status: **Accepted**
+- Date: 2026-07-27
+
+## Context
+
+Photometry experiments commonly combine neural signals with markerless pose,
+automatically discovered behavioral states, or human ethograms. DeepLabCut and
+SLEAP produce coordinates with confidence and identity structure. Keypoint-MoSeq
+produces frame-level latent-state labels. BORIS distinguishes point events from
+positive-duration state annotations.
+
+A single generic event table would make integration easy only by discarding scorer
+identity, track identity, confidence, interval duration, clock evidence or units.
+Implementing pose or state discovery inside FiberPhotometry would instead duplicate
+the source tools and blur responsibility for their validation.
+
+## Decision
+
+FiberPhotometry will consume external behavior through separate typed pose,
+continuous-covariate, point-event and interval boundaries. Native adapters will be
+thin and dependency-light. They must require ambiguous identities and array axes to
+be declared, retain confidence-derived missingness, name clocks and units, and
+refuse implicit cross-clock alignment.
+
+Projecting an interval to its onset or offset is an explicit analysis operation; it
+does not replace the source interval. Time-normalized progress supplements rather
+than replaces physical start, stop and duration. Behavioral discovery remains in
+the source tool. Longitudinal behavioral modelling remains in Unspool under
+[SDR-0030](0030-delegate-behavioral-trajectories-to-unspool.md).
+
+## Alternatives considered
+
+- **Accept arbitrary dataframes directly in the event-kernel API:** rejected
+  because row grain, units, clocks and missingness would remain implicit.
+- **Convert every source to point events:** rejected because it discards state
+  duration and makes onset, offset and progress analyses indistinguishable.
+- **Add pose estimation and behavioral clustering here:** rejected because those
+  are independently validated scientific methods with mature packages.
+- **Depend directly on all source packages:** rejected because a photometry-only
+  installation should not inherit several large machine-learning stacks.
+
+## Consequences
+
+- Scientists can compose familiar behavior tools with photometry without changing
+  the source tools or installing them as FiberPhotometry dependencies.
+- The initial API is experimental. Official SLEAP and BORIS files now provide the
+  first parity fixtures; DeepLabCut and Keypoint-MoSeq remain schema-generated.
+- Clock synchronisation, validity-mask-aware encoding, `ndx-pose`, multi-animal
+  identity audits and duration kernels remain visible product gaps.
+- A boundary may be extracted into a shared ecosystem package only after it has an
+  independent object model and at least two real consumers.
+
+## Revisit trigger
+
+Revisit after real-file fixtures cover two versions of each source format, after
+Unspool or another peer package needs the same behavior boundary, or if a community
+standard supersedes these types.
