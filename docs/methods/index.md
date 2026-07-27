@@ -54,10 +54,11 @@ summaries](../spontaneous-transients-v0.1.md) expose named threshold and local-
 baseline alternatives, protect acquisition gaps, retain rejected candidates, and
 have a prospective public three-animal sensitivity audit.
 
-This is not yet parity with the GuPPY, PASTa, or prominence methods. Detection
-and quantification cannot yet use separate signal scales; compound events,
-control-derived frozen thresholds, cut-waveform QC, and animal-aware rate/kinetic
-inference remain gaps. Long-window bins are descriptive and do not label slow
+Candidate detection is now separate from quantification on non-z-scored dF/F, with
+named GuPPY-, PASTa-, and prominence-compatible families, compound-event metadata,
+exposure-adjusted session summaries, and animal-aware rate/kinetic contrasts.
+Control-derived frozen thresholds, gap-aware cut-waveform QC, and broader raw-signal
+validation remain gaps. Long-window bins are descriptive and do not label slow
 fluorescence as a biological tonic component.
 
 ## Explain overlapping events and behavior
@@ -87,11 +88,19 @@ normalized-progress gate; pointwise group sensitivity remains the default. See t
 
 ## Ask long-duration, state, longitudinal, or network questions
 
+Gap-aware single-signal analysis is now an **experimental first-class workflow**:
+
+- autocorrelation retains within-run pair counts at every lag;
+- Welch PSD aggregates complete windows across continuity runs;
+- spectrograms retain window bounds and edge distances without padding;
+- user-supplied state epochs remain separate analysis partitions; and
+- band-power contrasts aggregate sessions before animal-level inference.
+
+See [gap-aware time, frequency, and state analysis](../spectral-state-analysis-v0.1.md).
+
 The remaining questions are scientifically important but **not yet first-class
 workflows**:
 
-- autocorrelation, power spectra, spectrograms, and state/epoch-conditioned
-  summaries;
 - native behavioral learning-trajectory models; use the experimental
   [Unspool interoperability contract](../unspool-interoperability-v0.1.md) instead;
 - across-session photometry comparability before handing summaries to Unspool;

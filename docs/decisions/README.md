@@ -72,6 +72,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0042](0042-separate-transient-detection-from-quantification.md) | Accepted | Separate transient detection from quantification |
 | [SDR-0043](0043-infer-transient-contrasts-at-the-animal-level.md) | Accepted | Infer transient contrasts at the animal level |
 | [SDR-0044](0044-require-comparability-evidence-before-longitudinal-handoff.md) | Accepted | Require comparability evidence before longitudinal handoff |
+| [SDR-0045](0045-never-bridge-gaps-or-state-boundaries-in-spectral-analysis.md) | Accepted | Never bridge gaps or state boundaries in spectral analysis |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.
