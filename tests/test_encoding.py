@@ -8,6 +8,7 @@ from fiberphotometry.encoding import (
     EncodingSession,
     EventKernelSpec,
     EventModulationSpec,
+    KernelUncertaintySpec,
     LinearProgressBasisSpec,
     ProgressKernelSpec,
     RaisedCosineBasisSpec,
@@ -98,7 +99,7 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert len(held_out) == len(set(held_out))
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "event_kernel_encoding_result"
-    assert payload["schema_version"] == "7"
+    assert payload["schema_version"] == "8"
     assert result.validity.total_observations == 16 * 400
     assert result.validity.retained_observations == result.observations
     assert result.validity.excluded_observations == 0
@@ -114,6 +115,19 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     )
     assert uncertainty["cue"].lower[2] < 1.2 < uncertainty["cue"].upper[2]
     assert uncertainty["reward"].lower[2] < 0.9 < uncertainty["reward"].upper[2]
+    grouped = result.kernel_uncertainty
+    assert grouped.simultaneous is True
+    assert grouped.simultaneous_family_size == 9
+    assert grouped.simultaneous_critical_value >= grouped.pointwise_critical_value
+    cue_interval = uncertainty["cue"]
+    assert np.all(
+        np.asarray(cue_interval.simultaneous_lower)
+        <= np.asarray(cue_interval.lower) + 1e-12
+    )
+    assert np.all(
+        np.asarray(cue_interval.simultaneous_upper)
+        >= np.asarray(cue_interval.upper) - 1e-12
+    )
     assert len(result.residual_diagnostics.groups) == 8
     assert result.residual_diagnostics.pooled_observations == result.observations
 
@@ -163,6 +177,55 @@ def test_session_grouping_uses_compound_identity_and_never_crosses_boundaries() 
     )
     assert design.values[4].toarray().ravel().tolist() == [1.0, 0.0, 0.0]
     assert design.values[5:8].nnz == 0
+
+
+def test_simultaneous_kernel_band_is_seeded_and_configurable() -> None:
+    sessions = _simulated_sessions()[:6]
+    uncertainty = KernelUncertaintySpec(
+        confidence_level=0.9,
+        simultaneous_draws=500,
+        simultaneous_seed=17,
+    )
+    spec = EncodingModelSpec(
+        event_kernels=(EventKernelSpec("cue", (0.0, 0.2)),),
+        alpha_grid=(0.1,),
+        folds=3,
+        uncertainty=uncertainty,
+    )
+
+    first = fit_event_kernel_model(sessions, spec).kernel_uncertainty
+    repeated = fit_event_kernel_model(sessions, spec).kernel_uncertainty
+    changed_seed = fit_event_kernel_model(
+        sessions,
+        EncodingModelSpec(
+            event_kernels=spec.event_kernels,
+            alpha_grid=spec.alpha_grid,
+            folds=spec.folds,
+            uncertainty=KernelUncertaintySpec(
+                confidence_level=0.9,
+                simultaneous_draws=500,
+                simultaneous_seed=18,
+            ),
+        ),
+    ).kernel_uncertainty
+
+    assert first.confidence_level == 0.9
+    assert first.simultaneous_draws == 500
+    assert first.simultaneous_seed == 17
+    assert first.simultaneous_critical_value == repeated.simultaneous_critical_value
+    assert first.event_kernels[0].simultaneous_lower == (
+        repeated.event_kernels[0].simultaneous_lower
+    )
+    assert first.simultaneous_critical_value != (
+        changed_seed.simultaneous_critical_value
+    )
+
+    with pytest.raises(ValueError, match="confidence_level"):
+        KernelUncertaintySpec(confidence_level=1.0)
+    with pytest.raises(ValueError, match="at least 100"):
+        KernelUncertaintySpec(simultaneous_draws=99)
+    with pytest.raises(ValueError, match="nonnegative"):
+        KernelUncertaintySpec(simultaneous_seed=-1)
 
 
 def test_rejects_irregular_sampling_and_absent_declared_events() -> None:
@@ -643,6 +706,17 @@ def test_recovers_normalized_progress_without_excluding_outside_bout_time() -> N
     )
     assert len(kernel.basis.coefficient) == 4
     assert len(result.kernel_uncertainty.progress_kernels[0].standard_error) == 101
+    progress_uncertainty = result.kernel_uncertainty
+    assert progress_uncertainty.simultaneous_family_size == 101
+    progress_interval = progress_uncertainty.progress_kernels[0]
+    assert np.all(
+        np.asarray(progress_interval.simultaneous_lower)
+        <= np.asarray(progress_interval.lower) + 1e-12
+    )
+    assert np.all(
+        np.asarray(progress_interval.simultaneous_upper)
+        >= np.asarray(progress_interval.upper) - 1e-12
+    )
     selected = next(
         item for item in result.cross_validation if item.alpha == result.selected_alpha
     )

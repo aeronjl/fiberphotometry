@@ -79,6 +79,7 @@ EXPERIMENTAL_API_V0_1 = (
     "EventModulationSpec",
     "FIRBasisSpec",
     "IntervalEncodingInputs",
+    "KernelUncertaintySpec",
     "LinearProgressBasisSpec",
     "MaterializedEncodingUniverse",
     "MultiverseSpec",

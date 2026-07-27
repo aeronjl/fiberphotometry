@@ -346,6 +346,7 @@ def _validation_policy(spec: EncodingModelSpec) -> tuple[object, ...]:
         spec.sampling_tolerance,
         spec.minimum_session_coverage,
         spec.minimum_session_observations,
+        spec.uncertainty,
     )
 
 

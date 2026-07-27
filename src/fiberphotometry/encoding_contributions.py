@@ -388,4 +388,5 @@ def _model_policy(spec: EncodingModelSpec) -> tuple[object, ...]:
         spec.minimum_session_coverage,
         spec.minimum_session_observations,
         spec.schema_version,
+        spec.uncertainty,
     )

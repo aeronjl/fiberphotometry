@@ -12,6 +12,7 @@ from typing import Literal, TypeAlias
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy.sparse import csr_matrix, lil_matrix, vstack
+from scipy.stats import norm
 from scipy.stats import t as student_t
 
 
@@ -202,6 +203,35 @@ class EncodingSession:
 
 
 @dataclass(frozen=True)
+class KernelUncertaintySpec:
+    """Grouped pointwise and whole-model simultaneous sensitivity policy."""
+
+    confidence_level: float = 0.95
+    simultaneous_method: Literal["jackknife_gaussian_multiplier_max_t"] = (
+        "jackknife_gaussian_multiplier_max_t"
+    )
+    simultaneous_draws: int = 2_000
+    simultaneous_seed: int = 20_260_727
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        if not 0.0 < self.confidence_level < 1.0:
+            raise ValueError("kernel confidence_level must lie in (0, 1)")
+        if isinstance(self.simultaneous_draws, bool) or not isinstance(
+            self.simultaneous_draws, int
+        ):
+            raise ValueError("kernel simultaneous_draws must be an integer")
+        if self.simultaneous_draws < 100:
+            raise ValueError("kernel simultaneous_draws must be at least 100")
+        if isinstance(self.simultaneous_seed, bool) or not isinstance(
+            self.simultaneous_seed, int
+        ):
+            raise ValueError("kernel simultaneous_seed must be an integer")
+        if self.simultaneous_seed < 0:
+            raise ValueError("kernel simultaneous_seed must be nonnegative")
+
+
+@dataclass(frozen=True)
 class EncodingModelSpec:
     """Declared predictors and grouped validation policy for one encoding model."""
 
@@ -215,6 +245,7 @@ class EncodingModelSpec:
     minimum_session_observations: int = 3
     schema_version: str = "1"
     progress_kernels: tuple[ProgressKernelSpec, ...] = ()
+    uncertainty: KernelUncertaintySpec = field(default_factory=KernelUncertaintySpec)
 
     def __post_init__(self) -> None:
         names = [item.name for item in self.event_kernels] + [
@@ -323,6 +354,8 @@ class EventKernelInterval:
     standard_error: tuple[float, ...]
     lower: tuple[float, ...]
     upper: tuple[float, ...]
+    simultaneous_lower: tuple[float, ...]
+    simultaneous_upper: tuple[float, ...]
 
 
 @dataclass(frozen=True)
@@ -336,6 +369,8 @@ class ProgressKernelInterval:
     standard_error: tuple[float, ...]
     lower: tuple[float, ...]
     upper: tuple[float, ...]
+    simultaneous_lower: tuple[float, ...]
+    simultaneous_upper: tuple[float, ...]
 
 
 @dataclass(frozen=True)
@@ -349,7 +384,15 @@ class GroupedKernelUncertainty:
     omitted_groups: tuple[str, ...]
     event_kernels: tuple[EventKernelInterval, ...]
     progress_kernels: tuple[ProgressKernelInterval, ...] = ()
-    simultaneous: bool = False
+    simultaneous_method: Literal["jackknife_gaussian_multiplier_max_t"] = (
+        "jackknife_gaussian_multiplier_max_t"
+    )
+    simultaneous_draws: int = 2_000
+    simultaneous_seed: int = 20_260_727
+    simultaneous_family_size: int = 0
+    pointwise_critical_value: float = 0.0
+    simultaneous_critical_value: float = 0.0
+    simultaneous: bool = True
 
 
 @dataclass(frozen=True)
@@ -437,7 +480,7 @@ class EncodingModelResult:
     artifact_type: Literal["event_kernel_encoding_result"] = (
         "event_kernel_encoding_result"
     )
-    schema_version: str = "7"
+    schema_version: str = "8"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -472,6 +515,16 @@ class _ProgressLayout:
     spec: ProgressKernelSpec
     columns: slice
     component_labels: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class _JackknifeCurve:
+    full: NDArray[np.float64]
+    estimate: NDArray[np.float64]
+    standard_error: NDArray[np.float64]
+    lower: NDArray[np.float64]
+    upper: NDArray[np.float64]
+    centered_pseudo_values: NDArray[np.float64]
 
 
 def fit_event_kernel_model(
@@ -565,7 +618,7 @@ def fit_event_kernel_model(
         for name, index in design.continuous_indices
     )
     uncertainty = _grouped_kernel_uncertainty(
-        design, coefficients, selected.alpha, confidence_level=0.95
+        design, coefficients, selected.alpha, spec.uncertainty
     )
     diagnostics = _residual_diagnostics(design, folds, selected.alpha, spec.group_by)
     return EncodingModelResult(
@@ -1131,8 +1184,7 @@ def _grouped_kernel_uncertainty(
     design: _Design,
     full_coefficients: NDArray[np.float64],
     alpha: float,
-    *,
-    confidence_level: float,
+    spec: KernelUncertaintySpec,
 ) -> GroupedKernelUncertainty:
     groups = tuple(sorted(set(design.groups.tolist())))
     replicates = []
@@ -1147,8 +1199,10 @@ def _grouped_kernel_uncertainty(
         replicates.append(coefficients)
     replicate_values = np.vstack(replicates)
     count = len(groups)
-    critical = float(student_t.ppf(0.5 + confidence_level / 2, df=max(1, count - 1)))
-    kernels = []
+    pointwise_critical = float(
+        student_t.ppf(0.5 + spec.confidence_level / 2, df=max(1, count - 1))
+    )
+    event_curves = []
     for event_layout_item in design.event_slices:
         full_curve = (
             event_layout_item.basis @ full_coefficients[event_layout_item.columns]
@@ -1156,27 +1210,11 @@ def _grouped_kernel_uncertainty(
         replicate_curves = (
             replicate_values[:, event_layout_item.columns] @ event_layout_item.basis.T
         )
-        replicate_mean = np.mean(replicate_curves, axis=0)
-        jackknife_estimate = count * full_curve - (count - 1) * replicate_mean
-        standard_error = np.sqrt(
-            (count - 1)
-            / count
-            * np.sum((replicate_curves - replicate_mean) ** 2, axis=0)
+        event_curves.append(
+            _jackknife_curve(full_curve, replicate_curves, count, pointwise_critical)
         )
-        lower = jackknife_estimate - critical * standard_error
-        upper = jackknife_estimate + critical * standard_error
-        kernels.append(
-            EventKernelInterval(
-                event_layout_item.spec.name,
-                tuple(float(value) for value in event_layout_item.lags),
-                tuple(float(value) for value in full_curve),
-                tuple(float(value) for value in jackknife_estimate),
-                tuple(float(value) for value in standard_error),
-                tuple(float(value) for value in lower),
-                tuple(float(value) for value in upper),
-            )
-        )
-    progress_kernels = []
+    progress_values = []
+    progress_curves = []
     for progress_layout_item in design.progress_slices:
         progress: NDArray[np.float64] = np.linspace(
             0.0,
@@ -1187,35 +1225,123 @@ def _grouped_kernel_uncertainty(
         basis, _ = _progress_basis(progress_layout_item.spec.basis, progress)
         full_curve = basis @ full_coefficients[progress_layout_item.columns]
         replicate_curves = replicate_values[:, progress_layout_item.columns] @ basis.T
-        replicate_mean = np.mean(replicate_curves, axis=0)
-        jackknife_estimate = count * full_curve - (count - 1) * replicate_mean
-        standard_error = np.sqrt(
-            (count - 1)
-            / count
-            * np.sum((replicate_curves - replicate_mean) ** 2, axis=0)
+        progress_values.append(progress)
+        progress_curves.append(
+            _jackknife_curve(full_curve, replicate_curves, count, pointwise_critical)
         )
-        lower = jackknife_estimate - critical * standard_error
-        upper = jackknife_estimate + critical * standard_error
+    all_curves = tuple(event_curves) + tuple(progress_curves)
+    simultaneous_critical = _simultaneous_critical_value(
+        all_curves,
+        groups=count,
+        confidence_level=spec.confidence_level,
+        draws=spec.simultaneous_draws,
+        seed=spec.simultaneous_seed,
+        minimum=pointwise_critical,
+    )
+    kernels = []
+    for event_layout_item, curve in zip(design.event_slices, event_curves, strict=True):
+        kernels.append(
+            EventKernelInterval(
+                name=event_layout_item.spec.name,
+                lag_s=tuple(float(value) for value in event_layout_item.lags),
+                full_coefficient=_float_tuple(curve.full),
+                jackknife_estimate=_float_tuple(curve.estimate),
+                standard_error=_float_tuple(curve.standard_error),
+                lower=_float_tuple(curve.lower),
+                upper=_float_tuple(curve.upper),
+                simultaneous_lower=_float_tuple(
+                    curve.estimate - simultaneous_critical * curve.standard_error
+                ),
+                simultaneous_upper=_float_tuple(
+                    curve.estimate + simultaneous_critical * curve.standard_error
+                ),
+            )
+        )
+    progress_kernels = []
+    for progress_layout_item, progress, curve in zip(
+        design.progress_slices, progress_values, progress_curves, strict=True
+    ):
         progress_kernels.append(
             ProgressKernelInterval(
                 name=progress_layout_item.spec.name,
-                progress=tuple(float(value) for value in progress),
-                full_coefficient=tuple(float(value) for value in full_curve),
-                jackknife_estimate=tuple(float(value) for value in jackknife_estimate),
-                standard_error=tuple(float(value) for value in standard_error),
-                lower=tuple(float(value) for value in lower),
-                upper=tuple(float(value) for value in upper),
+                progress=_float_tuple(progress),
+                full_coefficient=_float_tuple(curve.full),
+                jackknife_estimate=_float_tuple(curve.estimate),
+                standard_error=_float_tuple(curve.standard_error),
+                lower=_float_tuple(curve.lower),
+                upper=_float_tuple(curve.upper),
+                simultaneous_lower=_float_tuple(
+                    curve.estimate - simultaneous_critical * curve.standard_error
+                ),
+                simultaneous_upper=_float_tuple(
+                    curve.estimate + simultaneous_critical * curve.standard_error
+                ),
             )
         )
     return GroupedKernelUncertainty(
         method="delete_one_group_jackknife",
-        confidence_level=confidence_level,
+        confidence_level=spec.confidence_level,
         conditional_on_selected_alpha=alpha,
         groups=count,
         omitted_groups=groups,
         event_kernels=tuple(kernels),
         progress_kernels=tuple(progress_kernels),
+        simultaneous_method=spec.simultaneous_method,
+        simultaneous_draws=spec.simultaneous_draws,
+        simultaneous_seed=spec.simultaneous_seed,
+        simultaneous_family_size=sum(len(item.full) for item in all_curves),
+        pointwise_critical_value=pointwise_critical,
+        simultaneous_critical_value=simultaneous_critical,
     )
+
+
+def _jackknife_curve(
+    full_curve: NDArray[np.float64],
+    replicate_curves: NDArray[np.float64],
+    groups: int,
+    pointwise_critical: float,
+) -> _JackknifeCurve:
+    pseudo_values = groups * full_curve - (groups - 1) * replicate_curves
+    estimate = np.mean(pseudo_values, axis=0)
+    centered = pseudo_values - estimate
+    standard_error = np.sqrt(np.sum(centered**2, axis=0) / (groups * (groups - 1)))
+    return _JackknifeCurve(
+        full=full_curve,
+        estimate=estimate,
+        standard_error=standard_error,
+        lower=estimate - pointwise_critical * standard_error,
+        upper=estimate + pointwise_critical * standard_error,
+        centered_pseudo_values=centered,
+    )
+
+
+def _simultaneous_critical_value(
+    curves: tuple[_JackknifeCurve, ...],
+    *,
+    groups: int,
+    confidence_level: float,
+    draws: int,
+    seed: int,
+    minimum: float,
+) -> float:
+    centered = np.concatenate([item.centered_pseudo_values for item in curves], axis=1)
+    standard_error = np.concatenate([item.standard_error for item in curves])
+    varying = standard_error > np.finfo(float).eps
+    if not np.any(varying):
+        return minimum
+    multipliers = np.random.default_rng(seed).normal(size=(draws, groups))
+    deviations = multipliers @ centered[:, varying]
+    deviations /= np.sqrt(groups * (groups - 1))
+    standardized = np.abs(deviations / standard_error[varying])
+    maximum = np.max(standardized, axis=1)
+    raw_critical = float(np.quantile(maximum, confidence_level, method="higher"))
+    gaussian_critical = float(norm.ppf(0.5 + confidence_level / 2))
+    small_sample_scale = minimum / gaussian_critical
+    return max(minimum, raw_critical * small_sample_scale)
+
+
+def _float_tuple(values: NDArray[np.float64]) -> tuple[float, ...]:
+    return tuple(float(value) for value in values)
 
 
 def _residual_diagnostics(
