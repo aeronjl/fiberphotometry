@@ -79,6 +79,44 @@ class EventKernelSpec:
 
 
 @dataclass(frozen=True)
+class LinearProgressBasisSpec:
+    """Piecewise-linear basis over normalized interval progress in ``[0, 1]``."""
+
+    functions: int = 5
+    evaluation_points: int = 101
+    family: Literal["linear_progress"] = "linear_progress"
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        if isinstance(self.functions, bool) or not isinstance(self.functions, int):
+            raise ValueError("progress-basis functions must be an integer")
+        if self.functions < 1:
+            raise ValueError("progress-basis functions must be positive")
+        if isinstance(self.evaluation_points, bool) or not isinstance(
+            self.evaluation_points, int
+        ):
+            raise ValueError("progress-basis evaluation_points must be an integer")
+        if self.evaluation_points < 2:
+            raise ValueError("progress-basis evaluation_points must be at least two")
+
+
+@dataclass(frozen=True)
+class ProgressKernelSpec:
+    """One normalized-progress trajectory for a named interval family."""
+
+    name: str
+    source_interval: str | None = None
+    basis: LinearProgressBasisSpec = field(default_factory=LinearProgressBasisSpec)
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        if not self.name.strip():
+            raise ValueError("progress-kernel name must be non-empty")
+        if self.source_interval is not None and not self.source_interval.strip():
+            raise ValueError("progress-kernel source_interval must be non-empty")
+
+
+@dataclass(frozen=True)
 class EncodingSession:
     """One continuous response with aligned events and continuous covariates."""
 
@@ -95,6 +133,9 @@ class EncodingSession:
     event_values: Mapping[str, Mapping[str, tuple[float, ...]]] = field(
         default_factory=dict
     )
+    intervals: Mapping[str, tuple[tuple[float, float], ...]] = field(
+        default_factory=dict
+    )
 
     @classmethod
     def from_arrays(
@@ -109,6 +150,7 @@ class EncodingSession:
         response_valid: ArrayLike | None = None,
         continuous_covariate_validity: Mapping[str, ArrayLike] | None = None,
         event_values: Mapping[str, Mapping[str, Sequence[float]]] | None = None,
+        intervals: Mapping[str, Sequence[tuple[float, float]]] | None = None,
     ) -> EncodingSession:
         """Create a validated session without joining signals across recordings."""
         time_values = np.asarray(time, dtype=float)
@@ -148,6 +190,12 @@ class EncodingSession:
                 }
                 for event, event_covariates in (event_values or {}).items()
             },
+            intervals={
+                name: tuple(
+                    (float(start), float(stop)) for start, stop in interval_values
+                )
+                for name, interval_values in (intervals or {}).items()
+            },
         )
         _validate_session(result)
         return result
@@ -166,9 +214,12 @@ class EncodingModelSpec:
     minimum_session_coverage: float = 0.5
     minimum_session_observations: int = 3
     schema_version: str = "1"
+    progress_kernels: tuple[ProgressKernelSpec, ...] = ()
 
     def __post_init__(self) -> None:
-        names = [item.name for item in self.event_kernels]
+        names = [item.name for item in self.event_kernels] + [
+            item.name for item in self.progress_kernels
+        ]
         all_names = names + list(self.continuous_covariates)
         if not all_names:
             raise ValueError("encoding model requires at least one predictor")
@@ -230,6 +281,28 @@ class EventKernelBasisResult:
 
 
 @dataclass(frozen=True)
+class ProgressKernelBasisResult:
+    """Basis weights and functions used to reconstruct normalized progress."""
+
+    family: str
+    component_label: tuple[str, ...]
+    coefficient: tuple[float, ...]
+    function_by_progress: tuple[tuple[float, ...], ...]
+
+
+@dataclass(frozen=True)
+class ProgressKernelResult:
+    """Estimated response trajectory over normalized interval progress."""
+
+    name: str
+    source_interval: str
+    intervals: int
+    progress: tuple[float, ...]
+    coefficient: tuple[float, ...]
+    basis: ProgressKernelBasisResult
+
+
+@dataclass(frozen=True)
 class ContinuousCoefficient:
     """Coefficient for a one-standard-deviation continuous-covariate change."""
 
@@ -253,6 +326,19 @@ class EventKernelInterval:
 
 
 @dataclass(frozen=True)
+class ProgressKernelInterval:
+    """Pointwise grouped-jackknife uncertainty over normalized progress."""
+
+    name: str
+    progress: tuple[float, ...]
+    full_coefficient: tuple[float, ...]
+    jackknife_estimate: tuple[float, ...]
+    standard_error: tuple[float, ...]
+    lower: tuple[float, ...]
+    upper: tuple[float, ...]
+
+
+@dataclass(frozen=True)
 class GroupedKernelUncertainty:
     """Delete-one-group sensitivity intervals conditional on one ridge penalty."""
 
@@ -262,6 +348,7 @@ class GroupedKernelUncertainty:
     groups: int
     omitted_groups: tuple[str, ...]
     event_kernels: tuple[EventKernelInterval, ...]
+    progress_kernels: tuple[ProgressKernelInterval, ...] = ()
     simultaneous: bool = False
 
 
@@ -336,6 +423,7 @@ class EncodingModelResult:
     selected_alpha: float
     intercept: float
     event_kernels: tuple[EventKernelResult, ...]
+    progress_kernels: tuple[ProgressKernelResult, ...]
     continuous_coefficients: tuple[ContinuousCoefficient, ...]
     kernel_uncertainty: GroupedKernelUncertainty
     residual_diagnostics: EncodingResidualDiagnostics
@@ -349,7 +437,7 @@ class EncodingModelResult:
     artifact_type: Literal["event_kernel_encoding_result"] = (
         "event_kernel_encoding_result"
     )
-    schema_version: str = "6"
+    schema_version: str = "7"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -363,6 +451,8 @@ class _Design:
     sessions: NDArray[np.str_]
     residual_segments: NDArray[np.str_]
     event_slices: tuple[_EventLayout, ...]
+    progress_slices: tuple[_ProgressLayout, ...]
+    progress_interval_counts: Mapping[str, int]
     continuous_indices: tuple[tuple[str, int], ...]
     sample_interval: float
     validity: EncodingValidityReport
@@ -374,6 +464,13 @@ class _EventLayout:
     columns: slice
     lags: NDArray[np.float64]
     basis: NDArray[np.float64]
+    component_labels: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class _ProgressLayout:
+    spec: ProgressKernelSpec
+    columns: slice
     component_labels: tuple[str, ...]
 
 
@@ -390,7 +487,7 @@ def fit_event_kernel_model(
     if not sessions:
         raise ValueError("encoding model requires at least one session")
     design = _build_design(tuple(sessions), spec)
-    _validate_event_lag_support(design)
+    _validate_kernel_support(design)
     unique_groups = sorted(set(design.groups.tolist()))
     if len(unique_groups) < 2:
         raise ValueError("encoding cross-validation requires at least two groups")
@@ -406,23 +503,54 @@ def fit_event_kernel_model(
         design.values, design.response, selected.alpha, design.continuous_indices
     )
     kernels = []
-    for layout in design.event_slices:
-        basis_coefficients = coefficients[layout.columns]
-        reconstructed = layout.basis @ basis_coefficients
+    for event_layout_item in design.event_slices:
+        basis_coefficients = coefficients[event_layout_item.columns]
+        reconstructed = event_layout_item.basis @ basis_coefficients
         kernels.append(
             EventKernelResult(
-                name=layout.spec.name,
-                source_event=_source_event(layout.spec),
-                modulation=layout.spec.modulation,
-                lag_s=tuple(float(value) for value in layout.lags),
+                name=event_layout_item.spec.name,
+                source_event=_source_event(event_layout_item.spec),
+                modulation=event_layout_item.spec.modulation,
+                lag_s=tuple(float(value) for value in event_layout_item.lags),
                 coefficient=tuple(float(value) for value in reconstructed),
                 basis=EventKernelBasisResult(
-                    family=layout.spec.basis.family,
-                    component_label=layout.component_labels,
+                    family=event_layout_item.spec.basis.family,
+                    component_label=event_layout_item.component_labels,
                     coefficient=tuple(float(value) for value in basis_coefficients),
                     function_by_lag=tuple(
                         tuple(float(value) for value in component)
-                        for component in layout.basis.T
+                        for component in event_layout_item.basis.T
+                    ),
+                ),
+            )
+        )
+    progress_kernels = []
+    for progress_layout_item in design.progress_slices:
+        progress: NDArray[np.float64] = np.linspace(
+            0.0,
+            1.0,
+            progress_layout_item.spec.basis.evaluation_points,
+            dtype=float,
+        )
+        basis, _ = _progress_basis(progress_layout_item.spec.basis, progress)
+        basis_coefficients = coefficients[progress_layout_item.columns]
+        reconstructed = basis @ basis_coefficients
+        progress_kernels.append(
+            ProgressKernelResult(
+                name=progress_layout_item.spec.name,
+                source_interval=_source_interval(progress_layout_item.spec),
+                intervals=design.progress_interval_counts[
+                    progress_layout_item.spec.name
+                ],
+                progress=tuple(float(value) for value in progress),
+                coefficient=tuple(float(value) for value in reconstructed),
+                basis=ProgressKernelBasisResult(
+                    family=progress_layout_item.spec.basis.family,
+                    component_label=progress_layout_item.component_labels,
+                    coefficient=tuple(float(value) for value in basis_coefficients),
+                    function_by_progress=tuple(
+                        tuple(float(value) for value in component)
+                        for component in basis.T
                     ),
                 ),
             )
@@ -445,6 +573,7 @@ def fit_event_kernel_model(
         selected_alpha=selected.alpha,
         intercept=intercept,
         event_kernels=tuple(kernels),
+        progress_kernels=tuple(progress_kernels),
         continuous_coefficients=continuous,
         kernel_uncertainty=uncertainty,
         residual_diagnostics=diagnostics,
@@ -458,17 +587,28 @@ def fit_event_kernel_model(
     )
 
 
-def _validate_event_lag_support(design: _Design) -> None:
-    unsupported: list[str] = []
-    for layout in design.event_slices:
-        for offset, label in enumerate(layout.component_labels):
-            column = layout.columns.start + offset
+def _validate_kernel_support(design: _Design) -> None:
+    unsupported_events: list[str] = []
+    for event_layout_item in design.event_slices:
+        for offset, label in enumerate(event_layout_item.component_labels):
+            column = event_layout_item.columns.start + offset
             if design.values[:, column].nnz == 0:
-                unsupported.append(f"{layout.spec.name}@{label}")
-    if unsupported:
+                unsupported_events.append(f"{event_layout_item.spec.name}@{label}")
+    if unsupported_events:
         raise ValueError(
             "encoding event lags have no retained observations: "
-            + ", ".join(unsupported)
+            + ", ".join(unsupported_events)
+        )
+    unsupported_progress: list[str] = []
+    for progress_layout_item in design.progress_slices:
+        for offset, label in enumerate(progress_layout_item.component_labels):
+            column = progress_layout_item.columns.start + offset
+            if design.values[:, column].nnz == 0:
+                unsupported_progress.append(f"{progress_layout_item.spec.name}@{label}")
+    if unsupported_progress:
+        raise ValueError(
+            "encoding progress components have no retained observations: "
+            + ", ".join(unsupported_progress)
         )
 
 
@@ -488,19 +628,29 @@ def _build_design(
         raise ValueError("encoding sessions must share one regular sampling interval")
     event_layout: list[_EventLayout] = []
     column = 0
-    for kernel in spec.event_kernels:
-        start = int(np.ceil(kernel.window_s[0] / interval - 1e-12))
-        stop = int(np.floor(kernel.window_s[1] / interval + 1e-12))
-        offsets = np.arange(start, stop + 1, dtype=int)
+    for event_kernel in spec.event_kernels:
+        event_start_index = int(np.ceil(event_kernel.window_s[0] / interval - 1e-12))
+        event_stop_index = int(np.floor(event_kernel.window_s[1] / interval + 1e-12))
+        offsets = np.arange(event_start_index, event_stop_index + 1, dtype=int)
         if not len(offsets):
-            raise ValueError(f"event-kernel window {kernel.name!r} contains no samples")
+            raise ValueError(
+                f"event-kernel window {event_kernel.name!r} contains no samples"
+            )
         lags = offsets.astype(float) * interval
-        basis, component_labels = _event_basis(kernel, lags)
+        basis, component_labels = _event_basis(event_kernel, lags)
         columns = slice(column, column + basis.shape[1])
         event_layout.append(
-            _EventLayout(kernel, columns, lags, basis, component_labels)
+            _EventLayout(event_kernel, columns, lags, basis, component_labels)
         )
         column += basis.shape[1]
+    progress_layout: list[_ProgressLayout] = []
+    for progress_kernel in spec.progress_kernels:
+        _, labels = _progress_basis(
+            progress_kernel.basis, np.asarray([0.0], dtype=float)
+        )
+        columns = slice(column, column + progress_kernel.basis.functions)
+        progress_layout.append(_ProgressLayout(progress_kernel, columns, labels))
+        column += progress_kernel.basis.functions
     continuous_layout = tuple(
         (name, column + index) for index, name in enumerate(spec.continuous_covariates)
     )
@@ -512,41 +662,89 @@ def _build_design(
     residual_segment_ids = []
     coverage_records = []
     event_counts = {kernel.name: 0 for kernel in spec.event_kernels}
+    progress_interval_counts = {kernel.name: 0 for kernel in spec.progress_kernels}
     for session in sessions:
         matrix = lil_matrix((len(session.time), width), dtype=float)
-        for layout in event_layout:
-            kernel = layout.spec
-            source_event = _source_event(kernel)
+        for event_layout_item in event_layout:
+            event_kernel = event_layout_item.spec
+            source_event = _source_event(event_kernel)
             try:
                 event_times = session.events[source_event]
             except KeyError as error:
                 raise ValueError(
                     f"encoding session {session.session!r} lacks event "
-                    f"{source_event!r} for kernel {kernel.name!r}"
+                    f"{source_event!r} for kernel {event_kernel.name!r}"
                 ) from error
-            event_weights = _event_weights(session, kernel, event_times)
-            offsets = np.rint(layout.lags / interval).astype(int)
+            event_weights = _event_weights(session, event_kernel, event_times)
+            offsets = np.rint(event_layout_item.lags / interval).astype(int)
             for event_time, event_weight in zip(
                 event_times, event_weights, strict=True
             ):
-                event_counts[kernel.name] += 1
+                event_counts[event_kernel.name] += 1
                 event_index = int(np.argmin(np.abs(session.time - event_time)))
                 mismatch = abs(float(session.time[event_index]) - event_time)
                 if mismatch > interval / 2 + spec.sampling_tolerance * interval:
                     raise ValueError(
-                        f"event {kernel.name!r} does not align to session sampling grid"
+                        f"event {event_kernel.name!r} does not align to session "
+                        "sampling grid"
                     )
                 rows = event_index + offsets
                 valid = (rows >= 0) & (rows < len(session.time))
                 for lag_index, row in zip(
                     np.flatnonzero(valid), rows[valid], strict=True
                 ):
-                    for component, value in enumerate(layout.basis[lag_index]):
+                    for component, value in enumerate(
+                        event_layout_item.basis[lag_index]
+                    ):
                         weighted_value = event_weight * value
                         if weighted_value != 0:
-                            matrix[int(row), layout.columns.start + component] += (
-                                weighted_value
-                            )
+                            matrix[
+                                int(row), event_layout_item.columns.start + component
+                            ] += weighted_value
+        for progress_layout_item in progress_layout:
+            source_interval = _source_interval(progress_layout_item.spec)
+            try:
+                interval_values = session.intervals[source_interval]
+            except KeyError as error:
+                raise ValueError(
+                    f"encoding session {session.session!r} lacks interval "
+                    f"{source_interval!r} for progress kernel "
+                    f"{progress_layout_item.spec.name!r}"
+                ) from error
+            _validate_progress_intervals(
+                session,
+                source_interval,
+                interval_values,
+                tolerance=spec.sampling_tolerance * interval,
+                sample_interval=interval,
+            )
+            progress_interval_counts[progress_layout_item.spec.name] += len(
+                interval_values
+            )
+            assigned = np.zeros(len(session.time), dtype=bool)
+            for interval_start, interval_stop in interval_values:
+                inside = (session.time >= interval_start) & (
+                    session.time < interval_stop
+                )
+                if np.any(assigned & inside):
+                    raise ValueError(
+                        f"overlapping interval {source_interval!r} makes normalized "
+                        f"progress ambiguous in session {session.session!r}"
+                    )
+                rows = np.flatnonzero(inside)
+                if not len(rows):
+                    continue
+                progress = (session.time[rows] - interval_start) / (
+                    interval_stop - interval_start
+                )
+                basis, _ = _progress_basis(progress_layout_item.spec.basis, progress)
+                for row, row_basis in zip(rows, basis, strict=True):
+                    for component, value in enumerate(row_basis):
+                        if value != 0:
+                            matrix[
+                                int(row), progress_layout_item.columns.start + component
+                            ] += value
+                assigned[rows] = True
         for name, index in continuous_layout:
             try:
                 matrix[:, index] = session.continuous_covariates[name]
@@ -610,6 +808,14 @@ def _build_design(
             "encoding event predictors have no occurrences: "
             + ", ".join(sorted(absent_events))
         )
+    absent_intervals = [
+        name for name, count in progress_interval_counts.items() if count == 0
+    ]
+    if absent_intervals:
+        raise ValueError(
+            "encoding progress predictors have no intervals: "
+            + ", ".join(sorted(absent_intervals))
+        )
     values = vstack(matrices, format="csr")
     response = np.concatenate(responses)
     if len(response) <= width:
@@ -624,6 +830,16 @@ def _build_design(
             "encoding event predictors have no retained support: "
             + ", ".join(sorted(unsupported_events))
         )
+    unsupported_progress = [
+        layout.spec.name
+        for layout in progress_layout
+        if values[:, layout.columns].nnz == 0
+    ]
+    if unsupported_progress:
+        raise ValueError(
+            "encoding progress predictors have no retained support: "
+            + ", ".join(sorted(unsupported_progress))
+        )
     total_observations = sum(item.total_observations for item in coverage_records)
     retained_observations = sum(item.retained_observations for item in coverage_records)
     validity = EncodingValidityReport(
@@ -637,15 +853,17 @@ def _build_design(
         sessions=tuple(coverage_records),
     )
     return _Design(
-        values,
-        response,
-        np.asarray(groups, dtype=str),
-        np.asarray(session_labels, dtype=str),
-        np.asarray(residual_segment_ids, dtype=str),
-        tuple(event_layout),
-        continuous_layout,
-        interval,
-        validity,
+        values=values,
+        response=response,
+        groups=np.asarray(groups, dtype=str),
+        sessions=np.asarray(session_labels, dtype=str),
+        residual_segments=np.asarray(residual_segment_ids, dtype=str),
+        event_slices=tuple(event_layout),
+        progress_slices=tuple(progress_layout),
+        progress_interval_counts=progress_interval_counts,
+        continuous_indices=continuous_layout,
+        sample_interval=interval,
+        validity=validity,
     )
 
 
@@ -676,6 +894,53 @@ def _event_basis(
     if np.linalg.matrix_rank(basis) != functions:
         raise ValueError(f"raised-cosine basis for {kernel.name!r} is rank deficient")
     return basis, tuple(f"raised-cosine-{index}" for index in range(functions))
+
+
+def _progress_basis(
+    spec: LinearProgressBasisSpec,
+    progress: NDArray[np.float64],
+) -> tuple[NDArray[np.float64], tuple[str, ...]]:
+    if np.any(~np.isfinite(progress)) or np.any((progress < 0) | (progress > 1)):
+        raise ValueError("normalized progress must be finite and lie in [0, 1]")
+    if spec.functions == 1:
+        return np.ones((len(progress), 1), dtype=float), ("progress-constant",)
+    centers = np.linspace(0.0, 1.0, spec.functions, dtype=float)
+    spacing = float(centers[1] - centers[0])
+    basis = np.maximum(
+        1.0 - np.abs(progress[:, None] - centers[None, :]) / spacing,
+        0.0,
+    )
+    basis /= np.sum(basis, axis=1, keepdims=True)
+    return basis, tuple(f"progress-{float(value):g}" for value in centers)
+
+
+def _source_interval(kernel: ProgressKernelSpec) -> str:
+    return kernel.source_interval if kernel.source_interval is not None else kernel.name
+
+
+def _validate_progress_intervals(
+    session: EncodingSession,
+    name: str,
+    intervals: tuple[tuple[float, float], ...],
+    *,
+    tolerance: float,
+    sample_interval: float,
+) -> None:
+    if any(current[0] <= previous[0] for previous, current in pairwise(intervals)):
+        raise ValueError(
+            f"interval {name!r} must be strictly ordered in session {session.session!r}"
+        )
+    if any(current[0] < previous[1] for previous, current in pairwise(intervals)):
+        raise ValueError(
+            f"overlapping interval {name!r} makes normalized progress ambiguous "
+            f"in session {session.session!r}"
+        )
+    earliest = float(session.time[0]) - tolerance
+    latest = float(session.time[-1]) + sample_interval + tolerance
+    if any(start < earliest or stop > latest for start, stop in intervals):
+        raise ValueError(
+            f"interval {name!r} extends beyond session {session.session!r} support"
+        )
 
 
 def _source_event(kernel: EventKernelSpec) -> str:
@@ -751,6 +1016,16 @@ def _validate_session(session: EncodingSession) -> None:
                     f"encoding event value {name!r} must be finite and match "
                     f"event {event!r} occurrences"
                 )
+    for name, intervals in session.intervals.items():
+        if not name.strip():
+            raise ValueError("encoding interval names must be non-empty")
+        if any(
+            not np.isfinite(start) or not np.isfinite(stop) or stop <= start
+            for start, stop in intervals
+        ):
+            raise ValueError(
+                f"encoding interval {name!r} bounds must be finite and positive"
+            )
     for name, covariate_values in session.continuous_covariates.items():
         if (
             not name.strip()
@@ -874,9 +1149,13 @@ def _grouped_kernel_uncertainty(
     count = len(groups)
     critical = float(student_t.ppf(0.5 + confidence_level / 2, df=max(1, count - 1)))
     kernels = []
-    for layout in design.event_slices:
-        full_curve = layout.basis @ full_coefficients[layout.columns]
-        replicate_curves = replicate_values[:, layout.columns] @ layout.basis.T
+    for event_layout_item in design.event_slices:
+        full_curve = (
+            event_layout_item.basis @ full_coefficients[event_layout_item.columns]
+        )
+        replicate_curves = (
+            replicate_values[:, event_layout_item.columns] @ event_layout_item.basis.T
+        )
         replicate_mean = np.mean(replicate_curves, axis=0)
         jackknife_estimate = count * full_curve - (count - 1) * replicate_mean
         standard_error = np.sqrt(
@@ -888,8 +1167,8 @@ def _grouped_kernel_uncertainty(
         upper = jackknife_estimate + critical * standard_error
         kernels.append(
             EventKernelInterval(
-                layout.spec.name,
-                tuple(float(value) for value in layout.lags),
+                event_layout_item.spec.name,
+                tuple(float(value) for value in event_layout_item.lags),
                 tuple(float(value) for value in full_curve),
                 tuple(float(value) for value in jackknife_estimate),
                 tuple(float(value) for value in standard_error),
@@ -897,13 +1176,45 @@ def _grouped_kernel_uncertainty(
                 tuple(float(value) for value in upper),
             )
         )
+    progress_kernels = []
+    for progress_layout_item in design.progress_slices:
+        progress: NDArray[np.float64] = np.linspace(
+            0.0,
+            1.0,
+            progress_layout_item.spec.basis.evaluation_points,
+            dtype=float,
+        )
+        basis, _ = _progress_basis(progress_layout_item.spec.basis, progress)
+        full_curve = basis @ full_coefficients[progress_layout_item.columns]
+        replicate_curves = replicate_values[:, progress_layout_item.columns] @ basis.T
+        replicate_mean = np.mean(replicate_curves, axis=0)
+        jackknife_estimate = count * full_curve - (count - 1) * replicate_mean
+        standard_error = np.sqrt(
+            (count - 1)
+            / count
+            * np.sum((replicate_curves - replicate_mean) ** 2, axis=0)
+        )
+        lower = jackknife_estimate - critical * standard_error
+        upper = jackknife_estimate + critical * standard_error
+        progress_kernels.append(
+            ProgressKernelInterval(
+                name=progress_layout_item.spec.name,
+                progress=tuple(float(value) for value in progress),
+                full_coefficient=tuple(float(value) for value in full_curve),
+                jackknife_estimate=tuple(float(value) for value in jackknife_estimate),
+                standard_error=tuple(float(value) for value in standard_error),
+                lower=tuple(float(value) for value in lower),
+                upper=tuple(float(value) for value in upper),
+            )
+        )
     return GroupedKernelUncertainty(
-        "delete_one_group_jackknife",
-        confidence_level,
-        alpha,
-        count,
-        groups,
-        tuple(kernels),
+        method="delete_one_group_jackknife",
+        confidence_level=confidence_level,
+        conditional_on_selected_alpha=alpha,
+        groups=count,
+        omitted_groups=groups,
+        event_kernels=tuple(kernels),
+        progress_kernels=tuple(progress_kernels),
     )
 
 

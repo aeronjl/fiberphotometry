@@ -33,6 +33,7 @@ def main() -> None:
     _multiverse(args.output_dir / "multiverse-robustness.svg")
     _method_map(args.output_dir / "method-question-map.svg")
     _event_kernel(args.output_dir / "event-kernel-validation.svg")
+    _variable_duration(args.output_dir / "variable-duration-kernels.svg")
     _publication(args.output_dir / "publication-provenance.svg")
     print(args.output_dir)
 
@@ -382,6 +383,78 @@ def _event_kernel(path: Path) -> None:
     axes[2].set_title("Report transport honestly")
     for axis in axes:
         axis.grid(color="#f0edf3")
+    _save(figure, path)
+
+
+def _variable_duration(path: Path) -> None:
+    figure, axes = plt.subplots(1, 3, figsize=(11.2, 3.8))
+    time = np.linspace(0.0, 10.0, 501)
+    intervals = ((1.0, 3.0), (5.0, 8.5))
+    profile = np.asarray([0.15, 0.75, 1.0, 0.35])
+    centers = np.linspace(0.0, 1.0, len(profile))
+    signal = np.zeros_like(time)
+    active = np.zeros_like(time, dtype=bool)
+    for start, stop in intervals:
+        inside = (time >= start) & (time < stop)
+        progress = (time[inside] - start) / (stop - start)
+        signal[inside] = np.interp(progress, centers, profile)
+        active |= inside
+        axes[0].axvspan(start, stop, color=TEAL, alpha=0.12)
+    axes[0].plot(time, signal, color=PURPLE, linewidth=2)
+    axes[0].scatter(
+        [item for interval in intervals for item in interval],
+        [0.0] * 4,
+        color=AMBER,
+        s=22,
+        zorder=3,
+    )
+    axes[0].set(
+        title="Keep physical bouts",
+        xlabel="Acquisition time (s)",
+        ylabel="Response",
+    )
+
+    progress_grid = np.linspace(0.0, 1.0, 101)
+    axes[1].plot(
+        progress_grid,
+        np.interp(progress_grid, centers, profile),
+        color=PURPLE,
+        linewidth=2.3,
+    )
+    for center, value in zip(centers, profile, strict=True):
+        axes[1].plot(center, value, "o", color=TEAL, markersize=5)
+    axes[1].set(
+        title="Add normalized progress",
+        xlabel="Within-bout progress",
+        ylabel="Conditional response",
+        xlim=(0, 1),
+    )
+
+    axes[2].fill_between(time, 0.0, active.astype(float), color=TEAL, alpha=0.3)
+    axes[2].plot(time, active.astype(float), color=TEAL, linewidth=1.8)
+    axes[2].axhline(0.0, color=PURPLE, linewidth=1.4)
+    axes[2].text(
+        3.95,
+        0.08,
+        "outside rows = 0\nnot missing",
+        ha="center",
+        color=PURPLE,
+        weight="bold",
+        fontsize=8,
+    )
+    axes[2].set(
+        title="Retain the full denominator",
+        xlabel="Acquisition time (s)",
+        ylabel="Progress design support",
+        ylim=(-0.08, 1.12),
+    )
+    for axis in axes:
+        axis.grid(color="#f0edf3")
+    figure.suptitle(
+        "Normalized progress supplements physical time—it does not replace it",
+        weight="bold",
+    )
+    figure.tight_layout()
     _save(figure, path)
 
 

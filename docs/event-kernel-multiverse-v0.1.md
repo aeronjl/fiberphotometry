@@ -110,10 +110,11 @@ This v0.1 surface enumerates complete model specifications rather than generatin
 a factorial decision graph. FIR, raised-cosine, and explicit event-history
 alternatives are available, but coefficients under unlike coding or bases should
 not be pooled into one magnitude range; compare reconstructed physical-lag curves
-and held-out prediction. The immediate extensions are variable-duration/progress
-kernels and predictor-family contribution summaries. Each must preserve the fixed
-validation policy, exact-denominator evidence and retained failures established
-here.
+and held-out prediction. Variable-duration progress kernels are also available;
+their dimensionless curves should not be pooled with physical-lag curves. The
+immediate extension is predictor-family contribution summaries. It must preserve
+the fixed validation policy, exact-denominator evidence and retained failures
+established here.
 
 The general rationale follows the
 [multiverse scientific contract](multiverse-contract-v0.1.md). Event-kernel-specific

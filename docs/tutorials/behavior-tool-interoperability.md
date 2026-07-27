@@ -110,12 +110,19 @@ The human-readable labels are study metadata, not a claim that syllable 1 has a
 universal biological meaning. Preserve the fitted model, any reindexing operation,
 and its version beside the analysis.
 
-For a variable-duration analysis, retain physical time and add progress rather than
-replacing time:
+For a variable-duration analysis, retain physical bounds and aligned duration
+values rather than replacing time:
 
 ```python
-rear_progress_on_video_grid = moseq.normalized_progress(video_time, label="rear")
+moseq_inputs = moseq.interval_encoding_inputs(edge="onset")
+# moseq_inputs.events["rear"]
+# moseq_inputs.event_values["rear"]["duration_s"]
+# moseq_inputs.intervals["rear"]
 ```
+
+`normalized_progress()` remains useful for visualization. For model fitting, the
+first-class progress kernel keeps outside-bout samples in the denominator instead
+of marking them as missing continuous-covariate rows.
 
 ## 4. Keep BORIS point and state annotations distinct
 
@@ -191,11 +198,14 @@ and across gaps larger than `max_gap_s`. `align_to()` remains available when onl
 the numeric array is needed, but `aligned_to()` is the loss-aware route into a
 model. Do not use a global fill that bridges long occlusions.
 
-For a complete synthetic session, point/bout onsets and a continuous movement
-covariate compose directly:
+For a complete synthetic session, point/bout onsets, physical intervals, aligned
+duration values, and a continuous movement covariate compose directly:
 
 ```python
 from fiberphotometry import EncodingSession
+
+moseq_inputs = moseq.interval_encoding_inputs(edge="onset")
+boris_inputs = boris.interval_encoding_inputs(edge="onset")
 
 session = EncodingSession.from_arrays(
     subject="mouse-07",
@@ -203,9 +213,13 @@ session = EncodingSession.from_arrays(
     time=photometry_time,
     response=processed_photometry,
     events={
-        **moseq.event_times(edge="onset"),
-        **boris.event_times(edge="onset"),
+        **moseq.point_events,
+        **moseq_inputs.events,
+        **boris.point_events,
+        **boris_inputs.events,
     },
+    event_values={**moseq_inputs.event_values, **boris_inputs.event_values},
+    intervals={**moseq_inputs.intervals, **boris_inputs.intervals},
     continuous_covariates={"nose_speed": aligned_speed.values},
     continuous_covariate_validity={"nose_speed": aligned_speed.valid},
 )

@@ -114,6 +114,7 @@
   - [ ] Basis, trial-history, duration/amplitude, and predictor-family contribution alternatives
     - [x] Typed full-FIR and raised-cosine kernel bases with physical-lag reconstruction
     - [x] Explicit current/lagged event-value modulation with session-local history
+    - [x] Duration modulation and normalized-progress kernel alternatives
 - [x] Validated longitudinal neural-summary handoff to Unspool
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
 - [ ] Across-session photometry comparability diagnostics before longitudinal handoff
@@ -121,7 +122,7 @@
   - [x] Preserve point/state distinction and physical bout duration
   - [x] Explicit onset, offset and normalized-progress projections
   - [ ] Merge/split/filter rules, contextual labels and overlap policies
-  - [ ] Duration/amplitude and progress-basis event-kernel alternatives
+  - [x] Duration/amplitude and progress-basis event-kernel alternatives
 - [ ] Single-signal time/frequency/state analysis
   - [ ] Gap-aware autocorrelation and power spectral density
   - [ ] Spectrograms with explicit detrending, edge, and missing-data evidence

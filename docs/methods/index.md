@@ -32,9 +32,9 @@ See [preprocessing and QC](../pipeline-v0.1.md) and
 - **Experimental:** design-aware hierarchical bootstrap, permutation procedures,
   and scalar mixed-model sensitivity summaries.
 - **Planned:** trial-level functional mixed models through `fastFMM`.
-- **Experimental:** typed point/interval annotations, explicit onset/offset
-  projection, and normalized progress for variable-duration behavior.
-- **Gap:** interval merge/split/filter policies and duration/amplitude kernels.
+- **Experimental:** typed point/interval annotations, explicit onset/offset and
+  duration modulation, and first-class normalized-progress kernels.
+- **Gap:** interval merge/split/filter, contextual-label, and overlap policies.
 
 See [the scientist-facing workflow](../product-workflow-v0.1.md) and
 [peri-event inference](../peri-event-inference-v0.1.md).
@@ -74,11 +74,12 @@ session-safe held-out residual diagnostics. The
 whole-design alternatives, retains failures, and permits score deltas only on
 identical retained timestamps.
 
-Full-FIR and raised-cosine bases plus explicit within-session event-history
-modulation are available as named alternatives. Duration/progress and
-predictor-family contribution alternatives remain planned, as do simultaneous
-kernel intervals and formal coverage calibration. See the
-[previous-outcome tutorial](../tutorials/event-kernel-history.md).
+Full-FIR and raised-cosine bases, explicit within-session event history, duration
+modulation, and normalized-progress kernels are available as named alternatives.
+Predictor-family contribution summaries remain planned, as do simultaneous kernel
+intervals and formal coverage calibration. See the
+[previous-outcome tutorial](../tutorials/event-kernel-history.md) and
+[variable-duration tutorial](../tutorials/variable-duration-kernels.md).
 
 ## Ask long-duration, state, longitudinal, or network questions
 

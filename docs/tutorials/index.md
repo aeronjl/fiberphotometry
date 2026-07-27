@@ -54,6 +54,14 @@ behavior models.
 
 [Open the event-history tutorial](event-kernel-history.md)
 
+## Variable-duration behavior kernels
+
+Keep physical bout boundaries while jointly modeling onset, duration modulation,
+and normalized within-bout progress. Outside-bout samples remain in the continuous
+recording denominator.
+
+[Open the variable-duration tutorial](variable-duration-kernels.md)
+
 ## Public DANDI event-kernel reproduction
 
 Fit joint active-poke and reward-increment kernels to DMS and DLS recordings from

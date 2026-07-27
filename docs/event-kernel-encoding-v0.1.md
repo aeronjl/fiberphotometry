@@ -84,6 +84,29 @@ zero must therefore have the intended meaning. Include the unmodulated cue kerne
 to interpret the history kernel as a conditional difference around that reference.
 Use lag zero for a declared current-event amplitude or duration.
 
+## Variable-duration behavior
+
+`ProgressKernelSpec` models the trajectory within a physical interval without
+discarding the rest of the recording. A piecewise-linear basis maps samples inside
+each bout to normalized progress; all progress columns are zero outside bouts.
+
+```python
+from fiberphotometry import LinearProgressBasisSpec, ProgressKernelSpec
+
+rear_progress = ProgressKernelSpec(
+    "rear-progress",
+    source_interval="rear",
+    basis=LinearProgressBasisSpec(functions=5),
+)
+```
+
+The result reconstructs the trajectory and grouped uncertainty on an explicit
+progress grid from zero to one while retaining the physical interval source and
+bout count. `BehaviorAnnotations.interval_encoding_inputs()` provides aligned
+edge events, `duration_s` values, and interval bounds from MoSeq or BORIS inputs.
+Onset/offset kernels, duration-modulated kernels, and progress kernels remain
+separate declared predictors and should be compared as named alternatives.
+
 This follows the behavioral-regression use case discussed in the
 [fiber-photometry analysis primer](https://pmc.ncbi.nlm.nih.gov/articles/PMC10939905/)
 and the multi-signal Gaussian GLM presented in the
@@ -95,6 +118,7 @@ Those examples motivate the model family; they do not validate this implementati
 - One regular time grid and corrected response per session.
 - Explicit event times, with a lag window declared for each event type.
 - Optional continuous covariates sampled on the response grid.
+- Optional physical interval bounds for normalized-progress kernels.
 - Optional boolean validity masks for the response and each continuous covariate.
 - Stable animal and session identities.
 
@@ -122,6 +146,8 @@ the fluorescence response.
 - Missing predictors, absent event types, duplicate animal/session identities, and
   constant training covariates fail loudly.
 - Event kernels fail if masking removes all retained support for any requested lag.
+- Progress kernels reject missing, out-of-recording, unordered, overlapping, or
+  unsupported interval families; outside-bout time remains retained.
 - Every tested ridge penalty and every fold score is retained in the result.
 - Delete-one-group kernel refits use the selected penalty unchanged and retain
   every omitted identity.
@@ -137,7 +163,7 @@ response samples. Non-finite values are invalid regardless of the supplied mask.
 Only covariates named in the model specification contribute to its complete-case
 mask.
 
-The result artifact schema v6 contains an `EncodingValidityReport`. Its per-session
+The result artifact schema v7 contains an `EncodingValidityReport`. Its per-session
 records make the model denominator auditable and distinguish invalid response
 samples from invalid samples for each selected covariate. Counts can overlap: the
 overall excluded count is the union, not the sum of reason counts. Each record also
@@ -186,7 +212,7 @@ and selected the largest declared ridge penalty. This validates execution and
 failure transparency, not scientific sufficiency. Its v0.2 rerun found substantial
 held-out residual autocorrelation and wide group-sensitivity intervals. The next
 step is to use the model-multiverse boundary for a newly specified expanded design,
-then add duration/progress and contribution families and formal interval-coverage
+then add predictor-family contribution summaries and formal interval-coverage
 calibration.
 
 See the [worked simulation](tutorials/event-kernel-simulation.md) and
@@ -201,3 +227,5 @@ Typed basis reconstruction is governed by
 [SDR-0036](decisions/0036-reconstruct-kernels-from-explicit-typed-bases.md).
 Within-session event modulation and history are governed by
 [SDR-0037](decisions/0037-model-event-history-as-explicit-within-session-modulation.md).
+Variable-duration progress modeling is governed by
+[SDR-0038](decisions/0038-model-variable-duration-behavior-with-physical-intervals-and-progress.md).
