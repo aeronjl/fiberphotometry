@@ -142,6 +142,11 @@ from fiberphotometry.project import (
     load_project_config,
 )
 from fiberphotometry.qc import assess_recording, assess_signal_recording
+from fiberphotometry.results import (
+    EvidenceFile,
+    ProjectEvidenceBundle,
+    read_project_evidence,
+)
 from fiberphotometry.stability import artifact_schema
 from fiberphotometry.timecourse import (
     PeriEventInferenceResult,
@@ -181,6 +186,7 @@ __all__ = [
     "EventCoverageStratum",
     "EventSession",
     "EventSummarySpec",
+    "EvidenceFile",
     "Factor",
     "InferenceRecommendation",
     "LeaveOneOutResult",
@@ -208,6 +214,7 @@ __all__ = [
     "PreprocessingOutcomeSpec",
     "PreprocessingSpec",
     "ProjectConfig",
+    "ProjectEvidenceBundle",
     "QualityGateSpec",
     "RecordingInput",
     "ReferenceDFFOperation",
@@ -271,6 +278,7 @@ __all__ = [
     "make_recording",
     "materialize_multiverse",
     "permutation_test",
+    "read_project_evidence",
     "recommend_inference",
     "reference_dff",
     "resample_recording",

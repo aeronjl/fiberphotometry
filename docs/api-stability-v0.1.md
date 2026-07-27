@@ -13,6 +13,7 @@ package root. Its machine-readable declaration is
   coverage, and peri-event inference workflow types;
 - canonical recording construction and validation;
 - tabular and TDT project schemas/loaders, project configuration, and NWB export;
+- verified project evidence reading from manifest directories and NWB files;
 - the direct event-coverage and peri-event inference entry points.
 
 Within a `0.1.x` line, supported names will not be removed or have required

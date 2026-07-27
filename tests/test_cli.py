@@ -7,6 +7,7 @@ import pytest
 
 from fiberphotometry.cli import main
 from fiberphotometry.project import TabularProjectConfig
+from fiberphotometry.results import read_project_evidence
 
 
 def _project(
@@ -280,6 +281,13 @@ def test_cli_inspects_and_runs_complete_tabular_project(tmp_path, capsys) -> Non
         )
     assert (output / "manifest.json").is_file()
     assert "Analysis artifacts written" in capsys.readouterr().out
+    bundle = read_project_evidence(output)
+    assert bundle.source_format == "directory"
+    assert bundle.kind == "analysis"
+    assert bundle.status == "complete"
+    assert bundle.manifest_verified is True
+    assert bundle.analysis == analysis
+    assert bundle.metadata is not None
 
 
 def test_cli_materializes_and_runs_declared_multiverse(tmp_path, capsys) -> None:
@@ -312,6 +320,42 @@ def test_cli_materializes_and_runs_declared_multiverse(tmp_path, capsys) -> None
         "robustness-summary.json",
     }
     assert "Robustness artifacts written" in capsys.readouterr().out
+    bundle = read_project_evidence(output)
+    assert bundle.kind == "multiverse"
+    assert bundle.multiverse == result
+    assert bundle.robustness_summary is not None
+    assert all(item.verified is True for item in bundle.files)
+
+
+def test_evidence_reader_rejects_manifest_tampering(tmp_path) -> None:
+    project_path = _project(tmp_path)
+    output = tmp_path / "results"
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+    (output / "analysis.json").write_text("{}")
+
+    with pytest.raises(ValueError, match="checksum mismatch"):
+        read_project_evidence(output)
+
+
+def test_evidence_reader_rejects_manifest_path_traversal(tmp_path) -> None:
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    outside = tmp_path / "outside.json"
+    outside.write_text("{}")
+    fingerprint = hashlib.sha256(outside.read_bytes()).hexdigest()
+    (bundle / "manifest.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "project": {"name": "project.toml", "sha256": "0" * 64},
+                "status": "complete",
+                "artifacts": {"../outside.json": {"sha256": fingerprint}},
+            }
+        )
+    )
+
+    with pytest.raises(ValueError, match="unsafe manifest artifact path"):
+        read_project_evidence(bundle)
 
 
 def test_cli_rejects_structurally_incompatible_multiverse_before_run(
@@ -556,6 +600,13 @@ def test_cli_exports_valid_provenance_complete_nwb(tmp_path) -> None:
             manifest["artifacts"][name]["sha256"]
             == hashlib.sha256(path.read_bytes()).hexdigest()
         )
+    nwb_bundle = read_project_evidence(paths[0])
+    assert nwb_bundle.kind == "analysis"
+    assert nwb_bundle.analysis is not None
+    assert (
+        nwb_bundle.project_sha256
+        == TabularProjectConfig.from_toml(project_path).fingerprint
+    )
 
 
 def test_cli_exports_multiverse_provenance_without_duplicate_signals(tmp_path) -> None:
@@ -596,6 +647,13 @@ def test_cli_exports_multiverse_provenance_without_duplicate_signals(tmp_path) -
             manifest["artifacts"][name]["sha256"]
             == hashlib.sha256(path.read_bytes()).hexdigest()
         )
+    nwb_bundle = read_project_evidence(paths[0])
+    assert nwb_bundle.source_format == "nwb"
+    assert nwb_bundle.kind == "multiverse"
+    assert nwb_bundle.status == "complete"
+    assert nwb_bundle.manifest_verified is None
+    assert nwb_bundle.multiverse is not None
+    assert nwb_bundle.robustness_summary is not None
 
 
 def test_complete_metadata_profile_is_publication_ready(tmp_path) -> None:

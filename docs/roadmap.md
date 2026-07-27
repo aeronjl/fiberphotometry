@@ -100,7 +100,8 @@
 - [x] Add per-unit-lane practical-effect thresholds and machine-readable summaries
 - [x] Add declarative method-specific baseline parameters and compatibility rules
 - [x] Add multiverse-aware NWB provenance and result export
-- [ ] Add a project-level result reader for JSON and NWB evidence bundles
+- [x] Add a project-level result reader for JSON and NWB evidence bundles
+- [ ] Add cross-bundle comparison and reproducibility-diff reporting
 - [x] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [x] Canonical raw-NWB to animal-level robustness tutorial

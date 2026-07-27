@@ -16,10 +16,12 @@ SUPPORTED_API_V0_1 = (
     "EventCoverageReport",
     "EventCoverageStratum",
     "EventSession",
+    "EvidenceFile",
     "PeriEventInferenceResult",
     "PeriEventInferenceSpec",
     "Preprocessing",
     "ProjectConfig",
+    "ProjectEvidenceBundle",
     "TDTBlockSchema",
     "TDTProjectConfig",
     "TabularEventSchema",
@@ -33,6 +35,7 @@ SUPPORTED_API_V0_1 = (
     "load_tabular_input",
     "load_tdt_input",
     "make_recording",
+    "read_project_evidence",
     "validate_recording",
 )
 

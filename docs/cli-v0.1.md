@@ -100,6 +100,29 @@ incompatibilities, unit-local robustness summary and thresholds, normalized
 project, metadata readiness, session preflight, and reference-workflow QC. The
 NWB identifier is labelled `multiverse`, and every file is hashed in the manifest.
 
+## Reading completed evidence
+
+The supported Python API reads either a complete output directory or one exported
+NWB file through the same normalized object:
+
+```python
+from fiberphotometry import read_project_evidence
+
+bundle = read_project_evidence("artifacts")
+print(bundle.kind, bundle.status, bundle.manifest_verified)
+analysis = bundle.analysis
+multiverse = bundle.multiverse
+lane_summary = bundle.robustness_summary
+```
+
+Directory reads require `manifest.json`, verify every declared SHA-256 before
+returning records, reject missing or modified artifacts, and prevent absolute,
+parent-relative, or symlink paths from escaping the bundle. Standalone NWB reads
+recover the embedded project, analysis or multiverse result, robustness summary,
+metadata, preflight, and QC. Because a standalone file has no external expected
+hash, `manifest_verified` is `None` rather than an unsupported claim of integrity.
+See the [evidence reader contract](evidence-reader-v0.1.md).
+
 `inspect` validates data without bypassing the analysis contract. `run` still
 fails when required assumptions are not recorded, contrast levels are absent,
 input roles are ambiguous, reference data are unavailable, or a schema is invalid.
