@@ -56,6 +56,34 @@ stores the basis family, component labels, fitted basis weights and sampled basi
 functions. Thus plots remain physically interpretable while the exact fitted
 parameterization is reproducible.
 
+## Event values and within-session history
+
+A second kernel can reuse an event train while being multiplied by a declared
+per-event value. Setting `lag_events=1` makes that value come from the immediately
+previous occurrence within the same session:
+
+```python
+from fiberphotometry import EventKernelSpec, EventModulationSpec
+
+history = EventKernelSpec(
+    "cue-by-previous-outcome",
+    (-1.0, 3.0),
+    source_event="cue",
+    modulation=EventModulationSpec(
+        value="outcome_code",
+        lag_events=1,
+        unavailable_value=0.0,
+    ),
+)
+```
+
+The session supplies one finite `outcome_code` per cue through `event_values`.
+History resets at recording boundaries and lagged events must be strictly ordered.
+FiberPhotometry neither guesses categorical coding nor standardizes these values;
+zero must therefore have the intended meaning. Include the unmodulated cue kernel
+to interpret the history kernel as a conditional difference around that reference.
+Use lag zero for a declared current-event amplitude or duration.
+
 This follows the behavioral-regression use case discussed in the
 [fiber-photometry analysis primer](https://pmc.ncbi.nlm.nih.gov/articles/PMC10939905/)
 and the multi-signal Gaussian GLM presented in the
@@ -109,7 +137,7 @@ response samples. Non-finite values are invalid regardless of the supplied mask.
 Only covariates named in the model specification contribute to its complete-case
 mask.
 
-The result artifact schema v5 contains an `EncodingValidityReport`. Its per-session
+The result artifact schema v6 contains an `EncodingValidityReport`. Its per-session
 records make the model denominator auditable and distinguish invalid response
 samples from invalid samples for each selected covariate. Counts can overlap: the
 overall excluded count is the union, not the sum of reason counts. Each record also
@@ -147,8 +175,8 @@ The response must already have undergone a scientifically defensible correction;
 the encoding model does not decide between isosbestic, regression, or control-free
 preprocessing. Autocorrelated residuals make ordinary sample-level standard errors
 unsafe; the grouped jackknife does not repair a misspecified temporal model. The
-workflow also lacks simultaneous kernel bands, selective inference, interactions,
-nonlinear terms, nested hyperparameter selection, blocked-within-session validation,
+workflow also lacks simultaneous kernel bands, selective inference, nonlinear
+terms, nested hyperparameter selection, blocked-within-session validation,
 missingness-mechanism models or imputation, and formal comparison between plausible
 design matrices.
 
@@ -158,7 +186,8 @@ and selected the largest declared ridge penalty. This validates execution and
 failure transparency, not scientific sufficiency. Its v0.2 rerun found substantial
 held-out residual autocorrelation and wide group-sensitivity intervals. The next
 step is to use the model-multiverse boundary for a newly specified expanded design,
-then add basis/history/duration families and formal interval-coverage calibration.
+then add duration/progress and contribution families and formal interval-coverage
+calibration.
 
 See the [worked simulation](tutorials/event-kernel-simulation.md) and
 [model-multiverse workflow](event-kernel-multiverse-v0.1.md). The grouped
@@ -170,3 +199,5 @@ policy is recorded in
 [SDR-0033](decisions/0033-retain-validity-masks-without-compressing-time.md).
 Typed basis reconstruction is governed by
 [SDR-0036](decisions/0036-reconstruct-kernels-from-explicit-typed-bases.md).
+Within-session event modulation and history are governed by
+[SDR-0037](decisions/0037-model-event-history-as-explicit-within-session-modulation.md).

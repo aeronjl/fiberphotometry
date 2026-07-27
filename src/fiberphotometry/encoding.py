@@ -6,6 +6,7 @@ import json
 from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass, field
 from hashlib import sha256
+from itertools import pairwise
 from typing import Literal, TypeAlias
 
 import numpy as np
@@ -39,16 +40,40 @@ EventKernelBasisSpec: TypeAlias = FIRBasisSpec | RaisedCosineBasisSpec
 
 
 @dataclass(frozen=True)
+class EventModulationSpec:
+    """Multiply an event kernel by a declared current or lagged event value."""
+
+    value: str
+    lag_events: int = 0
+    unavailable_value: float = 0.0
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        if not self.value.strip():
+            raise ValueError("event-modulation value name must be non-empty")
+        if isinstance(self.lag_events, bool) or not isinstance(self.lag_events, int):
+            raise ValueError("event-modulation lag_events must be an integer")
+        if self.lag_events < 0:
+            raise ValueError("event-modulation lag_events must be nonnegative")
+        if not np.isfinite(self.unavailable_value):
+            raise ValueError("event-modulation unavailable_value must be finite")
+
+
+@dataclass(frozen=True)
 class EventKernelSpec:
     """One named event train, lag window and typed kernel basis."""
 
     name: str
     window_s: tuple[float, float]
     basis: EventKernelBasisSpec = field(default_factory=FIRBasisSpec)
+    source_event: str | None = None
+    modulation: EventModulationSpec | None = None
 
     def __post_init__(self) -> None:
         if not self.name.strip():
             raise ValueError("event-kernel name must be non-empty")
+        if self.source_event is not None and not self.source_event.strip():
+            raise ValueError("event-kernel source_event must be non-empty")
         if self.window_s[0] > self.window_s[1]:
             raise ValueError("event-kernel window start must not exceed stop")
 
@@ -67,6 +92,9 @@ class EncodingSession:
     continuous_covariate_validity: Mapping[str, NDArray[np.bool_]] = field(
         default_factory=dict
     )
+    event_values: Mapping[str, Mapping[str, tuple[float, ...]]] = field(
+        default_factory=dict
+    )
 
     @classmethod
     def from_arrays(
@@ -80,6 +108,7 @@ class EncodingSession:
         continuous_covariates: Mapping[str, ArrayLike] | None = None,
         response_valid: ArrayLike | None = None,
         continuous_covariate_validity: Mapping[str, ArrayLike] | None = None,
+        event_values: Mapping[str, Mapping[str, Sequence[float]]] | None = None,
     ) -> EncodingSession:
         """Create a validated session without joining signals across recordings."""
         time_values = np.asarray(time, dtype=float)
@@ -93,21 +122,32 @@ class EncodingSession:
             for name, values in (continuous_covariate_validity or {}).items()
         }
         result = cls(
-            str(subject),
-            str(session),
-            time_values.copy(),
-            response_values.copy(),
-            {
+            subject=str(subject),
+            session=str(session),
+            time=time_values.copy(),
+            response=response_values.copy(),
+            events={
                 name: tuple(float(value) for value in values)
                 for name, values in events.items()
             },
-            {name: values.copy() for name, values in covariates.items()},
-            (
+            continuous_covariates={
+                name: values.copy() for name, values in covariates.items()
+            },
+            response_valid=(
                 np.asarray(response_valid, dtype=bool).copy()
                 if response_valid is not None
                 else None
             ),
-            {name: values.copy() for name, values in covariate_validity.items()},
+            continuous_covariate_validity={
+                name: values.copy() for name, values in covariate_validity.items()
+            },
+            event_values={
+                event: {
+                    name: tuple(float(value) for value in values)
+                    for name, values in event_covariates.items()
+                }
+                for event, event_covariates in (event_values or {}).items()
+            },
         )
         _validate_session(result)
         return result
@@ -172,6 +212,8 @@ class EventKernelResult:
     """Estimated response-unit change at each lag for one event type."""
 
     name: str
+    source_event: str
+    modulation: EventModulationSpec | None
     lag_s: tuple[float, ...]
     coefficient: tuple[float, ...]
     basis: EventKernelBasisResult
@@ -307,7 +349,7 @@ class EncodingModelResult:
     artifact_type: Literal["event_kernel_encoding_result"] = (
         "event_kernel_encoding_result"
     )
-    schema_version: str = "5"
+    schema_version: str = "6"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -370,6 +412,8 @@ def fit_event_kernel_model(
         kernels.append(
             EventKernelResult(
                 name=layout.spec.name,
+                source_event=_source_event(layout.spec),
+                modulation=layout.spec.modulation,
                 lag_s=tuple(float(value) for value in layout.lags),
                 coefficient=tuple(float(value) for value in reconstructed),
                 basis=EventKernelBasisResult(
@@ -472,14 +516,19 @@ def _build_design(
         matrix = lil_matrix((len(session.time), width), dtype=float)
         for layout in event_layout:
             kernel = layout.spec
+            source_event = _source_event(kernel)
             try:
-                event_times = session.events[kernel.name]
+                event_times = session.events[source_event]
             except KeyError as error:
                 raise ValueError(
-                    f"encoding session {session.session!r} lacks event {kernel.name!r}"
+                    f"encoding session {session.session!r} lacks event "
+                    f"{source_event!r} for kernel {kernel.name!r}"
                 ) from error
+            event_weights = _event_weights(session, kernel, event_times)
             offsets = np.rint(layout.lags / interval).astype(int)
-            for event_time in event_times:
+            for event_time, event_weight in zip(
+                event_times, event_weights, strict=True
+            ):
                 event_counts[kernel.name] += 1
                 event_index = int(np.argmin(np.abs(session.time - event_time)))
                 mismatch = abs(float(session.time[event_index]) - event_time)
@@ -493,8 +542,11 @@ def _build_design(
                     np.flatnonzero(valid), rows[valid], strict=True
                 ):
                     for component, value in enumerate(layout.basis[lag_index]):
-                        if value != 0:
-                            matrix[int(row), layout.columns.start + component] += value
+                        weighted_value = event_weight * value
+                        if weighted_value != 0:
+                            matrix[int(row), layout.columns.start + component] += (
+                                weighted_value
+                            )
         for name, index in continuous_layout:
             try:
                 matrix[:, index] = session.continuous_covariates[name]
@@ -626,6 +678,40 @@ def _event_basis(
     return basis, tuple(f"raised-cosine-{index}" for index in range(functions))
 
 
+def _source_event(kernel: EventKernelSpec) -> str:
+    return kernel.source_event if kernel.source_event is not None else kernel.name
+
+
+def _event_weights(
+    session: EncodingSession,
+    kernel: EventKernelSpec,
+    event_times: tuple[float, ...],
+) -> NDArray[np.float64]:
+    modulation = kernel.modulation
+    if modulation is None:
+        return np.ones(len(event_times), dtype=float)
+    source_event = _source_event(kernel)
+    if modulation.lag_events and any(
+        current >= following for current, following in pairwise(event_times)
+    ):
+        raise ValueError(
+            f"history-modulated event {source_event!r} must be strictly increasing "
+            f"within session {session.session!r}"
+        )
+    try:
+        values = session.event_values[source_event][modulation.value]
+    except KeyError as error:
+        raise ValueError(
+            f"encoding session {session.session!r} lacks event value "
+            f"{modulation.value!r} for event {source_event!r}"
+        ) from error
+    weights = np.full(len(event_times), modulation.unavailable_value, dtype=float)
+    if modulation.lag_events < len(event_times):
+        stop = len(event_times) - modulation.lag_events
+        weights[modulation.lag_events :] = values[:stop]
+    return weights
+
+
 def _retained_run_ids(
     retained: NDArray[np.bool_], session: str
 ) -> tuple[list[str], int]:
@@ -648,6 +734,23 @@ def _validate_session(session: EncodingSession) -> None:
     for name, event_times in session.events.items():
         if not name.strip() or not all(np.isfinite(event_times)):
             raise ValueError("encoding event names and times must be valid")
+    unknown_event_values = set(session.event_values) - set(session.events)
+    if unknown_event_values:
+        raise ValueError(
+            "encoding event values name unknown events: "
+            + ", ".join(sorted(unknown_event_values))
+        )
+    for event, values_by_name in session.event_values.items():
+        for name, values in values_by_name.items():
+            if (
+                not name.strip()
+                or len(values) != len(session.events[event])
+                or not all(np.isfinite(values))
+            ):
+                raise ValueError(
+                    f"encoding event value {name!r} must be finite and match "
+                    f"event {event!r} occurrences"
+                )
     for name, covariate_values in session.continuous_covariates.items():
         if (
             not name.strip()

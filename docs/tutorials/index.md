@@ -45,6 +45,15 @@ the exact same retained timestamps, and failed designs remain in the ledger.
 
 [Open the model-multiverse method](../event-kernel-multiverse-v0.1.md)
 
+## Previous-outcome event kernels
+
+Fit an average cue kernel together with an explicitly coded previous-outcome
+modulation. The simulation demonstrates recovery, session-boundary resets, and the
+separation between within-session neural encoding and Unspool's longitudinal
+behavior models.
+
+[Open the event-history tutorial](event-kernel-history.md)
+
 ## Public DANDI event-kernel reproduction
 
 Fit joint active-poke and reward-increment kernels to DMS and DLS recordings from

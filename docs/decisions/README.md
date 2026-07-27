@@ -64,6 +64,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0034](0034-fit-only-explicit-matched-pulse-clock-transforms.md) | Accepted | Fit only explicit matched-pulse clock transforms |
 | [SDR-0035](0035-compare-event-kernel-models-only-on-common-evidence.md) | Accepted | Compare event-kernel models only on common evidence |
 | [SDR-0036](0036-reconstruct-kernels-from-explicit-typed-bases.md) | Accepted | Reconstruct kernels from explicit typed bases |
+| [SDR-0037](0037-model-event-history-as-explicit-within-session-modulation.md) | Accepted | Model event history as explicit within-session modulation |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

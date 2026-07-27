@@ -85,6 +85,7 @@ nav:
       - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
       - Public transient validation: dandi-000251-transient-results-v0.1.md
       - Event-kernel simulation: tutorials/event-kernel-simulation.md
+      - Previous-outcome event kernels: tutorials/event-kernel-history.md
       - Event-kernel model multiverse: event-kernel-multiverse-v0.1.md
       - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
       - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md

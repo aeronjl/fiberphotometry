@@ -38,6 +38,9 @@ development versions until the first public release.
 - Typed full-FIR and lower-dimensional raised-cosine event-kernel bases with
   reconstructed physical-lag curves, reconstructed grouped uncertainty, and
   retained basis functions and weights.
+- Typed current and lagged event-value modulation for event-kernel models, with
+  session-local history, recovery fixtures, multiverse comparison, and a worked
+  tutorial.
 
 ### Scientific status
 
