@@ -17,12 +17,15 @@ beside their estimands, independent units, and retained negative findings.
   and gap diagnostics, explicit resampling, low-pass filtering, OLS and robust
   IRLS reference fitting, subtraction or fitted-reference dF/F.
 - **Experimental:** double-exponential and asymmetric least-squares control-free
-  baselines.
-- **Planned:** hemodynamic correction, spectral unmixing, optogenetic-artifact
-  handling, and stronger lag diagnostics.
+  baselines; prospective optogenetic-pulse masks with separate recovery/control
+  diagnostics; open versioned sensor profiles with wavelength, detector, reference,
+  lag, and event-validity evidence.
+- **Planned:** hemodynamic correction, spectral unmixing, automatic artifact
+  correction, and stronger validated lag diagnostics.
 
 See [preprocessing and QC](../pipeline-v0.1.md) and
-[irregular sampling](../irregular-sampling-v0.1.md).
+[irregular sampling](../irregular-sampling-v0.1.md). For stimulation and optical
+interpretation safeguards, see [optogenetic artifacts and sensor validity](../optical-validity-v0.1.md).
 
 ## Ask event-related questions
 

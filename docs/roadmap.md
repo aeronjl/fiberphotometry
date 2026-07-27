@@ -30,8 +30,8 @@
 - [x] Event-correlated reference diagnostic benchmarked against confounds
 - [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)
 - [ ] Wavelength-aware hemodynamic correction and spectral-unmixing contract
-- [ ] Optogenetic-pulse artifact masks and recovery-window diagnostics
-- [ ] Sensor registry with kinetic, saturation, and interpretation constraints
+- [x] Optogenetic-pulse artifact masks and recovery-window diagnostics
+- [x] Open, versioned sensor registry with kinetic, saturation, and interpretation constraints
 - [x] Initial three-scenario benchmark report with retained failure
 - [x] Seven-scenario v0.2 benchmark with retained failures
 - [x] Twelve-session, four-animal IBL channel-QC audit

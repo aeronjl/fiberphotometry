@@ -11,7 +11,7 @@ experiment belongs in one package.
 | Reference-channel correction | **Supported** | OLS and IRLS; subtraction and division remain distinct |
 | Signal-only bleaching correction | **Experimental** | AsLS and double exponential need broader controls |
 | Processing order, normalization and negative-control contract | **Partial** | Provenance exists; add operation-order validation, local/null-relative normalization, and explicit control roles |
-| Sensor/isobestic-aware validity | **Gap** | Add sensor registry, wavelength evidence, bleed-through and saturation diagnostics |
+| Sensor/isobestic-aware validity | **Experimental** | Open versioned profiles; wavelength, role, unit, detector, fiber, saturation, range, reference-coupling, lag and event-response evidence; cannot prove inertness or concentration |
 | Hemodynamic and spectral crosstalk correction | **Gap** | Requires wavelength-aware mixing model and controls |
 | Multi-color spectral unmixing | **Gap** | Extend channel metadata and mixing diagnostics |
 | Event alignment and window summaries | **Supported** | Retains events, sessions and animals |
@@ -32,7 +32,7 @@ experiment belongs in one package.
 | Multi-site/multi-color coupling | **Experimental** | Explicit pair/site/sensor/optical metadata; joint-validity lagged association; declared event/behavior residualization; crosstalk review flags; blocked within-session nulls and animal-level contrasts |
 | Coherence and phase analysis | **Experimental** | Window-weighted joint cross-spectra, state conditioning, explicit phase convention and band summaries; multitaper and phase uncertainty remain gaps |
 | Dense spatial multi-fiber analysis | **Gap** | Add coordinates and mouse-aware site/spatial models; avoid treating fibers as independent animals |
-| Optogenetic-stimulation artifact handling | **Gap** | Pulse masks, recovery windows and negative controls |
+| Optogenetic-stimulation artifact handling | **Experimental** | Prospective time-only pulse masks compose with existing validity; separate recovery, censoring, detector-rail and negative-control diagnostics never adapt the mask |
 | Sensor-kinetic deconvolution | **Gap / caution** | Sensor-specific forward models and identifiability diagnostics |
 | Behavior/pose/state discovery | **Experimental interoperability boundary** | Typed file/in-memory adapters and matched-pulse affine clock synchronization; current DeepLabCut, Keypoint-MoSeq, SLEAP and BORIS file fixtures pass with explicit provenance class; `ndx-pose` and real clock fixtures remain gaps; Unspool owns longitudinal models |
 | Robustness multiverses | **Supported** | Named alternatives, compatibility, failures and provenance |
