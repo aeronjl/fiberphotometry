@@ -3,7 +3,7 @@
 !!! warning "Experimental"
     This workflow compares held-out prediction across manually declared model
     specifications. It does not choose a scientifically correct model, establish
-    causal contributions, or yet generate history/duration alternatives.
+    causal contributions, or automatically generate a privileged model set.
 
 ## Scientific question
 
@@ -62,8 +62,8 @@ All alternatives must share:
 
 Changing those fields changes the predictive target or evidence-admission policy
 and therefore belongs in a separate multiverse. Event kernels, windows, typed
-FIR/raised-cosine bases, continuous predictors and candidate ridge penalties may
-differ.
+FIR/raised-cosine bases, current or lagged event-value modulation, continuous
+predictors and candidate ridge penalties may differ.
 
 ## Direct versus descriptive comparison
 
@@ -107,10 +107,10 @@ the comparison ledger.
 ## Current boundary and next extensions
 
 This v0.1 surface enumerates complete model specifications rather than generating
-a factorial decision graph. FIR and raised-cosine alternatives are available, but
-coefficients at unlike lags or in unlike bases should not be pooled into one
-magnitude range; compare reconstructed physical-lag curves and held-out prediction.
-The immediate extensions are trial-history predictors, variable-duration/progress
+a factorial decision graph. FIR, raised-cosine, and explicit event-history
+alternatives are available, but coefficients under unlike coding or bases should
+not be pooled into one magnitude range; compare reconstructed physical-lag curves
+and held-out prediction. The immediate extensions are variable-duration/progress
 kernels and predictor-family contribution summaries. Each must preserve the fixed
 validation policy, exact-denominator evidence and retained failures established
 here.

@@ -76,6 +76,7 @@ EXPERIMENTAL_API_V0_1 = (
     "EventKernelBasisResult",
     "EventKernelBasisSpec",
     "EventKernelSpec",
+    "EventModulationSpec",
     "FIRBasisSpec",
     "MaterializedEncodingUniverse",
     "MultiverseSpec",

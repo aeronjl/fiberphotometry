@@ -7,6 +7,7 @@ from fiberphotometry.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
+    EventModulationSpec,
     RaisedCosineBasisSpec,
 )
 from fiberphotometry.encoding_multiverse import (
@@ -185,6 +186,63 @@ def test_fir_and_raised_cosine_bases_compare_on_common_evidence() -> None:
     assert cosine_result.event_kernels[0].basis.family == "raised_cosine"
     assert len(cosine_result.event_kernels[0].basis.coefficient) == 3
     assert len(cosine_result.event_kernels[0].coefficient) == 5
+
+
+def test_trial_history_kernel_is_a_named_common_evidence_alternative() -> None:
+    sessions = tuple(
+        EncodingSession.from_arrays(
+            subject=session.subject,
+            session=session.session,
+            time=session.time,
+            response=session.response,
+            events=session.events,
+            continuous_covariates=session.continuous_covariates,
+            event_values={
+                "cue": {
+                    "outcome": tuple(
+                        0.5 if index % 2 else -0.5
+                        for index in range(len(session.events["cue"]))
+                    )
+                }
+            },
+        )
+        for session in _sessions()
+    )
+    cue = EventKernelSpec("cue", (0.0, 0.4))
+    history = EventKernelSpec(
+        "cue-by-previous-outcome",
+        (0.0, 0.4),
+        source_event="cue",
+        modulation=EventModulationSpec("outcome", lag_events=1),
+    )
+    spec = EncodingMultiverseSpec(
+        alternatives=(
+            EncodingModelAlternative("cue-only", "Current cue only.", _model(cue)),
+            EncodingModelAlternative(
+                "cue-plus-history",
+                "Add previous-outcome modulation.",
+                _model(cue, history),
+            ),
+        ),
+        reference="cue-only",
+        intent="exploratory",
+    )
+
+    result = run_encoding_multiverse(sessions, spec)
+    comparison = next(
+        item for item in result.comparisons if item.name == "cue-plus-history"
+    )
+    history_result = next(
+        item.model_result
+        for item in result.universes
+        if item.name == "cue-plus-history"
+    )
+
+    assert comparison.status == "direct_predictive_comparison"
+    assert comparison.exact_same_observations is True
+    assert history_result is not None
+    assert history_result.event_kernels[1].modulation is not None
+    assert history_result.event_kernels[1].modulation.lag_events == 1
 
 
 def test_retains_failed_alternative_without_improving_summary() -> None:

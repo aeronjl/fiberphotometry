@@ -7,6 +7,7 @@ from fiberphotometry.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
+    EventModulationSpec,
     RaisedCosineBasisSpec,
     _build_design,
     _residual_metrics,
@@ -77,6 +78,8 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
         (-0.2, 0.4, 0.9, 0.45), abs=0.04
     )
     assert kernels["cue"].basis.family == "fir"
+    assert kernels["cue"].source_event == "cue"
+    assert kernels["cue"].modulation is None
     assert kernels["cue"].basis.coefficient == pytest.approx(kernels["cue"].coefficient)
     assert np.asarray(kernels["cue"].basis.function_by_lag) == pytest.approx(np.eye(5))
     motion = result.continuous_coefficients[0]
@@ -93,7 +96,7 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert len(held_out) == len(set(held_out))
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "event_kernel_encoding_result"
-    assert payload["schema_version"] == "5"
+    assert payload["schema_version"] == "6"
     assert result.validity.total_observations == 16 * 400
     assert result.validity.retained_observations == result.observations
     assert result.validity.excluded_observations == 0
@@ -424,6 +427,164 @@ def test_raised_cosine_basis_rejects_more_functions_than_sampled_lags() -> None:
     )
     with pytest.raises(ValueError, match="requests 4 functions for 3 sampled lags"):
         fit_event_kernel_model(_simulated_sessions(), spec)
+
+
+def test_recovers_explicit_within_session_trial_history_kernel() -> None:
+    rng = np.random.default_rng(914)
+    sessions = []
+    main_kernel = np.asarray([0.3, 0.8, 0.4])
+    history_kernel = np.asarray([-0.2, 0.5, 0.25])
+    for animal in range(8):
+        time = np.arange(0.0, 50.0, 0.1)
+        cue = np.arange(2.0, 48.0, 2.0)
+        outcome = np.where((np.arange(len(cue)) + animal) % 3 == 0, 0.5, -0.5)
+        response = rng.normal(0, 0.04, len(time))
+        for index, event_time in enumerate(cue):
+            history = 0.0 if index == 0 else outcome[index - 1]
+            start = round(event_time / 0.1)
+            response[start : start + 3] += main_kernel + history * history_kernel
+        sessions.append(
+            EncodingSession.from_arrays(
+                subject=f"mouse-{animal}",
+                session="day-0",
+                time=time,
+                response=response,
+                events={"cue": cue},
+                event_values={"cue": {"outcome_code": outcome}},
+            )
+        )
+    spec = EncodingModelSpec(
+        event_kernels=(
+            EventKernelSpec("cue", (0.0, 0.2)),
+            EventKernelSpec(
+                "cue-by-previous-outcome",
+                (0.0, 0.2),
+                source_event="cue",
+                modulation=EventModulationSpec(
+                    value="outcome_code",
+                    lag_events=1,
+                    unavailable_value=0.0,
+                ),
+            ),
+        ),
+        alpha_grid=(0.0, 0.1),
+        folds=4,
+    )
+
+    result = fit_event_kernel_model(tuple(sessions), spec)
+    kernels = {kernel.name: kernel for kernel in result.event_kernels}
+
+    assert kernels["cue"].coefficient == pytest.approx(main_kernel, abs=0.03)
+    history = kernels["cue-by-previous-outcome"]
+    assert history.coefficient == pytest.approx(history_kernel, abs=0.05)
+    assert history.source_event == "cue"
+    assert history.modulation == EventModulationSpec("outcome_code", lag_events=1)
+
+
+def test_history_modulation_resets_at_session_boundaries() -> None:
+    sessions = tuple(
+        EncodingSession.from_arrays(
+            subject=f"mouse-{index}",
+            session="day-0",
+            time=np.arange(6.0),
+            response=np.arange(6.0),
+            events={"cue": (1.0, 3.0)},
+            event_values={"cue": {"outcome": (2.0, -1.0)}},
+        )
+        for index in range(2)
+    )
+    design = _build_design(
+        sessions,
+        EncodingModelSpec(
+            event_kernels=(
+                EventKernelSpec(
+                    "history",
+                    (0.0, 0.0),
+                    source_event="cue",
+                    modulation=EventModulationSpec("outcome", lag_events=1),
+                ),
+            ),
+            group_by="session",
+            folds=2,
+        ),
+    )
+
+    assert design.values[:, 0].toarray().ravel().tolist() == [
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0,
+        0.0,
+        0.0,
+    ]
+
+
+def test_event_modulation_rejects_ambiguous_or_missing_event_values() -> None:
+    with pytest.raises(ValueError, match="lag_events must be an integer"):
+        EventModulationSpec("outcome", lag_events=1.5)  # type: ignore[arg-type]
+
+    with pytest.raises(ValueError, match="must be finite and match event"):
+        EncodingSession.from_arrays(
+            subject="mouse",
+            session="day-0",
+            time=np.arange(6.0),
+            response=np.arange(6.0),
+            events={"cue": (1.0, 3.0)},
+            event_values={"cue": {"outcome": (1.0,)}},
+        )
+
+    missing_value_sessions = tuple(
+        EncodingSession.from_arrays(
+            subject=f"mouse-{index}",
+            session="day-0",
+            time=np.arange(6.0),
+            response=np.arange(6.0),
+            events={"cue": (1.0, 3.0)},
+        )
+        for index in range(2)
+    )
+    missing_value_spec = EncodingModelSpec(
+        event_kernels=(
+            EventKernelSpec(
+                "history",
+                (0.0, 0.0),
+                source_event="cue",
+                modulation=EventModulationSpec("outcome", lag_events=1),
+            ),
+        )
+    )
+    with pytest.raises(ValueError, match="lacks event value 'outcome'"):
+        fit_event_kernel_model(missing_value_sessions, missing_value_spec)
+
+    sessions = tuple(
+        EncodingSession.from_arrays(
+            subject=f"mouse-{index}",
+            session="day-0",
+            time=np.arange(6.0),
+            response=np.arange(6.0),
+            events={"cue": (3.0, 1.0)},
+            event_values={"cue": {"outcome": (1.0, -1.0)}},
+        )
+        for index in range(2)
+    )
+    spec = EncodingModelSpec(
+        event_kernels=(
+            EventKernelSpec(
+                "history",
+                (0.0, 0.0),
+                source_event="cue",
+                modulation=EventModulationSpec("outcome", lag_events=1),
+            ),
+        )
+    )
+    with pytest.raises(ValueError, match="must be strictly increasing"):
+        fit_event_kernel_model(sessions, spec)
 
 
 def test_residual_metrics_do_not_bridge_excluded_spans() -> None:

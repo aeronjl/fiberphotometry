@@ -74,9 +74,11 @@ session-safe held-out residual diagnostics. The
 whole-design alternatives, retains failures, and permits score deltas only on
 identical retained timestamps.
 
-Basis, trial-history, duration/amplitude, and predictor-family contribution
-alternatives remain planned, as do simultaneous kernel intervals and formal
-coverage calibration.
+Full-FIR and raised-cosine bases plus explicit within-session event-history
+modulation are available as named alternatives. Duration/progress and
+predictor-family contribution alternatives remain planned, as do simultaneous
+kernel intervals and formal coverage calibration. See the
+[previous-outcome tutorial](../tutorials/event-kernel-history.md).
 
 ## Ask long-duration, state, longitudinal, or network questions
 
