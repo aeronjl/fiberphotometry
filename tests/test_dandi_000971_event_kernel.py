@@ -55,6 +55,10 @@ def test_frozen_public_model_shape_runs_with_complete_animal_holdout() -> None:
     for result in results.values():
         assert result.groups == 6
         assert len(result.cross_validation) == 6
+        assert result.kernel_uncertainty.groups == 6
+        assert len(result.kernel_uncertainty.event_kernels) == 2
+        assert len(result.residual_diagnostics.groups) == 6
+        assert result.residual_diagnostics.pooled_observations == result.observations
         held_out = [
             group
             for alpha in result.cross_validation

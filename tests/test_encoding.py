@@ -8,6 +8,7 @@ from fiberphotometry.encoding import (
     EncodingSession,
     EventKernelSpec,
     _build_design,
+    _residual_metrics,
     fit_event_kernel_model,
 )
 
@@ -25,12 +26,14 @@ def _simulated_sessions() -> tuple[EncodingSession, ...]:
             reward = cue + 0.5 + 0.1 * (session_index % 2)
             motion = np.sin(time * 0.7 + animal_index) + rng.normal(0, 0.15, len(time))
             response = 0.35 * motion + 0.05 * animal_index
+            cue_scale = 1 + 0.04 * (animal_index - 3.5)
+            reward_scale = 1 - 0.03 * (animal_index - 3.5)
             for event_time in cue:
                 index = round(event_time / dt)
-                response[index - 1 : index + 4] += cue_kernel
+                response[index - 1 : index + 4] += cue_scale * cue_kernel
             for event_time in reward:
                 index = round(event_time / dt)
-                response[index : index + 4] += reward_kernel
+                response[index : index + 4] += reward_scale * reward_kernel
             response += rng.normal(0, 0.08, len(time))
             sessions.append(
                 EncodingSession.from_arrays(
@@ -86,7 +89,17 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert len(held_out) == len(set(held_out))
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "event_kernel_encoding_result"
-    assert payload["schema_version"] == "1"
+    assert payload["schema_version"] == "2"
+    uncertainty = {
+        kernel.name: kernel for kernel in result.kernel_uncertainty.event_kernels
+    }
+    assert result.kernel_uncertainty.omitted_groups == tuple(
+        f"mouse-{index}" for index in range(8)
+    )
+    assert uncertainty["cue"].lower[2] < 1.2 < uncertainty["cue"].upper[2]
+    assert uncertainty["reward"].lower[2] < 0.9 < uncertainty["reward"].upper[2]
+    assert len(result.residual_diagnostics.groups) == 8
+    assert result.residual_diagnostics.pooled_observations == result.observations
 
 
 def test_session_grouping_uses_compound_identity_and_never_crosses_boundaries() -> None:
@@ -174,3 +187,30 @@ def test_rejects_irregular_sampling_and_absent_declared_events() -> None:
             ),
             absent_spec,
         )
+
+
+def test_residual_diagnostics_detect_autocorrelation_and_reset_sessions() -> None:
+    rng = np.random.default_rng(91)
+    white = rng.normal(size=400)
+    autoregressive = np.zeros(400)
+    innovations = rng.normal(size=400)
+    for index in range(1, len(autoregressive)):
+        autoregressive[index] = 0.85 * autoregressive[index - 1] + innovations[index]
+    sessions = np.asarray(["first"] * 200 + ["second"] * 200)
+    white_metrics = _residual_metrics(white, np.zeros(400), sessions)
+    ar_metrics = _residual_metrics(autoregressive, np.zeros(400), sessions)
+
+    assert white_metrics[-2] is not None
+    assert ar_metrics[-2] is not None
+    assert white_metrics[-1] is not None
+    assert ar_metrics[-1] is not None
+    assert ar_metrics[-2] > white_metrics[-2] + 0.7
+    assert ar_metrics[-1] < white_metrics[-1] - 1.0
+
+    boundary_residual = np.asarray([0.0, 1.0, 2.0, 100.0, 101.0, 102.0])
+    boundary_sessions = np.asarray(["a", "a", "a", "b", "b", "b"])
+    metrics = _residual_metrics(boundary_residual, np.zeros(6), boundary_sessions)
+    expected_difference_sum = 4.0
+    assert metrics[-1] == pytest.approx(
+        expected_difference_sum / float(boundary_residual @ boundary_residual)
+    )

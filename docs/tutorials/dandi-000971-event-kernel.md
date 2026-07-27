@@ -53,10 +53,12 @@ samples. The independent validation denominator remains six animals.
 
 ## Frozen model and result
 
-The [protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-event-kernel-v0.1.md)
-was committed before the new model outcomes were inspected. It records prior use
-of these fluorescence traces and prespecifies six leave-one-animal-out folds and
-ridge penalties from 0 to 1000.
+The [model protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-event-kernel-v0.1.md)
+was committed before the original model outcomes were inspected. The separate
+[uncertainty and diagnostics protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-event-kernel-uncertainty-diagnostics-v0.1.md)
+was then frozen before those additions were implemented or run on this cohort.
+Together they retain prior use of the fluorescence traces and prespecify six
+leave-one-animal-out folds and ridge penalties from 0 to 1000.
 
 | Region | Selected ridge penalty | Mean animal-held-out R² | Fold range |
 |---|---:|---:|---:|
@@ -68,13 +70,31 @@ improved monotonically as kernels were shrunk, but remained negative on average.
 For DMS, four of six animal scores were positive but tiny; for DLS, two were
 positive. Animal 113-283 had the most negative score in both regions.
 
-![Pooled DMS and DLS event kernels with held-out scores](../assets/dandi-000971-event-kernels-v0.1.png)
+![Pooled DMS and DLS event kernels with grouped-jackknife sensitivity intervals](../assets/dandi-000971-event-kernels-v0.2.png)
 
 The pooled all-animal DMS reward-increment kernel peaks near 0.45 seconds and the
-DLS increment peaks near 1.10 seconds. Those shapes are useful hypotheses, not
-population estimates: the current API has no animal-level kernel uncertainty, the
-regularization optimum lies beyond the tested grid, and held-out prediction is
-weak.
+DLS increment peaks near 1.10 seconds. Grouped-jackknife intervals are broad and
+the bias-corrected estimates differ visibly from the full-data coefficients. Some
+individual pointwise intervals exclude zero, but these are non-simultaneous,
+conditional on a data-selected boundary penalty, and not calibrated for selective
+inference. They do not support a significance or regional-difference claim.
+
+## Held-out residual diagnostics
+
+The v0.2 workflow predicts every sample using a model that excluded its complete
+animal. Lagged residual calculations restart at recording boundaries.
+
+| Region | Pooled out-of-fold R² | RMSE (ΔF/F) | Residual lag-1 correlation | Durbin–Watson |
+|---|---:|---:|---:|---:|
+| DMS | 0.000240 | 0.03856 | 0.433 | 1.130 |
+| DLS | −0.000049 | 0.02544 | 0.864 | 0.269 |
+
+The pooled R² differs from the primary mean animal-wise R² because pooling weights
+animals by their recording lengths. Neither version indicates useful predictive
+transport. Residual autocorrelation is strong, especially in DLS, and varies
+substantially among animals. This means the event design leaves considerable
+temporal structure unexplained; it also reinforces why sample-level independent
+errors would be untenable.
 
 ## What this teaches us about the product
 
@@ -89,10 +109,11 @@ sparse two-event design generalizes well. Several explanations remain live:
 - the ridge grid ends before a clear optimum;
 - reference correction and model design have not yet been varied jointly.
 
-The correct next product increment is therefore not a prettier coefficient plot.
-It is animal-level kernel uncertainty plus residual diagnostics, followed by a
-prospectively expanded/nested penalty design and explicit design-matrix
-multiverses. The event-kernel API remains experimental.
+The next product increment is a prospectively expanded or nested penalty design
+and explicit design-matrix multiverses: movement, inactive pokes, consumption,
+trial history, analysis support, and preprocessing alternatives must be represented
+as named choices. Formal coverage calibration and simultaneous bands remain later
+promotion gates. The event-kernel API remains experimental.
 
 ## Reproduce it
 
@@ -103,6 +124,8 @@ uv run --extra nwb python examples/dandi_000971_event_kernel.py
 uv run --extra plots python scripts/plot_dandi_000971_event_kernel.py
 ```
 
-The committed [result artifact](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-event-kernel-v0.1/result.json)
-retains both kernels, all candidate penalties, every fold score and held-out animal,
-preprocessing metadata, event denominators, and source checksums.
+The committed [v0.2 result artifact](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-event-kernel-v0.2/result.json)
+retains both kernels, pointwise grouped-jackknife summaries, every out-of-fold
+group diagnostic, all candidate penalties, event denominators, and source
+checksums. The original [v0.1 result](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-event-kernel-v0.1/result.json)
+remains unchanged.

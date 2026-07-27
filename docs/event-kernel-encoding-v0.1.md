@@ -3,7 +3,8 @@
 !!! warning "Experimental"
     This is a first vertical slice, not yet a supported inferential workflow. It
     estimates predictive kernels and validates predictions across held-out animals
-    or sessions. It does not provide coefficient uncertainty or causal effects.
+    or sessions. Grouped-jackknife intervals are conditional sensitivity summaries,
+    not promotion-grade confidence bands or causal effects.
 
 ## Scientific question
 
@@ -53,22 +54,46 @@ the fluorescence response.
 - Missing predictors, absent event types, duplicate animal/session identities, and
   constant training covariates fail loudly.
 - Every tested ridge penalty and every fold score is retained in the result.
+- Delete-one-group kernel refits use the selected penalty unchanged and retain
+  every omitted identity.
+- Residual diagnostics use only group-held-out predictions; lagged calculations
+  restart at session boundaries.
+
+## Uncertainty and diagnostics
+
+Each event kernel includes a delete-one-group jackknife sensitivity interval. By
+default, one complete animal is removed per replicate. The result stores the
+full-data coefficient, bias-corrected jackknife estimate, standard error, and
+pointwise 95% Student interval at every lag. These intervals quantify sensitivity
+of the pooled regularized estimator to independent groups.
+
+They are conditional on the ridge penalty selected using the full dataset. They do
+not account for model-selection uncertainty, are not simultaneous across lags, and
+have not yet passed broad repeated-sampling coverage calibration. With few animals,
+interpret them as influence-aware sensitivity summaries rather than binary tests.
+
+For every animal or session, the model also reports out-of-fold R², RMSE, MAE,
+residual bias and spread, lag-1 residual autocorrelation, and Durbin–Watson ratio.
+The latter two are descriptive warnings about remaining temporal structure, not
+formal p-value-producing tests.
 
 ## Current limitations
 
 The response must already have undergone a scientifically defensible correction;
 the encoding model does not decide between isosbestic, regression, or control-free
-preprocessing. Autocorrelated residuals make ordinary pointwise standard errors
-unsafe, so this release intentionally omits them. It also lacks interactions,
+preprocessing. Autocorrelated residuals make ordinary sample-level standard errors
+unsafe; the grouped jackknife does not repair a misspecified temporal model. The
+workflow also lacks simultaneous kernel bands, selective inference, interactions,
 nonlinear terms, nested hyperparameter selection, blocked-within-session validation,
 missing-data imputation, and formal comparison between plausible design matrices.
 
 The first [public-data reproduction](tutorials/dandi-000971-event-kernel.md)
 retained slightly negative mean animal-held-out prediction in both modeled regions
 and selected the largest declared ridge penalty. This validates execution and
-failure transparency, not scientific sufficiency. The next step is animal-level
-coefficient uncertainty and residual/model diagnostics, followed by a newly
-specified expanded or nested regularization design.
+failure transparency, not scientific sufficiency. Its v0.2 rerun found substantial
+held-out residual autocorrelation and wide group-sensitivity intervals. The next
+step is a newly specified expanded or nested regularization design and explicit
+design-matrix multiverses, followed by formal interval-coverage calibration.
 
 See the [worked simulation](tutorials/event-kernel-simulation.md) and
 [SDR-0027](decisions/0027-hold-out-complete-groups-for-event-kernel-models.md).

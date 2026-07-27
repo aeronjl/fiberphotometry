@@ -10,6 +10,7 @@ from typing import Literal
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy.sparse import csr_matrix, lil_matrix, vstack
+from scipy.stats import t as student_t
 
 
 @dataclass(frozen=True)
@@ -138,6 +139,65 @@ class ContinuousCoefficient:
 
 
 @dataclass(frozen=True)
+class EventKernelInterval:
+    """Pointwise grouped-jackknife uncertainty for one event kernel."""
+
+    name: str
+    lag_s: tuple[float, ...]
+    full_coefficient: tuple[float, ...]
+    jackknife_estimate: tuple[float, ...]
+    standard_error: tuple[float, ...]
+    lower: tuple[float, ...]
+    upper: tuple[float, ...]
+
+
+@dataclass(frozen=True)
+class GroupedKernelUncertainty:
+    """Delete-one-group sensitivity intervals conditional on one ridge penalty."""
+
+    method: Literal["delete_one_group_jackknife"]
+    confidence_level: float
+    conditional_on_selected_alpha: float
+    groups: int
+    omitted_groups: tuple[str, ...]
+    event_kernels: tuple[EventKernelInterval, ...]
+    simultaneous: bool = False
+
+
+@dataclass(frozen=True)
+class EncodingGroupDiagnostic:
+    """Out-of-fold prediction and residual diagnostics for one complete group."""
+
+    group: str
+    sessions: int
+    observations: int
+    r_squared: float
+    rmse: float
+    mae: float
+    residual_mean: float
+    residual_standard_deviation: float
+    lag1_autocorrelation: float | None
+    durbin_watson: float | None
+
+
+@dataclass(frozen=True)
+class EncodingResidualDiagnostics:
+    """Group-held-out diagnostics with lag calculations reset by session."""
+
+    prediction_source: Literal["group_held_out"]
+    group_by: str
+    groups: tuple[EncodingGroupDiagnostic, ...]
+    pooled_observations: int
+    pooled_r_squared: float
+    pooled_rmse: float
+    pooled_mae: float
+    pooled_residual_mean: float
+    pooled_residual_standard_deviation: float
+    pooled_lag1_autocorrelation: float | None
+    pooled_durbin_watson: float | None
+
+
+@dataclass(frozen=True)
 class EncodingModelResult:
     """Fitted kernels plus group-held-out predictive validation evidence."""
 
@@ -146,6 +206,8 @@ class EncodingModelResult:
     intercept: float
     event_kernels: tuple[EventKernelResult, ...]
     continuous_coefficients: tuple[ContinuousCoefficient, ...]
+    kernel_uncertainty: GroupedKernelUncertainty
+    residual_diagnostics: EncodingResidualDiagnostics
     cross_validation: tuple[EncodingAlphaResult, ...]
     group_by: str
     groups: int
@@ -155,7 +217,7 @@ class EncodingModelResult:
     artifact_type: Literal["event_kernel_encoding_result"] = (
         "event_kernel_encoding_result"
     )
-    schema_version: str = "1"
+    schema_version: str = "2"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -166,6 +228,7 @@ class _Design:
     values: csr_matrix
     response: NDArray[np.float64]
     groups: NDArray[np.str_]
+    sessions: NDArray[np.str_]
     event_slices: tuple[tuple[EventKernelSpec, slice, NDArray[np.float64]], ...]
     continuous_indices: tuple[tuple[str, int], ...]
     sample_interval: float
@@ -215,12 +278,18 @@ def fit_event_kernel_model(
         )
         for name, index in design.continuous_indices
     )
+    uncertainty = _grouped_kernel_uncertainty(
+        design, coefficients, selected.alpha, confidence_level=0.95
+    )
+    diagnostics = _residual_diagnostics(design, folds, selected.alpha, spec.group_by)
     return EncodingModelResult(
         design.sample_interval,
         selected.alpha,
         intercept,
         kernels,
         continuous,
+        uncertainty,
+        diagnostics,
         alpha_results,
         spec.group_by,
         len(unique_groups),
@@ -262,6 +331,7 @@ def _build_design(
     matrices: list[csr_matrix] = []
     responses = []
     groups = []
+    segment_ids = []
     event_counts = {kernel.name: 0 for kernel in spec.event_kernels}
     for session in sessions:
         matrix = lil_matrix((len(session.time), width), dtype=float)
@@ -304,6 +374,8 @@ def _build_design(
             else f"{session.subject}/{session.session}"
         )
         groups.extend([group] * int(np.sum(finite)))
+        segment = f"{session.subject}/{session.session}"
+        segment_ids.extend([segment] * int(np.sum(finite)))
     absent_events = [name for name, count in event_counts.items() if count == 0]
     if absent_events:
         raise ValueError(
@@ -318,6 +390,7 @@ def _build_design(
         values,
         response,
         np.asarray(groups, dtype=str),
+        np.asarray(segment_ids, dtype=str),
         tuple(event_layout),
         continuous_layout,
         interval,
@@ -411,6 +484,140 @@ def _cross_validate_alpha(
         alpha,
         float(np.mean([item.r_squared for item in results])),
         tuple(results),
+    )
+
+
+def _grouped_kernel_uncertainty(
+    design: _Design,
+    full_coefficients: NDArray[np.float64],
+    alpha: float,
+    *,
+    confidence_level: float,
+) -> GroupedKernelUncertainty:
+    groups = tuple(sorted(set(design.groups.tolist())))
+    replicates = []
+    for group in groups:
+        retained = design.groups != group
+        coefficients, _, _, _ = _fit(
+            design.values[retained],
+            design.response[retained],
+            alpha,
+            design.continuous_indices,
+        )
+        replicates.append(coefficients)
+    replicate_values = np.vstack(replicates)
+    replicate_mean = np.mean(replicate_values, axis=0)
+    count = len(groups)
+    jackknife_estimate = count * full_coefficients - (count - 1) * replicate_mean
+    standard_error = np.sqrt(
+        (count - 1) / count * np.sum((replicate_values - replicate_mean) ** 2, axis=0)
+    )
+    critical = float(student_t.ppf(0.5 + confidence_level / 2, df=max(1, count - 1)))
+    lower = jackknife_estimate - critical * standard_error
+    upper = jackknife_estimate + critical * standard_error
+    kernels = tuple(
+        EventKernelInterval(
+            kernel.name,
+            tuple(float(value) for value in lags),
+            tuple(float(value) for value in full_coefficients[columns]),
+            tuple(float(value) for value in jackknife_estimate[columns]),
+            tuple(float(value) for value in standard_error[columns]),
+            tuple(float(value) for value in lower[columns]),
+            tuple(float(value) for value in upper[columns]),
+        )
+        for kernel, columns, lags in design.event_slices
+    )
+    return GroupedKernelUncertainty(
+        "delete_one_group_jackknife",
+        confidence_level,
+        alpha,
+        count,
+        groups,
+        kernels,
+    )
+
+
+def _residual_diagnostics(
+    design: _Design,
+    folds: tuple[tuple[str, ...], ...],
+    alpha: float,
+    group_by: str,
+) -> EncodingResidualDiagnostics:
+    prediction = np.full(len(design.response), np.nan, dtype=float)
+    for held_out in folds:
+        test = np.isin(design.groups, held_out)
+        train = ~test
+        coefficients, intercept, means, scales = _fit(
+            design.values[train],
+            design.response[train],
+            alpha,
+            design.continuous_indices,
+        )
+        prediction[test] = _predict(
+            design.values[test],
+            coefficients,
+            intercept,
+            design.continuous_indices,
+            means,
+            scales,
+        )
+    if not np.all(np.isfinite(prediction)):
+        raise RuntimeError("encoding diagnostics did not predict every observation")
+    group_results = []
+    for group in sorted(set(design.groups.tolist())):
+        selected = design.groups == group
+        metrics = _residual_metrics(
+            design.response[selected], prediction[selected], design.sessions[selected]
+        )
+        group_results.append(
+            EncodingGroupDiagnostic(
+                group,
+                len(set(design.sessions[selected].tolist())),
+                int(np.sum(selected)),
+                *metrics,
+            )
+        )
+    pooled = _residual_metrics(design.response, prediction, design.sessions)
+    return EncodingResidualDiagnostics(
+        "group_held_out",
+        group_by,
+        tuple(group_results),
+        len(design.response),
+        *pooled,
+    )
+
+
+def _residual_metrics(
+    observed: NDArray[np.float64],
+    predicted: NDArray[np.float64],
+    sessions: NDArray[np.str_],
+) -> tuple[float, float, float, float, float, float | None, float | None]:
+    residual = observed - predicted
+    lag_numerator = 0.0
+    lag_left = 0.0
+    lag_right = 0.0
+    difference_sum = 0.0
+    for session in sorted(set(sessions.tolist())):
+        values = residual[sessions == session]
+        if len(values) < 2:
+            continue
+        centered = values - np.mean(values)
+        lag_numerator += float(centered[:-1] @ centered[1:])
+        lag_left += float(centered[:-1] @ centered[:-1])
+        lag_right += float(centered[1:] @ centered[1:])
+        difference_sum += float(np.sum(np.diff(values) ** 2))
+    lag_denominator = float(np.sqrt(lag_left * lag_right))
+    residual_sum = float(residual @ residual)
+    lag1 = lag_numerator / lag_denominator if lag_denominator > 0 else None
+    durbin_watson = difference_sum / residual_sum if residual_sum > 0 else None
+    return (
+        _r_squared(observed, predicted),
+        float(np.sqrt(np.mean(residual**2))),
+        float(np.mean(np.abs(residual))),
+        float(np.mean(residual)),
+        float(np.std(residual)),
+        lag1,
+        durbin_watson,
     )
 
 

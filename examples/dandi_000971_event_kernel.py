@@ -27,7 +27,7 @@ from fiberphotometry.io.dandi_000971 import (
 
 DEFAULT_MANIFEST = Path("benchmarks/dandi-000971-tutorial-manifest-v0.1.json")
 DEFAULT_CACHE = Path.home() / "Library/Caches/fiberphotometry/dandi-000971-tutorial"
-DEFAULT_OUTPUT = Path("benchmarks/dandi-000971-event-kernel-v0.1")
+DEFAULT_OUTPUT = Path("benchmarks/dandi-000971-event-kernel-v0.2")
 REGIONS = ("DMS", "DLS")
 
 
@@ -115,10 +115,13 @@ def evidence_payload(
 ) -> dict[str, Any]:
     """Build deterministic, versioned evidence around the model results."""
     return {
-        "schema_version": "dandi-000971-event-kernel-v0.1",
+        "schema_version": "dandi-000971-event-kernel-v0.2",
         "artifact_type": "public_event_kernel_reproduction",
         "fiberphotometry_version": version("fiberphotometry"),
-        "scientific_protocol": "protocol-dandi-000971-event-kernel-v0.1",
+        "scientific_protocol": (
+            "protocol-dandi-000971-event-kernel-v0.1 + "
+            "protocol-event-kernel-uncertainty-diagnostics-v0.1"
+        ),
         "source": {
             "dandiset": manifest["dandiset"],
             "published_version": manifest["published_version"],
@@ -175,7 +178,7 @@ def main() -> None:
     )
     _, result_digest = _digest(result_path)
     manifest_payload = {
-        "schema_version": "dandi-000971-event-kernel-manifest-v0.1",
+        "schema_version": "dandi-000971-event-kernel-manifest-v0.2",
         "status": "complete",
         "artifacts": {"result.json": {"sha256": result_digest}},
     }

@@ -95,7 +95,8 @@
   - [x] Leakage-safe animal/session-held-out ridge selection
   - [x] Ground-truth recovery fixture and executable simulation tutorial
   - [x] Public-data literature reproduction with a frozen design and retained weak validation
-  - [ ] Animal-level coefficient uncertainty and residual/model diagnostics
+  - [x] Conditional grouped-jackknife kernel intervals and out-of-fold residual diagnostics
+  - [ ] Formal interval-coverage calibration and simultaneous kernel bands
   - [ ] Design-matrix alternatives in reproducible robustness multiverses
 - [ ] Longitudinal learning-trajectory and session-within-animal models
 - [ ] Long-duration tonic/phasic analysis

@@ -14,12 +14,12 @@ def main() -> None:
     parser.add_argument(
         "--result",
         type=Path,
-        default=Path("benchmarks/dandi-000971-event-kernel-v0.1/result.json"),
+        default=Path("benchmarks/dandi-000971-event-kernel-v0.2/result.json"),
     )
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("docs/assets/dandi-000971-event-kernels-v0.1.png"),
+        default=Path("docs/assets/dandi-000971-event-kernels-v0.2.png"),
     )
     args = parser.parse_args()
     payload = json.loads(args.result.read_text(encoding="utf-8"))
@@ -44,6 +44,20 @@ def main() -> None:
                 color=colors[kernel["name"]],
                 linewidth=2,
             )
+            uncertainty = next(
+                item
+                for item in region_result["kernel_uncertainty"]["event_kernels"]
+                if item["name"] == kernel["name"]
+            )
+            axis.fill_between(
+                uncertainty["lag_s"],
+                uncertainty["lower"],
+                uncertainty["upper"],
+                color=colors[kernel["name"]],
+                alpha=0.18,
+                linewidth=0,
+                label="Pointwise grouped jackknife interval",
+            )
             axis.axhline(0, color="#777777", linewidth=0.8)
             axis.axvline(0, color="#222222", linewidth=0.8, linestyle="--")
             axis.set_title(f"{region}: {labels[kernel['name']]}")
@@ -59,7 +73,9 @@ def main() -> None:
                 axis.set_xlabel("Lag from event (s)")
             if column == 0:
                 axis.set_ylabel("Pooled coefficient (ΔF/F)")
-    figure.suptitle("DANDI:000971 pooled FIR kernels; predictive validation is weak")
+    figure.suptitle(
+        "DANDI:000971 pooled FIR kernels with grouped-jackknife sensitivity intervals"
+    )
     figure.tight_layout()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(args.output, dpi=180, bbox_inches="tight")

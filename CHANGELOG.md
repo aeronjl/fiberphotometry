@@ -18,6 +18,8 @@ development versions until the first public release.
   animal/session-held-out ridge selection.
 - Sparse event-kernel fitting and a frozen six-animal public DANDI reproduction
   retaining weak held-out prediction.
+- Conditional delete-one-group kernel intervals and group-held-out residual
+  diagnostics with session-safe temporal calculations.
 
 ### Scientific status
 
