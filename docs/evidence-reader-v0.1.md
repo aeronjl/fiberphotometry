@@ -29,6 +29,10 @@ that an independently published checksum has been verified.
 To obtain verified NWB checksums, read the complete artifact directory containing
 the NWB files and its manifest.
 
+Manifest checksum verification establishes internal bundle integrity; it does not
+authenticate a publisher. Use `verify_publication_manifest` with an independently
+maintained `allowed_signers` file for publisher authentication.
+
 ## Stability
 
 `EvidenceFile`, `ProjectEvidenceBundle`, and `read_project_evidence` are supported

@@ -50,6 +50,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0020](0020-store-one-reference-signal-and-the-complete-multiverse-ledger.md) | Accepted | Store one reference signal and the complete multiverse ledger |
 | [SDR-0021](0021-verify-directory-bundles-and-mark-standalone-nwb-trust.md) | Accepted | Verify directory bundles and mark standalone NWB trust |
 | [SDR-0022](0022-separate-byte-identity-from-scientific-reproduction.md) | Accepted | Separate byte identity from scientific reproduction |
+| [SDR-0023](0023-sign-manifest-attestations-with-domain-separated-openssh.md) | Accepted | Sign manifest attestations with domain-separated OpenSSH |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

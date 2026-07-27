@@ -43,6 +43,10 @@ from fiberphotometry.project import (
     SessionSource,
     load_project_config,
 )
+from fiberphotometry.publication import (
+    sign_publication_manifest,
+    verify_publication_manifest,
+)
 from fiberphotometry.results import read_project_evidence
 
 
@@ -69,6 +73,21 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
                 _atomic_write(destination, content)
                 print(f"Comparison written to {destination}")
+            return 0
+        if args.command == "sign":
+            attestation = sign_publication_manifest(
+                args.bundle,
+                key=args.key,
+                signer_identity=args.identity,
+                overwrite=args.force,
+            )
+            print(attestation.to_json(), end="")
+            return 0
+        if args.command == "verify-signature":
+            verification = verify_publication_manifest(
+                args.bundle, allowed_signers=args.allowed_signers
+            )
+            print(verification.to_json())
             return 0
         project = load_project_config(args.project)
         loaded = project.load()
@@ -548,6 +567,27 @@ def _parser() -> argparse.ArgumentParser:
     )
     compare.add_argument(
         "--output", type=Path, help="write Markdown or JSON based on the extension"
+    )
+    sign = subparsers.add_parser(
+        "sign", help="create a detached OpenSSH publication attestation"
+    )
+    sign.add_argument("bundle", type=Path, help="complete artifact directory")
+    sign.add_argument("--key", type=Path, required=True, help="OpenSSH signing key")
+    sign.add_argument(
+        "--identity", required=True, help="signer identity used by allowed_signers"
+    )
+    sign.add_argument(
+        "--force", action="store_true", help="replace an existing attestation"
+    )
+    verify = subparsers.add_parser(
+        "verify-signature", help="verify a detached publication attestation"
+    )
+    verify.add_argument("bundle", type=Path, help="artifact directory")
+    verify.add_argument(
+        "--allowed-signers",
+        type=Path,
+        required=True,
+        help="OpenSSH allowed_signers trust file",
     )
     return parser
 

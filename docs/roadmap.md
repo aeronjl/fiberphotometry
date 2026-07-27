@@ -102,7 +102,8 @@
 - [x] Add multiverse-aware NWB provenance and result export
 - [x] Add a project-level result reader for JSON and NWB evidence bundles
 - [x] Add cross-bundle comparison and reproducibility-diff reporting
-- [ ] Add signed publication manifests and detached verification
+- [x] Add signed publication manifests and detached verification
+- [ ] Add release/DOI deposition packaging and archival metadata validation
 - [x] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [x] Canonical raw-NWB to animal-level robustness tutorial

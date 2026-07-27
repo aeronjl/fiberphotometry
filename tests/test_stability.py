@@ -43,6 +43,14 @@ def test_evidence_bundle_comparison_has_a_normative_schema() -> None:
     )
 
 
+def test_publication_attestation_has_a_normative_schema() -> None:
+    schema = fiberphotometry.artifact_schema("publication_manifest_attestation")
+
+    assert schema["additionalProperties"] is False
+    assert set(schema["required"]) == set(schema["properties"])
+    assert schema["properties"]["signature_method"]["const"] == "openssh"
+
+
 def test_unknown_or_embedded_schema_is_not_guessed() -> None:
     for artifact_type in ("missing", "event_coverage"):
         try:

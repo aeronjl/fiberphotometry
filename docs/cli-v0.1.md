@@ -138,6 +138,38 @@ differences classified as configuration, specification, data, quality, outcome,
 execution, or provenance. See the
 [reproducibility comparison contract](reproducibility-comparison-v0.1.md).
 
+## Signing a publication bundle
+
+Sign only after a bundle is complete and its manifest verifies:
+
+```bash
+uv run fiberphotometry sign artifacts \
+  --key ~/.ssh/id_ed25519 \
+  --identity scientist@example.org
+```
+
+This creates `publication-attestation.json` and the detached
+`publication-attestation.json.sig`. Existing signatures are not replaced unless
+`--force` is explicit. Private keys are never copied into the bundle.
+
+Verifiers maintain an OpenSSH `allowed_signers` file outside the evidence bundle:
+
+```text
+scientist@example.org namespaces="fiberphotometry-publication@aeronjl.github.io" ssh-ed25519 AAAA...
+```
+
+Then verify signer authorization, signature bytes, the exact manifest digest, and
+the project fingerprint:
+
+```bash
+uv run fiberphotometry verify-signature artifacts \
+  --allowed-signers allowed_signers
+```
+
+The identity and namespace are signed. A readable self-signature is insufficient:
+the identity must match a trusted key in `allowed_signers`. See the
+[publication signing contract](publication-signing-v0.1.md).
+
 `inspect` validates data without bypassing the analysis contract. `run` still
 fails when required assumptions are not recorded, contrast levels are absent,
 input roles are ambiguous, reference data are unavailable, or a schema is invalid.

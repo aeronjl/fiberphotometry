@@ -146,6 +146,12 @@ from fiberphotometry.project import (
     TDTSessionSource,
     load_project_config,
 )
+from fiberphotometry.publication import (
+    PublicationAttestation,
+    PublicationVerification,
+    sign_publication_manifest,
+    verify_publication_manifest,
+)
 from fiberphotometry.qc import assess_recording, assess_signal_recording
 from fiberphotometry.results import (
     EvidenceFile,
@@ -222,6 +228,8 @@ __all__ = [
     "PreprocessingSpec",
     "ProjectConfig",
     "ProjectEvidenceBundle",
+    "PublicationAttestation",
+    "PublicationVerification",
     "QualityGateSpec",
     "RecordingInput",
     "ReferenceDFFOperation",
@@ -292,10 +300,12 @@ __all__ = [
     "resample_recording",
     "run_multiverse",
     "run_pipeline",
+    "sign_publication_manifest",
     "summarize_event_windows",
     "summarize_multiverse_groups",
     "unit_t_interval",
     "validate_design",
     "validate_recording",
+    "verify_publication_manifest",
     "welch_power_sensitivity",
 ]

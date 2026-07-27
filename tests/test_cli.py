@@ -1,5 +1,6 @@
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -8,6 +9,7 @@ import pytest
 from fiberphotometry.cli import main
 from fiberphotometry.comparison import compare_project_evidence
 from fiberphotometry.project import TabularProjectConfig
+from fiberphotometry.publication import PUBLICATION_NAMESPACE
 from fiberphotometry.results import read_project_evidence
 
 
@@ -417,6 +419,116 @@ def test_evidence_comparison_detects_changed_data_and_outcome(tmp_path) -> None:
     payload = json.loads(report.read_text())
     assert payload["artifact_type"] == "evidence_bundle_comparison"
     assert payload["scientifically_equivalent"] is False
+
+
+def test_cli_signs_and_verifies_complete_publication_manifest(tmp_path, capsys) -> None:
+    project_path = _project(tmp_path)
+    output = tmp_path / "results"
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+    key = tmp_path / "publication-key"
+    subprocess.run(
+        ["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-f", str(key)],
+        check=True,
+    )
+    identity = "scientist@example.org"
+    allowed = tmp_path / "allowed_signers"
+    allowed.write_text(
+        f'{identity} namespaces="{PUBLICATION_NAMESPACE}" '
+        f"{key.with_suffix('.pub').read_text()}"
+    )
+
+    assert (
+        main(
+            [
+                "sign",
+                str(output),
+                "--key",
+                str(key),
+                "--identity",
+                identity,
+            ]
+        )
+        == 0
+    )
+    attestation = json.loads((output / "publication-attestation.json").read_text())
+    assert attestation["artifact_type"] == "publication_manifest_attestation"
+    assert (
+        (output / "publication-attestation.json.sig")
+        .read_text()
+        .startswith("-----BEGIN SSH SIGNATURE-----")
+    )
+    capsys.readouterr()
+    assert (
+        main(
+            [
+                "verify-signature",
+                str(output),
+                "--allowed-signers",
+                str(allowed),
+            ]
+        )
+        == 0
+    )
+    verification = json.loads(capsys.readouterr().out)
+    assert verification["status"] == "verified"
+    assert verification["signer_identity"] == identity
+    allowed.write_text(f"other@example.org {key.with_suffix('.pub').read_text()}")
+    assert (
+        main(
+            [
+                "verify-signature",
+                str(output),
+                "--allowed-signers",
+                str(allowed),
+            ]
+        )
+        == 2
+    )
+    assert "verification failed" in capsys.readouterr().err
+
+
+def test_publication_verification_rejects_manifest_tampering(tmp_path, capsys) -> None:
+    project_path = _project(tmp_path)
+    output = tmp_path / "results"
+    assert main(["run", str(project_path), "--output-dir", str(output)]) == 0
+    key = tmp_path / "publication-key"
+    subprocess.run(
+        ["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-f", str(key)],
+        check=True,
+    )
+    identity = "scientist@example.org"
+    allowed = tmp_path / "allowed_signers"
+    allowed.write_text(f"{identity} {key.with_suffix('.pub').read_text()}")
+    assert (
+        main(
+            [
+                "sign",
+                str(output),
+                "--key",
+                str(key),
+                "--identity",
+                identity,
+            ]
+        )
+        == 0
+    )
+    manifest_path = output / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["fiberphotometry_version"] = "tampered"
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+
+    assert (
+        main(
+            [
+                "verify-signature",
+                str(output),
+                "--allowed-signers",
+                str(allowed),
+            ]
+        )
+        == 2
+    )
+    assert "does not match manifest bytes" in capsys.readouterr().err
 
 
 def test_cli_rejects_structurally_incompatible_multiverse_before_run(

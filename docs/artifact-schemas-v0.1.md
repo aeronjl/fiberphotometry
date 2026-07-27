@@ -15,6 +15,11 @@ Cross-bundle reports emit `artifact_type = "evidence_bundle_comparison"` and
 `schema_version = "1"`, governed by
 [`schemas/evidence-bundle-comparison-v1.schema.json`](../schemas/evidence-bundle-comparison-v1.schema.json).
 
+Publication signing emits `artifact_type = "publication_manifest_attestation"`
+and `schema_version = "1"`, governed by
+[`schemas/publication-manifest-attestation-v1.schema.json`](../schemas/publication-manifest-attestation-v1.schema.json).
+Its detached `.sig` file uses the OpenSSH SSHSIG format.
+
 The nested event-coverage and peri-event inference records each carry their own
 `schema_version = "1"`. Analysis plans, study designs, project configuration, and
 pipeline specifications retain their existing explicit versions. Provenance
