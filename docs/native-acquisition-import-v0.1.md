@@ -18,8 +18,8 @@ of the complete source file.
 ```python
 from fiberphotometry import detect_acquisition_format
 
-detect_acquisition_format("session.doric")       # "doric"
-detect_acquisition_format("subject.ppd")         # "pyphotometry"
+detect_acquisition_format("session.doric")  # "doric"
+detect_acquisition_format("subject.ppd")  # "pyphotometry"
 detect_acquisition_format("photometryData.csv")  # "neurophotometrics"
 ```
 
