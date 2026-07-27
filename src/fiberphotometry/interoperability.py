@@ -1250,6 +1250,103 @@ def annotations_from_boris(
     )
 
 
+def annotations_from_boris_aggregated_file(
+    path: str | Path,
+    *,
+    subject: str,
+    session: str,
+    source_subject: str | None = None,
+    source_observation: str | None = None,
+    clock_id: str = "video",
+    source_version: str | None = None,
+) -> BehaviorAnnotations:
+    """Read a BORIS aggregated-event CSV or TSV without collapsing event type.
+
+    BORIS aggregated exports already contain one row per complete POINT or STATE
+    event. Selection of an observation and focal subject is explicit whenever a
+    file contains more than one of either.
+    """
+
+    source = Path(path)
+    delimiter = "\t" if source.suffix.lower() == ".tsv" else ","
+    with source.open(newline="", encoding="utf-8-sig") as stream:
+        rows = list(csv.reader(stream, delimiter=delimiter))
+    if not rows:
+        raise ValueError("BORIS aggregated export is empty")
+    header = [value.strip() for value in rows[0]]
+    required = {
+        "Observation id",
+        "Subject",
+        "Behavior",
+        "Behavior type",
+        "Start (s)",
+        "Stop (s)",
+    }
+    missing = sorted(required - set(header))
+    if missing:
+        raise ValueError(f"BORIS aggregated export is missing columns: {missing}")
+    records = [
+        dict(zip(header, row, strict=False))
+        for row in rows[1:]
+        if any(value.strip() for value in row)
+    ]
+
+    observations = sorted({record["Observation id"].strip() for record in records})
+    observations = [value for value in observations if value]
+    selected_observation = source_observation
+    if selected_observation is None:
+        if len(observations) != 1:
+            raise ValueError(
+                "BORIS aggregated export contains multiple observations; "
+                "declare source_observation"
+            )
+        selected_observation = observations[0]
+    if selected_observation not in observations:
+        raise ValueError(
+            f"BORIS source_observation {selected_observation!r} was not found"
+        )
+    observation_records = [
+        record
+        for record in records
+        if record["Observation id"].strip() == selected_observation
+    ]
+
+    subjects = sorted({record["Subject"].strip() for record in observation_records})
+    subjects = [value for value in subjects if value]
+    selected_subject = source_subject
+    if selected_subject is None:
+        if len(subjects) != 1:
+            raise ValueError(
+                "BORIS aggregated export contains multiple subjects; "
+                "declare source_subject"
+            )
+        selected_subject = subjects[0]
+    if selected_subject not in subjects:
+        raise ValueError(f"BORIS source_subject {selected_subject!r} was not found")
+    selected = [
+        record
+        for record in observation_records
+        if record["Subject"].strip() == selected_subject
+    ]
+    return annotations_from_boris(
+        {
+            "behavior": [record["Behavior"] for record in selected],
+            "type": [record["Behavior type"] for record in selected],
+            "start": [record["Start (s)"] for record in selected],
+            "stop": [record["Stop (s)"] for record in selected],
+        },
+        subject=subject,
+        session=session,
+        behavior_column="behavior",
+        type_column="type",
+        start_column="start",
+        stop_column="stop",
+        clock_id=clock_id,
+        source_version=source_version,
+        source_artifact=str(source),
+    )
+
+
 def annotations_from_boris_tabular_file(
     path: str | Path,
     *,

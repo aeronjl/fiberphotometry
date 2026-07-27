@@ -170,13 +170,21 @@ the fitted MoSeq model remains essential.
 
 ### BORIS
 
-`annotations_from_boris()` consumes an aggregated export after explicit column
-selection. `annotations_from_boris_tabular_file()` handles the other common BORIS
-shape: a metadata preamble followed by START/STOP or point-event rows.
+`annotations_from_boris()` consumes already-loaded aggregated columns.
+`annotations_from_boris_aggregated_file()` reads BORIS aggregated CSV/TSV directly.
+`annotations_from_boris_tabular_file()` handles the other common shape: a metadata
+preamble followed by START/STOP or point-event rows.
 
 ```python
 annotations = annotations_from_boris_tabular_file(
     "mouse-07-day-04-boris.csv",
+    subject="mouse-07",
+    session="day-04",
+    source_subject="mouse-07",
+)
+
+aggregated = annotations_from_boris_aggregated_file(
+    "mouse-07-day-04-aggregated.tsv",
     subject="mouse-07",
     session="day-04",
     source_subject="mouse-07",
@@ -208,7 +216,7 @@ and the separate [Unspool contract](unspool-interoperability-v0.1.md).
 
 | Priority | Missing ecosystem capability | Likely home |
 |---|---|---|
-| P0 | complete real-file matrix: current DeepLabCut and Keypoint-MoSeq remain missing; official SLEAP and BORIS fixtures now pass | adapter validation in FiberPhotometry |
+| P0 | extend the now-complete one-version fixture matrix across a second released version and one real camera-to-photometry synchronization record | adapter validation in FiberPhotometry |
 | P1 | direct `ndx-pose` read/write path and NWB round trip | FiberPhotometry I/O |
 | P1 | interval merge/split/filter, contextual-label and overlap policies | FiberPhotometry inference |
 | P1 | multi-animal identity-switch diagnostics at the neural-alignment boundary | source-tool QC plus FiberPhotometry preflight |
