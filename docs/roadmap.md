@@ -98,7 +98,8 @@
 - [x] Configuration-driven multiverse preflight, execution, and evidence bundle
 - [x] Extend project multiverses to signal-only preprocessing recipe families
 - [x] Add per-unit-lane practical-effect thresholds and machine-readable summaries
-- [ ] Add declarative method-specific baseline parameters and compatibility rules
+- [x] Add declarative method-specific baseline parameters and compatibility rules
+- [ ] Add multiverse-aware NWB provenance and result export
 - [x] First-class candidate-to-gated-to-complete event coverage API and report panel
 - [x] Public IBL tutorial from import to fingerprinted JSON/HTML report
 - [x] Canonical raw-NWB to animal-level robustness tutorial

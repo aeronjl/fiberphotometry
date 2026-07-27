@@ -189,6 +189,44 @@ change the acquisition model. Reports partition ΔF/F and acquired-fluorescence
 estimates into separate evidence lanes. A single `smallest_effect` is rejected
 when alternatives span units because no one threshold is meaningful in both.
 
+Baseline parameters are method-specific and appear directly on the relevant
+recipe:
+
+```toml
+[[multiverse.preprocessing]]
+name = "regularized_asls"
+rationale = "Test the predeclared smooth lower-envelope comparator."
+kind = "signal_only"
+method = "asls"
+normalization = "divide"
+asls_smoothness = 10000000.0
+asls_asymmetry = 0.02
+max_iterations = 25
+asls_reference_rate_hz = 20.0
+resample_rate_hz = "median"
+resample_max_gap_factor = 1.5
+```
+
+`double_exponential` accepts `min_tau_s`; `asls` accepts the four AsLS fields
+above; and `rolling_mean` accepts `rolling_window_s` and `rolling_gap_factor`.
+Supplying a parameter from another method is an error rather than an ignored
+setting. All values are range-checked before universe materialization.
+
+Scientifically incoherent combinations can be excluded prospectively:
+
+```toml
+[[multiverse.compatibility_rules]]
+reason = "The parametric fit was not validated for the shortened window."
+when = [
+  { node = "preprocessing", alternative = "double_exponential" },
+  { node = "response_window", alternative = "quarter_second" },
+]
+```
+
+Rules must name declared choices, cannot repeat a choice, and cannot exclude the
+reference workflow. Matching universes remain in the result as `incompatible`
+with the declared reason and never access outcomes.
+
 Declare a complete threshold policy with one table per unit lane:
 
 ```toml
@@ -213,4 +251,4 @@ v0.1 handles the categorical, within-animal scalar event contrast supported by
 `EventAnalysis`, with either schema-first tabular files or explicitly mapped TDT
 blocks. Multiverse configuration currently varies reference preprocessing,
 signal-only baseline recipes, normalization, and response windows. It does not
-yet expose arbitrary designs or method-specific AsLS penalty choices.
+yet expose arbitrary designs or method-specific reference-regression parameters.

@@ -30,6 +30,7 @@ from fiberphotometry.io.tdt import (
 )
 from fiberphotometry.multiverse import (
     ChoiceRef,
+    CompatibilityRule,
     DecisionAlternative,
     DecisionNode,
     MultiverseSpec,
@@ -85,6 +86,12 @@ class MultiversePreprocessingAlternative:
     normalization: str = "divide"
     lowpass_hz: float | None = None
     rolling_window_s: float = 60.0
+    min_tau_s: float = 5.0
+    asls_smoothness: float = 1e8
+    asls_asymmetry: float = 0.01
+    max_iterations: int = 20
+    asls_reference_rate_hz: float = 20.0
+    rolling_gap_factor: float = 1.5
     resample_rate_hz: float | str | None = None
     resample_max_gap_factor: float | None = None
 
@@ -127,7 +134,13 @@ class MultiversePreprocessingAlternative:
                 BaselineDFFOperation(
                     method=cast(Any, self.method),
                     normalization=cast(Any, self.normalization),
+                    min_tau_s=self.min_tau_s,
+                    asls_smoothness=self.asls_smoothness,
+                    asls_asymmetry=self.asls_asymmetry,
+                    max_iterations=self.max_iterations,
+                    asls_reference_rate_hz=self.asls_reference_rate_hz,
                     rolling_window_s=self.rolling_window_s,
+                    rolling_gap_factor=self.rolling_gap_factor,
                 )
             )
         return tuple(operations)
@@ -164,6 +177,7 @@ class ProjectMultiverseConfig:
     direction: str = "either"
     leave_one_animal_out: bool = False
     effect_thresholds: tuple[MultiverseEffectThreshold, ...] = ()
+    compatibility_rules: tuple[CompatibilityRule, ...] = ()
     schema_version: str = "1"
 
     def build(self, base: PipelineSpec) -> MultiverseSpec:
@@ -220,7 +234,7 @@ class ProjectMultiverseConfig:
         return MultiverseSpec(
             base,
             ordered_nodes,
-            (),
+            self.compatibility_rules,
             tuple(references),
             cast(Any, self.intent),
             smallest_effect=self.smallest_effect,
@@ -650,6 +664,7 @@ def _multiverse_config(
             "reference_response_window",
             "preprocessing",
             "response_windows",
+            "compatibility_rules",
         },
         "multiverse",
     )
@@ -664,6 +679,9 @@ def _multiverse_config(
     )
     reference_window = _multiverse_reference(
         value, "reference_response_window", windows
+    )
+    compatibility_rules = _multiverse_compatibility_rules(
+        value.get("compatibility_rules", []), preprocessing, windows
     )
     intent = value.get("intent", analysis.intent)
     if intent not in {"confirmatory", "exploratory", "descriptive"}:
@@ -711,7 +729,47 @@ def _multiverse_config(
         direction=str(direction),
         leave_one_animal_out=leave_one_out,
         effect_thresholds=effect_thresholds,
+        compatibility_rules=compatibility_rules,
     )
+
+
+def _multiverse_compatibility_rules(
+    value: object,
+    preprocessing: tuple[MultiversePreprocessingAlternative, ...],
+    windows: tuple[MultiverseWindowAlternative, ...],
+) -> tuple[CompatibilityRule, ...]:
+    if not isinstance(value, list):
+        raise ValueError("multiverse.compatibility_rules must be an array of tables")
+    known = {
+        "preprocessing": {item.name for item in preprocessing},
+        "response_window": {item.name for item in windows},
+    }
+    output = []
+    for index, item in enumerate(value):
+        section = f"multiverse.compatibility_rules[{index}]"
+        if not isinstance(item, dict):
+            raise ValueError(f"{section} must be a TOML table")
+        _reject_unknown(item, {"reason", "when"}, section)
+        when = item.get("when")
+        if not isinstance(when, list) or not when:
+            raise ValueError(f"{section}.when must be a non-empty array of tables")
+        choices = []
+        for choice_index, choice in enumerate(when):
+            choice_section = f"{section}.when[{choice_index}]"
+            if not isinstance(choice, dict):
+                raise ValueError(f"{choice_section} must be a TOML inline table")
+            _reject_unknown(choice, {"node", "alternative"}, choice_section)
+            node = _nonempty_string(choice, "node", choice_section)
+            alternative = _nonempty_string(choice, "alternative", choice_section)
+            if node not in known or alternative not in known[node]:
+                raise ValueError(f"{choice_section} names an unknown choice")
+            choices.append(ChoiceRef(node, alternative))
+        if len(choices) != len(set(choices)):
+            raise ValueError(f"{section}.when cannot repeat a choice")
+        output.append(
+            CompatibilityRule(tuple(choices), _nonempty_string(item, "reason", section))
+        )
+    return tuple(output)
 
 
 def _multiverse_effect_thresholds(
@@ -783,6 +841,12 @@ def _multiverse_preprocessing(
                 "normalization",
                 "lowpass_hz",
                 "rolling_window_s",
+                "min_tau_s",
+                "asls_smoothness",
+                "asls_asymmetry",
+                "max_iterations",
+                "asls_reference_rate_hz",
+                "rolling_gap_factor",
                 "resample_rate_hz",
                 "resample_max_gap_factor",
             },
@@ -810,6 +874,7 @@ def _multiverse_preprocessing(
             raise ValueError(
                 f"{section}.normalization is only valid for signal_only recipes"
             )
+        _validate_method_parameters(item, section, str(kind), method)
         cutoff_raw = item.get("lowpass_hz")
         cutoff = _optional_positive_number(cutoff_raw, f"{section}.lowpass_hz")
         rolling_window = _positive_number(
@@ -837,6 +902,25 @@ def _multiverse_preprocessing(
             raise ValueError(
                 f"{section}.resample_max_gap_factor requires resample_rate_hz"
             )
+        min_tau = _positive_number(item.get("min_tau_s", 5.0), f"{section}.min_tau_s")
+        asls_smoothness = _positive_number(
+            item.get("asls_smoothness", 1e8), f"{section}.asls_smoothness"
+        )
+        asls_asymmetry = _open_unit_interval(
+            item.get("asls_asymmetry", 0.01), f"{section}.asls_asymmetry"
+        )
+        max_iterations = _positive_integer(
+            item.get("max_iterations", 20), f"{section}.max_iterations"
+        )
+        asls_reference_rate = _positive_number(
+            item.get("asls_reference_rate_hz", 20.0),
+            f"{section}.asls_reference_rate_hz",
+        )
+        rolling_gap = _positive_number(
+            item.get("rolling_gap_factor", 1.5), f"{section}.rolling_gap_factor"
+        )
+        if rolling_gap <= 1:
+            raise ValueError(f"{section}.rolling_gap_factor must be greater than one")
         output.append(
             MultiversePreprocessingAlternative(
                 name=_nonempty_string(item, "name", section),
@@ -846,6 +930,12 @@ def _multiverse_preprocessing(
                 normalization=str(normalization),
                 lowpass_hz=cutoff,
                 rolling_window_s=rolling_window,
+                min_tau_s=min_tau,
+                asls_smoothness=asls_smoothness,
+                asls_asymmetry=asls_asymmetry,
+                max_iterations=max_iterations,
+                asls_reference_rate_hz=asls_reference_rate,
+                rolling_gap_factor=rolling_gap,
                 resample_rate_hz=resample_rate,
                 resample_max_gap_factor=gap,
             )
@@ -895,6 +985,34 @@ def _validate_multiverse_alternatives(value: list[Any], section: str) -> None:
         raise ValueError(f"{section} names must be unique")
 
 
+def _validate_method_parameters(
+    item: dict[str, Any], section: str, kind: str, method: str
+) -> None:
+    method_parameters = {
+        "min_tau_s",
+        "asls_smoothness",
+        "asls_asymmetry",
+        "max_iterations",
+        "asls_reference_rate_hz",
+        "rolling_window_s",
+        "rolling_gap_factor",
+    }
+    allowed = {
+        "double_exponential": {"min_tau_s"},
+        "asls": {
+            "asls_smoothness",
+            "asls_asymmetry",
+            "max_iterations",
+            "asls_reference_rate_hz",
+        },
+        "rolling_mean": {"rolling_window_s", "rolling_gap_factor"},
+    }.get(method, set())
+    invalid = sorted((set(item) & method_parameters) - allowed)
+    if invalid:
+        family = method if kind == "signal_only" else "reference correction"
+        raise ValueError(f"{section} parameters are invalid for {family}: {invalid}")
+
+
 def _positive_number(value: object, name: str) -> float:
     if (
         not isinstance(value, int | float)
@@ -915,6 +1033,13 @@ def _nonnegative_number(value: object, name: str) -> float:
     ):
         raise ValueError(f"{name} must be finite and nonnegative")
     return float(value)
+
+
+def _open_unit_interval(value: object, name: str) -> float:
+    parsed = _positive_number(value, name)
+    if parsed >= 1:
+        raise ValueError(f"{name} must lie between zero and one")
+    return parsed
 
 
 def _optional_positive_number(value: object, name: str) -> float | None:

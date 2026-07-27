@@ -14,6 +14,10 @@ robustness analysis, not a search over outcomes or a substitute for replication.
   uniquely correct workflow.
 - Compatibility rules exclude incoherent combinations before execution and
   retain the exclusion reason.
+- Project rules identify choices by node and alternative, must refer to existing
+  alternatives, and may not exclude the named reference workflow.
+- Method-specific preprocessing parameters are range-checked and serialized in
+  each materialized pipeline; irrelevant parameters are rejected, not ignored.
 - Every valid universe receives an identifier derived from its canonical choices
   and complete materialized pipeline specification.
 - Successful, QC-blocked, incompatible, non-finite, and failed universes are all

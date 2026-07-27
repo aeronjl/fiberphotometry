@@ -196,6 +196,7 @@ kind = "signal_only"
 method = "rolling_mean"
 normalization = "divide"
 rolling_window_s = 4.0
+rolling_gap_factor = 1.75
 
 [[multiverse.preprocessing]]
 name = "rolling_subtract"
@@ -204,6 +205,7 @@ kind = "signal_only"
 method = "rolling_mean"
 normalization = "subtract"
 rolling_window_s = 4.0
+rolling_gap_factor = 1.75
 
 [[multiverse.preprocessing]]
 name = "regularized_asls"
@@ -214,6 +216,10 @@ normalization = "divide"
 resample_rate_hz = "median"
 resample_max_gap_factor = 1.5
 lowpass_hz = 3.0
+asls_smoothness = 10000000.0
+asls_asymmetry = 0.02
+max_iterations = 25
+asls_reference_rate_hz = 20.0
 
 [[multiverse.preprocessing]]
 name = "double_exponential"
@@ -221,6 +227,7 @@ rationale = "Test a parametric bleaching trajectory."
 kind = "signal_only"
 method = "double_exponential"
 normalization = "divide"
+min_tau_s = 3.0
 
 [[multiverse.response_windows]]
 name = "half_second"
@@ -231,6 +238,13 @@ response = [0.0, 0.5]
 name = "quarter_second"
 rationale = "Test sensitivity to an early-response definition."
 response = [0.0, 0.25]
+
+[[multiverse.compatibility_rules]]
+reason = "The parametric baseline is not supported for the shortened event definition."
+when = [
+  { node = "preprocessing", alternative = "double_exponential" },
+  { node = "response_window", alternative = "quarter_second" },
+]
 """
     )
 
@@ -344,6 +358,7 @@ direction = "either"
     html = (output / "robustness.html").read_text()
     assert result["summary"]["total_universes"] == 8
     assert result["summary"]["successful_universes"] >= 4
+    assert result["summary"]["incompatible_universes"] == 1
     assert "Divisive normalization" in html
     assert "Subtractive normalization" in html
     assert "Parallel evidence lanes preserve unit" in html
@@ -367,9 +382,15 @@ direction = "either"
             "baseline_subtracted" if preprocessing == "rolling_subtract" else "dff"
         )
         if preprocessing == "regularized_asls":
-            assert [
-                operation["kind"] for operation in universe["pipeline"]["preprocessing"]
-            ] == ["resample", "lowpass_filter", "baseline_dff"]
+            operations = universe["pipeline"]["preprocessing"]
+            assert [operation["kind"] for operation in operations] == [
+                "resample",
+                "lowpass_filter",
+                "baseline_dff",
+            ]
+            assert operations[-1]["asls_smoothness"] == 10000000.0
+            assert operations[-1]["asls_asymmetry"] == 0.02
+            assert operations[-1]["max_iterations"] == 25
 
 
 def test_signal_only_multiverse_rejects_implicit_gap_regularization(tmp_path) -> None:
@@ -416,6 +437,45 @@ smallest_effect = 0.001
 
     assert main(["inspect", str(project_path)]) == 2
     assert "cover every declared unit lane" in capsys.readouterr().err
+
+
+def test_signal_only_multiverse_rejects_method_irrelevant_parameters(
+    tmp_path, capsys
+) -> None:
+    project_path = _project(tmp_path)
+    _declare_signal_only_multiverse(project_path)
+    project_path.write_text(
+        project_path.read_text().replace(
+            'method = "double_exponential"\nnormalization = "divide"',
+            'method = "double_exponential"\nnormalization = "divide"\n'
+            "asls_asymmetry = 0.02",
+        )
+    )
+
+    assert main(["inspect", str(project_path)]) == 2
+    assert "invalid for double_exponential" in capsys.readouterr().err
+
+
+def test_multiverse_rejects_rule_that_excludes_reference_workflow(
+    tmp_path, capsys
+) -> None:
+    project_path = _project(tmp_path)
+    _declare_multiverse(project_path)
+    project_path.write_text(
+        project_path.read_text()
+        + """
+
+[[multiverse.compatibility_rules]]
+reason = "Invalid fixture excluding the declared reference."
+when = [
+  { node = "preprocessing", alternative = "filtered_irls" },
+  { node = "response_window", alternative = "half_second" },
+]
+"""
+    )
+
+    assert main(["inspect", str(project_path)]) == 2
+    assert "reference_selection" in capsys.readouterr().err
 
 
 def test_cli_requires_multiverse_declaration(tmp_path, capsys) -> None:
