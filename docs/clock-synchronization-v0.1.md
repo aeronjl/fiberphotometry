@@ -69,9 +69,7 @@ not proof that an affine clock model is scientifically sufficient.
 pose_on_photometry_clock = synchronization.synchronize_pose(pose)
 speed = pose_on_photometry_clock.speed(minimum_confidence=0.9)
 
-annotations_on_photometry_clock = synchronization.synchronize_annotations(
-    annotations
-)
+annotations_on_photometry_clock = synchronization.synchronize_annotations(annotations)
 ```
 
 Equivalent `synchronize_covariate()` support is available for an already derived

@@ -83,8 +83,7 @@ def test_clock_synchronization_recovers_drift_and_retains_evidence() -> None:
 
     transformed = synchronization.transform_time([5.0, 55.0])
     assert transformed == pytest.approx(
-        synchronization.intercept_s
-        + synchronization.scale * np.asarray([5.0, 55.0])
+        synchronization.intercept_s + synchronization.scale * np.asarray([5.0, 55.0])
     )
     assert not transformed.flags.writeable
     with pytest.raises(ValueError, match="requires 1s extrapolation"):
@@ -160,8 +159,7 @@ def test_synchronization_composes_pose_covariates_and_annotations() -> None:
         synchronization.synchronization_id,
     )
     assert (
-        speed.clock_synchronization_ids
-        == synchronized_pose.clock_synchronization_ids
+        speed.clock_synchronization_ids == synchronized_pose.clock_synchronization_ids
     )
 
     covariate = BehaviorCovariate(

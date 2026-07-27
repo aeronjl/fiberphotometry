@@ -365,10 +365,7 @@ class ClockSynchronization:
         source_time_s: NDArray[np.float64],
         maximum_extrapolation_s: float,
     ) -> None:
-        if (
-            not np.isfinite(maximum_extrapolation_s)
-            or maximum_extrapolation_s < 0
-        ):
+        if not np.isfinite(maximum_extrapolation_s) or maximum_extrapolation_s < 0:
             raise ValueError("maximum_extrapolation_s must be finite and non-negative")
         before = max(0.0, self.source_start_s - float(source_time_s[0]))
         after = max(0.0, float(source_time_s[-1]) - self.source_stop_s)
