@@ -57,6 +57,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0027](0027-hold-out-complete-groups-for-event-kernel-models.md) | Accepted | Hold out complete groups for event-kernel models |
 | [SDR-0028](0028-retain-weak-event-kernel-validation.md) | Accepted | Retain weak event-kernel validation and keep the API experimental |
 | [SDR-0029](0029-treat-event-kernel-intervals-as-conditional-sensitivity.md) | Accepted | Treat grouped event-kernel intervals as conditional sensitivity |
+| [SDR-0030](0030-delegate-behavioral-trajectories-to-unspool.md) | Accepted | Delegate behavioral learning trajectories to Unspool |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

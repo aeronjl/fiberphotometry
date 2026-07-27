@@ -98,7 +98,8 @@
   - [x] Conditional grouped-jackknife kernel intervals and out-of-fold residual diagnostics
   - [ ] Formal interval-coverage calibration and simultaneous kernel bands
   - [ ] Design-matrix alternatives in reproducible robustness multiverses
-- [ ] Longitudinal learning-trajectory and session-within-animal models
+- [x] Validated longitudinal neural-summary handoff to Unspool
+- [ ] Frozen cross-package public IBL learning-trajectory benchmark
 - [ ] Long-duration tonic/phasic analysis
 - [ ] Spontaneous transient detection with local-baseline sensitivity analysis
 - [ ] Multi-site/multi-color paired and conditional association workflows

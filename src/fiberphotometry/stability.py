@@ -62,6 +62,7 @@ EXPERIMENTAL_API_V0_1 = (
     "EventKernelSpec",
     "MultiverseSpec",
     "ScalarMixedModelSpec",
+    "UnspoolStudyExport",
     "baseline_dff",
     "export_project_multiverse_nwb",
     "fit_scalar_mixed_model",
@@ -69,6 +70,7 @@ EXPERIMENTAL_API_V0_1 = (
     "hierarchical_bootstrap",
     "materialize_multiverse",
     "permutation_test",
+    "prepare_unspool_study",
     "resample_recording",
     "run_multiverse",
 )

@@ -58,7 +58,8 @@ session-safe held-out residual diagnostics.
 The remaining questions are scientifically important but **not yet first-class
 workflows**:
 
-- learning trajectories and nested longitudinal models;
+- native behavioral learning-trajectory models; use the experimental
+  [Unspool interoperability contract](../unspool-interoperability-v0.1.md) instead;
 - tonic/phasic decomposition across hours or days;
 - spontaneous transient detection and rate/amplitude/duration summaries;
 - multi-site or multi-color coupling and network analyses;

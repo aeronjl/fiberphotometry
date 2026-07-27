@@ -73,6 +73,7 @@ nav:
       - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
+      - Longitudinal behavior with Unspool: unspool-interoperability-v0.1.md
   - Worked examples:
       - Examples overview: tutorials/index.md
       - Public IBL event report: tutorials/ibl-feedback-report.md

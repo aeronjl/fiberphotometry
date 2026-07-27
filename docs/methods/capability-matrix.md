@@ -17,7 +17,7 @@ experiment belongs in one package.
 | Whole-waveform intervals | **Supported** | Animal-level pointwise and simultaneous bands |
 | Trial-level functional mixed models | **Planned** | `fastFMM` bridge and numerical-parity fixtures |
 | Behavioral/event-kernel GLMs | **Experimental** | FIR kernels, grouped validation, conditional jackknife intervals and residual diagnostics; public prediction remains weak and formal coverage is unvalidated |
-| Longitudinal learning trajectories | **Gap** | Session/time hierarchy and varying effects |
+| Longitudinal learning trajectories | **Interoperable / experimental** | Validated neural-summary handoff to Unspool; public cross-package benchmark still required |
 | Tonic/phasic long-duration analysis | **Gap** | Multiscale baseline and transient representations |
 | Spontaneous transient detection | **Gap** | Local baselines, event definitions and validation fixtures |
 | Multi-site/multi-color coupling | **Gap** | Cross-channel lag, partial association and shared-event models |

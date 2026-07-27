@@ -188,6 +188,7 @@ from fiberphotometry.timecourse import (
     PeriEventInferenceSpec,
     infer_peri_event_contrast,
 )
+from fiberphotometry.unspool import UnspoolStudyExport, prepare_unspool_study
 from fiberphotometry.workflow import (
     EventAnalysis,
     EventAnalysisResult,
@@ -301,6 +302,7 @@ __all__ = [
     "Unit",
     "UniverseCompatibility",
     "UniverseResult",
+    "UnspoolStudyExport",
     "ZenodoDraftReceipt",
     "__version__",
     "align_events",
@@ -340,6 +342,7 @@ __all__ = [
     "make_recording",
     "materialize_multiverse",
     "permutation_test",
+    "prepare_unspool_study",
     "read_project_evidence",
     "recommend_inference",
     "reference_dff",
