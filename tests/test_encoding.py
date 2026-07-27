@@ -132,8 +132,8 @@ def test_session_grouping_uses_compound_identity_and_never_crosses_boundaries() 
             folds=2,
         ),
     )
-    assert design.values[4].tolist() == [1.0, 0.0, 0.0]
-    assert np.all(design.values[5:8] == 0.0)
+    assert design.values[4].toarray().ravel().tolist() == [1.0, 0.0, 0.0]
+    assert design.values[5:8].nnz == 0
 
 
 def test_rejects_irregular_sampling_and_absent_declared_events() -> None:

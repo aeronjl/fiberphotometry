@@ -16,6 +16,8 @@ development versions until the first public release.
 - Configuration-first CLI output to JSON, HTML, and optional NWB.
 - Experimental FIR event-kernel encoding with continuous covariates and
   animal/session-held-out ridge selection.
+- Sparse event-kernel fitting and a frozen six-animal public DANDI reproduction
+  retaining weak held-out prediction.
 
 ### Scientific status
 

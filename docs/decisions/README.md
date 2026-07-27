@@ -55,6 +55,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0025](0025-stop-zenodo-automation-at-validated-drafts.md) | Accepted | Stop Zenodo automation at validated drafts |
 | [SDR-0026](0026-organize-documentation-by-scientific-question.md) | Accepted | Organize documentation by scientific question |
 | [SDR-0027](0027-hold-out-complete-groups-for-event-kernel-models.md) | Accepted | Hold out complete groups for event-kernel models |
+| [SDR-0028](0028-retain-weak-event-kernel-validation.md) | Accepted | Retain weak event-kernel validation and keep the API experimental |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

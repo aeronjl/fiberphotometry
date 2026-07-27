@@ -9,6 +9,7 @@ from typing import Literal
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
+from scipy.sparse import csr_matrix, lil_matrix, vstack
 
 
 @dataclass(frozen=True)
@@ -162,7 +163,7 @@ class EncodingModelResult:
 
 @dataclass(frozen=True)
 class _Design:
-    values: NDArray[np.float64]
+    values: csr_matrix
     response: NDArray[np.float64]
     groups: NDArray[np.str_]
     event_slices: tuple[tuple[EventKernelSpec, slice, NDArray[np.float64]], ...]
@@ -258,12 +259,12 @@ def _build_design(
         (name, column + index) for index, name in enumerate(spec.continuous_covariates)
     )
     width = column + len(continuous_layout)
-    matrices = []
+    matrices: list[csr_matrix] = []
     responses = []
     groups = []
     event_counts = {kernel.name: 0 for kernel in spec.event_kernels}
     for session in sessions:
-        matrix = np.zeros((len(session.time), width), dtype=float)
+        matrix = lil_matrix((len(session.time), width), dtype=float)
         for kernel, columns, lags in event_layout:
             try:
                 event_times = session.events[kernel.name]
@@ -282,7 +283,9 @@ def _build_design(
                     )
                 rows = event_index + offsets
                 valid = (rows >= 0) & (rows < len(session.time))
-                matrix[rows[valid], np.arange(columns.start, columns.stop)[valid]] += 1
+                event_columns = np.arange(columns.start, columns.stop)[valid]
+                for row, event_column in zip(rows[valid], event_columns, strict=True):
+                    matrix[int(row), int(event_column)] += 1
         for name, index in continuous_layout:
             try:
                 matrix[:, index] = session.continuous_covariates[name]
@@ -290,8 +293,10 @@ def _build_design(
                 raise ValueError(
                     f"encoding session {session.session!r} lacks covariate {name!r}"
                 ) from error
-        finite = np.isfinite(session.response) & np.all(np.isfinite(matrix), axis=1)
-        matrices.append(matrix[finite])
+        finite = np.isfinite(session.response)
+        for name, _ in continuous_layout:
+            finite &= np.isfinite(session.continuous_covariates[name])
+        matrices.append(matrix.tocsr()[finite])
         responses.append(session.response[finite])
         group = (
             session.subject
@@ -305,7 +310,7 @@ def _build_design(
             "encoding event predictors have no occurrences: "
             + ", ".join(sorted(absent_events))
         )
-    values = np.vstack(matrices)
+    values = vstack(matrices, format="csr")
     response = np.concatenate(responses)
     if len(response) <= width:
         raise ValueError("encoding model has too few finite observations")
@@ -374,10 +379,14 @@ def _cross_validate_alpha(
             alpha,
             design.continuous_indices,
         )
-        transformed = _transform_continuous(
-            design.values[test], design.continuous_indices, means, scales
+        prediction = _predict(
+            design.values[test],
+            coefficients,
+            intercept,
+            design.continuous_indices,
+            means,
+            scales,
         )
-        prediction = intercept + transformed @ coefficients
         group_scores = []
         for group in held_out:
             group_mask = design.groups[test] == group
@@ -406,42 +415,64 @@ def _cross_validate_alpha(
 
 
 def _fit(
-    values: NDArray[np.float64],
+    values: csr_matrix,
     response: NDArray[np.float64],
     alpha: float,
     continuous: tuple[tuple[str, int], ...],
 ) -> tuple[NDArray[np.float64], float, NDArray[np.float64], NDArray[np.float64]]:
-    means = np.zeros(values.shape[1], dtype=float)
-    scales = np.ones(values.shape[1], dtype=float)
-    transformed = values.copy()
+    width = values.shape[1]
+    means = np.zeros(width, dtype=float)
+    scales = np.ones(width, dtype=float)
+    column_sum = np.asarray(values.sum(axis=0), dtype=float).ravel()
+    gram = np.asarray((values.T @ values).toarray(), dtype=float)
+    cross = np.asarray(values.T @ response, dtype=float).ravel()
+    response_sum = float(np.sum(response))
+    count = len(response)
     for _, index in continuous:
-        means[index] = float(np.mean(values[:, index]))
-        scales[index] = float(np.std(values[:, index]))
+        means[index] = column_sum[index] / count
+        variance = gram[index, index] / count - means[index] ** 2
+        scales[index] = float(np.sqrt(max(variance, 0.0)))
         if scales[index] <= np.finfo(float).eps:
             raise ValueError(
                 "encoding continuous covariates must vary in training data"
             )
-        transformed[:, index] = (values[:, index] - means[index]) / scales[index]
-    column_means = np.mean(transformed, axis=0)
-    response_mean = float(np.mean(response))
-    centered = transformed - column_means
-    target = response - response_mean
-    penalty = alpha * np.eye(centered.shape[1])
-    coefficients = np.linalg.pinv(centered.T @ centered + penalty) @ centered.T @ target
-    intercept = float(response_mean - column_means @ coefficients)
+    multiplier = np.ones(width, dtype=float)
+    shift = np.zeros(width, dtype=float)
+    for _, index in continuous:
+        multiplier[index] = 1 / scales[index]
+        shift[index] = -means[index] / scales[index]
+    scaled_sum = multiplier * column_sum
+    transformed_sum = scaled_sum + count * shift
+    transformed_gram = gram * np.outer(multiplier, multiplier)
+    transformed_gram += np.outer(scaled_sum, shift)
+    transformed_gram += np.outer(shift, scaled_sum)
+    transformed_gram += count * np.outer(shift, shift)
+    transformed_cross = multiplier * cross + shift * response_sum
+    response_mean = response_sum / count
+    centered_gram = (
+        transformed_gram - np.outer(transformed_sum, transformed_sum) / count
+    )
+    centered_cross = transformed_cross - transformed_sum * response_mean
+    penalty = alpha * np.eye(width)
+    coefficients = np.linalg.pinv(centered_gram + penalty) @ centered_cross
+    intercept = float(response_mean - transformed_sum @ coefficients / count)
     return coefficients, intercept, means, scales
 
 
-def _transform_continuous(
-    values: NDArray[np.float64],
+def _predict(
+    values: csr_matrix,
+    coefficients: NDArray[np.float64],
+    intercept: float,
     continuous: tuple[tuple[str, int], ...],
     means: NDArray[np.float64],
     scales: NDArray[np.float64],
 ) -> NDArray[np.float64]:
-    transformed = values.copy()
+    raw_coefficients = coefficients.copy()
+    adjusted_intercept = intercept
     for _, index in continuous:
-        transformed[:, index] = (values[:, index] - means[index]) / scales[index]
-    return transformed
+        raw_coefficients[index] /= scales[index]
+        adjusted_intercept -= means[index] * raw_coefficients[index]
+    return np.asarray(adjusted_intercept + values @ raw_coefficients, dtype=float)
 
 
 def _r_squared(observed: NDArray[np.float64], predicted: NDArray[np.float64]) -> float:

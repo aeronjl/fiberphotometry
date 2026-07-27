@@ -1,0 +1,9 @@
+{
+  "artifacts": {
+    "result.json": {
+      "sha256": "2ddd3ac58cae255999b866cf523e1abcc2d3dee64f8c1e16e7672c9f377395d1"
+    }
+  },
+  "schema_version": "dandi-000971-event-kernel-manifest-v0.1",
+  "status": "complete"
+}

@@ -63,9 +63,14 @@ unsafe, so this release intentionally omits them. It also lacks interactions,
 nonlinear terms, nested hyperparameter selection, blocked-within-session validation,
 missing-data imputation, and formal comparison between plausible design matrices.
 
-The next validation step is a public-data reproduction with a prospectively
-declared design, followed by animal-level coefficient uncertainty and residual/model
-diagnostics. Until then, use the model for exploration and predictive validation.
+The first [public-data reproduction](tutorials/dandi-000971-event-kernel.md)
+retained slightly negative mean animal-held-out prediction in both modeled regions
+and selected the largest declared ridge penalty. This validates execution and
+failure transparency, not scientific sufficiency. The next step is animal-level
+coefficient uncertainty and residual/model diagnostics, followed by a newly
+specified expanded or nested regularization design.
 
 See the [worked simulation](tutorials/event-kernel-simulation.md) and
 [SDR-0027](decisions/0027-hold-out-complete-groups-for-event-kernel-models.md).
+The promotion decision is recorded in
+[SDR-0028](decisions/0028-retain-weak-event-kernel-validation.md).

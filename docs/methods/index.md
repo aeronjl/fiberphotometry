@@ -42,6 +42,9 @@ See [robustness multiverses](../multiverse-contract-v0.1.md).
 event responses and continuous covariates, with complete animals or sessions held
 out during ridge selection. See the [method contract](../event-kernel-encoding-v0.1.md)
 and [worked simulation](../tutorials/event-kernel-simulation.md).
+The [public DANDI reproduction](../tutorials/dandi-000971-event-kernel.md)
+retains weak animal-held-out prediction and shows why the method remains
+experimental.
 
 The remaining questions are scientifically important but **not yet first-class
 workflows**:

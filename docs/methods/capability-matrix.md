@@ -16,7 +16,7 @@ experiment belongs in one package.
 | Animal-level scalar inference | **Supported/experimental** | t intervals supported; resampling and mixed models experimental |
 | Whole-waveform intervals | **Supported** | Animal-level pointwise and simultaneous bands |
 | Trial-level functional mixed models | **Planned** | `fastFMM` bridge and numerical-parity fixtures |
-| Behavioral/event-kernel GLMs | **Experimental** | FIR event kernels, continuous covariates and group-held-out ridge selection; uncertainty and public-data validation remain |
+| Behavioral/event-kernel GLMs | **Experimental** | FIR kernels and group-held-out ridge selection; first public reproduction retained weak prediction, and uncertainty remains absent |
 | Longitudinal learning trajectories | **Gap** | Session/time hierarchy and varying effects |
 | Tonic/phasic long-duration analysis | **Gap** | Multiscale baseline and transient representations |
 | Spontaneous transient detection | **Gap** | Local baselines, event definitions and validation fixtures |

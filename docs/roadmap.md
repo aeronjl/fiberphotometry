@@ -94,7 +94,7 @@
   - [x] Typed Gaussian FIR model for overlapping events and continuous covariates
   - [x] Leakage-safe animal/session-held-out ridge selection
   - [x] Ground-truth recovery fixture and executable simulation tutorial
-  - [ ] Public-data literature reproduction with a prospectively declared design
+  - [x] Public-data literature reproduction with a frozen design and retained weak validation
   - [ ] Animal-level coefficient uncertainty and residual/model diagnostics
   - [ ] Design-matrix alternatives in reproducible robustness multiverses
 - [ ] Longitudinal learning-trajectory and session-within-animal models
@@ -111,7 +111,7 @@
   - [x] Raw-NWB animal-level robustness analysis
   - [ ] Behavioral event-kernel GLM
     - [x] Ground-truth implementation tutorial
-    - [ ] Public-data literature reproduction
+    - [x] Public-data literature reproduction with retained negative held-out R²
   - [ ] Trial-level functional mixed model
   - [ ] Long-duration tonic/phasic and spontaneous events
   - [ ] Multi-site/multi-color association
