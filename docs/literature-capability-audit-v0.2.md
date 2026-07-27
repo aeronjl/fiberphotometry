@@ -144,28 +144,30 @@ validation, and interpretation contract is mature.
 
 ### 4. Are there spontaneous transients, and how do their kinetics change?
 
-**Status: experimental prototype, previously overstated.**
+**Status: experimental product family with important validation gaps.**
 
-The current detector is genuinely useful: it is gap-aware, exposes absolute,
-global-MAD and rolling-MAD thresholds, supports three local baseline summaries,
-returns event-level amplitude/half-width/AUC/interval measurements, and has a
-prospective public three-animal sensitivity audit.
+The product API now separates candidate detection from quantification, retains
+gap boundaries, and provides named GuPPY two-threshold MAD, PASTa local-baseline,
+and Wallace-style z-height/prominence families. Prominence timestamps can be
+quantified on non-z-scored dF/F; PASTa includes last-local-minimum baselines; and
+nearby accepted events receive compound-group metadata.
 
-It does **not** yet reproduce GuPPY, PASTa, or Wallace methods. Missing:
+Missing:
 
-- separate detection and quantification variables/scales;
-- prominence-based inclusion with quantification on non-z-scored dF/F;
-- GuPPY's high-event-excluded moving baseline;
-- PASTa's last-local-minimum baseline and compound-event handling;
 - thresholds learned from a declared baseline epoch, control session, or control
   cohort and then frozen across conditions;
 - maximum fall-search rules, incomplete/compound status, T80/decay and slope
   measures, and exported cut waveforms;
-- behavior-defined bins/epochs and animal-aware inference for rates and kinetics;
+- behavior-defined bins/epochs;
 - manual/biological ground truth across sensors and acquisition systems.
 
-The public dLight result is evidence that the method family matters, not evidence
-that one detector is correct.
+Animal-level rate and kinetic contrasts are now available: count/exposure is
+pooled within animal, kinetics are summarized session-to-animal, and resampling
+or condition randomization operates on animals rather than detected events.
+
+The existing public dLight result predates the separated detector families. It
+remains evidence that the method family matters, not validation that one detector
+is correct.
 
 ### 5. How does activity vary over long recordings or physiological states?
 

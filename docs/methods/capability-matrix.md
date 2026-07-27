@@ -25,8 +25,9 @@ experiment belongs in one package.
 | Across-session photometry comparability | **Gap** | Add expression/coupling/baseline diagnostics and explicit refusal states before Unspool handoff |
 | Single-signal autocorrelation, PSD and spectrograms | **Gap** | Add gap-aware, detrending-explicit time/frequency results and public state fixture |
 | State/epoch-conditioned and multiscale long-duration summaries | **Gap** | Consume external state tables; keep observable summaries distinct from biological “tonic/phasic” claims |
-| Spontaneous transient detection | **Experimental** | Gap-aware local-baseline prototype and public sensitivity audit; not yet GuPPY/PASTa/Prominence parity |
-| Spontaneous transient kinetic/rate inference | **Gap** | Separate detection from quantification; add compound events, cut traces, control-derived thresholds and animal-aware models |
+| Spontaneous transient detection | **Experimental** | Separate GuPPY-, PASTa-, and prominence-compatible candidate families; gap-aware detector evidence retained |
+| Spontaneous transient quantification | **Experimental** | Non-z-scored amplitude/half-width/AUC, compound groups, exposure-adjusted session summaries; cut traces and frozen control-derived thresholds remain gaps |
+| Spontaneous transient animal-level inference | **Experimental** | Paired/independent animal bootstrap and randomization for exposure-adjusted rate, amplitude, width, and AUC contrasts |
 | Multi-site/multi-color coupling | **Gap** | Cross-channel lag, partial association and shared-event models |
 | Coherence and phase analysis | **Gap** | Implement only after single-signal spectral validation, with state conditioning and blocked uncertainty |
 | Dense spatial multi-fiber analysis | **Gap** | Add coordinates and mouse-aware site/spatial models; avoid treating fibers as independent animals |

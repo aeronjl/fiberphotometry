@@ -491,6 +491,11 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+acquisition = [
+    { name = "h5py" },
+    { name = "pandas" },
+    { name = "pyarrow" },
+]
 behavior = [
     { name = "h5py" },
     { name = "pandas" },
@@ -536,12 +541,15 @@ stats-validation = [
 
 [package.metadata]
 requires-dist = [
+    { name = "h5py", marker = "extra == 'acquisition'", specifier = ">=3.11" },
     { name = "h5py", marker = "extra == 'behavior'", specifier = ">=3.11" },
     { name = "matplotlib", marker = "extra == 'plots'", specifier = ">=3.9" },
     { name = "ndx-fiber-photometry", marker = "extra == 'nwb'", specifier = ">=0.2.3" },
     { name = "numpy", specifier = ">=2.0" },
+    { name = "pandas", marker = "extra == 'acquisition'", specifier = ">=2.2" },
     { name = "pandas", marker = "extra == 'behavior'", specifier = ">=2.2" },
     { name = "pandas", marker = "extra == 'stats'", specifier = ">=2.2" },
+    { name = "pyarrow", marker = "extra == 'acquisition'", specifier = ">=18" },
     { name = "pynwb", marker = "extra == 'nwb'", specifier = ">=3.0" },
     { name = "remfile", marker = "extra == 'nwb'", specifier = ">=0.1.13" },
     { name = "scipy", specifier = ">=1.14" },
@@ -550,7 +558,7 @@ requires-dist = [
     { name = "tdt", marker = "extra == 'tdt'", specifier = ">=0.7.3" },
     { name = "xarray", specifier = ">=2025.1" },
 ]
-provides-extras = ["behavior", "plots", "nwb", "tdt", "stats"]
+provides-extras = ["acquisition", "behavior", "plots", "nwb", "tdt", "stats"]
 
 [package.metadata.requires-dev]
 dev = [

@@ -23,6 +23,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+acquisition = ["h5py>=3.11", "pandas>=2.2", "pyarrow>=18"]
 behavior = ["h5py>=3.11", "pandas>=2.2", "tables>=3.10"]
 plots = ["matplotlib>=3.9"]
 nwb = [
