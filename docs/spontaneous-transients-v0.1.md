@@ -5,11 +5,62 @@
     There is no field-wide spontaneous-event definition. Report the complete
     specification and show whether conclusions survive plausible alternatives.
 
-`detect_transients()` detects local maxima inside uninterrupted finite acquisition
-runs. It then defines amplitude relative to an adaptive pre-peak baseline, applies
-a named inclusion threshold, and measures half-height width and area. It retains
-rejected candidates and uses acquired duration—not wall-clock duration across
-gaps—for rates.
+The preferred product API separates candidate detection from kinetic
+quantification. This matters whenever detection uses a normalized representation:
+candidate timestamps can come from a z-scored stream while amplitude, width, and
+area are measured on non-z-scored dF/F.
+
+```python
+from fiberphotometry import (
+    ProminenceTransientDetectorSpec,
+    TransientQuantificationSpec,
+    detect_transient_candidates,
+    quantify_transient_candidates,
+)
+
+candidates = detect_transient_candidates(
+    recording,
+    variable="detection_z",
+    spec=ProminenceTransientDetectorSpec(
+        minimum_height_z=1,
+        minimum_prominence_z=2,
+        detrend_window_s=100,
+    ),
+)
+result = quantify_transient_candidates(
+    recording,
+    candidates,
+    variable="dff",
+    spec=TransientQuantificationSpec(
+        baseline_method="mean",
+        baseline_start_s=1.0,
+        baseline_end_s=0.2,
+    ),
+)
+```
+
+Both stages split the signal at missing acquisition and large timestamp gaps.
+Candidate IDs retain the detector family, sample, threshold, and score through
+quantification.
+
+## Named detector families
+
+- `PastaTransientDetectorSpec` finds local maxima and tests their amplitude
+  relative to a pre-peak mean, minimum, or last local minimum. Its threshold is
+  supplied in the same units as the detection stream.
+- `GuppyTransientDetectorSpec` implements GuPPY's chunked two-threshold
+  procedure: high-amplitude samples are excluded using the first, unscaled MAD
+  threshold before the second MAD threshold and local-maximum detection.
+- `ProminenceTransientDetectorSpec` optionally removes a gap-local moving mean,
+  z-scores within each uninterrupted run, and requires both peak height and
+  prominence. Quantification remains a separate call on dF/F.
+
+These are compatibility families, not assertions that one detector is correct.
+The exact specification belongs in analysis provenance.
+
+## Legacy combined call
+
+`detect_transients()` remains available for the earlier single-variable workflow:
 
 ```python
 from fiberphotometry import TransientDetectionSpec, detect_transients
@@ -49,29 +100,17 @@ At minimum, compare `global_mad` and `rolling_mad`, more than one defensible MAD
 multiplier, and `median` versus `minimum` local baselines. The scientific result
 should include changes in event count as well as downstream effect estimates.
 
-The defaults are close to some common published choices, but are not endorsed as
-universally optimal. This implementation is **not** a reproduction of GuPPY,
-PASTa, or the Wallace prominence method:
-
-- GuPPY removes high-amplitude events before estimating its moving MAD baseline;
-- PASTa also offers a last-local-minimum baseline, compound-event handling, and
-  thresholds derived from declared baseline/control periods;
-- Wallace et al. use z-scoring only to locate candidates, apply prominence, and
-  then return to non-z-scored dF/F for kinetic quantification.
-
-`detect_transients()` currently detects and quantifies the same input variable.
-Do not use a z-scored input to claim interpretable changes in event amplitude or
-kinetics across conditions. Until separate detection and quantification streams
-are implemented, use non-z-scored dF/F and treat method comparisons as
-sensitivity evidence rather than detector validation.
+For new work, prefer the separated calls. Do not use a z-scored quantification
+variable to claim interpretable changes in amplitude or kinetics across
+conditions.
 
 ## Current boundaries
 
-This increment does not yet identify compound events, export cut waveforms,
-separate detection from quantification, fit animal-aware rate/kinetic models,
-deconvolve sensor kinetics, assign events to neurotransmitter release episodes,
-or infer a biological tonic/phasic decomposition. Those require separate ground
-truth and interpretation tests.
+Quantification now marks nearby events with compound-group/rank metadata. It does
+not yet export cut waveforms, freeze thresholds learned from baseline/control
+epochs, fit animal-aware rate/kinetic models, deconvolve sensor kinetics, assign
+events to neurotransmitter release episodes, or infer a biological tonic/phasic
+decomposition.
 
 ## Sources
 
