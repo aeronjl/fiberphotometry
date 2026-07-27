@@ -54,3 +54,11 @@ explicit.
 Revisit after repeated-sampling coverage calibration across realistic animal
 counts and heterogeneity, selective or nested model-selection treatment, and a
 validated simultaneous-band procedure.
+
+## Evidence added later
+
+The frozen
+[event-kernel interval calibration v0.1](../event-kernel-interval-calibration-v0.1.md)
+found acceptable marginal pointwise coverage across all six scenarios, but the
+candidate simultaneous band missed its normalized-progress gate. SDR-0040 retains
+the candidate as a distinct opt-in without changing the pointwise default.

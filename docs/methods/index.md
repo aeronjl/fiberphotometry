@@ -79,7 +79,9 @@ modulation, and normalized-progress kernels are available as named alternatives.
 The [predictor-family contribution workflow](../predictor-family-contributions-v0.1.md)
 adds strictly paired full-versus-reduced held-out comparisons while rejecting
 changed predictors, tuning policies, or denominators. Simultaneous kernel intervals
-and formal coverage calibration remain planned. See the
+remain opt-in after the first
+[480-study calibration](../event-kernel-interval-calibration-v0.1.md) missed its
+normalized-progress gate; pointwise group sensitivity remains the default. See the
 [previous-outcome tutorial](../tutorials/event-kernel-history.md) and
 [variable-duration tutorial](../tutorials/variable-duration-kernels.md).
 

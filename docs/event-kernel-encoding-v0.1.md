@@ -8,8 +8,9 @@
 !!! warning "Experimental"
     This is a first vertical slice, not yet a supported inferential workflow. It
     estimates predictive kernels and validates predictions across held-out animals
-    or sessions. Grouped-jackknife intervals are conditional sensitivity summaries,
-    not promotion-grade confidence bands or causal effects.
+    or sessions. Grouped-jackknife intervals and the explicitly opt-in simultaneous
+    candidate are conditional sensitivity summaries, not promotion-grade confidence
+    bands or causal effects.
 
 ## Scientific question
 
@@ -186,9 +187,18 @@ pointwise 95% Student interval at every lag. These intervals quantify sensitivit
 of the pooled regularized estimator to independent groups.
 
 They are conditional on the ridge penalty selected using the full dataset. They do
-not account for model-selection uncertainty, are not simultaneous across lags, and
-have not yet passed broad repeated-sampling coverage calibration. With few animals,
-interpret them as influence-aware sensitivity summaries rather than binary tests.
+not account for model-selection uncertainty and are not simultaneous across lags.
+The first frozen calibration found 93.8–96.0% marginal pointwise coverage but much
+lower whole-family coverage, as expected. With few animals, interpret them as
+influence-aware sensitivity summaries rather than binary tests.
+
+An explicitly typed `MultiplierSimultaneousBandSpec` asks for one seeded max-*t*
+critical value across every evaluated position from every kernel in the model. It
+is not the default: the
+[480-study calibration](event-kernel-interval-calibration-v0.1.md) missed its
+frozen normalized-progress gate (82.5% versus an 85% minimum). Candidate results
+retain method, seed, draw count, family size, critical value and nullable
+simultaneous bounds. `KernelUncertaintySpec` remains pointwise-only.
 
 For every animal or session, the model also reports out-of-fold R², RMSE, MAE,
 residual bias and spread, lag-1 residual autocorrelation, and Durbin–Watson ratio.
@@ -201,21 +211,21 @@ The response must already have undergone a scientifically defensible correction;
 the encoding model does not decide between isosbestic, regression, or control-free
 preprocessing. Autocorrelated residuals make ordinary sample-level standard errors
 unsafe; the grouped jackknife does not repair a misspecified temporal model. The
-workflow also lacks simultaneous kernel bands, selective inference, nonlinear
-terms, nested hyperparameter selection, blocked-within-session validation,
-missingness-mechanism models or imputation, and formal comparison between plausible
-design matrices.
+workflow still lacks a fully calibrated simultaneous kernel band, selective
+inference, nonlinear terms, nested hyperparameter selection,
+blocked-within-session validation, and missingness-mechanism models or imputation.
 
 The first [public-data reproduction](tutorials/dandi-000971-event-kernel.md)
 retained slightly negative mean animal-held-out prediction in both modeled regions
 and selected the largest declared ridge penalty. This validates execution and
 failure transparency, not scientific sufficiency. Its v0.2 rerun found substantial
-held-out residual autocorrelation and wide group-sensitivity intervals. The next
-step is to use the model-multiverse boundary for a newly specified expanded design,
-then use paired
+held-out residual autocorrelation and wide group-sensitivity intervals. Named
+model multiverses and paired
 [predictor-family contribution summaries](predictor-family-contributions-v0.1.md)
-where literal reduced models are scientifically justified. Formal interval-coverage
-calibration remains outstanding.
+now cover explicit design comparisons. Promotion priorities are nested or
+independently frozen penalty selection, blocked validation where scientifically
+appropriate, and a new interval protocol after the retained v0.1 progress-kernel
+failure.
 
 See the [worked simulation](tutorials/event-kernel-simulation.md) and
 [model-multiverse workflow](event-kernel-multiverse-v0.1.md). The grouped

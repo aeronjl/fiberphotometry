@@ -83,6 +83,7 @@ EXPERIMENTAL_API_V0_1 = (
     "LinearProgressBasisSpec",
     "MaterializedEncodingUniverse",
     "MultiverseSpec",
+    "MultiplierSimultaneousBandSpec",
     "PoseTrajectory",
     "PredictorFamilyContribution",
     "PredictorFamilyContributionResult",

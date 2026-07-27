@@ -204,7 +204,20 @@ class EncodingSession:
 
 @dataclass(frozen=True)
 class KernelUncertaintySpec:
-    """Grouped pointwise and whole-model simultaneous sensitivity policy."""
+    """Default grouped pointwise sensitivity policy."""
+
+    confidence_level: float = 0.95
+    simultaneous_method: Literal["none"] = "none"
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        if not 0.0 < self.confidence_level < 1.0:
+            raise ValueError("kernel confidence_level must lie in (0, 1)")
+
+
+@dataclass(frozen=True)
+class MultiplierSimultaneousBandSpec:
+    """Explicit opt-in to the incompletely calibrated multiplier max-t band."""
 
     confidence_level: float = 0.95
     simultaneous_method: Literal["jackknife_gaussian_multiplier_max_t"] = (
@@ -245,7 +258,9 @@ class EncodingModelSpec:
     minimum_session_observations: int = 3
     schema_version: str = "1"
     progress_kernels: tuple[ProgressKernelSpec, ...] = ()
-    uncertainty: KernelUncertaintySpec = field(default_factory=KernelUncertaintySpec)
+    uncertainty: KernelUncertaintySpec | MultiplierSimultaneousBandSpec = field(
+        default_factory=KernelUncertaintySpec
+    )
 
     def __post_init__(self) -> None:
         names = [item.name for item in self.event_kernels] + [
@@ -256,6 +271,10 @@ class EncodingModelSpec:
             raise ValueError("encoding model requires at least one predictor")
         if len(all_names) != len(set(all_names)):
             raise ValueError("encoding predictor names must be unique")
+        if isinstance(self.uncertainty, MultiplierSimultaneousBandSpec) and not names:
+            raise ValueError(
+                "simultaneous kernel bands require an event or progress kernel"
+            )
         if not self.alpha_grid or any(value < 0 for value in self.alpha_grid):
             raise ValueError("encoding alpha_grid must contain nonnegative values")
         if len(self.alpha_grid) != len(set(self.alpha_grid)):
@@ -345,7 +364,7 @@ class ContinuousCoefficient:
 
 @dataclass(frozen=True)
 class EventKernelInterval:
-    """Pointwise grouped-jackknife uncertainty for one event kernel."""
+    """Pointwise and optional simultaneous uncertainty for one event kernel."""
 
     name: str
     lag_s: tuple[float, ...]
@@ -354,13 +373,13 @@ class EventKernelInterval:
     standard_error: tuple[float, ...]
     lower: tuple[float, ...]
     upper: tuple[float, ...]
-    simultaneous_lower: tuple[float, ...]
-    simultaneous_upper: tuple[float, ...]
+    simultaneous_lower: tuple[float, ...] | None
+    simultaneous_upper: tuple[float, ...] | None
 
 
 @dataclass(frozen=True)
 class ProgressKernelInterval:
-    """Pointwise grouped-jackknife uncertainty over normalized progress."""
+    """Pointwise and optional simultaneous uncertainty over progress."""
 
     name: str
     progress: tuple[float, ...]
@@ -369,8 +388,8 @@ class ProgressKernelInterval:
     standard_error: tuple[float, ...]
     lower: tuple[float, ...]
     upper: tuple[float, ...]
-    simultaneous_lower: tuple[float, ...]
-    simultaneous_upper: tuple[float, ...]
+    simultaneous_lower: tuple[float, ...] | None
+    simultaneous_upper: tuple[float, ...] | None
 
 
 @dataclass(frozen=True)
@@ -384,15 +403,13 @@ class GroupedKernelUncertainty:
     omitted_groups: tuple[str, ...]
     event_kernels: tuple[EventKernelInterval, ...]
     progress_kernels: tuple[ProgressKernelInterval, ...] = ()
-    simultaneous_method: Literal["jackknife_gaussian_multiplier_max_t"] = (
-        "jackknife_gaussian_multiplier_max_t"
-    )
-    simultaneous_draws: int = 2_000
-    simultaneous_seed: int = 20_260_727
-    simultaneous_family_size: int = 0
+    simultaneous_method: Literal["jackknife_gaussian_multiplier_max_t"] | None = None
+    simultaneous_draws: int | None = None
+    simultaneous_seed: int | None = None
+    simultaneous_family_size: int | None = None
     pointwise_critical_value: float = 0.0
-    simultaneous_critical_value: float = 0.0
-    simultaneous: bool = True
+    simultaneous_critical_value: float | None = None
+    simultaneous: bool = False
 
 
 @dataclass(frozen=True)
@@ -1184,7 +1201,7 @@ def _grouped_kernel_uncertainty(
     design: _Design,
     full_coefficients: NDArray[np.float64],
     alpha: float,
-    spec: KernelUncertaintySpec,
+    spec: KernelUncertaintySpec | MultiplierSimultaneousBandSpec,
 ) -> GroupedKernelUncertainty:
     groups = tuple(sorted(set(design.groups.tolist())))
     replicates = []
@@ -1230,13 +1247,20 @@ def _grouped_kernel_uncertainty(
             _jackknife_curve(full_curve, replicate_curves, count, pointwise_critical)
         )
     all_curves = tuple(event_curves) + tuple(progress_curves)
-    simultaneous_critical = _simultaneous_critical_value(
-        all_curves,
-        groups=count,
-        confidence_level=spec.confidence_level,
-        draws=spec.simultaneous_draws,
-        seed=spec.simultaneous_seed,
-        minimum=pointwise_critical,
+    simultaneous_spec = (
+        spec if isinstance(spec, MultiplierSimultaneousBandSpec) else None
+    )
+    simultaneous_critical = (
+        _simultaneous_critical_value(
+            all_curves,
+            groups=count,
+            confidence_level=spec.confidence_level,
+            draws=simultaneous_spec.simultaneous_draws,
+            seed=simultaneous_spec.simultaneous_seed,
+            minimum=pointwise_critical,
+        )
+        if simultaneous_spec is not None
+        else None
     )
     kernels = []
     for event_layout_item, curve in zip(design.event_slices, event_curves, strict=True):
@@ -1249,11 +1273,19 @@ def _grouped_kernel_uncertainty(
                 standard_error=_float_tuple(curve.standard_error),
                 lower=_float_tuple(curve.lower),
                 upper=_float_tuple(curve.upper),
-                simultaneous_lower=_float_tuple(
-                    curve.estimate - simultaneous_critical * curve.standard_error
+                simultaneous_lower=(
+                    _float_tuple(
+                        curve.estimate - simultaneous_critical * curve.standard_error
+                    )
+                    if simultaneous_critical is not None
+                    else None
                 ),
-                simultaneous_upper=_float_tuple(
-                    curve.estimate + simultaneous_critical * curve.standard_error
+                simultaneous_upper=(
+                    _float_tuple(
+                        curve.estimate + simultaneous_critical * curve.standard_error
+                    )
+                    if simultaneous_critical is not None
+                    else None
                 ),
             )
         )
@@ -1270,11 +1302,19 @@ def _grouped_kernel_uncertainty(
                 standard_error=_float_tuple(curve.standard_error),
                 lower=_float_tuple(curve.lower),
                 upper=_float_tuple(curve.upper),
-                simultaneous_lower=_float_tuple(
-                    curve.estimate - simultaneous_critical * curve.standard_error
+                simultaneous_lower=(
+                    _float_tuple(
+                        curve.estimate - simultaneous_critical * curve.standard_error
+                    )
+                    if simultaneous_critical is not None
+                    else None
                 ),
-                simultaneous_upper=_float_tuple(
-                    curve.estimate + simultaneous_critical * curve.standard_error
+                simultaneous_upper=(
+                    _float_tuple(
+                        curve.estimate + simultaneous_critical * curve.standard_error
+                    )
+                    if simultaneous_critical is not None
+                    else None
                 ),
             )
         )
@@ -1286,12 +1326,29 @@ def _grouped_kernel_uncertainty(
         omitted_groups=groups,
         event_kernels=tuple(kernels),
         progress_kernels=tuple(progress_kernels),
-        simultaneous_method=spec.simultaneous_method,
-        simultaneous_draws=spec.simultaneous_draws,
-        simultaneous_seed=spec.simultaneous_seed,
-        simultaneous_family_size=sum(len(item.full) for item in all_curves),
+        simultaneous_method=(
+            simultaneous_spec.simultaneous_method
+            if simultaneous_spec is not None
+            else None
+        ),
+        simultaneous_draws=(
+            simultaneous_spec.simultaneous_draws
+            if simultaneous_spec is not None
+            else None
+        ),
+        simultaneous_seed=(
+            simultaneous_spec.simultaneous_seed
+            if simultaneous_spec is not None
+            else None
+        ),
+        simultaneous_family_size=(
+            sum(len(item.full) for item in all_curves)
+            if simultaneous_spec is not None
+            else None
+        ),
         pointwise_critical_value=pointwise_critical,
         simultaneous_critical_value=simultaneous_critical,
+        simultaneous=simultaneous_spec is not None,
     )
 
 

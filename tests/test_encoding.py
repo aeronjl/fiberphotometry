@@ -10,6 +10,7 @@ from fiberphotometry.encoding import (
     EventModulationSpec,
     KernelUncertaintySpec,
     LinearProgressBasisSpec,
+    MultiplierSimultaneousBandSpec,
     ProgressKernelSpec,
     RaisedCosineBasisSpec,
     _build_design,
@@ -65,6 +66,7 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
             alpha_grid=(0.0, 0.1, 1.0),
             group_by="animal",
             folds=4,
+            uncertainty=MultiplierSimultaneousBandSpec(),
         ),
     )
 
@@ -120,6 +122,8 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert grouped.simultaneous_family_size == 9
     assert grouped.simultaneous_critical_value >= grouped.pointwise_critical_value
     cue_interval = uncertainty["cue"]
+    assert cue_interval.simultaneous_lower is not None
+    assert cue_interval.simultaneous_upper is not None
     assert np.all(
         np.asarray(cue_interval.simultaneous_lower)
         <= np.asarray(cue_interval.lower) + 1e-12
@@ -181,7 +185,7 @@ def test_session_grouping_uses_compound_identity_and_never_crosses_boundaries() 
 
 def test_simultaneous_kernel_band_is_seeded_and_configurable() -> None:
     sessions = _simulated_sessions()[:6]
-    uncertainty = KernelUncertaintySpec(
+    uncertainty = MultiplierSimultaneousBandSpec(
         confidence_level=0.9,
         simultaneous_draws=500,
         simultaneous_seed=17,
@@ -201,7 +205,7 @@ def test_simultaneous_kernel_band_is_seeded_and_configurable() -> None:
             event_kernels=spec.event_kernels,
             alpha_grid=spec.alpha_grid,
             folds=spec.folds,
-            uncertainty=KernelUncertaintySpec(
+            uncertainty=MultiplierSimultaneousBandSpec(
                 confidence_level=0.9,
                 simultaneous_draws=500,
                 simultaneous_seed=18,
@@ -220,12 +224,32 @@ def test_simultaneous_kernel_band_is_seeded_and_configurable() -> None:
         changed_seed.simultaneous_critical_value
     )
 
+    default = fit_event_kernel_model(
+        sessions,
+        EncodingModelSpec(
+            event_kernels=spec.event_kernels,
+            alpha_grid=spec.alpha_grid,
+            folds=spec.folds,
+        ),
+    ).kernel_uncertainty
+    assert default.simultaneous is False
+    assert default.simultaneous_method is None
+    assert default.simultaneous_critical_value is None
+    assert default.event_kernels[0].simultaneous_lower is None
+    assert default.event_kernels[0].simultaneous_upper is None
+
     with pytest.raises(ValueError, match="confidence_level"):
         KernelUncertaintySpec(confidence_level=1.0)
     with pytest.raises(ValueError, match="at least 100"):
-        KernelUncertaintySpec(simultaneous_draws=99)
+        MultiplierSimultaneousBandSpec(simultaneous_draws=99)
     with pytest.raises(ValueError, match="nonnegative"):
-        KernelUncertaintySpec(simultaneous_seed=-1)
+        MultiplierSimultaneousBandSpec(simultaneous_seed=-1)
+    with pytest.raises(ValueError, match="require an event or progress kernel"):
+        EncodingModelSpec(
+            event_kernels=(),
+            continuous_covariates=("motion",),
+            uncertainty=MultiplierSimultaneousBandSpec(),
+        )
 
 
 def test_rejects_irregular_sampling_and_absent_declared_events() -> None:
@@ -691,6 +715,7 @@ def test_recovers_normalized_progress_without_excluding_outside_bout_time() -> N
         ),
         alpha_grid=(0.0, 0.1),
         folds=4,
+        uncertainty=MultiplierSimultaneousBandSpec(),
     )
 
     result = fit_event_kernel_model(tuple(sessions), spec)
@@ -709,6 +734,8 @@ def test_recovers_normalized_progress_without_excluding_outside_bout_time() -> N
     progress_uncertainty = result.kernel_uncertainty
     assert progress_uncertainty.simultaneous_family_size == 101
     progress_interval = progress_uncertainty.progress_kernels[0]
+    assert progress_interval.simultaneous_lower is not None
+    assert progress_interval.simultaneous_upper is not None
     assert np.all(
         np.asarray(progress_interval.simultaneous_lower)
         <= np.asarray(progress_interval.lower) + 1e-12

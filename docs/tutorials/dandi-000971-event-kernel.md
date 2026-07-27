@@ -112,8 +112,10 @@ sparse two-event design generalizes well. Several explanations remain live:
 The next product increment is a prospectively expanded or nested penalty design
 and explicit design-matrix multiverses: movement, inactive pokes, consumption,
 trial history, analysis support, and preprocessing alternatives must be represented
-as named choices. Formal coverage calibration and simultaneous bands remain later
-promotion gates. The event-kernel API remains experimental.
+as named choices. The first
+[formal coverage calibration](../event-kernel-interval-calibration-v0.1.md) retained
+a normalized-progress failure, so simultaneous kernel bands remain an explicit
+experimental opt-in rather than a default. The event-kernel API remains experimental.
 
 ## Reproduce it
 

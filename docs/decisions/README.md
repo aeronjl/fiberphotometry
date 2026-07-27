@@ -67,6 +67,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0037](0037-model-event-history-as-explicit-within-session-modulation.md) | Accepted | Model event history as explicit within-session modulation |
 | [SDR-0038](0038-model-variable-duration-behavior-with-physical-intervals-and-progress.md) | Accepted | Model variable-duration behavior with physical intervals and progress |
 | [SDR-0039](0039-treat-predictor-family-drops-as-paired-predictive-sensitivity.md) | Accepted | Treat predictor-family drops as paired predictive sensitivity |
+| [SDR-0040](0040-keep-simultaneous-kernel-bands-opt-in-after-failed-calibration.md) | Accepted | Keep simultaneous kernel bands opt-in after failed calibration |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

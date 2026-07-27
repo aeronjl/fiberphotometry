@@ -47,11 +47,17 @@ development versions until the first public release.
 - Paired predictor-family held-out contribution summaries over declared encoding
   multiverses, with literal-subset validation, exact-denominator safeguards,
   per-group deltas, conditional sensitivity intervals, and non-causal guidance.
+- A frozen 480-study event/progress kernel interval calibration and retained failed
+  normalized-progress gate; seeded whole-model multiplier bands are available only
+  through an explicit experimental opt-in while pointwise sensitivity remains the
+  default.
 
 ### Scientific status
 
 - Signal-only double-exponential and AsLS baselines remain experimental.
 - Held-out regularized-AsLS validation retained its failed aggregate gate.
 - Scalar mixed models remain opt-in sensitivity summaries.
+- Simultaneous event-kernel bands remain opt-in after the v0.1 progress-kernel
+  calibration gate failed.
 
 [Unreleased]: https://github.com/aeronjl/fiberphotometry/compare/main...HEAD

@@ -15,8 +15,8 @@ from fiberphotometry import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
-    KernelUncertaintySpec,
     LinearProgressBasisSpec,
+    MultiplierSimultaneousBandSpec,
     ProgressKernelSpec,
     fit_event_kernel_model,
 )
@@ -82,6 +82,8 @@ def main() -> None:
         "artifact_type": "event_kernel_interval_coverage_benchmark",
         "schema_version": "1",
         "protocol": "protocol-event-kernel-interval-coverage-v0.1.md",
+        "protocol_commit": "38656b2d08e8c2df60045e56118dff691d3c5a20",
+        "candidate_implementation_commit": ("38f17aa254a91f44f4e4f5bff80bc1fe5b2fff7c"),
         "studies_per_scenario": args.studies,
         "scenarios": list(SCENARIOS),
         "candidate_procedure": {
@@ -132,6 +134,8 @@ def _coverage_metrics(
     true_values = []
     for interval in result.kernel_uncertainty.event_kernels:
         key = f"event:{interval.name}"
+        if interval.simultaneous_lower is None or interval.simultaneous_upper is None:
+            raise RuntimeError("calibration model did not emit simultaneous bounds")
         true_values.extend(truth[key])
         point_lower.extend(interval.lower)
         point_upper.extend(interval.upper)
@@ -139,6 +143,8 @@ def _coverage_metrics(
         simultaneous_upper.extend(interval.simultaneous_upper)
     for interval in result.kernel_uncertainty.progress_kernels:
         key = f"progress:{interval.name}"
+        if interval.simultaneous_lower is None or interval.simultaneous_upper is None:
+            raise RuntimeError("calibration model did not emit simultaneous bounds")
         true_values.extend(truth[key])
         point_lower.extend(interval.lower)
         point_upper.extend(interval.upper)
@@ -287,7 +293,7 @@ def _simulate_events(scenario: str, seed: int) -> SimulationStudy:
         group_by="animal",
         folds=4,
         minimum_session_coverage=(0.7 if scenario == "blockwise_missingness" else 0.9),
-        uncertainty=KernelUncertaintySpec(),
+        uncertainty=MultiplierSimultaneousBandSpec(),
     )
     return SimulationStudy(tuple(sessions), model, truth)
 
@@ -334,7 +340,7 @@ def _simulate_progress(seed: int) -> SimulationStudy:
         ),
         alpha_grid=(0.0,),
         folds=3,
-        uncertainty=KernelUncertaintySpec(),
+        uncertainty=MultiplierSimultaneousBandSpec(),
     )
     return SimulationStudy(
         tuple(sessions),

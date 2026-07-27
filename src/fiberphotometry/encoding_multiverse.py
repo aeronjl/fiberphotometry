@@ -60,7 +60,7 @@ class EncodingMultiverseSpec:
         if len(policies) != 1:
             raise ValueError(
                 "encoding alternatives must share grouping, folds, sampling, and "
-                "coverage policy"
+                "coverage and uncertainty policy"
             )
         model_payloads = [_canonical_model(item.model) for item in self.alternatives]
         if len(model_payloads) != len(set(model_payloads)):
