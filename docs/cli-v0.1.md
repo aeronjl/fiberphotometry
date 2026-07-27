@@ -91,6 +91,15 @@ The current writer uses valid core-NWB `TimeSeries` objects and deliberately doe
 not invent unavailable `ndx-fiber-photometry` hardware metadata; see
 [SDR-0006](decisions/0006-require-explicit-nwb-session-metadata.md).
 
+When `[nwb]` and `[multiverse]` are both declared, the `multiverse` command also
+exports one validated NWB file per session. Each file stores raw acquisition data
+once and one processed time series for the explicitly selected reference universe.
+It does not duplicate full signals for every workflow. Scratch datasets retain the
+complete multiverse result, stable universe IDs and choices, failures and declared
+incompatibilities, unit-local robustness summary and thresholds, normalized
+project, metadata readiness, session preflight, and reference-workflow QC. The
+NWB identifier is labelled `multiverse`, and every file is hashed in the manifest.
+
 `inspect` validates data without bypassing the analysis contract. `run` still
 fails when required assumptions are not recorded, contrast levels are absent,
 input roles are ambiguous, reference data are unavailable, or a schema is invalid.

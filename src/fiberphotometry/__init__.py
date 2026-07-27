@@ -45,7 +45,10 @@ from fiberphotometry.inference import (
     recommend_inference,
     unit_t_interval,
 )
-from fiberphotometry.io.nwb_project import export_project_nwb
+from fiberphotometry.io.nwb_project import (
+    export_project_multiverse_nwb,
+    export_project_nwb,
+)
 from fiberphotometry.io.tabular import (
     TabularChannel,
     TabularChannelInspection,
@@ -251,6 +254,7 @@ __all__ = [
     "create_analysis_plan",
     "exact_sign_flip_test",
     "execute_analysis_plan",
+    "export_project_multiverse_nwb",
     "export_project_nwb",
     "fit_scalar_mixed_model",
     "hierarchical_bootstrap",

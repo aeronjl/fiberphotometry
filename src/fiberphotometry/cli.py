@@ -19,7 +19,10 @@ from fiberphotometry.compatibility import (
     assess_multiverse_compatibility,
     assess_pipeline_compatibility,
 )
-from fiberphotometry.io.nwb_project import export_project_nwb
+from fiberphotometry.io.nwb_project import (
+    export_project_multiverse_nwb,
+    export_project_nwb,
+)
 from fiberphotometry.metadata import (
     MetadataCompletenessReport,
     assess_metadata_completeness,
@@ -243,6 +246,27 @@ def run_project_multiverse(
         if name not in {"metadata.json", "preflight.json"}:
             _atomic_write(output_directory / name, content)
     hashes = {name: _text_sha256(content) for name, content in artifacts.items()}
+    if project.nwb is not None:
+        nwb_directory = output_directory / "nwb"
+        if nwb_directory.is_dir():
+            for stale in nwb_directory.glob("*.nwb"):
+                stale.unlink()
+    try:
+        nwb_paths = export_project_multiverse_nwb(
+            project, loaded, result, groups, output_directory
+        )
+    except ValueError as error:
+        nwb_directory = output_directory / "nwb"
+        if nwb_directory.is_dir():
+            for incomplete in nwb_directory.glob("*.nwb"):
+                incomplete.unlink()
+        _atomic_write(
+            output_directory / "manifest.json",
+            _manifest(project, "failed", hashes, error=str(error)),
+        )
+        raise
+    for path in nwb_paths:
+        hashes[str(path.relative_to(output_directory))] = _file_sha256(path)
     status = "complete" if result.summary.successful_universes else "blocked"
     _atomic_write(
         output_directory / "manifest.json", _manifest(project, status, hashes)

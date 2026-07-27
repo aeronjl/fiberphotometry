@@ -47,6 +47,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0017](0017-couple-preprocessing-outputs-and-separate-units.md) | Accepted | Couple preprocessing outputs and separate incompatible units |
 | [SDR-0018](0018-summarize-robustness-within-unit-lanes.md) | Accepted | Summarize robustness within complete unit lanes |
 | [SDR-0019](0019-reject-irrelevant-parameters-and-declare-incompatibility.md) | Accepted | Reject irrelevant parameters and declare incompatibility prospectively |
+| [SDR-0020](0020-store-one-reference-signal-and-the-complete-multiverse-ledger.md) | Accepted | Store one reference signal and the complete multiverse ledger |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

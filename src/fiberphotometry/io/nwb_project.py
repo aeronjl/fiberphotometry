@@ -5,12 +5,15 @@ from __future__ import annotations
 import os
 import re
 import tempfile
+from collections.abc import Sequence
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from fiberphotometry.io.nwb import add_recording_to_nwb
 from fiberphotometry.metadata import assess_metadata_completeness
-from fiberphotometry.pipeline import RecordingInput
+from fiberphotometry.multiverse import MultiverseReportGroup, MultiverseResult
+from fiberphotometry.pipeline import RecordingInput, run_pipeline
 from fiberphotometry.project import LoadedTabularProject, ProjectConfig
 from fiberphotometry.workflow import EventAnalysisResult
 
@@ -24,6 +27,97 @@ def export_project_nwb(
     mixed_model_json: str | None = None,
 ) -> tuple[Path, ...]:
     """Write one validated NWB file per session and return resolved paths."""
+    scratch = [
+        (
+            "fiberphotometry_analysis",
+            result.to_json(),
+            "Complete population analysis, QC summaries, and processing lineage",
+        )
+    ]
+    if mixed_model_json is not None:
+        scratch.append(
+            (
+                "fiberphotometry_scalar_mixed_model",
+                mixed_model_json,
+                "Secondary scalar mixed-model sensitivity summary",
+            )
+        )
+    return _export_project_nwb_files(
+        project,
+        loaded,
+        output_directory,
+        _NWBAnalysisExport(
+            result.pipeline.processed_recordings,
+            result.pipeline.quality_reports,
+            result.preprocessing.output_variable,
+            result.preprocessing.units,
+            "ProcessedFiberPhotometrySignal",
+            tuple(scratch),
+            "analysis",
+        ),
+    )
+
+
+def export_project_multiverse_nwb(
+    project: ProjectConfig,
+    loaded: LoadedTabularProject,
+    result: MultiverseResult,
+    groups: Sequence[MultiverseReportGroup],
+    output_directory: Path,
+) -> tuple[Path, ...]:
+    """Archive one reference signal and the complete multiverse evidence ledger."""
+    if project.nwb is None:
+        return ()
+    reference = next(item for item in result.universes if item.is_reference)
+    if reference.status == "incompatible":
+        raise ValueError("the multiverse reference workflow is incompatible")
+    pipeline = run_pipeline(reference.pipeline, loaded.inputs)
+    group = next(item for item in groups if reference.universe_id in item.universe_ids)
+    return _export_project_nwb_files(
+        project,
+        loaded,
+        output_directory,
+        _NWBAnalysisExport(
+            pipeline.processed_recordings,
+            pipeline.quality_reports,
+            reference.pipeline.event_summary.variable,
+            group.units,
+            "ReferenceWorkflowProcessedFiberPhotometrySignal",
+            (
+                (
+                    "fiberphotometry_multiverse_result",
+                    result.to_json(),
+                    "Complete multiverse specification, outcomes, and retained "
+                    "failures",
+                ),
+                (
+                    "fiberphotometry_robustness_summary",
+                    result.grouped_summary_json(groups),
+                    "Unit-local robustness summaries and practical-effect policies",
+                ),
+            ),
+            "multiverse",
+        ),
+    )
+
+
+@dataclass(frozen=True)
+class _NWBAnalysisExport:
+    processed_recordings: tuple[Any, ...]
+    quality_reports: tuple[Any, ...]
+    processed_variable: str
+    processed_units: str
+    processed_name: str
+    population_scratch: tuple[tuple[str, str, str], ...]
+    identifier_label: str
+
+
+def _export_project_nwb_files(
+    project: ProjectConfig,
+    loaded: LoadedTabularProject,
+    output_directory: Path,
+    export: _NWBAnalysisExport,
+) -> tuple[Path, ...]:
     if project.nwb is None:
         return ()
     try:
@@ -33,7 +127,6 @@ def export_project_nwb(
         raise ValueError(
             "NWB export requires the optional 'nwb' dependencies"
         ) from error
-
     nwb_directory = output_directory / "nwb"
     nwb_directory.mkdir(parents=True, exist_ok=True)
     paths = []
@@ -44,8 +137,8 @@ def export_project_nwb(
         loaded.sessions,
         loaded.inputs,
         loaded.inspections,
-        result.pipeline.processed_recordings,
-        result.pipeline.quality_reports,
+        export.processed_recordings,
+        export.quality_reports,
         strict=True,
     ):
         if source.session_start_time is None:
@@ -59,7 +152,7 @@ def export_project_nwb(
         destination = nwb_directory / f"{stem}.nwb"
         identifier = (
             f"{project.nwb.identifier_prefix}-{source.subject}-{source.session}-"
-            f"{project.fingerprint[:12]}"
+            f"{project.fingerprint[:12]}-{export.identifier_label}"
         )
         nwbfile = NWBFile(
             session_description=project.nwb.session_description,
@@ -94,9 +187,9 @@ def export_project_nwb(
         add_recording_to_nwb(
             processed,
             nwbfile,
-            variable=result.preprocessing.output_variable,
-            name="ProcessedFiberPhotometrySignal",
-            unit=result.preprocessing.units,
+            variable=export.processed_variable,
+            name=export.processed_name,
+            unit=export.processed_units,
             processing_module=processing,
         )
         _add_events(nwbfile, item)
@@ -112,18 +205,16 @@ def export_project_nwb(
             project.normalized_json(),
             "Normalized project configuration and project SHA-256",
         )
-        _add_json_scratch(
-            nwbfile,
-            "fiberphotometry_analysis",
-            result.to_json(),
-            "Complete population analysis, QC summaries, and processing lineage",
-        )
-        if mixed_model_json is not None:
+        for (
+            scratch_name,
+            scratch_payload,
+            scratch_description,
+        ) in export.population_scratch:
             _add_json_scratch(
                 nwbfile,
-                "fiberphotometry_scalar_mixed_model",
-                mixed_model_json,
-                "Secondary scalar mixed-model sensitivity summary",
+                scratch_name,
+                scratch_payload,
+                scratch_description,
             )
         _add_json_scratch(
             nwbfile,

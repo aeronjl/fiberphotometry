@@ -51,4 +51,7 @@ from real acquisition systems.
 
 ## Evidence added later
 
-None.
+On 2026-07-27, NWB export was extended to multiverse projects without inventing
+additional acquisition metadata. The storage boundary for processed workflows is
+governed by
+[SDR-0020](0020-store-one-reference-signal-and-the-complete-multiverse-ledger.md).

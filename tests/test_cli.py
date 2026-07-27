@@ -558,6 +558,46 @@ def test_cli_exports_valid_provenance_complete_nwb(tmp_path) -> None:
         )
 
 
+def test_cli_exports_multiverse_provenance_without_duplicate_signals(tmp_path) -> None:
+    pynwb = pytest.importorskip("pynwb")
+    project_path = _project(tmp_path, nwb=True)
+    _declare_multiverse(project_path)
+    output = tmp_path / "multiverse-results"
+
+    assert main(["multiverse", str(project_path), "--output-dir", str(output)]) == 0
+
+    paths = sorted((output / "nwb").glob("*.nwb"))
+    assert len(paths) == 4
+    assert not pynwb.validate(path=str(paths[0]))
+    with pynwb.NWBHDF5IO(paths[0], "r") as io:
+        nwbfile = io.read()
+        interfaces = nwbfile.processing["fiberphotometry"].data_interfaces
+        assert set(interfaces) == {"ReferenceWorkflowProcessedFiberPhotometrySignal"}
+        assert set(nwbfile.scratch) == {
+            "fiberphotometry_metadata_completeness",
+            "fiberphotometry_multiverse_result",
+            "fiberphotometry_project",
+            "fiberphotometry_robustness_summary",
+            "fiberphotometry_session_preflight",
+            "fiberphotometry_session_qc",
+        }
+        multiverse = json.loads(
+            nwbfile.scratch["fiberphotometry_multiverse_result"].data
+        )
+        summary = json.loads(nwbfile.scratch["fiberphotometry_robustness_summary"].data)
+        assert multiverse["summary"]["total_universes"] == 4
+        assert summary["artifact_type"] == "multiverse_lane_summary"
+        assert sum(item["is_reference"] for item in multiverse["universes"]) == 1
+        assert nwbfile.identifier.endswith("-multiverse")
+    manifest = json.loads((output / "manifest.json").read_text())
+    for path in paths:
+        name = f"nwb/{path.name}"
+        assert (
+            manifest["artifacts"][name]["sha256"]
+            == hashlib.sha256(path.read_bytes()).hexdigest()
+        )
+
+
 def test_complete_metadata_profile_is_publication_ready(tmp_path) -> None:
     project_path = _project(tmp_path, nwb=True)
     project_path.write_text(

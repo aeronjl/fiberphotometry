@@ -40,6 +40,7 @@ EXPERIMENTAL_API_V0_1 = (
     "MultiverseSpec",
     "ScalarMixedModelSpec",
     "baseline_dff",
+    "export_project_multiverse_nwb",
     "fit_scalar_mixed_model",
     "hierarchical_bootstrap",
     "materialize_multiverse",
