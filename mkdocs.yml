@@ -62,6 +62,7 @@ nav:
       - Configuration-first CLI: cli-v0.1.md
       - Import tabular data: tabular-import-v0.1.md
       - Import TDT data: tdt-import-v0.1.md
+      - Import native acquisition files: native-acquisition-import-v0.1.md
   - Methods:
       - Methods catalog: methods/index.md
       - Public-data evidence atlas: methods/public-evidence-atlas.md
@@ -96,6 +97,7 @@ nav:
       - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
       - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
   - Data and interoperability:
+      - Native acquisition files: native-acquisition-import-v0.1.md
       - Behavioral ecosystem contract: ecosystem-interoperability-v0.1.md
       - Clock synchronization: clock-synchronization-v0.1.md
       - Behavioral adapter validation: interoperability-validation-v0.1.md

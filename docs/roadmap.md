@@ -52,7 +52,11 @@
   - [x] Schema-first wide CSV/TSV recording and event adapter
   - [x] Explicit TDT stream/epoc adapter through the same canonical boundary
   - [x] Checksum-pinned official real-block TDT integration fixture
-- [ ] Native Doric, Neurophotometrics, and pyPhotometry adapters
+- [x] Native Doric, Neurophotometrics, and pyPhotometry adapters
+  - [x] Shared acquisition inspection, provenance, and conformance boundary
+  - [x] Doric HDF5 series/digital mapping with official-file parity
+  - [x] Neurophotometrics `Flags`/`LedState` alternating-wavelength import
+  - [x] pyPhotometry legacy and v1.1 pulsed binary import
 - [ ] Behavioral ecosystem adapters
   - [x] Typed pose, continuous-covariate, point-event and interval boundaries
   - [x] Native-shaped DeepLabCut, SLEAP, Keypoint-MoSeq and BORIS adapters

@@ -127,9 +127,38 @@ from fiberphotometry.interoperability import (
     pose_from_sleap,
     pose_from_sleap_analysis_h5,
 )
+from fiberphotometry.io.acquisition import (
+    AcquisitionField,
+    AcquisitionFormat,
+    AcquisitionInspection,
+    detect_acquisition_format,
+    validate_acquisition_input,
+)
+from fiberphotometry.io.doric import (
+    DoricChannel,
+    DoricDigitalEvents,
+    DoricSchema,
+    DoricSeries,
+    inspect_doric,
+    load_doric_input,
+)
+from fiberphotometry.io.neurophotometrics import (
+    NeurophotometricsChannel,
+    NeurophotometricsDigitalEvents,
+    NeurophotometricsSchema,
+    inspect_neurophotometrics,
+    load_neurophotometrics_input,
+)
 from fiberphotometry.io.nwb_project import (
     export_project_multiverse_nwb,
     export_project_nwb,
+)
+from fiberphotometry.io.pyphotometry import (
+    PyPhotometryChannel,
+    PyPhotometryDigitalEvents,
+    PyPhotometrySchema,
+    inspect_pyphotometry,
+    load_pyphotometry_input,
 )
 from fiberphotometry.io.tabular import (
     TabularChannel,
@@ -264,6 +293,9 @@ except PackageNotFoundError:  # pragma: no cover - source tree without installat
     __version__ = "0+unknown"
 
 __all__ = [
+    "AcquisitionField",
+    "AcquisitionFormat",
+    "AcquisitionInspection",
     "AnalysisPlan",
     "AnalysisResult",
     "ArchiveCreator",
@@ -286,6 +318,10 @@ __all__ = [
     "DecisionAlternative",
     "DecisionNode",
     "DecisionSummary",
+    "DoricChannel",
+    "DoricDigitalEvents",
+    "DoricSchema",
+    "DoricSeries",
     "EncodingAlphaResult",
     "EncodingFoldResult",
     "EncodingGroupDiagnostic",
@@ -341,6 +377,9 @@ __all__ = [
     "MultiverseResult",
     "MultiverseSpec",
     "NWBExportConfig",
+    "NeurophotometricsChannel",
+    "NeurophotometricsDigitalEvents",
+    "NeurophotometricsSchema",
     "ObservationTable",
     "PeriEventInferenceResult",
     "PeriEventInferenceSpec",
@@ -367,6 +406,9 @@ __all__ = [
     "ProjectEvidenceBundle",
     "PublicationAttestation",
     "PublicationVerification",
+    "PyPhotometryChannel",
+    "PyPhotometryDigitalEvents",
+    "PyPhotometrySchema",
     "QualityGateSpec",
     "RaisedCosineBasisSpec",
     "RecordingInput",
@@ -427,6 +469,7 @@ __all__ = [
     "create_analysis_plan",
     "create_archive_package",
     "create_zenodo_draft",
+    "detect_acquisition_format",
     "detect_transients",
     "exact_sign_flip_test",
     "execute_analysis_plan",
@@ -437,11 +480,17 @@ __all__ = [
     "fit_scalar_mixed_model",
     "hierarchical_bootstrap",
     "infer_peri_event_contrast",
+    "inspect_doric",
     "inspect_loaded_tabular_input",
+    "inspect_neurophotometrics",
+    "inspect_pyphotometry",
     "inspect_tabular_input",
     "inspect_tabular_recording",
     "load_archive_metadata",
+    "load_doric_input",
+    "load_neurophotometrics_input",
     "load_project_config",
+    "load_pyphotometry_input",
     "load_tabular_events",
     "load_tabular_input",
     "load_tabular_recording",
@@ -467,6 +516,7 @@ __all__ = [
     "summarize_event_windows",
     "summarize_multiverse_groups",
     "unit_t_interval",
+    "validate_acquisition_input",
     "validate_design",
     "validate_recording",
     "verify_archive_package",
