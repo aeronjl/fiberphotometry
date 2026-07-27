@@ -73,6 +73,7 @@ nav:
       - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
       - Event-kernel model multiverses: event-kernel-multiverse-v0.1.md
       - Predictor-family contributions: predictor-family-contributions-v0.1.md
+      - Event-kernel interval calibration: event-kernel-interval-calibration-v0.1.md
       - Spontaneous transients: spontaneous-transients-v0.1.md
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
@@ -111,6 +112,7 @@ nav:
       - Scientific design: scientific-design.md
       - Tool landscape: landscape.md
       - Validation report: validation-report-v0.1.md
+      - Event-kernel interval calibration: event-kernel-interval-calibration-v0.1.md
       - Scientific decisions: decisions/README.md
       - Roadmap: roadmap.md
   - Reference:

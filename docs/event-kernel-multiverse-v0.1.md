@@ -58,7 +58,8 @@ All alternatives must share:
 - animal-versus-session grouping;
 - fold count;
 - sampling tolerance; and
-- minimum session coverage and observation thresholds.
+- minimum session coverage and observation thresholds; and
+- pointwise or explicitly opt-in simultaneous uncertainty policy.
 
 Changing those fields changes the predictive target or evidence-admission policy
 and therefore belongs in a separate multiverse. Event kernels, windows, typed

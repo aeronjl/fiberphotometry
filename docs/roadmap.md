@@ -110,6 +110,9 @@
   - [x] Conditional grouped-jackknife kernel intervals and out-of-fold residual diagnostics
   - [x] Validity-mask-aware complete-case fitting with coverage evidence and gap-safe residual diagnostics
   - [ ] Formal interval-coverage calibration and simultaneous kernel bands
+    - [x] Freeze and execute the first 480-study event/progress calibration
+    - [x] Retain the failed normalized-progress gate without default promotion
+    - [ ] Validate a revised whole-model band across every frozen scenario
   - [x] Named whole-spec design alternatives in reproducible robustness multiverses
   - [x] Basis, trial-history, duration/amplitude, and predictor-family contribution alternatives
     - [x] Typed full-FIR and raised-cosine kernel bases with physical-lag reconstruction

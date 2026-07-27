@@ -60,7 +60,7 @@ class EncodingMultiverseSpec:
         if len(policies) != 1:
             raise ValueError(
                 "encoding alternatives must share grouping, folds, sampling, and "
-                "coverage policy"
+                "coverage and uncertainty policy"
             )
         model_payloads = [_canonical_model(item.model) for item in self.alternatives]
         if len(model_payloads) != len(set(model_payloads)):
@@ -346,6 +346,7 @@ def _validation_policy(spec: EncodingModelSpec) -> tuple[object, ...]:
         spec.sampling_tolerance,
         spec.minimum_session_coverage,
         spec.minimum_session_observations,
+        spec.uncertainty,
     )
 
 
