@@ -20,6 +20,18 @@ development versions until the first public release.
   retaining weak held-out prediction.
 - Conditional delete-one-group kernel intervals and group-held-out residual
   diagnostics with session-safe temporal calculations.
+- Explicit response and continuous-covariate validity masks for event-kernel
+  models, with complete-case coverage ledgers, configurable per-session floors,
+  unsupported-lag rejection, and residual diagnostics that do not bridge gaps.
+- Experimental typed interoperability for DeepLabCut and SLEAP pose trajectories,
+  Keypoint-MoSeq bouts, BORIS point/state annotations, and gap-safe behavioral
+  covariates, with an executable ecosystem tutorial.
+- Optional DeepLabCut prediction, SLEAP Analysis HDF5, Keypoint-MoSeq results HDF5,
+  and BORIS tabular file readers, validated against checksum-pinned official SLEAP
+  and BORIS fixtures where upstream artifacts are available.
+- Experimental matched-pulse affine clock synchronization with explicit residual,
+  drift, pulse-count, span and extrapolation thresholds; pose, covariate and
+  annotation transformations retain a stable synchronization evidence ID.
 
 ### Scientific status
 

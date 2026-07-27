@@ -1,0 +1,53 @@
+:root {
+  --fp-purple: #563d7c;
+  --fp-teal: #23877c;
+  --fp-amber: #c47a2c;
+}
+
+.md-typeset .doc-figure {
+  margin: 1.6rem auto 2rem;
+  max-width: 54rem;
+}
+
+.md-typeset .doc-figure--wide {
+  max-width: 66rem;
+}
+
+.md-typeset .doc-figure img {
+  background: #fff;
+  border: 1px solid rgb(86 61 124 / 16%);
+  border-radius: 0.4rem;
+  box-shadow: 0 0.35rem 1.1rem rgb(36 27 52 / 10%);
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.md-typeset .doc-figure figcaption {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  margin-top: 0.7rem;
+}
+
+.md-typeset .evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.md-typeset .evidence-grid .doc-figure {
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .md-typeset .evidence-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+[data-md-color-scheme="slate"] .md-typeset .doc-figure img {
+  border-color: rgb(255 255 255 / 17%);
+  box-shadow: 0 0.35rem 1.2rem rgb(0 0 0 / 30%);
+}

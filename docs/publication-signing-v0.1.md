@@ -1,5 +1,10 @@
 # Publication manifest signing v0.1
 
+<figure class="doc-figure doc-figure--wide">
+  <img src="../assets/publication-provenance.svg" alt="An evidence bundle passes through schema and checksum verification, scientific comparison, manifest signing, and creation of a validated archival deposit draft.">
+  <figcaption><strong>Publication evidence is a verifiable chain.</strong> Schema validity, byte identity, scientific comparability, authorship attestation, and archival deposition remain separate checks.</figcaption>
+</figure>
+
 FiberPhotometry authenticates a completed evidence bundle with a detached OpenSSH
 signature. The signed payload is a canonical JSON attestation binding the exact
 `manifest.json` SHA-256, project fingerprint, signer identity, signing time,

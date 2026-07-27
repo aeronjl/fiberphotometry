@@ -57,6 +57,11 @@ the original reasoning is not silently rewritten.
 | [SDR-0027](0027-hold-out-complete-groups-for-event-kernel-models.md) | Accepted | Hold out complete groups for event-kernel models |
 | [SDR-0028](0028-retain-weak-event-kernel-validation.md) | Accepted | Retain weak event-kernel validation and keep the API experimental |
 | [SDR-0029](0029-treat-event-kernel-intervals-as-conditional-sensitivity.md) | Accepted | Treat grouped event-kernel intervals as conditional sensitivity |
+| [SDR-0030](0030-delegate-behavioral-trajectories-to-unspool.md) | Accepted | Delegate behavioral learning trajectories to Unspool |
+| [SDR-0031](0031-treat-spontaneous-transients-as-a-method-family.md) | Accepted | Treat spontaneous transients as a method family |
+| [SDR-0032](0032-preserve-external-behavior-semantics.md) | Accepted | Preserve external behavior semantics at typed boundaries |
+| [SDR-0033](0033-retain-validity-masks-without-compressing-time.md) | Accepted | Retain validity masks without compressing time |
+| [SDR-0034](0034-fit-only-explicit-matched-pulse-clock-transforms.md) | Accepted | Fit only explicit matched-pulse clock transforms |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

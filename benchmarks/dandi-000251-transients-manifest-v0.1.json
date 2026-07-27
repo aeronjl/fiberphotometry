@@ -1,0 +1,58 @@
+{
+  "schema_version": "dandi-000251-transients-manifest-v0.1",
+  "dandiset": "000251",
+  "dandiset_version": "draft",
+  "snapshot_observed_utc": "2026-07-27",
+  "mutable_dataset_warning": "DANDI:000251 has no published immutable version; every selected asset is pinned by asset ID, path, size, and SHA-256.",
+  "source_article_doi": "10.1016/j.cell.2020.11.013",
+  "assets": [
+    {
+      "subject": "213",
+      "condition": "standard",
+      "asset_id": "e83718ea-a0db-4b74-bd39-54ad6c867979",
+      "path": "sub-213/sub-213_ses-DAsensor-VS-VR-5.nwb",
+      "size": 7530040,
+      "sha256": "a8d215b93a27e5edaa1a18d0b264e475a48fa2f35c8e7fb30b75275caa9c1a01"
+    },
+    {
+      "subject": "213",
+      "condition": "three_teleport",
+      "asset_id": "44472954-88fb-44bf-a980-9988c99701aa",
+      "path": "sub-213/sub-213_ses-DAsensor-VS-VR-THREE-TP-4.nwb",
+      "size": 7579064,
+      "sha256": "120203a53fe82b94756c57bbf7a95019df0c3b0fe53fe3b5d20c608c0d8dc58c"
+    },
+    {
+      "subject": "214",
+      "condition": "standard",
+      "asset_id": "08f70a26-45c4-426f-a6a6-871e5b757072",
+      "path": "sub-214/sub-214_ses-DAsensor-VS-VR-6.nwb",
+      "size": 8039720,
+      "sha256": "622193e59126b7ecd0a9612af3eb5c49131e1c5b70da6599bd11814576939ef8"
+    },
+    {
+      "subject": "214",
+      "condition": "three_teleport",
+      "asset_id": "835c3aae-e928-4a6e-9aab-b9f594766929",
+      "path": "sub-214/sub-214_ses-DAsensor-VS-VR-THREE-TP-5.nwb",
+      "size": 7761648,
+      "sha256": "502b31b767d52b2eb549dd224cc7d8440faab6972f4e14569bd2be42fa589cf2"
+    },
+    {
+      "subject": "215",
+      "condition": "standard",
+      "asset_id": "ee2aa249-239c-4a1f-bf10-6bcd97a16936",
+      "path": "sub-215/sub-215_ses-DAsensor-VS-VR-7.nwb",
+      "size": 6420184,
+      "sha256": "eae9e1de8701bf50bdc9a3b3ebc73bfc915b9b8bcfbeea1bd8f98a3a653eac63"
+    },
+    {
+      "subject": "215",
+      "condition": "three_teleport",
+      "asset_id": "058c3a48-d78c-4acf-9944-44f21d2d2ffb",
+      "path": "sub-215/sub-215_ses-DAsensor-VS-VR-THREE-TP-6.nwb",
+      "size": 6056432,
+      "sha256": "ef44292dc2162a5bc5c61ec96c675efd40b1527b603a07185dc28bbcd53fc12c"
+    }
+  ]
+}

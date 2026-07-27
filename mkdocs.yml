@@ -31,6 +31,9 @@ theme:
         icon: material/weather-sunny
         name: Use light mode
 
+extra_css:
+  - stylesheets/extra.css
+
 markdown_extensions:
   - admonition
   - attr_list
@@ -61,22 +64,34 @@ nav:
       - Import TDT data: tdt-import-v0.1.md
   - Methods:
       - Methods catalog: methods/index.md
+      - Public-data evidence atlas: methods/public-evidence-atlas.md
       - Capability matrix: methods/capability-matrix.md
       - Preprocessing and QC: pipeline-v0.1.md
       - Irregular sampling: irregular-sampling-v0.1.md
       - Experimental design and inference: inference-design-v0.1.md
       - Peri-event inference: peri-event-inference-v0.1.md
       - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
+      - Spontaneous transients: spontaneous-transients-v0.1.md
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
+      - Behavioral ecosystem interoperability: ecosystem-interoperability-v0.1.md
+      - Clock synchronization: clock-synchronization-v0.1.md
+      - Longitudinal behavior with Unspool: unspool-interoperability-v0.1.md
   - Worked examples:
       - Examples overview: tutorials/index.md
       - Public IBL event report: tutorials/ibl-feedback-report.md
       - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
       - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
+      - Public transient validation: dandi-000251-transient-results-v0.1.md
       - Event-kernel simulation: tutorials/event-kernel-simulation.md
+      - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
       - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md
+      - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
+      - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
   - Data and interoperability:
+      - Behavioral ecosystem contract: ecosystem-interoperability-v0.1.md
+      - Clock synchronization: clock-synchronization-v0.1.md
+      - Behavioral adapter validation: interoperability-validation-v0.1.md
       - Metadata readiness: metadata-completeness-v0.1.md
       - NWB and DANDI integration: dandi-001084-integration.md
       - Evidence reader: evidence-reader-v0.1.md
@@ -86,7 +101,7 @@ nav:
       - Create DOI deposits: archive-deposition-v0.1.md
       - Artifact schemas: artifact-schemas-v0.1.md
   - Evidence and rationale:
-      - Literature and capability audit: literature-capability-audit-v0.1.md
+      - Literature and capability audit: literature-capability-audit-v0.2.md
       - Scientific design: scientific-design.md
       - Tool landscape: landscape.md
       - Validation report: validation-report-v0.1.md
@@ -94,5 +109,6 @@ nav:
       - Roadmap: roadmap.md
   - Reference:
       - Python API: reference/index.md
+      - Figure provenance: reference/figure-provenance.md
       - Stability policy: api-stability-v0.1.md
       - Release readiness: release-readiness-v0.1.md

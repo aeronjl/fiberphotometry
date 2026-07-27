@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Gap-aware spontaneous transient detection contract</title>
+  <desc id="desc">A trace split at an acquisition gap flows through baseline, threshold, and shape gates into events, exclusions, and time bins.</desc>
+  <rect width="1200" height="420" rx="28" fill="#f7f5ff"/>
+  <g font-family="system-ui, sans-serif" fill="#241f33">
+    <text x="60" y="62" font-size="24" font-weight="700">Observed fluorescence</text>
+    <path d="M65 145 C110 145 120 142 150 145 C180 147 190 70 220 145 C260 146 280 145 320 145" fill="none" stroke="#6750a4" stroke-width="5"/>
+    <path d="M390 145 C430 145 450 145 480 145 C510 145 520 92 545 145 C580 147 600 145 630 145" fill="none" stroke="#6750a4" stroke-width="5"/>
+    <rect x="330" y="95" width="50" height="100" rx="8" fill="#ffd8df"/>
+    <text x="319" y="222" font-size="18">acquisition gap</text>
+
+    <path d="M660 145 H725" stroke="#58606b" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="740" y="72" width="395" height="146" rx="18" fill="#ffffff" stroke="#cbc3e3" stroke-width="2"/>
+    <text x="770" y="110" font-size="20" font-weight="700">For each finite-run candidate</text>
+    <text x="770" y="145" font-size="18">1  complete pre-peak local baseline</text>
+    <text x="770" y="175" font-size="18">2  named absolute or MAD threshold</text>
+    <text x="770" y="205" font-size="18">3  complete half-height shape support</text>
+
+    <path d="M200 275 H1000" stroke="#cbc3e3" stroke-width="2"/>
+    <rect x="75" y="305" width="300" height="70" rx="16" fill="#d9f4e7"/>
+    <text x="110" y="335" font-size="19" font-weight="700">Accepted events</text>
+    <text x="110" y="360" font-size="16">amplitude · width · AUC · IEI</text>
+    <rect x="450" y="305" width="300" height="70" rx="16" fill="#ffe8cc"/>
+    <text x="485" y="335" font-size="19" font-weight="700">Explicit exclusions</text>
+    <text x="485" y="360" font-size="16">candidate time + reason</text>
+    <rect x="825" y="305" width="300" height="70" rx="16" fill="#dcecff"/>
+    <text x="860" y="335" font-size="19" font-weight="700">Long-window bins</text>
+    <text x="860" y="360" font-size="16">finite exposure · rate · amplitude</text>
+  </g>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#58606b"/></marker></defs>
+</svg>

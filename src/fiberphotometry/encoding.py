@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping, Sequence
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Literal
 
 import numpy as np
@@ -37,6 +37,10 @@ class EncodingSession:
     response: NDArray[np.float64]
     events: Mapping[str, tuple[float, ...]]
     continuous_covariates: Mapping[str, NDArray[np.float64]]
+    response_valid: NDArray[np.bool_] | None = None
+    continuous_covariate_validity: Mapping[str, NDArray[np.bool_]] = field(
+        default_factory=dict
+    )
 
     @classmethod
     def from_arrays(
@@ -48,6 +52,8 @@ class EncodingSession:
         response: ArrayLike,
         events: Mapping[str, Sequence[float]],
         continuous_covariates: Mapping[str, ArrayLike] | None = None,
+        response_valid: ArrayLike | None = None,
+        continuous_covariate_validity: Mapping[str, ArrayLike] | None = None,
     ) -> EncodingSession:
         """Create a validated session without joining signals across recordings."""
         time_values = np.asarray(time, dtype=float)
@@ -55,6 +61,10 @@ class EncodingSession:
         covariates = {
             name: np.asarray(values, dtype=float)
             for name, values in (continuous_covariates or {}).items()
+        }
+        covariate_validity = {
+            name: np.asarray(values, dtype=bool)
+            for name, values in (continuous_covariate_validity or {}).items()
         }
         result = cls(
             str(subject),
@@ -66,6 +76,12 @@ class EncodingSession:
                 for name, values in events.items()
             },
             {name: values.copy() for name, values in covariates.items()},
+            (
+                np.asarray(response_valid, dtype=bool).copy()
+                if response_valid is not None
+                else None
+            ),
+            {name: values.copy() for name, values in covariate_validity.items()},
         )
         _validate_session(result)
         return result
@@ -81,6 +97,8 @@ class EncodingModelSpec:
     group_by: Literal["animal", "session"] = "animal"
     folds: int = 5
     sampling_tolerance: float = 1e-3
+    minimum_session_coverage: float = 0.5
+    minimum_session_observations: int = 3
     schema_version: str = "1"
 
     def __post_init__(self) -> None:
@@ -98,6 +116,10 @@ class EncodingModelSpec:
             raise ValueError("encoding cross-validation requires at least two folds")
         if not 0 < self.sampling_tolerance < 0.1:
             raise ValueError("encoding sampling_tolerance must lie between 0 and 0.1")
+        if not 0 < self.minimum_session_coverage <= 1:
+            raise ValueError("minimum_session_coverage must lie in (0, 1]")
+        if self.minimum_session_observations < 1:
+            raise ValueError("minimum_session_observations must be positive")
 
 
 @dataclass(frozen=True)
@@ -198,6 +220,35 @@ class EncodingResidualDiagnostics:
 
 
 @dataclass(frozen=True)
+class EncodingSessionCoverage:
+    """Complete-case exclusions for one session before model fitting."""
+
+    subject: str
+    session: str
+    total_observations: int
+    retained_observations: int
+    excluded_observations: int
+    retained_fraction: float
+    invalid_response: int
+    invalid_by_covariate: Mapping[str, int]
+    contiguous_retained_runs: int
+
+
+@dataclass(frozen=True)
+class EncodingValidityReport:
+    """Declared mask policy and retained denominators for an encoding model."""
+
+    policy: Literal["complete_case"]
+    minimum_session_coverage: float
+    minimum_session_observations: int
+    total_observations: int
+    retained_observations: int
+    excluded_observations: int
+    retained_fraction: float
+    sessions: tuple[EncodingSessionCoverage, ...]
+
+
+@dataclass(frozen=True)
 class EncodingModelResult:
     """Fitted kernels plus group-held-out predictive validation evidence."""
 
@@ -208,6 +259,7 @@ class EncodingModelResult:
     continuous_coefficients: tuple[ContinuousCoefficient, ...]
     kernel_uncertainty: GroupedKernelUncertainty
     residual_diagnostics: EncodingResidualDiagnostics
+    validity: EncodingValidityReport
     cross_validation: tuple[EncodingAlphaResult, ...]
     group_by: str
     groups: int
@@ -217,7 +269,7 @@ class EncodingModelResult:
     artifact_type: Literal["event_kernel_encoding_result"] = (
         "event_kernel_encoding_result"
     )
-    schema_version: str = "2"
+    schema_version: str = "3"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -229,9 +281,11 @@ class _Design:
     response: NDArray[np.float64]
     groups: NDArray[np.str_]
     sessions: NDArray[np.str_]
+    residual_segments: NDArray[np.str_]
     event_slices: tuple[tuple[EventKernelSpec, slice, NDArray[np.float64]], ...]
     continuous_indices: tuple[tuple[str, int], ...]
     sample_interval: float
+    validity: EncodingValidityReport
 
 
 def fit_event_kernel_model(
@@ -247,6 +301,7 @@ def fit_event_kernel_model(
     if not sessions:
         raise ValueError("encoding model requires at least one session")
     design = _build_design(tuple(sessions), spec)
+    _validate_event_lag_support(design)
     unique_groups = sorted(set(design.groups.tolist()))
     if len(unique_groups) < 2:
         raise ValueError("encoding cross-validation requires at least two groups")
@@ -283,20 +338,35 @@ def fit_event_kernel_model(
     )
     diagnostics = _residual_diagnostics(design, folds, selected.alpha, spec.group_by)
     return EncodingModelResult(
-        design.sample_interval,
-        selected.alpha,
-        intercept,
-        kernels,
-        continuous,
-        uncertainty,
-        diagnostics,
-        alpha_results,
-        spec.group_by,
-        len(unique_groups),
-        len({(item.subject, item.session) for item in sessions}),
-        len({item.subject for item in sessions}),
-        len(design.response),
+        sample_interval_s=design.sample_interval,
+        selected_alpha=selected.alpha,
+        intercept=intercept,
+        event_kernels=kernels,
+        continuous_coefficients=continuous,
+        kernel_uncertainty=uncertainty,
+        residual_diagnostics=diagnostics,
+        validity=design.validity,
+        cross_validation=alpha_results,
+        group_by=spec.group_by,
+        groups=len(unique_groups),
+        sessions=len({(item.subject, item.session) for item in sessions}),
+        animals=len({item.subject for item in sessions}),
+        observations=len(design.response),
     )
+
+
+def _validate_event_lag_support(design: _Design) -> None:
+    unsupported: list[str] = []
+    for kernel, columns, lags in design.event_slices:
+        for offset, lag in enumerate(lags):
+            column = columns.start + offset
+            if design.values[:, column].nnz == 0:
+                unsupported.append(f"{kernel.name}@{float(lag):g}s")
+    if unsupported:
+        raise ValueError(
+            "encoding event lags have no retained observations: "
+            + ", ".join(unsupported)
+        )
 
 
 def _build_design(
@@ -331,7 +401,9 @@ def _build_design(
     matrices: list[csr_matrix] = []
     responses = []
     groups = []
-    segment_ids = []
+    session_labels = []
+    residual_segment_ids = []
+    coverage_records = []
     event_counts = {kernel.name: 0 for kernel in spec.event_kernels}
     for session in sessions:
         matrix = lil_matrix((len(session.time), width), dtype=float)
@@ -363,19 +435,53 @@ def _build_design(
                 raise ValueError(
                     f"encoding session {session.session!r} lacks covariate {name!r}"
                 ) from error
-        finite = np.isfinite(session.response)
+        response_valid = np.isfinite(session.response)
+        if session.response_valid is not None:
+            response_valid &= session.response_valid
+        retained = response_valid.copy()
+        invalid_by_covariate: dict[str, int] = {}
         for name, _ in continuous_layout:
-            finite &= np.isfinite(session.continuous_covariates[name])
-        matrices.append(matrix.tocsr()[finite])
-        responses.append(session.response[finite])
+            covariate_valid = np.isfinite(session.continuous_covariates[name])
+            if name in session.continuous_covariate_validity:
+                covariate_valid &= session.continuous_covariate_validity[name]
+            invalid_by_covariate[name] = int(np.sum(~covariate_valid))
+            retained &= covariate_valid
+        retained_count = int(np.sum(retained))
+        retained_fraction = retained_count / len(session.time)
+        segment = f"{session.subject}/{session.session}"
+        run_ids, run_count = _retained_run_ids(retained, segment)
+        coverage = EncodingSessionCoverage(
+            subject=session.subject,
+            session=session.session,
+            total_observations=len(session.time),
+            retained_observations=retained_count,
+            excluded_observations=len(session.time) - retained_count,
+            retained_fraction=retained_fraction,
+            invalid_response=int(np.sum(~response_valid)),
+            invalid_by_covariate=invalid_by_covariate,
+            contiguous_retained_runs=run_count,
+        )
+        if retained_count < spec.minimum_session_observations:
+            raise ValueError(
+                f"encoding session {segment!r} retains {retained_count} observations; "
+                f"minimum is {spec.minimum_session_observations}"
+            )
+        if retained_fraction < spec.minimum_session_coverage:
+            raise ValueError(
+                f"encoding session {segment!r} retains {retained_fraction:.1%}; "
+                f"minimum coverage is {spec.minimum_session_coverage:.1%}"
+            )
+        coverage_records.append(coverage)
+        matrices.append(matrix.tocsr()[retained])
+        responses.append(session.response[retained])
         group = (
             session.subject
             if spec.group_by == "animal"
             else f"{session.subject}/{session.session}"
         )
-        groups.extend([group] * int(np.sum(finite)))
-        segment = f"{session.subject}/{session.session}"
-        segment_ids.extend([segment] * int(np.sum(finite)))
+        groups.extend([group] * retained_count)
+        session_labels.extend([segment] * retained_count)
+        residual_segment_ids.extend(run_ids)
     absent_events = [name for name, count in event_counts.items() if count == 0]
     if absent_events:
         raise ValueError(
@@ -386,15 +492,49 @@ def _build_design(
     response = np.concatenate(responses)
     if len(response) <= width:
         raise ValueError("encoding model has too few finite observations")
+    unsupported_events = [
+        kernel.name
+        for kernel, columns, _ in event_layout
+        if values[:, columns].nnz == 0
+    ]
+    if unsupported_events:
+        raise ValueError(
+            "encoding event predictors have no retained support: "
+            + ", ".join(sorted(unsupported_events))
+        )
+    total_observations = sum(item.total_observations for item in coverage_records)
+    retained_observations = sum(item.retained_observations for item in coverage_records)
+    validity = EncodingValidityReport(
+        policy="complete_case",
+        minimum_session_coverage=spec.minimum_session_coverage,
+        minimum_session_observations=spec.minimum_session_observations,
+        total_observations=total_observations,
+        retained_observations=retained_observations,
+        excluded_observations=total_observations - retained_observations,
+        retained_fraction=retained_observations / total_observations,
+        sessions=tuple(coverage_records),
+    )
     return _Design(
         values,
         response,
         np.asarray(groups, dtype=str),
-        np.asarray(segment_ids, dtype=str),
+        np.asarray(session_labels, dtype=str),
+        np.asarray(residual_segment_ids, dtype=str),
         tuple(event_layout),
         continuous_layout,
         interval,
+        validity,
     )
+
+
+def _retained_run_ids(
+    retained: NDArray[np.bool_], session: str
+) -> tuple[list[str], int]:
+    indices = np.flatnonzero(retained)
+    if not len(indices):
+        return [], 0
+    run = np.concatenate(([0], np.cumsum(np.diff(indices) != 1)))
+    return [f"{session}#run-{int(value)}" for value in run], int(run[-1] + 1)
 
 
 def _validate_session(session: EncodingSession) -> None:
@@ -416,6 +556,29 @@ def _validate_session(session: EncodingSession) -> None:
             or len(covariate_values) != len(session.time)
         ):
             raise ValueError("encoding continuous covariates must match session time")
+    if session.response_valid is not None and (
+        session.response_valid.ndim != 1
+        or len(session.response_valid) != len(session.time)
+        or session.response_valid.dtype.kind != "b"
+    ):
+        raise ValueError("encoding response validity must be a matching bool mask")
+    unknown_masks = set(session.continuous_covariate_validity) - set(
+        session.continuous_covariates
+    )
+    if unknown_masks:
+        raise ValueError(
+            "encoding validity masks name unknown covariates: "
+            + ", ".join(sorted(unknown_masks))
+        )
+    for name, validity in session.continuous_covariate_validity.items():
+        if (
+            validity.ndim != 1
+            or len(validity) != len(session.time)
+            or validity.dtype.kind != "b"
+        ):
+            raise ValueError(
+                f"encoding validity for covariate {name!r} must be a matching bool mask"
+            )
 
 
 def _sample_interval(session: EncodingSession, spec: EncodingModelSpec) -> float:
@@ -567,7 +730,9 @@ def _residual_diagnostics(
     for group in sorted(set(design.groups.tolist())):
         selected = design.groups == group
         metrics = _residual_metrics(
-            design.response[selected], prediction[selected], design.sessions[selected]
+            design.response[selected],
+            prediction[selected],
+            design.residual_segments[selected],
         )
         group_results.append(
             EncodingGroupDiagnostic(
@@ -577,7 +742,7 @@ def _residual_diagnostics(
                 *metrics,
             )
         )
-    pooled = _residual_metrics(design.response, prediction, design.sessions)
+    pooled = _residual_metrics(design.response, prediction, design.residual_segments)
     return EncodingResidualDiagnostics(
         "group_held_out",
         group_by,
@@ -590,15 +755,15 @@ def _residual_diagnostics(
 def _residual_metrics(
     observed: NDArray[np.float64],
     predicted: NDArray[np.float64],
-    sessions: NDArray[np.str_],
+    contiguous_segments: NDArray[np.str_],
 ) -> tuple[float, float, float, float, float, float | None, float | None]:
     residual = observed - predicted
     lag_numerator = 0.0
     lag_left = 0.0
     lag_right = 0.0
     difference_sum = 0.0
-    for session in sorted(set(sessions.tolist())):
-        values = residual[sessions == session]
+    for segment in sorted(set(contiguous_segments.tolist())):
+        values = residual[contiguous_segments == segment]
         if len(values) < 2:
             continue
         centered = values - np.mean(values)
