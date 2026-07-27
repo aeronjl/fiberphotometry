@@ -70,6 +70,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0040](0040-keep-simultaneous-kernel-bands-opt-in-after-failed-calibration.md) | Accepted | Keep simultaneous kernel bands opt-in after failed calibration |
 | [SDR-0041](0041-use-format-specific-readers-behind-one-acquisition-boundary.md) | Accepted | Use format-specific readers behind one acquisition boundary |
 | [SDR-0042](0042-separate-transient-detection-from-quantification.md) | Accepted | Separate transient detection from quantification |
+| [SDR-0043](0043-infer-transient-contrasts-at-the-animal-level.md) | Accepted | Infer transient contrasts at the animal level |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

@@ -270,6 +270,13 @@ from fiberphotometry.timecourse import (
     PeriEventInferenceSpec,
     infer_peri_event_contrast,
 )
+from fiberphotometry.transient_inference import (
+    TransientAnimalEstimate,
+    TransientAnimalInferenceResult,
+    TransientAnimalInferenceSpec,
+    TransientStudySession,
+    infer_transient_animals,
+)
 from fiberphotometry.transient_product import (
     GuppyTransientDetectorSpec,
     PastaTransientDetectorSpec,
@@ -457,6 +464,9 @@ __all__ = [
     "TabularProjectConfig",
     "TabularRecordingSchema",
     "TabularSessionSource",
+    "TransientAnimalEstimate",
+    "TransientAnimalInferenceResult",
+    "TransientAnimalInferenceSpec",
     "TransientCandidate",
     "TransientCandidateExclusion",
     "TransientCandidateResult",
@@ -470,6 +480,7 @@ __all__ = [
     "TransientQuantificationResult",
     "TransientQuantificationSpec",
     "TransientQuantificationSummary",
+    "TransientStudySession",
     "Unit",
     "UniverseCompatibility",
     "UniverseResult",
@@ -509,6 +520,7 @@ __all__ = [
     "fit_scalar_mixed_model",
     "hierarchical_bootstrap",
     "infer_peri_event_contrast",
+    "infer_transient_animals",
     "inspect_doric",
     "inspect_loaded_tabular_input",
     "inspect_neurophotometrics",

@@ -107,10 +107,58 @@ conditions.
 ## Current boundaries
 
 Quantification now marks nearby events with compound-group/rank metadata. It does
-not yet export cut waveforms, freeze thresholds learned from baseline/control
-epochs, fit animal-aware rate/kinetic models, deconvolve sensor kinetics, assign
-events to neurotransmitter release episodes, or infer a biological tonic/phasic
-decomposition.
+not yet export cut waveforms or freeze thresholds learned from baseline/control
+epochs.
+
+## Animal-level rate and kinetic contrasts
+
+Attach subject, session, and condition identity to each quantified result, then
+declare a paired or independent contrast:
+
+```python
+from fiberphotometry import (
+    TransientAnimalInferenceSpec,
+    TransientStudySession,
+    infer_transient_animals,
+)
+
+study = [
+    TransientStudySession(
+        subject="mouse-01",
+        session="day-1",
+        condition="control",
+        result=control_result,
+    ),
+    TransientStudySession(
+        subject="mouse-01",
+        session="day-2",
+        condition="drug",
+        result=drug_result,
+    ),
+    # Additional animals...
+]
+inference = infer_transient_animals(
+    study,
+    TransientAnimalInferenceSpec(
+        metric="rate_per_minute",  # or amplitude, width_s, auc
+        condition_a="control",
+        condition_b="drug",
+        channel="NAc",
+        design="paired",
+        effect_scale="difference",
+        seed=2026,
+    ),
+)
+```
+
+Rates pool event counts over acquired exposure within each animal-condition.
+Kinetic metrics are summarized within session and then within animal. Bootstrap
+intervals resample animals; permutation evidence swaps conditions within paired
+animals or shuffles whole-animal estimates in independent designs. The result
+retains every animal estimate and reports incomplete paired animals explicitly.
+
+This API does not deconvolve sensor kinetics, assign events to neurotransmitter
+release episodes, or infer a biological tonic/phasic decomposition.
 
 ## Sources
 

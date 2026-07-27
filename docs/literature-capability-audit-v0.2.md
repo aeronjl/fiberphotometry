@@ -158,8 +158,12 @@ Missing:
   cohort and then frozen across conditions;
 - maximum fall-search rules, incomplete/compound status, T80/decay and slope
   measures, and exported cut waveforms;
-- behavior-defined bins/epochs and animal-aware inference for rates and kinetics;
+- behavior-defined bins/epochs;
 - manual/biological ground truth across sensors and acquisition systems.
+
+Animal-level rate and kinetic contrasts are now available: count/exposure is
+pooled within animal, kinetics are summarized session-to-animal, and resampling
+or condition randomization operates on animals rather than detected events.
 
 The existing public dLight result predates the separated detector families. It
 remains evidence that the method family matters, not validation that one detector

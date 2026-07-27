@@ -145,7 +145,7 @@
     - [ ] Baseline/control-derived frozen threshold objects
     - [x] Compound-event group and rank metadata
     - [ ] Gap-aware cut waveforms and boundary QC
-  - [ ] Animal-aware rate and kinetic inference
+  - [x] Animal-aware rate and kinetic inference
   - [ ] Raw-signal and manual-annotation validation across two sensors/acquisition systems
 - [ ] Multi-site/multi-color paired and conditional association workflows
   - [ ] Paired channel/site metadata, alignment, control, and crosstalk diagnostics
