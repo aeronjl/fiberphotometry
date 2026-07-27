@@ -60,13 +60,17 @@ workflows**:
 
 - native behavioral learning-trajectory models; use the experimental
   [Unspool interoperability contract](../unspool-interoperability-v0.1.md) instead;
-- tonic/phasic decomposition across hours or days;
-- spontaneous transient detection and rate/amplitude/duration summaries;
+- biological tonic/phasic decomposition across hours or days;
 - multi-site or multi-color coupling and network analyses;
 - sensor-kinetic deconvolution or concentration calibration.
 
 The [capability matrix](capability-matrix.md) explains why these gaps matter and
 which should enter the roadmap.
+
+**Experimental:** [spontaneous transient detection and long-window descriptive
+summaries](../spontaneous-transients-v0.1.md) expose named threshold and local-
+baseline alternatives, protect acquisition gaps, and retain rejected candidates.
+They do not label slow fluorescence as a biological tonic component.
 
 ## Interpret and publish
 

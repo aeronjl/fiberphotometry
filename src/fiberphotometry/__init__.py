@@ -188,6 +188,14 @@ from fiberphotometry.timecourse import (
     PeriEventInferenceSpec,
     infer_peri_event_contrast,
 )
+from fiberphotometry.transients import (
+    TransientChannelSummary,
+    TransientDetectionResult,
+    TransientDetectionSpec,
+    TransientEvent,
+    TransientExclusion,
+    detect_transients,
+)
 from fiberphotometry.unspool import UnspoolStudyExport, prepare_unspool_study
 from fiberphotometry.workflow import (
     EventAnalysis,
@@ -299,6 +307,11 @@ __all__ = [
     "TabularProjectConfig",
     "TabularRecordingSchema",
     "TabularSessionSource",
+    "TransientChannelSummary",
+    "TransientDetectionResult",
+    "TransientDetectionSpec",
+    "TransientEvent",
+    "TransientExclusion",
     "Unit",
     "UniverseCompatibility",
     "UniverseResult",
@@ -321,6 +334,7 @@ __all__ = [
     "create_analysis_plan",
     "create_archive_package",
     "create_zenodo_draft",
+    "detect_transients",
     "exact_sign_flip_test",
     "execute_analysis_plan",
     "export_project_multiverse_nwb",

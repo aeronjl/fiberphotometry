@@ -1,5 +1,11 @@
 # Worked examples
 
+## Spontaneous events and long recordings
+
+The [spontaneous-transient sensitivity tutorial](spontaneous-transients.md) starts
+with known synthetic events, introduces an acquisition gap, and compares named
+threshold and local-baseline alternatives without claiming a tonic signal.
+
 The tutorials are executable scientific narratives rather than isolated API
 snippets. Each begins with a question and records the experimental unit,
 preprocessing choices, event denominator, inferential target, and limitations.

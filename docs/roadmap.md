@@ -101,7 +101,7 @@
 - [x] Validated longitudinal neural-summary handoff to Unspool
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
 - [ ] Long-duration tonic/phasic analysis
-- [ ] Spontaneous transient detection with local-baseline sensitivity analysis
+- [x] Experimental spontaneous transient detection with local-baseline sensitivity analysis
 - [ ] Multi-site/multi-color paired and conditional association workflows
 
 ## Phase 4 — adoption

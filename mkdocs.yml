@@ -71,6 +71,7 @@ nav:
       - Experimental design and inference: inference-design-v0.1.md
       - Peri-event inference: peri-event-inference-v0.1.md
       - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
+      - Spontaneous transients: spontaneous-transients-v0.1.md
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
       - Longitudinal behavior with Unspool: unspool-interoperability-v0.1.md
@@ -80,6 +81,7 @@ nav:
       - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
       - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
       - Event-kernel simulation: tutorials/event-kernel-simulation.md
+      - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
       - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md
       - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
   - Data and interoperability:
