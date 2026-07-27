@@ -22,7 +22,7 @@ experiment belongs in one package.
 | Trial-level functional mixed models | **Planned** | `fastFMM` bridge and numerical-parity fixtures |
 | Behavioral/event-kernel GLMs | **Experimental** | Full-FIR, raised-cosine, history, duration/progress kernels, grouped validation, pointwise jackknife sensitivity, model multiverses, and paired family drops; the first simultaneous-band calibration failed its normalized-progress gate, so that band is opt-in only |
 | Longitudinal learning trajectories | **Interoperable / experimental** | Validated neural-summary handoff to Unspool; public cross-package benchmark still required |
-| Across-session photometry comparability | **Gap** | Add expression/coupling/baseline diagnostics and explicit refusal states before Unspool handoff |
+| Across-session photometry comparability | **Experimental** | Typed outcome-blind identity, preprocessing, coverage, baseline, reference-coupling and sampling diagnostics with warning/refusal states bound into the Unspool handoff |
 | Single-signal autocorrelation, PSD and spectrograms | **Gap** | Add gap-aware, detrending-explicit time/frequency results and public state fixture |
 | State/epoch-conditioned and multiscale long-duration summaries | **Gap** | Consume external state tables; keep observable summaries distinct from biological “tonic/phasic” claims |
 | Spontaneous transient detection | **Experimental** | Separate GuPPY-, PASTa-, and prominence-compatible candidate families; gap-aware detector evidence retained |

@@ -80,6 +80,7 @@ nav:
       - Scalar mixed models: scalar-mixed-model-v0.1.md
       - Behavioral ecosystem interoperability: ecosystem-interoperability-v0.1.md
       - Clock synchronization: clock-synchronization-v0.1.md
+      - Across-session comparability: session-comparability-v0.1.md
       - Longitudinal behavior with Unspool: unspool-interoperability-v0.1.md
   - Worked examples:
       - Examples overview: tutorials/index.md
