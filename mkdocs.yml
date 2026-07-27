@@ -77,6 +77,7 @@ nav:
       - Event-kernel interval calibration: event-kernel-interval-calibration-v0.1.md
       - Spontaneous transients: spontaneous-transients-v0.1.md
       - Time, frequency, and state analysis: spectral-state-analysis-v0.1.md
+      - Multi-site and multi-color association: multisite-multicolor-analysis-v0.1.md
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
       - Behavioral ecosystem interoperability: ecosystem-interoperability-v0.1.md

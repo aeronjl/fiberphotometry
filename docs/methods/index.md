@@ -98,6 +98,13 @@ Gap-aware single-signal analysis is now an **experimental first-class workflow**
 
 See [gap-aware time, frequency, and state analysis](../spectral-state-analysis-v0.1.md).
 
+Guarded multi-site and multi-color analysis is also an **experimental first-class
+workflow**. It adds explicit pair/site/sensor/optical metadata, shared-clock and
+joint-validity evidence, lagged association with declared event/behavior
+residualization, blocked within-session nulls, crosstalk review flags,
+state-conditioned coherence/phase, and session-to-animal inference. See
+[multi-site and multi-color association](../multisite-multicolor-analysis-v0.1.md).
+
 The remaining questions are scientifically important but **not yet first-class
 workflows**:
 
@@ -106,8 +113,7 @@ workflows**:
 - across-session photometry comparability before handing summaries to Unspool;
 - multiscale long-duration descriptions without assuming a biological
   tonic/phasic decomposition;
-- confound-aware multi-site or multi-color association, coherence, phase, and
-  coordinate-aware dense-array models;
+- coordinate-aware dense-array models beyond guarded pairwise summaries;
 - sensor-kinetic deconvolution or concentration calibration.
 
 The [capability matrix](capability-matrix.md) explains why these gaps matter and
