@@ -69,6 +69,7 @@ nav:
       - Capability matrix: methods/capability-matrix.md
       - Preprocessing and QC: pipeline-v0.1.md
       - Irregular sampling: irregular-sampling-v0.1.md
+      - Optogenetic artifacts and sensor validity: optical-validity-v0.1.md
       - Experimental design and inference: inference-design-v0.1.md
       - Peri-event inference: peri-event-inference-v0.1.md
       - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
