@@ -3,6 +3,11 @@
 This catalog is organized by scientific task. Method availability and scientific
 validation are different claims.
 
+<figure class="doc-figure doc-figure--wide">
+  <img src="../assets/method-question-map.svg" alt="A central scientific question branches to event contrasts, preprocessing sensitivity, overlapping event kernels, and population effects, each with a distinct method and evidence boundary.">
+  <figcaption><strong>Method selection starts with the question.</strong> The surrounding workflow can be standardized while each method retains its own assumptions, estimand, and validation evidence.</figcaption>
+</figure>
+
 ## Prepare and validate signals
 
 - **Supported:** channel validity, dropout/repeated-extreme/flat-step QC, sampling

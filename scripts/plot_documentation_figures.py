@@ -1,0 +1,420 @@
+"""Generate deterministic conceptual figures for the scientist documentation."""
+
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+
+ROOT = Path(__file__).parents[1]
+OUTPUT = ROOT / "docs" / "assets"
+PURPLE = "#563d7c"
+TEAL = "#23877c"
+AMBER = "#c47a2c"
+INK = "#26212e"
+MUTED = "#7b7484"
+LIGHT = "#ece9f1"
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", type=Path, default=OUTPUT)
+    args = parser.parse_args()
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    _style()
+    _evidence_path(args.output_dir / "evidence-path.svg")
+    _preprocessing(args.output_dir / "preprocessing-sequence.svg")
+    _qc_gate(args.output_dir / "qc-gating.svg")
+    _peri_event(args.output_dir / "peri-event-inference.svg")
+    _multiverse(args.output_dir / "multiverse-robustness.svg")
+    _method_map(args.output_dir / "method-question-map.svg")
+    _event_kernel(args.output_dir / "event-kernel-validation.svg")
+    _publication(args.output_dir / "publication-provenance.svg")
+    print(args.output_dir)
+
+
+def _style() -> None:
+    mpl.rcParams.update(
+        {
+            "axes.edgecolor": "#cbc5d2",
+            "axes.labelcolor": INK,
+            "axes.spines.right": False,
+            "axes.spines.top": False,
+            "figure.facecolor": "white",
+            "font.family": "DejaVu Sans",
+            "font.size": 9,
+            "savefig.facecolor": "white",
+            "svg.fonttype": "none",
+            "svg.hashsalt": "fiberphotometry-docs-v1",
+            "text.color": INK,
+            "xtick.color": MUTED,
+            "ytick.color": MUTED,
+        }
+    )
+
+
+def _box(
+    axis: plt.Axes,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    title: str,
+    note: str,
+    color: str = PURPLE,
+) -> None:
+    axis.add_patch(
+        FancyBboxPatch(
+            (x, y),
+            w,
+            h,
+            boxstyle="round,pad=0.025,rounding_size=0.05",
+            facecolor="white",
+            edgecolor=color,
+            linewidth=1.25,
+        )
+    )
+    axis.text(
+        x + w / 2,
+        y + h * 0.62,
+        title,
+        ha="center",
+        va="center",
+        weight="bold",
+        color=color,
+    )
+    axis.text(
+        x + w / 2, y + h * 0.28, note, ha="center", va="center", fontsize=7, color=MUTED
+    )
+
+
+def _arrow(
+    axis: plt.Axes,
+    start: tuple[float, float],
+    end: tuple[float, float],
+    color: str = MUTED,
+) -> None:
+    axis.add_patch(
+        FancyArrowPatch(
+            start, end, arrowstyle="-|>", mutation_scale=10, color=color, linewidth=1.1
+        )
+    )
+
+
+def _canvas(
+    figsize: tuple[float, float], xlim: tuple[float, float], ylim: tuple[float, float]
+) -> tuple[plt.Figure, plt.Axes]:
+    figure, axis = plt.subplots(figsize=figsize)
+    axis.set(xlim=xlim, ylim=ylim)
+    axis.axis("off")
+    return figure, axis
+
+
+def _save(figure: plt.Figure, path: Path) -> None:
+    figure.savefig(path, format="svg", bbox_inches="tight", metadata={"Date": None})
+    plt.close(figure)
+    # Matplotlib writes path-data lines with trailing spaces. Normalizing them keeps
+    # generated assets friendly to Git's whitespace checks and stable in reviews.
+    svg = path.read_text(encoding="utf-8")
+    path.write_text(
+        "\n".join(line.rstrip() for line in svg.splitlines()) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _evidence_path(path: Path) -> None:
+    figure, axis = _canvas((11.5, 3.0), (0, 11.5), (0, 3))
+    items = (
+        ("Acquired signals", "channels · clocks · events"),
+        ("Explicit processing", "QC · gaps · correction"),
+        ("Animal-level evidence", "coverage · contrasts · bands"),
+        ("Robustness", "named universes · failures"),
+        ("Publication object", "JSON · NWB · signature · DOI"),
+    )
+    for index, (title, note) in enumerate(items):
+        x = 0.2 + index * 2.3
+        color = AMBER if index == 3 else TEAL if index == 2 else PURPLE
+        _box(axis, x, 0.85, 1.85, 1.1, title, note, color)
+        if index < len(items) - 1:
+            _arrow(axis, (x + 1.88, 1.4), (x + 2.25, 1.4))
+    axis.text(
+        5.75,
+        2.55,
+        "Every claim remains attached to its acquisition and analysis choices",
+        ha="center",
+        weight="bold",
+    )
+    _save(figure, path)
+
+
+def _preprocessing(path: Path) -> None:
+    time = np.linspace(0, 40, 1000)
+    rng = np.random.default_rng(741)
+    reference = (
+        0.18 * np.sin(time / 2.8) + 0.012 * time + rng.normal(0, 0.025, len(time))
+    )
+    neural = sum(np.exp(-(((time - event) / 0.35) ** 2)) for event in (8, 17, 29, 35))
+    signal = 1.7 * reference + 0.32 * neural + rng.normal(0, 0.025, len(time))
+    fitted = np.polyval(np.polyfit(reference, signal, 1), reference)
+    corrected = signal - fitted
+    figure, axes = plt.subplots(3, 1, figsize=(10.5, 5.8), sharex=True)
+    axes[0].plot(time, signal, color=PURPLE, label="signal")
+    axes[0].plot(time, reference, color=TEAL, alpha=0.8, label="reference")
+    axes[0].set_title("1 · Preserve acquired channels and clock", loc="left")
+    axes[1].plot(time, fitted, color=AMBER, label="fitted reference")
+    axes[1].plot(time, signal, color=PURPLE, alpha=0.35)
+    axes[1].set_title(
+        "2 · Fit the declared correction without erasing provenance", loc="left"
+    )
+    axes[2].plot(time, corrected, color=TEAL)
+    axes[2].axhline(0, color=LIGHT)
+    axes[2].set_title(
+        "3 · Carry corrected signal and operation ledger forward", loc="left"
+    )
+    axes[2].set_xlabel("Acquisition time (s)")
+    for axis in axes:
+        axis.grid(color="#f0edf3")
+        axis.legend(frameon=False, fontsize=7, loc="upper right") if axis is not axes[
+            2
+        ] else None
+    _save(figure, path)
+
+
+def _qc_gate(path: Path) -> None:
+    figure, axis = _canvas((10.5, 4.2), (0, 10.5), (0, 4.2))
+    _box(
+        axis, 0.2, 1.45, 2.0, 1.25, "Recording QC", "dropout · flats · extremes", PURPLE
+    )
+    _arrow(axis, (2.25, 2.08), (3.05, 2.08))
+    _box(
+        axis,
+        3.1,
+        1.45,
+        2.0,
+        1.25,
+        "Complete outputs",
+        "traces · events · warnings",
+        TEAL,
+    )
+    _arrow(axis, (5.15, 2.08), (6.0, 2.9), AMBER)
+    _arrow(axis, (5.15, 2.08), (6.0, 1.25), TEAL)
+    _box(axis, 6.05, 2.35, 2.0, 1.0, "Blocking warning", "analysis = None", AMBER)
+    _box(axis, 6.05, 0.7, 2.0, 1.0, "Gate passed", "animal-aware inference", TEAL)
+    _arrow(axis, (8.1, 2.85), (9.0, 2.85), AMBER)
+    _arrow(axis, (8.1, 1.2), (9.0, 1.2), TEAL)
+    axis.text(
+        9.65,
+        2.85,
+        "Visible failure",
+        ha="center",
+        va="center",
+        weight="bold",
+        color=AMBER,
+    )
+    axis.text(
+        9.65, 1.2, "Bounded result", ha="center", va="center", weight="bold", color=TEAL
+    )
+    axis.text(
+        5.25,
+        3.85,
+        "QC gates inference; it never silently deletes evidence",
+        ha="center",
+        weight="bold",
+    )
+    _save(figure, path)
+
+
+def _peri_event(path: Path) -> None:
+    rng = np.random.default_rng(812)
+    time = np.linspace(-1, 2, 90)
+    animals = np.vstack(
+        [
+            0.28 * np.exp(-(((time - 0.45) / 0.34) ** 2))
+            + rng.normal(0, 0.045, len(time))
+            for _ in range(8)
+        ]
+    )
+    mean = animals.mean(axis=0)
+    se = animals.std(axis=0, ddof=1) / np.sqrt(len(animals))
+    figure, axes = plt.subplots(1, 2, figsize=(10.5, 4.1))
+    for curve in animals:
+        axes[0].plot(time, curve, color=PURPLE, alpha=0.2)
+    axes[0].plot(time, mean, color=PURPLE, linewidth=2.3)
+    axes[0].axvline(0, color=AMBER, linestyle="--")
+    axes[0].set_title("Animal contrast curves—not pooled events")
+    axes[1].fill_between(
+        time,
+        mean - 2.5 * se,
+        mean + 2.5 * se,
+        color=TEAL,
+        alpha=0.16,
+        label="simultaneous",
+    )
+    axes[1].fill_between(
+        time,
+        mean - 1.96 * se,
+        mean + 1.96 * se,
+        color=PURPLE,
+        alpha=0.28,
+        label="pointwise",
+    )
+    axes[1].plot(time, mean, color=PURPLE, linewidth=2.3)
+    axes[1].axvline(0, color=AMBER, linestyle="--")
+    axes[1].set_title("Two uncertainty statements")
+    axes[1].legend(frameon=False)
+    for axis in axes:
+        axis.set(xlabel="Time from event (s)", ylabel="Condition contrast")
+        axis.grid(color="#f0edf3")
+    _save(figure, path)
+
+
+def _multiverse(path: Path) -> None:
+    figure, axis = _canvas((11, 4.5), (0, 11), (0, 4.5))
+    _box(
+        axis,
+        0.2,
+        1.55,
+        1.7,
+        1.2,
+        "Fixed estimand",
+        "same animals · contrast · unit",
+        PURPLE,
+    )
+    choices = (
+        ("Correction", "OLS · robust", 3.2),
+        ("Normalization", "subtract · divide", 2.2),
+        ("Window", "early · late", 1.2),
+    )
+    for title, note, y in choices:
+        _box(axis, 2.6, y, 1.8, 0.75, title, note, TEAL)
+        _arrow(axis, (1.95, 2.15), (2.55, y + 0.38))
+        _arrow(axis, (4.45, y + 0.38), (5.15, 2.15))
+    _box(
+        axis,
+        5.2,
+        1.45,
+        1.9,
+        1.4,
+        "Complete ledger",
+        "success · blocked · incompatible · failed",
+        AMBER,
+    )
+    _arrow(axis, (7.15, 2.15), (7.85, 2.15))
+    _box(
+        axis,
+        7.9,
+        1.45,
+        2.4,
+        1.4,
+        "Robustness summary",
+        "range · direction · practical effect · LOO",
+        PURPLE,
+    )
+    axis.text(
+        5.5,
+        4.15,
+        "Reasonable alternatives become an auditable sensitivity analysis",
+        ha="center",
+        weight="bold",
+    )
+    _save(figure, path)
+
+
+def _method_map(path: Path) -> None:
+    figure, axis = _canvas((10.8, 5.2), (0, 10.8), (0, 5.2))
+    _box(
+        axis,
+        4.1,
+        2.0,
+        2.6,
+        1.2,
+        "Scientific question",
+        "choose method by estimand",
+        PURPLE,
+    )
+    destinations = (
+        (0.2, 3.8, "Event contrast", "peri-event bands"),
+        (0.2, 0.4, "Preprocessing sensitivity", "multiverse"),
+        (8.1, 3.8, "Overlapping events", "event kernels"),
+        (8.1, 0.4, "Population effect", "scalar mixed model"),
+    )
+    for x, y, title, note in destinations:
+        _box(axis, x, y, 2.35, 0.95, title, note, TEAL if y > 2 else AMBER)
+        start = (4.1, 2.6) if x < 4 else (6.7, 2.6)
+        _arrow(axis, start, (x + 1.18, y + 0.48))
+    axis.text(
+        5.4,
+        4.85,
+        "Availability is not validation",
+        ha="center",
+        weight="bold",
+        color=AMBER,
+    )
+    axis.text(
+        5.4,
+        0.35,
+        "Each route keeps its own assumptions and evidence boundary",
+        ha="center",
+        color=MUTED,
+    )
+    _save(figure, path)
+
+
+def _event_kernel(path: Path) -> None:
+    time = np.linspace(-1, 2, 120)
+    cue = 0.35 * np.exp(-(((time - 0.2) / 0.3) ** 2))
+    reward = 0.5 * np.exp(-(((time - 0.7) / 0.4) ** 2))
+    figure, axes = plt.subplots(1, 3, figsize=(10.8, 3.7))
+    axes[0].plot(time, cue, color=PURPLE, label="cue")
+    axes[0].plot(time, reward, color=TEAL, label="reward")
+    axes[0].plot(time, cue + reward, color=AMBER, label="observed overlap")
+    axes[0].set_title("Joint encoding problem")
+    axes[0].legend(frameon=False, fontsize=7)
+    for animal in range(6):
+        axes[1].plot(time, cue + animal * 0.025, color=PURPLE, alpha=0.25)
+    axes[1].set_title("Fit complete animals")
+    axes[2].bar((0, 1), (0.18, 0.03), color=(TEAL, AMBER))
+    axes[2].set_xticks((0, 1), ("training", "held-out"))
+    axes[2].set_title("Report transport honestly")
+    for axis in axes:
+        axis.grid(color="#f0edf3")
+    _save(figure, path)
+
+
+def _publication(path: Path) -> None:
+    figure, axis = _canvas((11, 3.5), (0, 11), (0, 3.5))
+    items = (
+        ("Evidence bundle", "JSON · HTML · NWB"),
+        ("Verify", "schemas · checksums"),
+        ("Compare", "estimand · inputs · results"),
+        ("Sign", "manifest attestation"),
+        ("Deposit", "validated DOI draft"),
+    )
+    for index, (title, note) in enumerate(items):
+        x = 0.15 + index * 2.2
+        _box(axis, x, 1.1, 1.75, 1.05, title, note, TEAL if index < 3 else PURPLE)
+        if index < 4:
+            _arrow(axis, (x + 1.78, 1.62), (x + 2.15, 1.62))
+    axis.text(
+        5.5,
+        3.05,
+        "Publication is a verifiable chain, not a final screenshot",
+        ha="center",
+        weight="bold",
+    )
+    axis.text(
+        5.5,
+        0.35,
+        "Byte identity and scientific reproduction remain separate claims",
+        ha="center",
+        color=AMBER,
+    )
+    _save(figure, path)
+
+
+if __name__ == "__main__":
+    main()

@@ -29,21 +29,10 @@ parameters, and uncertainty throughout the analysis.
 
 ## The evidence path
 
-```text
-raw / tabular / TDT / NWB
-        ↓
-schema and metadata preflight
-        ↓
-QC → resampling → filtering → correction
-        ↓
-event coverage and animal-aware analysis
-        ↓
-declared robustness multiverse
-        ↓
-JSON / HTML / NWB evidence bundle
-        ↓
-comparison → signature → archival deposit
-```
+<figure class="doc-figure doc-figure--wide">
+  <img src="assets/evidence-path.svg" alt="Five linked stages carry acquired photometry signals through explicit preprocessing, animal-level evidence, robustness analysis, and a verifiable publication object.">
+  <figcaption><strong>The evidence path.</strong> Signal identity, clocks, events, processing choices, exclusions, uncertainty, and provenance remain attached to the final scientific claim.</figcaption>
+</figure>
 
 The project does not claim that one preprocessing or statistical method is always
 correct. It makes the choice, its assumptions, and its sensitivity visible.

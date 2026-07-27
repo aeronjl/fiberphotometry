@@ -31,6 +31,9 @@ theme:
         icon: material/weather-sunny
         name: Use light mode
 
+extra_css:
+  - stylesheets/extra.css
+
 markdown_extensions:
   - admonition
   - attr_list
@@ -94,5 +97,6 @@ nav:
       - Roadmap: roadmap.md
   - Reference:
       - Python API: reference/index.md
+      - Figure provenance: reference/figure-provenance.md
       - Stability policy: api-stability-v0.1.md
       - Release readiness: release-readiness-v0.1.md

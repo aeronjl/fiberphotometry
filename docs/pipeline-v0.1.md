@@ -6,6 +6,11 @@ plans. The composition is intentionally narrow: it supports the validated
 scalar path without pretending that every future preprocessing or statistical
 model belongs in one permanent configuration type.
 
+<figure class="doc-figure doc-figure--wide">
+  <img src="../assets/preprocessing-sequence.svg" alt="Three aligned traces show acquired signal and reference channels, the fitted reference contribution, and the resulting corrected signal, emphasizing that each stage remains available with its provenance.">
+  <figcaption><strong>A correction is a sequence, not a replacement trace.</strong> The illustration is synthetic: acquired channels, fitted reference, corrected output, and the ordered operation ledger remain distinct objects.</figcaption>
+</figure>
+
 The specification has four independent parts:
 
 - `PreprocessingSpec` records the reference-fit method and numerical controls.
@@ -23,6 +28,11 @@ schema version; new incompatible meanings require a new schema rather than
 silently reinterpreting old JSON.
 
 ## QC behavior
+
+<figure class="doc-figure">
+  <img src="../assets/qc-gating.svg" alt="Recording quality control always produces complete traces, events, and warnings; blocking warnings lead to a visible failed analysis while passed gates lead to animal-aware inference.">
+  <figcaption><strong>QC gates inference without deleting evidence.</strong> Blocked analyses still return their processed recordings, event summaries, quality reports, and explicit reason.</figcaption>
+</figure>
 
 QC never deletes observations. If a selected blocking warning occurs, the
 pipeline still returns corrected recordings, event summaries, quality reports,

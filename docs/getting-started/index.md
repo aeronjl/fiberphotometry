@@ -2,6 +2,11 @@
 
 Start with the scientific question, not the file format.
 
+<figure class="doc-figure">
+  <img src="../assets/method-question-map.svg" alt="A central scientific question branches to event contrasts, preprocessing sensitivity, overlapping event kernels, and population effects, each with a distinct method and evidence boundary.">
+  <figcaption><strong>Choose by estimand.</strong> File format determines an adapter; the scientific question determines the analysis and validation contract.</figcaption>
+</figure>
+
 ## Event-locked group comparison
 
 Use the main workflow when you have named events, conditions, repeated trials,

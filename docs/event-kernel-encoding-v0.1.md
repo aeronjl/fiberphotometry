@@ -1,5 +1,10 @@
 # Behavioral event-kernel encoding
 
+<figure class="doc-figure doc-figure--wide">
+  <img src="../assets/event-kernel-validation.svg" alt="A cue and reward response overlap in time, model fitting retains complete animal trajectories, and a final comparison shows strong training performance but weaker held-out performance.">
+  <figcaption><strong>Kernel shape is not enough.</strong> Joint encoding must separate overlapping events and then demonstrate transport to complete held-out animals or sessions.</figcaption>
+</figure>
+
 !!! warning "Experimental"
     This is a first vertical slice, not yet a supported inferential workflow. It
     estimates predictive kernels and validates predictions across held-out animals

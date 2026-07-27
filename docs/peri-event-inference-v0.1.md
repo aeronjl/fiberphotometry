@@ -3,6 +3,11 @@
 FiberPhotometry can add a time-resolved evidence lane to the existing scalar event
 contrast without treating events as independent replicates.
 
+<figure class="doc-figure doc-figure--wide">
+  <img src="../assets/peri-event-inference.svg" alt="Eight animal-level peri-event contrast curves are summarized by a mean with a narrower pointwise interval and a wider simultaneous whole-window band around an event at time zero.">
+  <figcaption><strong>Animal-level curves support two uncertainty statements.</strong> The synthetic illustration distinguishes pointwise uncertainty from simultaneous coverage across the declared window.</figcaption>
+</figure>
+
 ```python
 from fiberphotometry import EventAnalysis, PeriEventInferenceSpec
 

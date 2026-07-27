@@ -4,6 +4,11 @@ A FiberPhotometry multiverse evaluates multiple defensible workflows for one
 fixed dataset, scientific estimand, and experimental-unit declaration. It is a
 robustness analysis, not a search over outcomes or a substitute for replication.
 
+<figure class="doc-figure doc-figure--wide">
+  <img src="../assets/multiverse-robustness.svg" alt="A fixed estimand branches across named correction, normalization, and response-window alternatives, converges on a complete execution ledger, and produces a robustness summary including failed and incompatible workflows.">
+  <figcaption><strong>One estimand, many defensible workflows.</strong> Compatibility is decided prospectively and every successful, blocked, incompatible, non-finite, or failed universe remains in the ledger.</figcaption>
+</figure>
+
 ## Invariants
 
 - Every universe has the same `Estimand`, including outcome meaning, contrast,
