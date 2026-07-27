@@ -38,9 +38,14 @@ See [robustness multiverses](../multiverse-contract-v0.1.md).
 
 ## Ask continuous, longitudinal, or network questions
 
-These are scientifically important but **not yet first-class workflows**:
+**Experimental:** behavioral event-kernel encoding jointly estimates overlapping
+event responses and continuous covariates, with complete animals or sessions held
+out during ridge selection. See the [method contract](../event-kernel-encoding-v0.1.md)
+and [worked simulation](../tutorials/event-kernel-simulation.md).
 
-- continuous behavioral/event-kernel GLMs;
+The remaining questions are scientifically important but **not yet first-class
+workflows**:
+
 - learning trajectories and nested longitudinal models;
 - tonic/phasic decomposition across hours or days;
 - spontaneous transient detection and rate/amplitude/duration summaries;

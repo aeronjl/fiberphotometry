@@ -66,6 +66,7 @@ nav:
       - Irregular sampling: irregular-sampling-v0.1.md
       - Experimental design and inference: inference-design-v0.1.md
       - Peri-event inference: peri-event-inference-v0.1.md
+      - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
   - Worked examples:
@@ -73,6 +74,7 @@ nav:
       - Public IBL event report: tutorials/ibl-feedback-report.md
       - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
       - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
+      - Event-kernel simulation: tutorials/event-kernel-simulation.md
   - Data and interoperability:
       - Metadata readiness: metadata-completeness-v0.1.md
       - NWB and DANDI integration: dandi-001084-integration.md
@@ -91,5 +93,5 @@ nav:
       - Roadmap: roadmap.md
   - Reference:
       - Python API: reference/index.md
-      - API stability: api-stability-v0.1.md
+      - Stability policy: api-stability-v0.1.md
       - Release readiness: release-readiness-v0.1.md

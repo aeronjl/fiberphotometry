@@ -1,6 +1,6 @@
 # Literature and capability audit v0.1
 
-**Audit date:** 2026-07-27  
+**Audit date:** 2026-07-27
 **Question:** Does FiberPhotometry cover the analyses a contemporary
 neuroscientist is likely to need, and can a scientist discover that coverage?
 

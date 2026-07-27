@@ -19,11 +19,19 @@ incompatibility, failure retention, and report verification.
 
 [Open the DANDI tutorial](dandi-000971-reward-multiverse.md)
 
+## Event-kernel encoding simulation
+
+Recover overlapping cue and reward kernels while controlling a continuous motion
+covariate and holding out complete animals. This is an implementation-validation
+example; a public-data literature reproduction remains on the roadmap.
+
+[Open the event-kernel simulation](event-kernel-simulation.md)
+
 ## Literature reproductions to add
 
 The capability audit identifies the next examples needed for field coverage:
 
-1. a behavioral event-kernel GLM inspired by contemporary dopamine-learning work;
+1. a public-data behavioral event-kernel GLM reproduction;
 2. a trial-level functional mixed-model reproduction of Loewinger et al.;
 3. a multi-site/multi-color association example;
 4. a long-duration tonic/phasic and spontaneous-transient example;

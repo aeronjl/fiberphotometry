@@ -91,6 +91,12 @@
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [x] Animal-level peri-event pointwise and simultaneous interval reporting
 - [ ] Behavioral/event-kernel GLMs with grouped cross-validation
+  - [x] Typed Gaussian FIR model for overlapping events and continuous covariates
+  - [x] Leakage-safe animal/session-held-out ridge selection
+  - [x] Ground-truth recovery fixture and executable simulation tutorial
+  - [ ] Public-data literature reproduction with a prospectively declared design
+  - [ ] Animal-level coefficient uncertainty and residual/model diagnostics
+  - [ ] Design-matrix alternatives in reproducible robustness multiverses
 - [ ] Longitudinal learning-trajectory and session-within-animal models
 - [ ] Long-duration tonic/phasic analysis
 - [ ] Spontaneous transient detection with local-baseline sensitivity analysis
@@ -104,6 +110,8 @@
   - [x] Event-locked public IBL analysis
   - [x] Raw-NWB animal-level robustness analysis
   - [ ] Behavioral event-kernel GLM
+    - [x] Ground-truth implementation tutorial
+    - [ ] Public-data literature reproduction
   - [ ] Trial-level functional mixed model
   - [ ] Long-duration tonic/phasic and spontaneous events
   - [ ] Multi-site/multi-color association

@@ -54,6 +54,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0024](0024-generate-deterministic-deposits-from-neutral-metadata.md) | Accepted | Generate deterministic deposits from neutral metadata |
 | [SDR-0025](0025-stop-zenodo-automation-at-validated-drafts.md) | Accepted | Stop Zenodo automation at validated drafts |
 | [SDR-0026](0026-organize-documentation-by-scientific-question.md) | Accepted | Organize documentation by scientific question |
+| [SDR-0027](0027-hold-out-complete-groups-for-event-kernel-models.md) | Accepted | Hold out complete groups for event-kernel models |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

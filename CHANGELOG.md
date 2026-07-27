@@ -14,6 +14,8 @@ development versions until the first public release.
 - Animal-level peri-event pointwise and simultaneous confidence bands.
 - Prospective irregular-clock regularization with protected gaps and provenance.
 - Configuration-first CLI output to JSON, HTML, and optional NWB.
+- Experimental FIR event-kernel encoding with continuous covariates and
+  animal/session-held-out ridge selection.
 
 ### Scientific status
 

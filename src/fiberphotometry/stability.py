@@ -56,11 +56,16 @@ SUPPORTED_API_V0_1 = (
 )
 
 EXPERIMENTAL_API_V0_1 = (
+    "EncodingModelResult",
+    "EncodingModelSpec",
+    "EncodingSession",
+    "EventKernelSpec",
     "MultiverseSpec",
     "ScalarMixedModelSpec",
     "baseline_dff",
     "export_project_multiverse_nwb",
     "fit_scalar_mixed_model",
+    "fit_event_kernel_model",
     "hierarchical_bootstrap",
     "materialize_multiverse",
     "permutation_test",
