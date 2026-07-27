@@ -7,6 +7,7 @@ from fiberphotometry.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
+    RaisedCosineBasisSpec,
     _build_design,
     _residual_metrics,
     fit_event_kernel_model,
@@ -75,6 +76,9 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert kernels["reward"].coefficient == pytest.approx(
         (-0.2, 0.4, 0.9, 0.45), abs=0.04
     )
+    assert kernels["cue"].basis.family == "fir"
+    assert kernels["cue"].basis.coefficient == pytest.approx(kernels["cue"].coefficient)
+    assert np.asarray(kernels["cue"].basis.function_by_lag) == pytest.approx(np.eye(5))
     motion = result.continuous_coefficients[0]
     assert motion.name == "motion"
     assert motion.coefficient / motion.training_standard_deviation == pytest.approx(
@@ -89,7 +93,7 @@ def test_recovers_overlapping_event_kernels_with_animal_held_out_cv() -> None:
     assert len(held_out) == len(set(held_out))
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "event_kernel_encoding_result"
-    assert payload["schema_version"] == "4"
+    assert payload["schema_version"] == "5"
     assert result.validity.total_observations == 16 * 400
     assert result.validity.retained_observations == result.observations
     assert result.validity.excluded_observations == 0
@@ -367,6 +371,59 @@ def test_rejects_event_lags_with_no_retained_support() -> None:
         match=r"event lags have no retained observations: cue@1s",
     ):
         fit_event_kernel_model(sessions, spec)
+
+
+def test_raised_cosine_basis_reduces_dimension_and_reconstructs_lag_curve() -> None:
+    sessions = _simulated_sessions()
+    spec = EncodingModelSpec(
+        event_kernels=(
+            EventKernelSpec(
+                "cue",
+                (-0.1, 0.3),
+                basis=RaisedCosineBasisSpec(functions=3),
+            ),
+            EventKernelSpec(
+                "reward",
+                (0.0, 0.3),
+                basis=RaisedCosineBasisSpec(functions=2),
+            ),
+        ),
+        continuous_covariates=("motion",),
+        alpha_grid=(0.0, 0.1, 1.0),
+        group_by="animal",
+        folds=4,
+    )
+    design = _build_design(sessions, spec)
+    result = fit_event_kernel_model(sessions, spec)
+    kernels = {item.name: item for item in result.event_kernels}
+    selected = next(
+        item for item in result.cross_validation if item.alpha == result.selected_alpha
+    )
+
+    assert design.event_slices[0].basis.shape == (5, 3)
+    assert design.event_slices[1].basis.shape == (4, 2)
+    assert design.values.shape[1] == 3 + 2 + 1
+    assert np.sum(design.event_slices[0].basis, axis=1) == pytest.approx(np.ones(5))
+    assert kernels["cue"].basis.family == "raised_cosine"
+    assert len(kernels["cue"].basis.coefficient) == 3
+    assert len(kernels["cue"].coefficient) == 5
+    assert len(kernels["reward"].basis.coefficient) == 2
+    assert len(result.kernel_uncertainty.event_kernels[0].standard_error) == 5
+    assert selected.mean_r_squared > 0.75
+
+
+def test_raised_cosine_basis_rejects_more_functions_than_sampled_lags() -> None:
+    spec = EncodingModelSpec(
+        event_kernels=(
+            EventKernelSpec(
+                "cue",
+                (0.0, 0.2),
+                basis=RaisedCosineBasisSpec(functions=4),
+            ),
+        )
+    )
+    with pytest.raises(ValueError, match="requests 4 functions for 3 sampled lags"):
+        fit_event_kernel_model(_simulated_sessions(), spec)
 
 
 def test_residual_metrics_do_not_bridge_excluded_spans() -> None:

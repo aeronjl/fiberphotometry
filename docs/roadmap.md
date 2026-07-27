@@ -112,6 +112,7 @@
   - [ ] Formal interval-coverage calibration and simultaneous kernel bands
   - [x] Named whole-spec design alternatives in reproducible robustness multiverses
   - [ ] Basis, trial-history, duration/amplitude, and predictor-family contribution alternatives
+    - [x] Typed full-FIR and raised-cosine kernel bases with physical-lag reconstruction
 - [x] Validated longitudinal neural-summary handoff to Unspool
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
 - [ ] Across-session photometry comparability diagnostics before longitudinal handoff

@@ -6,7 +6,7 @@ import json
 from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass, field
 from hashlib import sha256
-from typing import Literal
+from typing import Literal, TypeAlias
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -15,11 +15,36 @@ from scipy.stats import t as student_t
 
 
 @dataclass(frozen=True)
+class FIRBasisSpec:
+    """One unconstrained coefficient per sampled event lag."""
+
+    family: Literal["fir"] = "fir"
+    schema_version: str = "1"
+
+
+@dataclass(frozen=True)
+class RaisedCosineBasisSpec:
+    """A lower-dimensional linear raised-cosine basis over the lag window."""
+
+    functions: int
+    family: Literal["raised_cosine"] = "raised_cosine"
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        if self.functions < 1:
+            raise ValueError("raised-cosine basis functions must be positive")
+
+
+EventKernelBasisSpec: TypeAlias = FIRBasisSpec | RaisedCosineBasisSpec
+
+
+@dataclass(frozen=True)
 class EventKernelSpec:
-    """One named event train and its finite impulse-response lag window."""
+    """One named event train, lag window and typed kernel basis."""
 
     name: str
     window_s: tuple[float, float]
+    basis: EventKernelBasisSpec = field(default_factory=FIRBasisSpec)
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -149,6 +174,17 @@ class EventKernelResult:
     name: str
     lag_s: tuple[float, ...]
     coefficient: tuple[float, ...]
+    basis: EventKernelBasisResult
+
+
+@dataclass(frozen=True)
+class EventKernelBasisResult:
+    """Basis weights and sampled functions used to reconstruct one kernel."""
+
+    family: str
+    component_label: tuple[str, ...]
+    coefficient: tuple[float, ...]
+    function_by_lag: tuple[tuple[float, ...], ...]
 
 
 @dataclass(frozen=True)
@@ -271,7 +307,7 @@ class EncodingModelResult:
     artifact_type: Literal["event_kernel_encoding_result"] = (
         "event_kernel_encoding_result"
     )
-    schema_version: str = "4"
+    schema_version: str = "5"
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
@@ -284,10 +320,19 @@ class _Design:
     groups: NDArray[np.str_]
     sessions: NDArray[np.str_]
     residual_segments: NDArray[np.str_]
-    event_slices: tuple[tuple[EventKernelSpec, slice, NDArray[np.float64]], ...]
+    event_slices: tuple[_EventLayout, ...]
     continuous_indices: tuple[tuple[str, int], ...]
     sample_interval: float
     validity: EncodingValidityReport
+
+
+@dataclass(frozen=True)
+class _EventLayout:
+    spec: EventKernelSpec
+    columns: slice
+    lags: NDArray[np.float64]
+    basis: NDArray[np.float64]
+    component_labels: tuple[str, ...]
 
 
 def fit_event_kernel_model(
@@ -318,14 +363,26 @@ def fit_event_kernel_model(
     coefficients, intercept, means, scales = _fit(
         design.values, design.response, selected.alpha, design.continuous_indices
     )
-    kernels = tuple(
-        EventKernelResult(
-            kernel.name,
-            tuple(float(value) for value in lags),
-            tuple(float(value) for value in coefficients[columns]),
+    kernels = []
+    for layout in design.event_slices:
+        basis_coefficients = coefficients[layout.columns]
+        reconstructed = layout.basis @ basis_coefficients
+        kernels.append(
+            EventKernelResult(
+                name=layout.spec.name,
+                lag_s=tuple(float(value) for value in layout.lags),
+                coefficient=tuple(float(value) for value in reconstructed),
+                basis=EventKernelBasisResult(
+                    family=layout.spec.basis.family,
+                    component_label=layout.component_labels,
+                    coefficient=tuple(float(value) for value in basis_coefficients),
+                    function_by_lag=tuple(
+                        tuple(float(value) for value in component)
+                        for component in layout.basis.T
+                    ),
+                ),
+            )
         )
-        for kernel, columns, lags in design.event_slices
-    )
     continuous = tuple(
         ContinuousCoefficient(
             name,
@@ -343,7 +400,7 @@ def fit_event_kernel_model(
         sample_interval_s=design.sample_interval,
         selected_alpha=selected.alpha,
         intercept=intercept,
-        event_kernels=kernels,
+        event_kernels=tuple(kernels),
         continuous_coefficients=continuous,
         kernel_uncertainty=uncertainty,
         residual_diagnostics=diagnostics,
@@ -359,11 +416,11 @@ def fit_event_kernel_model(
 
 def _validate_event_lag_support(design: _Design) -> None:
     unsupported: list[str] = []
-    for kernel, columns, lags in design.event_slices:
-        for offset, lag in enumerate(lags):
-            column = columns.start + offset
+    for layout in design.event_slices:
+        for offset, label in enumerate(layout.component_labels):
+            column = layout.columns.start + offset
             if design.values[:, column].nnz == 0:
-                unsupported.append(f"{kernel.name}@{float(lag):g}s")
+                unsupported.append(f"{layout.spec.name}@{label}")
     if unsupported:
         raise ValueError(
             "encoding event lags have no retained observations: "
@@ -385,7 +442,7 @@ def _build_design(
     interval = float(np.median(intervals))
     if np.max(np.abs(intervals - interval)) > spec.sampling_tolerance * interval:
         raise ValueError("encoding sessions must share one regular sampling interval")
-    event_layout: list[tuple[EventKernelSpec, slice, NDArray[np.float64]]] = []
+    event_layout: list[_EventLayout] = []
     column = 0
     for kernel in spec.event_kernels:
         start = int(np.ceil(kernel.window_s[0] / interval - 1e-12))
@@ -393,9 +450,13 @@ def _build_design(
         offsets = np.arange(start, stop + 1, dtype=int)
         if not len(offsets):
             raise ValueError(f"event-kernel window {kernel.name!r} contains no samples")
-        columns = slice(column, column + len(offsets))
-        event_layout.append((kernel, columns, offsets.astype(float) * interval))
-        column += len(offsets)
+        lags = offsets.astype(float) * interval
+        basis, component_labels = _event_basis(kernel, lags)
+        columns = slice(column, column + basis.shape[1])
+        event_layout.append(
+            _EventLayout(kernel, columns, lags, basis, component_labels)
+        )
+        column += basis.shape[1]
     continuous_layout = tuple(
         (name, column + index) for index, name in enumerate(spec.continuous_covariates)
     )
@@ -409,14 +470,15 @@ def _build_design(
     event_counts = {kernel.name: 0 for kernel in spec.event_kernels}
     for session in sessions:
         matrix = lil_matrix((len(session.time), width), dtype=float)
-        for kernel, columns, lags in event_layout:
+        for layout in event_layout:
+            kernel = layout.spec
             try:
                 event_times = session.events[kernel.name]
             except KeyError as error:
                 raise ValueError(
                     f"encoding session {session.session!r} lacks event {kernel.name!r}"
                 ) from error
-            offsets = np.rint(lags / interval).astype(int)
+            offsets = np.rint(layout.lags / interval).astype(int)
             for event_time in event_times:
                 event_counts[kernel.name] += 1
                 event_index = int(np.argmin(np.abs(session.time - event_time)))
@@ -427,9 +489,12 @@ def _build_design(
                     )
                 rows = event_index + offsets
                 valid = (rows >= 0) & (rows < len(session.time))
-                event_columns = np.arange(columns.start, columns.stop)[valid]
-                for row, event_column in zip(rows[valid], event_columns, strict=True):
-                    matrix[int(row), int(event_column)] += 1
+                for lag_index, row in zip(
+                    np.flatnonzero(valid), rows[valid], strict=True
+                ):
+                    for component, value in enumerate(layout.basis[lag_index]):
+                        if value != 0:
+                            matrix[int(row), layout.columns.start + component] += value
         for name, index in continuous_layout:
             try:
                 matrix[:, index] = session.continuous_covariates[name]
@@ -498,9 +563,9 @@ def _build_design(
     if len(response) <= width:
         raise ValueError("encoding model has too few finite observations")
     unsupported_events = [
-        kernel.name
-        for kernel, columns, _ in event_layout
-        if values[:, columns].nnz == 0
+        layout.spec.name
+        for layout in event_layout
+        if values[:, layout.columns].nnz == 0
     ]
     if unsupported_events:
         raise ValueError(
@@ -530,6 +595,35 @@ def _build_design(
         interval,
         validity,
     )
+
+
+def _event_basis(
+    kernel: EventKernelSpec,
+    lags: NDArray[np.float64],
+) -> tuple[NDArray[np.float64], tuple[str, ...]]:
+    if isinstance(kernel.basis, FIRBasisSpec):
+        return np.eye(len(lags), dtype=float), tuple(f"{float(lag):g}s" for lag in lags)
+    functions = kernel.basis.functions
+    if functions > len(lags):
+        raise ValueError(
+            f"raised-cosine basis for {kernel.name!r} requests {functions} "
+            f"functions for {len(lags)} sampled lags"
+        )
+    if functions == 1:
+        basis = np.ones((len(lags), 1), dtype=float)
+    else:
+        centers = np.linspace(float(lags[0]), float(lags[-1]), functions)
+        spacing = float(centers[1] - centers[0])
+        distance = (lags[:, None] - centers[None, :]) / spacing
+        basis = np.where(
+            np.abs(distance) <= 1,
+            0.5 * (np.cos(np.pi * distance) + 1),
+            0.0,
+        )
+        basis /= np.sum(basis, axis=1, keepdims=True)
+    if np.linalg.matrix_rank(basis) != functions:
+        raise ValueError(f"raised-cosine basis for {kernel.name!r} is rank deficient")
+    return basis, tuple(f"raised-cosine-{index}" for index in range(functions))
 
 
 def _retained_run_ids(
@@ -674,34 +768,39 @@ def _grouped_kernel_uncertainty(
         )
         replicates.append(coefficients)
     replicate_values = np.vstack(replicates)
-    replicate_mean = np.mean(replicate_values, axis=0)
     count = len(groups)
-    jackknife_estimate = count * full_coefficients - (count - 1) * replicate_mean
-    standard_error = np.sqrt(
-        (count - 1) / count * np.sum((replicate_values - replicate_mean) ** 2, axis=0)
-    )
     critical = float(student_t.ppf(0.5 + confidence_level / 2, df=max(1, count - 1)))
-    lower = jackknife_estimate - critical * standard_error
-    upper = jackknife_estimate + critical * standard_error
-    kernels = tuple(
-        EventKernelInterval(
-            kernel.name,
-            tuple(float(value) for value in lags),
-            tuple(float(value) for value in full_coefficients[columns]),
-            tuple(float(value) for value in jackknife_estimate[columns]),
-            tuple(float(value) for value in standard_error[columns]),
-            tuple(float(value) for value in lower[columns]),
-            tuple(float(value) for value in upper[columns]),
+    kernels = []
+    for layout in design.event_slices:
+        full_curve = layout.basis @ full_coefficients[layout.columns]
+        replicate_curves = replicate_values[:, layout.columns] @ layout.basis.T
+        replicate_mean = np.mean(replicate_curves, axis=0)
+        jackknife_estimate = count * full_curve - (count - 1) * replicate_mean
+        standard_error = np.sqrt(
+            (count - 1)
+            / count
+            * np.sum((replicate_curves - replicate_mean) ** 2, axis=0)
         )
-        for kernel, columns, lags in design.event_slices
-    )
+        lower = jackknife_estimate - critical * standard_error
+        upper = jackknife_estimate + critical * standard_error
+        kernels.append(
+            EventKernelInterval(
+                layout.spec.name,
+                tuple(float(value) for value in layout.lags),
+                tuple(float(value) for value in full_curve),
+                tuple(float(value) for value in jackknife_estimate),
+                tuple(float(value) for value in standard_error),
+                tuple(float(value) for value in lower),
+                tuple(float(value) for value in upper),
+            )
+        )
     return GroupedKernelUncertainty(
         "delete_one_group_jackknife",
         confidence_level,
         alpha,
         count,
         groups,
-        kernels,
+        tuple(kernels),
     )
 
 

@@ -12,6 +12,7 @@ from fiberphotometry import (
     EncodingMultiverseSpec,
     EncodingSession,
     EventKernelSpec,
+    RaisedCosineBasisSpec,
     run_encoding_multiverse,
 )
 
@@ -62,6 +63,16 @@ def model(
 def run() -> None:
     cue = EventKernelSpec("cue", (0.0, 0.2))
     reward = EventKernelSpec("reward", (0.0, 0.2))
+    smooth_cue = EventKernelSpec(
+        "cue",
+        (0.0, 0.2),
+        basis=RaisedCosineBasisSpec(functions=2),
+    )
+    smooth_reward = EventKernelSpec(
+        "reward",
+        (0.0, 0.2),
+        basis=RaisedCosineBasisSpec(functions=2),
+    )
     spec = EncodingMultiverseSpec(
         alternatives=(
             EncodingModelAlternative(
@@ -78,6 +89,11 @@ def run() -> None:
                 "cue-reward-motion",
                 "Test whether measured motion adds held-out predictive value.",
                 model(cue, reward, covariates=("motion",)),
+            ),
+            EncodingModelAlternative(
+                "smooth-cue-reward-motion",
+                "Test a lower-dimensional raised-cosine event representation.",
+                model(smooth_cue, smooth_reward, covariates=("motion",)),
             ),
         ),
         reference="cue-only",
