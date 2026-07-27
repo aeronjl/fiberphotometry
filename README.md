@@ -137,6 +137,9 @@ The experimental [event-kernel model workflow](docs/event-kernel-encoding-v0.1.m
 jointly estimates overlapping events and continuous behavioral covariates. Its
 [model-multiverse layer](docs/event-kernel-multiverse-v0.1.md) compares named
 design alternatives only when their held-out evidence is genuinely comparable.
+The [predictor-family contribution layer](docs/predictor-family-contributions-v0.1.md)
+then compares prespecified literal family drops with paired animal/session evidence
+and explicitly predictive—not causal—interpretation.
 
 For configuration-first reruns, use the versioned
 [`feedback-analysis.toml`](examples/feedback-analysis.toml). The

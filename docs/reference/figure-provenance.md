@@ -18,6 +18,7 @@ The following SVGs are generated deterministically by
 | `multiverse-robustness.svg` | Explain fixed-estimand robustness with a complete execution ledger |
 | `method-question-map.svg` | Route scientific questions to distinct method contracts |
 | `event-kernel-validation.svg` | Connect overlapping-event estimation to held-out-group validation |
+| `predictor-family-contributions.svg` | Distinguish literal family drops, paired held-out groups, and predictive sensitivity |
 | `variable-duration-kernels.svg` | Separate physical bout duration, normalized progress, and full-denominator design support |
 | `publication-provenance.svg` | Separate verification, comparison, signing, and deposition |
 

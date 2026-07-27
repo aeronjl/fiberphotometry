@@ -33,6 +33,7 @@ def main() -> None:
     _multiverse(args.output_dir / "multiverse-robustness.svg")
     _method_map(args.output_dir / "method-question-map.svg")
     _event_kernel(args.output_dir / "event-kernel-validation.svg")
+    _predictor_contributions(args.output_dir / "predictor-family-contributions.svg")
     _variable_duration(args.output_dir / "variable-duration-kernels.svg")
     _publication(args.output_dir / "publication-provenance.svg")
     print(args.output_dir)
@@ -383,6 +384,66 @@ def _event_kernel(path: Path) -> None:
     axes[2].set_title("Report transport honestly")
     for axis in axes:
         axis.grid(color="#f0edf3")
+    _save(figure, path)
+
+
+def _predictor_contributions(path: Path) -> None:
+    figure, axes = plt.subplots(1, 3, figsize=(11.2, 3.9))
+    axes[0].axis("off")
+    _box(
+        axes[0], 0.06, 0.59, 0.88, 0.23, "Full model", "cue · reward · movement", PURPLE
+    )
+    _arrow(axes[0], (0.5, 0.57), (0.28, 0.39), AMBER)
+    _arrow(axes[0], (0.5, 0.57), (0.72, 0.39), TEAL)
+    _box(axes[0], 0.04, 0.13, 0.47, 0.22, "Drop reward", "cue · movement", AMBER)
+    _box(axes[0], 0.56, 0.13, 0.40, 0.22, "Drop movement", "cue · reward", TEAL)
+    axes[0].set(xlim=(0, 1), ylim=(0, 1), title="Declare literal subsets")
+
+    groups = np.arange(1, 7)
+    full = np.asarray((0.38, 0.31, 0.42, 0.25, 0.36, 0.29))
+    reduced = np.asarray((0.21, 0.19, 0.26, 0.17, 0.20, 0.18))
+    for _group, full_score, reduced_score in zip(groups, full, reduced, strict=True):
+        axes[1].plot(
+            (0, 1),
+            (reduced_score, full_score),
+            color=LIGHT,
+            linewidth=2,
+            zorder=1,
+        )
+        axes[1].scatter(0, reduced_score, color=AMBER, s=25, zorder=2)
+        axes[1].scatter(1, full_score, color=PURPLE, s=25, zorder=2)
+    axes[1].set(
+        title="Pair held-out animals",
+        ylabel="Out-of-fold $R^2$",
+        xticks=(0, 1),
+        xticklabels=("reduced", "full"),
+        xlim=(-0.35, 1.35),
+    )
+
+    deltas = full - reduced
+    axes[2].scatter(deltas, groups, color=TEAL, s=28, zorder=3)
+    estimate = float(np.mean(deltas))
+    interval = (estimate - 0.06, estimate + 0.06)
+    axes[2].axvline(0, color=MUTED, linestyle="--", linewidth=1)
+    axes[2].errorbar(
+        estimate,
+        0.25,
+        xerr=((estimate - interval[0],), (interval[1] - estimate,)),
+        fmt="o",
+        color=PURPLE,
+        capsize=4,
+        linewidth=2,
+    )
+    axes[2].set(
+        title="Paired sensitivity",
+        xlabel=r"$\Delta R^2$",
+        ylabel="Held-out animal",
+        yticks=groups,
+        ylim=(-0.2, 6.7),
+    )
+    for axis in axes[1:]:
+        axis.grid(color="#f0edf3")
+    figure.subplots_adjust(wspace=0.42)
     _save(figure, path)
 
 

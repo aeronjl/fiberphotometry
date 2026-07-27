@@ -66,6 +66,15 @@ from fiberphotometry.encoding import (
     RaisedCosineBasisSpec,
     fit_event_kernel_model,
 )
+from fiberphotometry.encoding_contributions import (
+    PredictorFamilyContribution,
+    PredictorFamilyContributionResult,
+    PredictorFamilyContributionSpec,
+    PredictorFamilyDeltaInterval,
+    PredictorFamilyDropSpec,
+    PredictorFamilyGroupDelta,
+    assess_predictor_family_contributions,
+)
 from fiberphotometry.encoding_multiverse import (
     EncodingModelAlternative,
     EncodingModelComparison,
@@ -337,6 +346,12 @@ __all__ = [
     "PipelineSpec",
     "PoseTrajectory",
     "PowerSensitivity",
+    "PredictorFamilyContribution",
+    "PredictorFamilyContributionResult",
+    "PredictorFamilyContributionSpec",
+    "PredictorFamilyDeltaInterval",
+    "PredictorFamilyDropSpec",
+    "PredictorFamilyGroupDelta",
     "Preprocessing",
     "PreprocessingOutcomeSpec",
     "PreprocessingSpec",
@@ -398,6 +413,7 @@ __all__ = [
     "assess_metadata_completeness",
     "assess_multiverse_compatibility",
     "assess_pipeline_compatibility",
+    "assess_predictor_family_contributions",
     "assess_recording",
     "assess_signal_recording",
     "baseline_dff",

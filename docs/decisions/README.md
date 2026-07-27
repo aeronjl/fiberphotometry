@@ -66,6 +66,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0036](0036-reconstruct-kernels-from-explicit-typed-bases.md) | Accepted | Reconstruct kernels from explicit typed bases |
 | [SDR-0037](0037-model-event-history-as-explicit-within-session-modulation.md) | Accepted | Model event history as explicit within-session modulation |
 | [SDR-0038](0038-model-variable-duration-behavior-with-physical-intervals-and-progress.md) | Accepted | Model variable-duration behavior with physical intervals and progress |
+| [SDR-0039](0039-treat-predictor-family-drops-as-paired-predictive-sensitivity.md) | Accepted | Treat predictor-family drops as paired predictive sensitivity |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.
