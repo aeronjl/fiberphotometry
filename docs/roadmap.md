@@ -126,10 +126,10 @@
 - [x] Validated longitudinal neural-summary handoff to Unspool
 - [x] Frozen cross-package public IBL learning-trajectory benchmark with retained negative lagged-neural forecast
 - [x] Across-session photometry comparability diagnostics before longitudinal handoff
-- [ ] Interval/bout event rules and variable-duration models
+- [x] Interval/bout event rules and variable-duration models
   - [x] Preserve point/state distinction and physical bout duration
   - [x] Explicit onset, offset and normalized-progress projections
-  - [ ] Merge/split/filter rules, contextual labels and overlap policies
+  - [x] Ordered merge/split/filter rules, contextual labels, overlap policies, lineage ledger, and evidence fingerprint
   - [x] Duration/amplitude and progress-basis event-kernel alternatives
 - [ ] Single-signal time/frequency/state analysis
   - [x] Gap-aware autocorrelation and power spectral density
