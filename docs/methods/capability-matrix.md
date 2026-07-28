@@ -12,8 +12,8 @@ experiment belongs in one package.
 | Signal-only bleaching correction | **Experimental** | AsLS and double exponential need broader controls |
 | Processing order, normalization and negative-control contract | **Partial** | Provenance exists; add operation-order validation, local/null-relative normalization, and explicit control roles |
 | Sensor/isobestic-aware validity | **Experimental** | Open versioned profiles; wavelength, role, unit, detector, fiber, saturation, range, reference-coupling, lag and event-response evidence; cannot prove inertness or concentration |
-| Hemodynamic and spectral crosstalk correction | **Gap** | Requires wavelength-aware mixing model and controls |
-| Multi-color spectral unmixing | **Gap** | Extend channel metadata and mixing diagnostics |
+| Hemodynamic and spectral crosstalk correction | **Experimental** | Independently calibrated or explicitly user-declared linear mixing matrix; rank/conditioning refusal, missing-pattern evidence, residuals, and optional channel holdouts; biological validation remains open |
+| Multi-color spectral unmixing | **Experimental** | Typed component/channel/wavelength metadata and the same identifiable linear contract; no blind, nonlinear, or time-varying unmixing |
 | Event alignment and window summaries | **Supported** | Retains events, sessions and animals |
 | Interval/bout alignment and normalized progress | **Experimental** | Typed intervals, explicit onset/offset, duration and progress kernels; ordered filter/merge/split/context/overlap policies retain a complete source-lineage ledger and evidence fingerprint |
 | Animal-level scalar inference | **Supported/experimental** | t intervals supported; resampling and mixed models experimental |

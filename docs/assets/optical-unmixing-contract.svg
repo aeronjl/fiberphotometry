@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 520" role="img" aria-labelledby="title desc">
+  <title id="title">Identifiability-first optical unmixing contract</title>
+  <desc id="desc">An independent calibration with known components produces a versioned mixing matrix. Rank and conditioning gates precede application to a biological recording. Missing channel patterns are solved only when identifiable, producing source estimates, residuals, and channel holdout diagnostics.</desc>
+  <defs>
+    <style>
+      .label{font:600 17px ui-sans-serif,system-ui,sans-serif;fill:#28243d}
+      .small{font:500 14px ui-sans-serif,system-ui,sans-serif;fill:#625e73}
+      .tiny{font:600 12px ui-sans-serif,system-ui,sans-serif;fill:#625e73}
+      .box{fill:#fff;stroke:#c8c3d6;stroke-width:2}
+      .cal{fill:#ebe6ff;stroke:#6d4aff;stroke-width:2}
+      .gate{fill:#fff1d9;stroke:#d88618;stroke-width:2}
+      .pass{fill:#ddf5ef;stroke:#15947d;stroke-width:2}
+      .stop{fill:#fde5e5;stroke:#d44b4b;stroke-width:2}
+      .arrow{stroke:#625e73;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .dash{stroke:#d44b4b;stroke-width:2;stroke-dasharray:7 6}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#625e73"/></marker>
+  </defs>
+  <rect width="1120" height="520" rx="20" fill="#fbfaff"/>
+  <text x="48" y="45" class="label">1. Identify the matrix outside the biological outcome</text>
+  <rect x="48" y="72" width="255" height="110" rx="12" class="cal"/>
+  <text x="70" y="104" class="small">known component values</text>
+  <text x="70" y="133" class="tiny">sensor · blood · background</text>
+  <text x="70" y="160" class="small">simultaneous channel values</text>
+  <path d="M309 127 L378 127" class="arrow"/>
+  <rect x="388" y="72" width="260" height="110" rx="12" class="box"/>
+  <text x="414" y="104" class="small">versioned mixing matrix A</text>
+  <text x="414" y="133" class="tiny">coefficients · offsets · wavelengths</text>
+  <text x="414" y="160" class="tiny">calibration ID · evidence fingerprint</text>
+  <path d="M654 127 L723 127" class="arrow"/>
+  <rect x="733" y="72" width="339" height="110" rx="12" class="gate"/>
+  <text x="758" y="104" class="small">pre-outcome design gates</text>
+  <text x="758" y="133" class="tiny">channels ≥ components · full rank</text>
+  <text x="758" y="158" class="tiny">condition number · optical metadata</text>
+
+  <text x="48" y="235" class="label">2. Apply only identifiable channel patterns</text>
+  <rect x="48" y="260" width="255" height="128" rx="12" class="box"/>
+  <text x="70" y="291" class="small">biological recording Y</text>
+  <text x="70" y="320" class="tiny">original clock and validity matrix</text>
+  <text x="70" y="347" class="tiny">no refit of A · no interpolation</text>
+  <path d="M309 324 L378 324" class="arrow"/>
+  <rect x="388" y="254" width="280" height="61" rx="10" class="pass"/>
+  <text x="412" y="282" class="small">3 channels / 2 components</text>
+  <text x="412" y="301" class="tiny">rank 2 → solve source values</text>
+  <rect x="388" y="327" width="280" height="61" rx="10" class="stop"/>
+  <text x="412" y="355" class="small">1 channel / 2 components</text>
+  <text x="412" y="374" class="tiny">rank 1 → retain unsolved sample</text>
+  <path d="M674 284 L743 284" class="arrow"/>
+  <path d="M674 358 L743 358" class="dash"/>
+  <rect x="753" y="260" width="319" height="128" rx="12" class="box"/>
+  <text x="778" y="291" class="small">explicit outputs</text>
+  <text x="778" y="320" class="tiny">component series · reconstructed channels</text>
+  <text x="778" y="347" class="tiny">residuals · availability-pattern ledger</text>
+  <text x="778" y="374" class="tiny">solved/unsolved samples · gaps · fingerprint</text>
+
+  <text x="48" y="441" class="label">3. Diagnose; do not overclaim</text>
+  <rect x="270" y="420" width="250" height="70" rx="11" class="box"/>
+  <text x="294" y="448" class="small">leave one channel out</text>
+  <text x="294" y="472" class="tiny">only for overdetermined designs</text>
+  <path d="M526 455 L595 455" class="arrow"/>
+  <rect x="605" y="420" width="250" height="70" rx="11" class="box"/>
+  <text x="631" y="448" class="small">RMSE · normalized RMSE · R²</text>
+  <text x="631" y="472" class="tiny">reconstruction evidence, not causality</text>
+</svg>

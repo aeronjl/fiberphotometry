@@ -1,5 +1,10 @@
 # Optogenetic artifacts and sensor validity
 
+For an independently calibrated linear model that separates declared sensor,
+hemodynamic, background, or spectral contributions, see
+[wavelength-aware optical unmixing](optical-unmixing-v0.1.md). A numerically
+identifiable matrix complements rather than replaces the validity checks below.
+
 Optical experiments need two safeguards that answer different questions:
 
 1. **Which samples were prospectively excluded because stimulation occurred?**

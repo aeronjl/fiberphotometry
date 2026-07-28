@@ -29,7 +29,12 @@
   - [ ] Broader independent-control validation before typed-pipeline promotion
 - [x] Event-correlated reference diagnostic benchmarked against confounds
 - [ ] Reliable reference-lag diagnostic (v0.3 derivative scan failed)
-- [ ] Wavelength-aware hemodynamic correction and spectral-unmixing contract
+- [x] Wavelength-aware hemodynamic correction and spectral-unmixing contract
+  - [x] Typed components, channel wavelengths, coefficients, offsets and calibration identity
+  - [x] Independent known-component calibration with rank and conditioning gates
+  - [x] Pointwise missing-channel-pattern identifiability without interpolation
+  - [x] Reconstruction residuals and overdetermined channel-holdout diagnostics
+  - [ ] Raw-system calibration and biological-recording validation across two sensor families
 - [x] Optogenetic-pulse artifact masks and recovery-window diagnostics
 - [x] Open, versioned sensor registry with kinetic, saturation, and interpretation constraints
 - [x] Initial three-scenario benchmark report with retained failure

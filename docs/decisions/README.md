@@ -79,6 +79,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0049](0049-make-interval-policy-order-explicit-and-auditable.md) | Accepted | Make interval-policy order explicit and auditable |
 | [SDR-0050](0050-preserve-ndx-pose-values-and-declare-link-omissions.md) | Accepted | Preserve ndx-pose values and declare link omissions |
 | [SDR-0051](0051-name-observable-multiscale-estimands-and-preserve-denominators.md) | Accepted | Name observable multiscale estimands and preserve denominators |
+| [SDR-0052](0052-require-independent-identification-for-optical-unmixing.md) | Accepted | Require independent identification for optical unmixing |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.
