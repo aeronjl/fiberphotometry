@@ -19,13 +19,17 @@ beside their estimands, independent units, and retained negative findings.
 - **Experimental:** double-exponential and asymmetric least-squares control-free
   baselines; prospective optogenetic-pulse masks with separate recovery/control
   diagnostics; open versioned sensor profiles with wavelength, detector, reference,
-  lag, and event-validity evidence.
-- **Planned:** hemodynamic correction, spectral unmixing, automatic artifact
-  correction, and stronger validated lag diagnostics.
+  lag, and event-validity evidence; independently identified wavelength-aware
+  linear optical unmixing with rank, conditioning, missing-pattern, residual, and
+  channel-holdout evidence.
+- **Planned:** automatic artifact correction, nonlinear or time-varying optical
+  mixing, and stronger validated lag diagnostics.
 
 See [preprocessing and QC](../pipeline-v0.1.md) and
 [irregular sampling](../irregular-sampling-v0.1.md). For stimulation and optical
 interpretation safeguards, see [optogenetic artifacts and sensor validity](../optical-validity-v0.1.md).
+For calibrated multi-wavelength or multi-color source separation, see
+[wavelength-aware optical unmixing](../optical-unmixing-v0.1.md).
 
 ## Ask event-related questions
 
