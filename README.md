@@ -138,6 +138,10 @@ session and animal estimates, support, exclusions, paired or independent group
 semantics, and leave-one-animal-out influence. A constrained
 [group-by-condition interaction](docs/population-interactions-v0.1.md) forms one
 repeated-condition difference per animal before comparing independent groups.
+Typed [cross-workflow materializers](docs/population-workflow-adapters-v0.1.md)
+now bring spontaneous-transient, state-band-power, and multi-signal association
+cells to that same population boundary while retaining their exposure, window,
+and pair-count denominators.
 The experimental [event-kernel model workflow](docs/event-kernel-encoding-v0.1.md)
 jointly estimates overlapping events and continuous behavioral covariates. Its
 [model-multiverse layer](docs/event-kernel-multiverse-v0.1.md) compares named

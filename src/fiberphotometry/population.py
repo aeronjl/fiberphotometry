@@ -17,6 +17,7 @@ class PopulationUnitEstimate:
     """One condition estimate for one independent population unit.
 
     ``source_units`` and ``observation_count`` retain how the estimate was formed;
+    a zero observation count is valid for an exposure-supported count outcome.
     ``support`` records the number of finite source-unit estimates at each point.
     Scalar outcomes use one-element tuples, so the same contract can serve curves,
     spectra, transient summaries, and other derived outcomes.
@@ -36,9 +37,10 @@ class PopulationUnitEstimate:
             raise ValueError("population estimate and support must share a shape")
         if any(value < 0 for value in self.support):
             raise ValueError("population support cannot be negative")
-        if not self.source_units or self.observation_count < 1:
+        if not self.source_units or self.observation_count < 0:
             raise ValueError(
-                "population estimates require source units and observations"
+                "population estimates require source units and a non-negative "
+                "observation count"
             )
 
 
@@ -285,8 +287,8 @@ def infer_population_contrast(
         pointwise_lower = np.nanquantile(distribution, alpha / 2, axis=0)
         pointwise_upper = np.nanquantile(distribution, 1 - alpha / 2, axis=0)
         studentized = np.abs((distribution - estimate) / standard_error)
-    usable = valid & (standard_error > 0)
-    maxima = np.nanmax(np.where(usable, studentized, np.nan), axis=1)
+        usable = valid & (standard_error > 0)
+        maxima = np.nanmax(np.where(usable, studentized, np.nan), axis=1)
     finite_maxima = maxima[np.isfinite(maxima)]
     bootstrap_critical = (
         float(np.quantile(finite_maxima, confidence))

@@ -82,6 +82,9 @@ the original reasoning is not silently rewritten.
 | [SDR-0052](0052-require-independent-identification-for-optical-unmixing.md) | Accepted | Require independent identification for optical unmixing |
 | [SDR-0053](0053-treat-spatial-edges-as-within-mouse-evidence.md) | Accepted | Treat spatial edges as within-mouse evidence |
 | [SDR-0054](0054-make-forward-models-primary-and-deconvolution-conditional.md) | Accepted | Make forward models primary and deconvolution conditional |
+| [SDR-0055](0055-materialize-animal-estimates-before-population-inference.md) | Accepted | Materialize animal estimates before population inference |
+| [SDR-0056](0056-form-interactions-from-animal-condition-contrasts.md) | Accepted | Form interactions from animal-condition contrasts |
+| [SDR-0057](0057-preserve-domain-denominators-at-one-population-boundary.md) | Accepted | Preserve domain denominators at one population boundary |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

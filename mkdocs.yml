@@ -102,6 +102,7 @@ nav:
           - Category guide: methods/inference-robustness.md
           - Animal estimates and population contrasts: population-inference-v0.1.md
           - Group-by-condition animal interactions: population-interactions-v0.1.md
+          - Population inference across core workflows: population-workflow-adapters-v0.1.md
           - Experimental design and inference: inference-design-v0.1.md
           - Robustness multiverses: multiverse-contract-v0.1.md
           - Scalar mixed models: scalar-mixed-model-v0.1.md

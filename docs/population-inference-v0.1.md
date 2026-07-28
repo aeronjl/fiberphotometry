@@ -114,5 +114,9 @@ The first constrained extension is the
 forms a repeated-condition contrast within each complete animal before comparing
 those contrasts across disjoint groups.
 
+Typed materializers now expose this same boundary for
+[spontaneous transients, state-band power, and multi-signal association](population-workflow-adapters-v0.1.md)
+without erasing their domain-specific exposure, window, or pair-count denominators.
+
 The governing rationale is recorded in
 [SDR-0055](decisions/0055-materialize-animal-estimates-before-population-inference.md).
