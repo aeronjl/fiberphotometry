@@ -140,9 +140,11 @@ SLEAP point scores are confidence-like values, not guaranteed probabilities. An
 official legacy fixture contains scores above one, so only non-negativity is
 assumed; thresholds must be calibrated to the producing SLEAP version and model.
 
-SLEAP also exports NWB through `ndx-pose`. Direct `ndx-pose` consumption is a
-valuable next adapter because it can carry more standardized pose metadata than
-an extracted array.
+SLEAP also exports NWB through `ndx-pose`. FiberPhotometry now provides native
+inspection, explicit estimator selection, 2D/3D import, schema-valid export, and a
+tested file round trip while reporting device/video links that cannot be recreated
+without destination objects. See the
+[native ndx-pose contract](ndx-pose-interoperability-v0.1.md).
 
 ### Keypoint-MoSeq
 
@@ -219,7 +221,7 @@ neural summaries and across-session comparability evidence exist.
 | Priority | Missing ecosystem capability | Likely home |
 |---|---|---|
 | P0 | extend the now-complete one-version fixture matrix across a second released version and one real camera-to-photometry synchronization record | adapter validation in FiberPhotometry |
-| P1 | direct `ndx-pose` read/write path and NWB round trip | FiberPhotometry I/O |
+| P1 | bounded remote `ndx-pose` series access and a real camera-to-photometry synchronization fixture | FiberPhotometry I/O and validation |
 | P1 | broaden interval-policy fixtures to real multi-label annotations and a second source-tool version | FiberPhotometry interoperability validation |
 | P1 | multi-animal identity-switch diagnostics at the neural-alignment boundary | source-tool QC plus FiberPhotometry preflight |
 | P1 | versioned behavioral interchange artifact with hashes and confidence semantics | shared package after a second consumer adopts it |

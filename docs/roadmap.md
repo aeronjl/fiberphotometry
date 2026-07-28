@@ -57,7 +57,7 @@
   - [x] Doric HDF5 series/digital mapping with official-file parity
   - [x] Neurophotometrics `Flags`/`LedState` alternating-wavelength import
   - [x] pyPhotometry legacy and v1.1 pulsed binary import
-- [ ] Behavioral ecosystem adapters
+- [x] Behavioral ecosystem adapters
   - [x] Typed pose, continuous-covariate, point-event and interval boundaries
   - [x] Native-shaped DeepLabCut, SLEAP, Keypoint-MoSeq and BORIS adapters
   - [x] Executable cross-tool composition tutorial and explicit gap register
@@ -67,7 +67,7 @@
     - [x] Current DeepLabCut single- and multi-animal writer-contract fixtures
     - [x] Current Keypoint-MoSeq `results.h5` writer-contract fixture
     - [x] Current SLEAP standard-preset and BORIS aggregated fixtures
-  - [ ] Direct `ndx-pose` NWB round trip
+  - [x] Direct loss-aware `ndx-pose` 0.3 NWB inspection, 2D/3D import, export, and round trip
   - [x] Typed affine clock-synchronization evidence, drift diagnostics and refusal thresholds
 - [x] Versioned metadata completeness and analysis/NWB/publication readiness report
 

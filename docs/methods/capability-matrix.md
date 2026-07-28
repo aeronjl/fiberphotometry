@@ -34,7 +34,7 @@ experiment belongs in one package.
 | Dense spatial multi-fiber analysis | **Gap** | Add coordinates and mouse-aware site/spatial models; avoid treating fibers as independent animals |
 | Optogenetic-stimulation artifact handling | **Experimental** | Prospective time-only pulse masks compose with existing validity; separate recovery, censoring, detector-rail and negative-control diagnostics never adapt the mask |
 | Sensor-kinetic deconvolution | **Gap / caution** | Sensor-specific forward models and identifiability diagnostics |
-| Behavior/pose/state discovery | **Experimental interoperability boundary** | Typed file/in-memory adapters and matched-pulse affine clock synchronization; current DeepLabCut, Keypoint-MoSeq, SLEAP and BORIS file fixtures pass with explicit provenance class; `ndx-pose` and real clock fixtures remain gaps; Unspool owns longitudinal models |
+| Behavior/pose/state discovery | **Experimental interoperability boundary** | Typed file/in-memory adapters, matched-pulse clock synchronization, current DeepLabCut/Keypoint-MoSeq/SLEAP/BORIS fixtures, and native loss-aware `ndx-pose` 0.3 inspection plus 2D/3D NWB round trip; a real camera-to-photometry clock fixture remains a gap; Unspool owns longitudinal models |
 | Robustness multiverses | **Supported** | Named alternatives, compatibility, failures and provenance |
 | NWB evidence and archival publication | **Supported** | Export, verification, signing and draft DOI handoff |
 

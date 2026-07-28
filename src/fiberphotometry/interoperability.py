@@ -291,6 +291,9 @@ class ClockSynchronization:
             coordinate_unit=pose.coordinate_unit,
             source=pose.source,
             clock_id=self.target_clock_id,
+            z=pose.z,
+            reference_frame=pose.reference_frame,
+            confidence_definition=pose.confidence_definition,
             individual=pose.individual,
             source_version=pose.source_version,
             source_artifact=pose.source_artifact,
@@ -574,7 +577,7 @@ class BehaviorCovariate:
 
 @dataclass(frozen=True)
 class PoseTrajectory:
-    """One tracked keypoint from DeepLabCut or SLEAP."""
+    """One tracked 2D or 3D keypoint from an external pose tool."""
 
     subject: str
     session: str
@@ -584,8 +587,11 @@ class PoseTrajectory:
     y: NDArray[np.float64]
     confidence: NDArray[np.float64]
     coordinate_unit: str
-    source: Literal["deeplabcut", "sleap"]
+    source: str
     clock_id: str
+    z: NDArray[np.float64] | None = None
+    reference_frame: str | None = None
+    confidence_definition: str | None = None
     individual: str | None = None
     source_version: str | None = None
     source_artifact: str | None = None
@@ -595,14 +601,24 @@ class PoseTrajectory:
         time_s = _readonly_float(self.time_s, name="time_s")
         x = _readonly_float(self.x, name="x")
         y = _readonly_float(self.y, name="y")
+        z = _readonly_float(self.z, name="z") if self.z is not None else None
         confidence = _readonly_float(self.confidence, name="confidence")
-        if len({len(time_s), len(x), len(y), len(confidence)}) != 1:
+        lengths = {len(time_s), len(x), len(y), len(confidence)}
+        if z is not None:
+            lengths.add(len(z))
+        if len(lengths) != 1:
             raise ValueError("pose arrays must have equal length")
         _validate_time(time_s)
         if not self.keypoint.strip() or not self.coordinate_unit.strip():
             raise ValueError("keypoint and coordinate_unit must be non-empty")
-        if not self.clock_id.strip():
-            raise ValueError("clock_id must be non-empty")
+        if not self.source.strip() or not self.clock_id.strip():
+            raise ValueError("pose source and clock_id must be non-empty")
+        for value, name in (
+            (self.reference_frame, "reference_frame"),
+            (self.confidence_definition, "confidence_definition"),
+        ):
+            if value is not None and not value.strip():
+                raise ValueError(f"{name} must be non-empty when provided")
         synchronization_ids = tuple(
             str(value) for value in self.clock_synchronization_ids
         )
@@ -614,6 +630,7 @@ class PoseTrajectory:
         object.__setattr__(self, "time_s", time_s)
         object.__setattr__(self, "x", x)
         object.__setattr__(self, "y", y)
+        object.__setattr__(self, "z", z)
         object.__setattr__(self, "confidence", confidence)
         object.__setattr__(self, "clock_synchronization_ids", synchronization_ids)
 
@@ -637,10 +654,15 @@ class PoseTrajectory:
             & np.isfinite(self.confidence)
             & (self.confidence >= minimum_confidence)
         )
+        if self.z is not None:
+            valid_pose &= np.isfinite(self.z)
         values = np.full(len(self.time_s), np.nan, dtype=float)
         valid = np.zeros(len(self.time_s), dtype=bool)
         if len(self.time_s) > 1:
-            delta = np.hypot(np.diff(self.x), np.diff(self.y)) * coordinate_scale
+            squared_delta = np.diff(self.x) ** 2 + np.diff(self.y) ** 2
+            if self.z is not None:
+                squared_delta += np.diff(self.z) ** 2
+            delta = np.sqrt(squared_delta) * coordinate_scale
             values[1:] = delta / np.diff(self.time_s)
             valid[1:] = valid_pose[1:] & valid_pose[:-1] & np.isfinite(values[1:])
         unit = output_unit or f"{self.coordinate_unit}/s"

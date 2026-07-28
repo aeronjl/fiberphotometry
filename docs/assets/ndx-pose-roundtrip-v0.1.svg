@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
+  <title id="title">Native ndx-pose round-trip</title>
+  <desc id="desc">An NWB ndx-pose file is inspected, explicitly selected, copied to pose trajectories, used for photometry covariates, or written back with explicit link omissions.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8f6ff"/><stop offset="1" stop-color="#eaf8f5"/></linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#65558f"/></marker>
+    <style>.title{font:700 25px system-ui,sans-serif;fill:#241d38}.label{font:650 17px system-ui,sans-serif;fill:#2e2545}.small{font:500 14px system-ui,sans-serif;fill:#544b66}.box{fill:#fff;stroke:#b7a9d7;stroke-width:2}.native{fill:#f3effc;stroke:#8f79c2;stroke-width:2}.safe{fill:#eaf8f5;stroke:#429483;stroke-width:2}.warn{fill:#fff7e8;stroke:#cf8c32;stroke-width:2}.line{stroke:#65558f;stroke-width:2.4;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1200" height="500" rx="22" fill="url(#bg)"/>
+  <text x="48" y="50" class="title">Standard pose data in; explicit neural-analysis evidence out</text>
+  <rect x="48" y="92" width="220" height="136" rx="16" class="native"/>
+  <text x="70" y="126" class="label">ndx-pose NWB</text><text x="70" y="157" class="small">PoseEstimationSeries</text><text x="70" y="181" class="small">skeleton · scorer · videos</text><text x="70" y="205" class="small">timestamps/rate · devices</text>
+  <path d="M268 160 H322" class="line"/>
+  <rect x="328" y="92" width="238" height="136" rx="16" class="box"/>
+  <text x="350" y="126" class="label">Inspect + select</text><text x="350" y="157" class="small">file SHA-256 + inventory</text><text x="350" y="181" class="small">module/name must be unique</text><text x="350" y="205" class="small">clock identity stays explicit</text>
+  <path d="M566 160 H620" class="line"/>
+  <rect x="626" y="92" width="238" height="136" rx="16" class="safe"/>
+  <text x="648" y="126" class="label">PoseTrajectory</text><text x="648" y="157" class="small">x · y · optional z</text><text x="648" y="181" class="small">physical unit + reference</text><text x="648" y="205" class="small">confidence + provenance</text>
+  <path d="M864 160 H918" class="line"/>
+  <rect x="924" y="92" width="228" height="136" rx="16" class="safe"/>
+  <text x="946" y="126" class="label">Photometry model</text><text x="946" y="157" class="small">gap-safe speed/covariates</text><text x="946" y="181" class="small">matched-pulse clock sync</text><text x="946" y="205" class="small">validity-aware encoding</text>
+  <path d="M745 228 V287" class="line"/>
+  <rect x="462" y="294" width="298" height="142" rx="16" class="native"/>
+  <text x="486" y="328" class="label">Write native extension</text><text x="486" y="359" class="small">Skeletons + PoseEstimation</text><text x="486" y="383" class="small">2D/3D · timestamps · confidence</text><text x="486" y="407" class="small">source software + scorer</text>
+  <path d="M760 365 H817" class="line"/>
+  <rect x="823" y="294" width="329" height="142" rx="16" class="warn"/>
+  <text x="847" y="328" class="label">Declared omissions</text><text x="847" y="359" class="small">destination Device not supplied</text><text x="847" y="383" class="small">source/labeled ImageSeries absent</text><text x="847" y="407" class="small">never recreate links from names</text>
+  <rect x="48" y="294" width="344" height="142" rx="16" class="box"/>
+  <text x="72" y="328" class="label">Loss-aware conversions</text><text x="72" y="359" class="small">stored × conversion + offset</text><text x="72" y="383" class="small">missing confidence → NaN</text><text x="72" y="407" class="small">unequal child clocks → refuse</text>
+  <path d="M626 194 C550 250 360 250 220 294" class="line"/>
+</svg>
