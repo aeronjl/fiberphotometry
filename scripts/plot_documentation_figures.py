@@ -30,6 +30,7 @@ def main() -> None:
     _preprocessing(args.output_dir / "preprocessing-sequence.svg")
     _qc_gate(args.output_dir / "qc-gating.svg")
     _peri_event(args.output_dir / "peri-event-inference.svg")
+    _population_boundary(args.output_dir / "population-inference-boundary.svg")
     _multiverse(args.output_dir / "multiverse-robustness.svg")
     _method_map(args.output_dir / "method-question-map.svg")
     _event_kernel(args.output_dir / "event-kernel-validation.svg")
@@ -247,6 +248,58 @@ def _peri_event(path: Path) -> None:
     for axis in axes:
         axis.set(xlabel="Time from event (s)", ylabel="Condition contrast")
         axis.grid(color="#f0edf3")
+    _save(figure, path)
+
+
+def _population_boundary(path: Path) -> None:
+    figure, axis = _canvas((11.5, 4.2), (0, 11.5), (0, 4.2))
+    items = (
+        ("Events / windows", "many observations", PURPLE),
+        ("Session estimates", "counts + finite support", PURPLE),
+        ("Animal estimates", "equal animal weight", TEAL),
+        ("Population", "contrast + uncertainty", AMBER),
+    )
+    positions = (0.2, 3.05, 5.9, 8.75)
+    for index, ((title, note, color), x_position) in enumerate(
+        zip(items, positions, strict=True)
+    ):
+        _box(axis, x_position, 1.65, 2.25, 1.15, title, note, color)
+        if index < len(items) - 1:
+            _arrow(axis, (x_position + 2.3, 2.23), (x_position + 2.8, 2.23))
+    axis.text(
+        5.75,
+        3.65,
+        "The replication boundary is materialized before inference",
+        ha="center",
+        weight="bold",
+    )
+    axis.text(
+        9.7,
+        0.85,
+        "paired · complete animals",
+        ha="center",
+        color=TEAL,
+        weight="bold",
+        fontsize=8,
+    )
+    axis.text(
+        9.7,
+        0.42,
+        "independent · disjoint groups",
+        ha="center",
+        color=PURPLE,
+        weight="bold",
+        fontsize=8,
+    )
+    axis.text(
+        4.15,
+        0.62,
+        "The ledger keeps sessions, observation counts, support, exclusions,\n"
+        "and every leave-one-animal-out population estimate.",
+        ha="center",
+        va="center",
+        color=MUTED,
+    )
     _save(figure, path)
 
 

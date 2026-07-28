@@ -8,6 +8,7 @@ depends on one defensible workflow choice.
 
 | Need | Workflow | Status |
 |---|---|---|
+| Materialize animal estimates and contrast a population | [Animal estimates and population contrasts](../population-inference-v0.1.md) | Supported contract; resampling is experimental |
 | Select the experimental unit, estimand, and resampling design | [Experimental design and inference](../inference-design-v0.1.md) | Supported guidance and APIs |
 | Quantify sensitivity to named analytic alternatives | [Robustness multiverses](../multiverse-contract-v0.1.md) | Supported |
 | Fit an optional scalar hierarchical sensitivity model | [Scalar mixed models](../scalar-mixed-model-v0.1.md) | Experimental |
@@ -19,6 +20,12 @@ Repeated samples and trials belong to sessions; sessions belong to animals. A
 workflow may model lower levels, but population uncertainty must not pretend those
 observations are independent animals. Predictive validation likewise holds out the
 complete group at the level of the intended generalization claim.
+
+The common population contract begins after a domain has constructed auditable
+animal estimates. It retains source sessions, observation counts, pointwise
+support, exclusions, and leave-one-animal-out influence. Domain-specific
+denominators—such as finite recording exposure for transient rates—remain the
+responsibility of the originating analysis.
 
 ## Coverage gaps this category exposes
 

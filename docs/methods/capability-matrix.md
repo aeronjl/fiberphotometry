@@ -16,8 +16,8 @@ experiment belongs in one package.
 | Multi-color spectral unmixing | **Experimental** | Typed component/channel/wavelength metadata and the same identifiable linear contract; no blind, nonlinear, or time-varying unmixing |
 | Event alignment and window summaries | **Supported** | Retains events, sessions and animals |
 | Interval/bout alignment and normalized progress | **Experimental** | Typed intervals, explicit onset/offset, duration and progress kernels; ordered filter/merge/split/context/overlap policies retain a complete source-lineage ledger and evidence fingerprint |
-| Animal-level scalar inference | **Supported/experimental** | t intervals supported; resampling and mixed models experimental |
-| Whole-waveform intervals | **Supported** | Animal-level pointwise and simultaneous bands |
+| Animal-level scalar/vector inference | **Supported/experimental** | Auditable animal-estimate ledger, paired and independent two-level contrasts, t intervals, animal bootstrap, standardized effects, support, and leave-one-animal-out influence; richer designs remain experimental or planned |
+| Whole-waveform intervals | **Supported** | Paired or independent animal-level pointwise and simultaneous bands with retained session-to-animal evidence |
 | Published waveform bootstrap/permutation parity | **Partial** | Related animal-level resampling exists; add an explicit literature reproduction and estimand comparison |
 | Trial-level functional mixed models | **Planned** | `fastFMM` bridge and numerical-parity fixtures |
 | Behavioral/event-kernel GLMs | **Experimental** | Full-FIR, raised-cosine, history, duration/progress kernels, grouped validation, pointwise jackknife sensitivity, model multiverses, and paired family drops; the first simultaneous-band calibration failed its normalized-progress gate, so that band is opt-in only |
