@@ -40,14 +40,14 @@ summary_spec = MultiscaleSummarySpec(
         MultiscaleWindowSpec(
             "ten_seconds",
             duration_s=10,
-            step_s=5,             # 50% overlap is explicit
+            step_s=5,  # 50% overlap is explicit
             minimum_coverage=0.95,
             minimum_samples=20,
         ),
         MultiscaleWindowSpec(
             "five_minutes",
             duration_s=300,
-            step_s=300,           # non-overlapping
+            step_s=300,  # non-overlapping
             minimum_coverage=0.98,
             minimum_samples=300,
         ),
@@ -176,7 +176,7 @@ contrast = infer_multiscale_animals(
         metric="time_weighted_mean",
         condition_a="vehicle",
         condition_b="drug",
-        state="rest",             # use None for an unconditioned result
+        state="rest",  # use None for an unconditioned result
         design="paired",
         effect_scale="difference",
         window_aggregation="median",
