@@ -115,6 +115,77 @@ class PopulationContrastResult:
         return json.dumps(asdict(self), indent=2, sort_keys=True)
 
 
+@dataclass(frozen=True)
+class PopulationGroupAssignment:
+    """One independent population unit's explicitly declared group."""
+
+    unit_id: str
+    group: str
+
+    def __post_init__(self) -> None:
+        if not self.unit_id or not self.group:
+            raise ValueError("population group assignments cannot be empty")
+
+
+@dataclass(frozen=True)
+class PopulationInteractionSpec:
+    """Versioned group-by-condition difference-in-differences estimand."""
+
+    group_numerator: str
+    group_denominator: str
+    condition_numerator: str
+    condition_denominator: str
+    group_factor: str = "group"
+    condition_factor: str = "condition"
+    confidence: float = 0.95
+    draws: int = 2000
+    seed: int = 0
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        labels = (
+            self.group_numerator,
+            self.group_denominator,
+            self.condition_numerator,
+            self.condition_denominator,
+            self.group_factor,
+            self.condition_factor,
+        )
+        if any(not value for value in labels):
+            raise ValueError("population interaction labels cannot be empty")
+        if self.group_numerator == self.group_denominator:
+            raise ValueError("population interaction groups must differ")
+        if self.condition_numerator == self.condition_denominator:
+            raise ValueError("population interaction conditions must differ")
+        if self.group_factor == self.condition_factor:
+            raise ValueError("population interaction factor names must differ")
+        if not 0 < self.confidence < 1:
+            raise ValueError("confidence must lie between zero and one")
+        if self.draws < 100:
+            raise ValueError("population interaction inference requires 100 draws")
+        if self.schema_version != "1":
+            raise ValueError("unsupported population-interaction schema version")
+
+
+@dataclass(frozen=True)
+class PopulationInteractionResult:
+    """A group contrast over complete within-unit condition contrasts."""
+
+    spec: PopulationInteractionSpec
+    cell_estimates: tuple[PopulationUnitEstimate, ...]
+    group_assignments: tuple[PopulationGroupAssignment, ...]
+    within_unit_contrasts: tuple[PopulationUnitEstimate, ...]
+    excluded_units: tuple[str, ...]
+    population: PopulationContrastResult
+    warnings: tuple[str, ...]
+    method: str = "within_unit_condition_difference_then_independent_group_contrast"
+    schema_version: str = "1"
+
+    def to_json(self) -> str:
+        """Serialize cells, unit contrasts, exclusions, and population evidence."""
+        return json.dumps(asdict(self), indent=2, sort_keys=True)
+
+
 def infer_population_contrast(
     estimates: tuple[PopulationUnitEstimate, ...],
     spec: PopulationContrastSpec,
@@ -292,6 +363,109 @@ def infer_population_contrast(
             if design == "paired"
             else "independent_group_bootstrap_percentile_and_welch_max_t"
         ),
+        warnings=tuple(result_warnings),
+    )
+
+
+def infer_population_interaction(
+    estimates: tuple[PopulationUnitEstimate, ...],
+    assignments: tuple[PopulationGroupAssignment, ...],
+    spec: PopulationInteractionSpec,
+) -> PopulationInteractionResult:
+    """Infer a group-by-condition interaction at the population-unit boundary."""
+    assignment_keys = [item.unit_id for item in assignments]
+    if len(set(assignment_keys)) != len(assignment_keys):
+        raise ValueError("population group assignments require unique units")
+    group_lookup = {item.unit_id: item.group for item in assignments}
+    estimate_units = {item.unit_id for item in estimates}
+    missing_assignments = sorted(estimate_units - set(group_lookup))
+    if missing_assignments:
+        raise ValueError(
+            "population estimates are missing group assignments: "
+            + ", ".join(missing_assignments)
+        )
+    keys = [(item.unit_id, item.level) for item in estimates]
+    if len(set(keys)) != len(keys):
+        raise ValueError("interaction estimates require unique unit-condition rows")
+
+    target_groups = {spec.group_numerator, spec.group_denominator}
+    target_conditions = {spec.condition_numerator, spec.condition_denominator}
+    selected = tuple(
+        item
+        for item in estimates
+        if group_lookup[item.unit_id] in target_groups
+        and item.level in target_conditions
+    )
+    selected_lookup = {(item.unit_id, item.level): item for item in selected}
+    selected_assignments = tuple(
+        item for item in assignments if item.group in target_groups
+    )
+    within: list[PopulationUnitEstimate] = []
+    excluded: list[str] = []
+    for assignment in sorted(
+        selected_assignments, key=lambda item: (item.group, item.unit_id)
+    ):
+        numerator = selected_lookup.get((assignment.unit_id, spec.condition_numerator))
+        denominator = selected_lookup.get(
+            (assignment.unit_id, spec.condition_denominator)
+        )
+        if numerator is None or denominator is None:
+            excluded.append(assignment.unit_id)
+            continue
+        numerator_values = np.asarray(numerator.estimate, dtype=float)
+        denominator_values = np.asarray(denominator.estimate, dtype=float)
+        if numerator_values.shape != denominator_values.shape:
+            raise ValueError(
+                "interaction condition estimates must share one outcome shape"
+            )
+        contrast = numerator_values - denominator_values
+        within.append(
+            PopulationUnitEstimate(
+                unit_id=assignment.unit_id,
+                level=assignment.group,
+                estimate=_tuple(contrast),
+                support=tuple(
+                    min(first, second)
+                    for first, second in zip(
+                        numerator.support, denominator.support, strict=True
+                    )
+                ),
+                source_units=tuple(
+                    sorted(set(numerator.source_units) | set(denominator.source_units))
+                ),
+                observation_count=(
+                    numerator.observation_count + denominator.observation_count
+                ),
+            )
+        )
+
+    population = infer_population_contrast(
+        tuple(within),
+        PopulationContrastSpec(
+            numerator=spec.group_numerator,
+            denominator=spec.group_denominator,
+            design="independent",
+            confidence=spec.confidence,
+            draws=spec.draws,
+            seed=spec.seed,
+        ),
+    )
+    result_warnings: list[str] = []
+    if excluded:
+        result_warnings.append("incomplete_condition_units_excluded")
+    ignored_groups = sorted(set(group_lookup.values()) - target_groups)
+    if ignored_groups:
+        result_warnings.append("noncontrast_groups_not_selected")
+    unobserved_assignments = sorted(set(group_lookup) - estimate_units)
+    if unobserved_assignments:
+        result_warnings.append("assigned_units_without_estimates")
+    return PopulationInteractionResult(
+        spec=spec,
+        cell_estimates=estimates,
+        group_assignments=assignments,
+        within_unit_contrasts=tuple(within),
+        excluded_units=tuple(sorted(excluded)),
+        population=population,
         warnings=tuple(result_warnings),
     )
 

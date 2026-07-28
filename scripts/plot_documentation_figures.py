@@ -31,6 +31,7 @@ def main() -> None:
     _qc_gate(args.output_dir / "qc-gating.svg")
     _peri_event(args.output_dir / "peri-event-inference.svg")
     _population_boundary(args.output_dir / "population-inference-boundary.svg")
+    _population_interaction(args.output_dir / "population-interaction-boundary.svg")
     _multiverse(args.output_dir / "multiverse-robustness.svg")
     _method_map(args.output_dir / "method-question-map.svg")
     _event_kernel(args.output_dir / "event-kernel-validation.svg")
@@ -299,6 +300,82 @@ def _population_boundary(path: Path) -> None:
         ha="center",
         va="center",
         color=MUTED,
+    )
+    _save(figure, path)
+
+
+def _population_interaction(path: Path) -> None:
+    figure, axis = _canvas((11.5, 5.1), (0, 11.5), (0, 5.1))
+    axis.text(
+        5.75,
+        4.72,
+        "Difference within animal, then difference between groups",
+        ha="center",
+        weight="bold",
+    )
+    rows = (("Treatment animals", 3.05, TEAL), ("Control animals", 1.2, PURPLE))
+    for label, y_position, color in rows:
+        axis.text(
+            0.15,
+            y_position + 0.55,
+            label,
+            ha="left",
+            va="center",
+            weight="bold",
+            color=color,
+            fontsize=8,
+        )
+        _box(
+            axis,
+            1.65,
+            y_position,
+            1.55,
+            1.05,
+            "Condition 0",
+            "animal estimate",
+            color,
+        )
+        _box(
+            axis,
+            3.65,
+            y_position,
+            1.55,
+            1.05,
+            "Condition 1",
+            "animal estimate",
+            color,
+        )
+        _arrow(axis, (3.25, y_position + 0.52), (3.6, y_position + 0.52))
+        _box(
+            axis,
+            5.7,
+            y_position,
+            1.7,
+            1.05,
+            "Within animal Δ",
+            "condition 1 - 0",
+            color,
+        )
+        _arrow(axis, (5.25, y_position + 0.52), (5.65, y_position + 0.52))
+        _arrow(axis, (7.45, y_position + 0.52), (8.45, 2.58), color)
+    _box(
+        axis,
+        8.5,
+        2.02,
+        2.35,
+        1.15,
+        "Interaction",
+        "treatment Δ - control Δ",
+        AMBER,
+    )
+    axis.text(
+        5.75,
+        0.43,
+        "Only complete animal contrasts cross the population boundary; "
+        "missing cells stay in the ledger.",
+        ha="center",
+        color=MUTED,
+        fontsize=8,
     )
     _save(figure, path)
 

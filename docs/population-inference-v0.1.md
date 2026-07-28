@@ -109,5 +109,10 @@ calibration under skew, heteroscedasticity, informative missingness, or
 preprocessing selection. Broader scenario calibration remains required before
 promoting the resampling API beyond its current experimental boundary.
 
+The first constrained extension is the
+[two-group × two-condition interaction](population-interactions-v0.1.md), which
+forms a repeated-condition contrast within each complete animal before comparing
+those contrasts across disjoint groups.
+
 The governing rationale is recorded in
 [SDR-0055](decisions/0055-materialize-animal-estimates-before-population-inference.md).

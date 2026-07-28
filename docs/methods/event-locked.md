@@ -9,6 +9,7 @@ a jointly estimated response to overlapping predictors, or predictive value.
 | Scientific question | Workflow | Output |
 |---|---|---|
 | What is the response around one event definition? | [Peri-event inference](../peri-event-inference-v0.1.md) | auditable session estimates and paired or independent animal-level time course |
+| Does a repeated event/condition contrast differ between animal groups? | [Group-by-condition interactions](../population-interactions-v0.1.md) | animal-level peri-event difference in differences |
 | What is associated with each of several overlapping events? | [Event-kernel encoding](../event-kernel-encoding-v0.1.md) | regularized kernels with complete-group validation |
 | Does the result survive plausible design choices? | [Event-kernel model multiverses](../event-kernel-multiverse-v0.1.md) | paired design alternatives and failure ledger |
 | Does one predictor family add held-out information? | [Predictor-family contributions](../predictor-family-contributions-v0.1.md) | paired full-minus-reduced held-out score |
@@ -21,6 +22,8 @@ a jointly estimated response to overlapping predictors, or predictive value.
 - A kernel coefficient is conditional on all included predictors and basis choices.
 - In-sample fit does not establish transport to a new animal.
 - Pointwise intervals do not cover an entire time course simultaneously.
+- Separate significance tests within each group do not test a group-by-condition
+  interaction.
 - Full-versus-reduced prediction measures conditional predictive contribution,
   not biological necessity.
 

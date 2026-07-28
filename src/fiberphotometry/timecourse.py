@@ -13,8 +13,12 @@ from numpy.typing import NDArray
 from fiberphotometry.population import (
     PopulationContrastResult,
     PopulationContrastSpec,
+    PopulationGroupAssignment,
+    PopulationInteractionResult,
+    PopulationInteractionSpec,
     PopulationUnitEstimate,
     infer_population_contrast,
+    infer_population_interaction,
 )
 
 
@@ -82,6 +86,25 @@ class PeriEventInferenceResult:
 
     def to_json(self) -> str:
         """Serialize arrays, unit ledgers, and inferential semantics."""
+        return json.dumps(asdict(self), indent=2, sort_keys=True)
+
+
+@dataclass(frozen=True)
+class PeriEventInteractionResult:
+    """A peri-event group-by-condition interaction with complete unit evidence."""
+
+    relative_time: tuple[float, ...]
+    session_estimates: tuple[PeriEventSessionEstimate, ...]
+    interaction: PopulationInteractionResult
+    schema_version: str = "1"
+
+    @property
+    def estimate(self) -> tuple[float, ...]:
+        """Return the group difference between within-animal condition curves."""
+        return self.interaction.population.estimate
+
+    def to_json(self) -> str:
+        """Serialize the complete event-to-interaction evidence chain."""
         return json.dumps(asdict(self), indent=2, sort_keys=True)
 
 
@@ -169,6 +192,45 @@ def infer_peri_event_contrast(
     )
 
 
+def infer_peri_event_interaction(
+    values: NDArray[np.float64],
+    relative_time: NDArray[np.float64],
+    *,
+    animals: tuple[str, ...],
+    sessions: tuple[str, ...],
+    groups: tuple[str, ...],
+    conditions: tuple[str, ...],
+    spec: PopulationInteractionSpec,
+) -> PeriEventInteractionResult:
+    """Infer a group contrast over within-animal peri-event condition contrasts."""
+    matrix = np.asarray(values, dtype=float)
+    time = np.asarray(relative_time, dtype=float)
+    if matrix.ndim != 2 or matrix.shape[1] != len(time):
+        raise ValueError("values must be event by relative_time")
+    if len(time) < 2 or not np.all(np.diff(time) > 0):
+        raise ValueError("relative_time must be strictly increasing")
+    event_count = matrix.shape[0]
+    if not (
+        len(animals) == len(sessions) == len(groups) == len(conditions) == event_count
+    ):
+        raise ValueError("event metadata must match the values rows")
+    assignments = _group_assignments(animals, groups)
+    session_estimates, animal_estimates = _materialize_estimates(
+        matrix,
+        animals,
+        sessions,
+        conditions,
+        spec.condition_numerator,
+        spec.condition_denominator,
+    )
+    interaction = infer_population_interaction(animal_estimates, assignments, spec)
+    return PeriEventInteractionResult(
+        relative_time=tuple(time.tolist()),
+        session_estimates=session_estimates,
+        interaction=interaction,
+    )
+
+
 def _materialize_estimates(
     values: NDArray[np.float64],
     animals: tuple[str, ...],
@@ -231,6 +293,22 @@ def _materialize_estimates(
                 )
             )
     return tuple(session_output), tuple(animal_output)
+
+
+def _group_assignments(
+    animals: tuple[str, ...], groups: tuple[str, ...]
+) -> tuple[PopulationGroupAssignment, ...]:
+    assignments: list[PopulationGroupAssignment] = []
+    animal_array = np.asarray(animals, dtype=str)
+    group_array = np.asarray(groups, dtype=str)
+    for animal in sorted(set(animals)):
+        observed = sorted(set(group_array[animal_array == animal].tolist()))
+        if len(observed) != 1:
+            raise ValueError(
+                f"animal {animal!r} must have exactly one population group"
+            )
+        assignments.append(PopulationGroupAssignment(animal, observed[0]))
+    return tuple(assignments)
 
 
 def _tuple(values: NDArray[np.float64]) -> tuple[float, ...]:

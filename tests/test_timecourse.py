@@ -3,7 +3,11 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry import infer_peri_event_contrast
+from fiberphotometry import (
+    PopulationInteractionSpec,
+    infer_peri_event_contrast,
+    infer_peri_event_interaction,
+)
 
 
 def _curves(seed: int = 7):
@@ -193,3 +197,85 @@ def test_peri_event_inference_exposes_incomplete_paired_animals() -> None:
     assert result.animal_count == 9
     assert result.population.excluded_units == ("a9",)
     assert "incomplete_paired_animals_excluded" in result.warnings
+
+
+def test_peri_event_interaction_uses_one_condition_difference_per_animal() -> None:
+    rng = np.random.default_rng(15)
+    time = np.linspace(-0.5, 1.0, 16)
+    effect = 0.5 * np.exp(-(((time - 0.25) / 0.2) ** 2))
+    values = []
+    animals = []
+    sessions = []
+    groups = []
+    conditions = []
+    for group, multiplier in (("control", 0.3), ("drug", 0.8)):
+        for animal_index in range(4):
+            animal = f"{group}-{animal_index}"
+            animal_noise = rng.normal(0, 0.01, len(time))
+            for condition in ("pre", "post"):
+                for session_index in range(2):
+                    for _ in range(3):
+                        values.append(
+                            animal_noise
+                            + (multiplier * effect if condition == "post" else 0)
+                            + rng.normal(0, 0.01, len(time))
+                        )
+                        animals.append(animal)
+                        sessions.append(f"{animal}:s{session_index}")
+                        groups.append(group)
+                        conditions.append(condition)
+    spec = PopulationInteractionSpec(
+        group_numerator="drug",
+        group_denominator="control",
+        condition_numerator="post",
+        condition_denominator="pre",
+        draws=200,
+        seed=9,
+    )
+    arguments = dict(
+        relative_time=time,
+        animals=tuple(animals),
+        sessions=tuple(sessions),
+        groups=tuple(groups),
+        conditions=tuple(conditions),
+        spec=spec,
+    )
+
+    result = infer_peri_event_interaction(np.asarray(values), **arguments)
+    duplicated = infer_peri_event_interaction(
+        np.repeat(np.asarray(values), 4, axis=0),
+        relative_time=time,
+        animals=tuple(value for value in animals for _ in range(4)),
+        sessions=tuple(value for value in sessions for _ in range(4)),
+        groups=tuple(value for value in groups for _ in range(4)),
+        conditions=tuple(value for value in conditions for _ in range(4)),
+        spec=spec,
+    )
+
+    assert np.max(np.abs(np.asarray(result.estimate) - 0.5 * effect)) < 0.03
+    assert result.interaction.population.included_units == tuple(
+        [f"control-{index}" for index in range(4)]
+        + [f"drug-{index}" for index in range(4)]
+    )
+    assert len(result.session_estimates) == 32
+    assert duplicated.estimate == pytest.approx(result.estimate)
+    assert duplicated.interaction.population.standard_error == pytest.approx(
+        result.interaction.population.standard_error
+    )
+    assert (
+        json.loads(result.to_json())["interaction"]["spec"]["group_numerator"] == "drug"
+    )
+
+
+def test_peri_event_interaction_rejects_group_changes_within_animal() -> None:
+    values = np.zeros((4, 3))
+    with pytest.raises(ValueError, match="exactly one population group"):
+        infer_peri_event_interaction(
+            values,
+            np.asarray((-1.0, 0.0, 1.0)),
+            animals=("a", "a", "b", "b"),
+            sessions=("a:s", "a:s", "b:s", "b:s"),
+            groups=("drug", "control", "control", "control"),
+            conditions=("pre", "post", "pre", "post"),
+            spec=PopulationInteractionSpec("drug", "control", "post", "pre", draws=100),
+        )
