@@ -11,6 +11,7 @@ depends on one defensible workflow choice.
 | Materialize animal estimates and contrast a population | [Animal estimates and population contrasts](../population-inference-v0.1.md) | Supported contract; resampling is experimental |
 | Test whether a within-animal condition contrast differs between groups | [Group-by-condition animal interactions](../population-interactions-v0.1.md) | Experimental two-group × two-condition contract |
 | Apply one population contract to transients, state-band power, or association | [Population inference across core workflows](../population-workflow-adapters-v0.1.md) | Experimental typed materializers |
+| Infer across complete PSD, autocorrelation, lag, or coherence curves | [Population inference for frequency and lag curves](../population-curve-inference-v0.1.md) | Experimental exact-axis vector contract |
 | Select the experimental unit, estimand, and resampling design | [Experimental design and inference](../inference-design-v0.1.md) | Supported guidance and APIs |
 | Quantify sensitivity to named analytic alternatives | [Robustness multiverses](../multiverse-contract-v0.1.md) | Supported |
 | Fit an optional scalar hierarchical sensitivity model | [Scalar mixed models](../scalar-mixed-model-v0.1.md) | Experimental |

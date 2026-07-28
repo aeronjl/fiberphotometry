@@ -116,6 +116,8 @@ EXPERIMENTAL_API_V0_1 = (
     "PopulationInteractionResult",
     "PopulationInteractionSpec",
     "PopulationUnitEstimate",
+    "CurvePopulationMaterialization",
+    "PopulationCurveSession",
     "AssociationPopulationMaterialization",
     "StateBandPowerPopulationMaterialization",
     "TransientPopulationMaterialization",
@@ -175,7 +177,15 @@ EXPERIMENTAL_API_V0_1 = (
     "infer_peri_event_interaction",
     "infer_population_contrast",
     "infer_population_interaction",
+    "curve_session_from_autocorrelation",
+    "curve_session_from_coherence",
+    "curve_session_from_lagged",
+    "curve_session_from_psd",
+    "curve_sessions_from_state_autocorrelation",
+    "curve_sessions_from_state_coherence",
+    "curve_sessions_from_state_psd",
     "materialize_association_population",
+    "materialize_curve_population",
     "materialize_state_band_power_population",
     "materialize_transient_population",
     "infer_spatial_network_animals",
@@ -213,6 +223,7 @@ ARTIFACT_SCHEMAS_V0_1 = {
     "transient_population_materialization": "embedded schema_version 1",
     "state_band_power_population_materialization": "embedded schema_version 1",
     "association_population_materialization": "embedded schema_version 1",
+    "curve_population_materialization": "embedded schema_version 1",
 }
 
 

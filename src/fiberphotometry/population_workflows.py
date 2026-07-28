@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import warnings
 from dataclasses import asdict, dataclass
 from typing import Literal, TypeAlias
 
@@ -12,6 +13,11 @@ from fiberphotometry.association_inference import (
     AssociationAnimalEstimate,
     AssociationSessionEstimate,
 )
+from fiberphotometry.cross_spectral import (
+    CoherencePhaseResult,
+    StateConditionedCoherenceResult,
+)
+from fiberphotometry.multisignal import LaggedAssociationResult
 from fiberphotometry.population import (
     PopulationContrastResult,
     PopulationContrastSpec,
@@ -23,8 +29,11 @@ from fiberphotometry.population import (
     infer_population_interaction,
 )
 from fiberphotometry.spectral import (
+    AutocorrelationResult,
     StateBandPowerEstimate,
+    StateConditionedAutocorrelationResult,
     StatePSDSession,
+    WelchPSDResult,
     _band_power,
 )
 from fiberphotometry.transient_inference import (
@@ -37,6 +46,310 @@ from fiberphotometry.transient_inference import (
 )
 
 Aggregation: TypeAlias = Literal["mean", "median"]
+
+
+@dataclass(frozen=True)
+class PopulationCurveSession:
+    """One session-level curve with an explicit axis and pointwise support."""
+
+    subject: str
+    session: str
+    level: str
+    metric: str
+    axis_name: str
+    axis_unit: str
+    value_unit: str
+    axis: tuple[float, ...]
+    estimate: tuple[float, ...]
+    observation_support: tuple[int, ...]
+    source_method: str
+
+    def __post_init__(self) -> None:
+        for name in (
+            "subject",
+            "session",
+            "level",
+            "metric",
+            "axis_name",
+            "axis_unit",
+            "value_unit",
+            "source_method",
+        ):
+            if not str(getattr(self, name)).strip():
+                raise ValueError(f"curve {name} cannot be empty")
+        if len(self.axis) < 2 or not (
+            len(self.axis) == len(self.estimate) == len(self.observation_support)
+        ):
+            raise ValueError("curve axis, estimate, and support must share a shape")
+        axis = np.asarray(self.axis, dtype=float)
+        if not np.all(np.isfinite(axis)) or not np.all(np.diff(axis) > 0):
+            raise ValueError("curve axis must be finite and strictly increasing")
+        if any(value < 0 for value in self.observation_support):
+            raise ValueError("curve observation support cannot be negative")
+        if any(
+            np.isfinite(value) and support == 0
+            for value, support in zip(
+                self.estimate, self.observation_support, strict=True
+            )
+        ):
+            raise ValueError("finite curve estimates require positive support")
+
+
+@dataclass(frozen=True)
+class CurvePopulationMaterialization:
+    """Aligned animal-level curves ready for common population inference."""
+
+    metric: str
+    axis_name: str
+    axis_unit: str
+    value_unit: str
+    axis: tuple[float, ...]
+    levels: tuple[str, ...]
+    session_aggregation: Aggregation
+    session_estimates: tuple[PopulationCurveSession, ...]
+    population_estimates: tuple[PopulationUnitEstimate, ...]
+    axis_policy: str = "require_identical_session_axes"
+    schema_version: str = "1"
+
+    def contrast(self, spec: PopulationContrastSpec) -> PopulationContrastResult:
+        """Apply pointwise and simultaneous inference to animal-level curves."""
+        return infer_population_contrast(self.population_estimates, spec)
+
+    def interaction(
+        self,
+        assignments: tuple[PopulationGroupAssignment, ...]
+        | list[PopulationGroupAssignment],
+        spec: PopulationInteractionSpec,
+    ) -> PopulationInteractionResult:
+        """Compare within-animal curves across two disjoint groups."""
+        return infer_population_interaction(
+            self.population_estimates, tuple(assignments), spec
+        )
+
+    def to_json(self) -> str:
+        """Serialize axes, session curves, animal cells, and support."""
+        return json.dumps(asdict(self), indent=2, sort_keys=True)
+
+
+def curve_session_from_psd(
+    result: WelchPSDResult,
+    *,
+    subject: str,
+    session: str,
+    level: str,
+) -> PopulationCurveSession:
+    """Adapt one gap-aware PSD to the common session-curve boundary."""
+    support = (result.total_window_count,) * len(result.frequencies_hz)
+    return PopulationCurveSession(
+        subject,
+        session,
+        level,
+        "power_spectral_density",
+        "frequency",
+        "Hz",
+        result.power_density_unit,
+        result.frequencies_hz,
+        result.power_density,
+        support,
+        result.method,
+    )
+
+
+def curve_session_from_autocorrelation(
+    result: AutocorrelationResult,
+    *,
+    subject: str,
+    session: str,
+    level: str,
+) -> PopulationCurveSession:
+    """Adapt one gap-aware autocorrelation curve and its pairs per lag."""
+    return PopulationCurveSession(
+        subject,
+        session,
+        level,
+        "autocorrelation",
+        "lag",
+        "s",
+        "correlation",
+        result.lags_s,
+        result.correlation,
+        result.pairs_per_lag,
+        result.method,
+    )
+
+
+def curve_session_from_lagged(
+    result: LaggedAssociationResult,
+    level: str,
+) -> PopulationCurveSession:
+    """Adapt one complete lag-association curve for a declared condition."""
+    return PopulationCurveSession(
+        result.pair.subject,
+        result.pair.session,
+        level,
+        f"lagged_correlation:{result.pair.pair_id}",
+        "lag",
+        "s",
+        "correlation",
+        result.lags_s,
+        result.correlation,
+        result.pairs_per_lag,
+        result.method,
+    )
+
+
+def curve_session_from_coherence(
+    result: CoherencePhaseResult,
+    level: str,
+) -> PopulationCurveSession:
+    """Adapt magnitude-squared coherence while retaining window support."""
+    support = (result.total_window_count,) * len(result.frequencies_hz)
+    return PopulationCurveSession(
+        result.pair.subject,
+        result.pair.session,
+        level,
+        f"coherence:{result.pair.pair_id}",
+        "frequency",
+        "Hz",
+        "magnitude_squared_coherence",
+        result.frequencies_hz,
+        result.coherence,
+        support,
+        result.method,
+    )
+
+
+def curve_sessions_from_state_psd(
+    session: StatePSDSession,
+) -> tuple[PopulationCurveSession, ...]:
+    """Expand every externally supplied state into a PSD session curve."""
+    return tuple(
+        curve_session_from_psd(
+            item.result,
+            subject=session.subject,
+            session=session.session,
+            level=item.state,
+        )
+        for item in session.result.states
+    )
+
+
+def curve_sessions_from_state_autocorrelation(
+    result: StateConditionedAutocorrelationResult,
+    *,
+    subject: str,
+    session: str,
+) -> tuple[PopulationCurveSession, ...]:
+    """Expand every externally supplied state into an autocorrelation curve."""
+    return tuple(
+        curve_session_from_autocorrelation(
+            item.result,
+            subject=subject,
+            session=session,
+            level=item.state,
+        )
+        for item in result.states
+    )
+
+
+def curve_sessions_from_state_coherence(
+    result: StateConditionedCoherenceResult,
+) -> tuple[PopulationCurveSession, ...]:
+    """Expand state-conditioned coherence using the pair's stored identities."""
+    return tuple(
+        curve_session_from_coherence(item.result, item.state) for item in result.states
+    )
+
+
+def materialize_curve_population(
+    sessions: tuple[PopulationCurveSession, ...] | list[PopulationCurveSession],
+    *,
+    levels: tuple[str, ...],
+    session_aggregation: Aggregation = "mean",
+) -> CurvePopulationMaterialization:
+    """Aggregate identical-axis session curves within animal and level.
+
+    Axis interpolation is never implicit. Sessions with different grids must be
+    harmonized prospectively and re-adapted before entering this boundary.
+    """
+    selected_levels = _validate_levels(levels, "level")
+    if session_aggregation not in {"mean", "median"}:
+        raise ValueError("session_aggregation must be 'mean' or 'median'")
+    selected = tuple(item for item in sessions if item.level in selected_levels)
+    if not selected:
+        raise ValueError("no session curves match the requested levels")
+    identities = [
+        (item.subject, item.session, item.level, item.metric) for item in selected
+    ]
+    if len(set(identities)) != len(identities):
+        raise ValueError("curve subject-session-level identities must be unique")
+    reference = selected[0]
+    for item in selected[1:]:
+        if (
+            item.metric != reference.metric
+            or item.axis_name != reference.axis_name
+            or item.axis_unit != reference.axis_unit
+            or item.value_unit != reference.value_unit
+        ):
+            raise ValueError(
+                "session curves must describe one metric and unit contract"
+            )
+        if item.axis != reference.axis:
+            raise ValueError(
+                "session curve axes differ; harmonize grids prospectively before "
+                "population materialization"
+            )
+
+    grouped: dict[tuple[str, str], list[PopulationCurveSession]] = {}
+    for item in selected:
+        grouped.setdefault((item.subject, item.level), []).append(item)
+    population_output: list[PopulationUnitEstimate] = []
+    for (subject, level), items in sorted(grouped.items()):
+        values = np.asarray([item.estimate for item in items], dtype=float)
+        finite = np.isfinite(values)
+        support = np.sum(finite, axis=0)
+        lower_support = np.sum(
+            np.where(
+                finite,
+                np.asarray([item.observation_support for item in items], dtype=int),
+                0,
+            ),
+            axis=0,
+        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            estimate = (
+                np.nanmean(values, axis=0)
+                if session_aggregation == "mean"
+                else np.nanmedian(values, axis=0)
+            )
+        estimate[support == 0] = np.nan
+        if not np.isfinite(estimate).any():
+            continue
+        population_output.append(
+            PopulationUnitEstimate(
+                unit_id=subject,
+                level=level,
+                estimate=tuple(float(value) for value in estimate),
+                support=tuple(int(value) for value in support),
+                source_units=tuple(sorted(item.session for item in items)),
+                observation_count=int(np.max(lower_support)),
+                observation_support=tuple(int(value) for value in lower_support),
+            )
+        )
+    if not population_output:
+        raise ValueError("session curves contain no finite population evidence")
+    return CurvePopulationMaterialization(
+        reference.metric,
+        reference.axis_name,
+        reference.axis_unit,
+        reference.value_unit,
+        reference.axis,
+        selected_levels,
+        session_aggregation,
+        selected,
+        tuple(population_output),
+    )
 
 
 @dataclass(frozen=True)
@@ -196,6 +509,7 @@ def materialize_transient_population(
                 support=(len(usable),),
                 source_units=sources,
                 observation_count=event_count,
+                observation_support=(event_count,),
             )
         )
     if not population_output:
@@ -263,6 +577,7 @@ def materialize_state_band_power_population(
                 support=(len(items),),
                 source_units=sources,
                 observation_count=window_count,
+                observation_support=(window_count,),
             )
         )
     if not population_output:
@@ -329,6 +644,7 @@ def materialize_association_population(
                 support=(len(items),),
                 source_units=sources,
                 observation_count=support,
+                observation_support=(support,),
             )
         )
     return AssociationPopulationMaterialization(

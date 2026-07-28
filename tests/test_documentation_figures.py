@@ -16,6 +16,7 @@ GENERATED = {
     "peri-event-inference.svg",
     "population-inference-boundary.svg",
     "population-interaction-boundary.svg",
+    "population-curve-boundary.svg",
     "predictor-family-contributions.svg",
     "preprocessing-sequence.svg",
     "publication-provenance.svg",

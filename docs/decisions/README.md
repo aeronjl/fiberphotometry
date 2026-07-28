@@ -85,6 +85,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0055](0055-materialize-animal-estimates-before-population-inference.md) | Accepted | Materialize animal estimates before population inference |
 | [SDR-0056](0056-form-interactions-from-animal-condition-contrasts.md) | Accepted | Form interactions from animal-condition contrasts |
 | [SDR-0057](0057-preserve-domain-denominators-at-one-population-boundary.md) | Accepted | Preserve domain denominators at one population boundary |
+| [SDR-0058](0058-require-explicit-axes-and-pointwise-support-for-population-curves.md) | Accepted | Require explicit axes and pointwise support for population curves |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

@@ -149,6 +149,7 @@
   - [x] Gap-aware autocorrelation and power spectral density
   - [x] Spectrograms with explicit detrending, edge, and missing-data evidence
   - [x] User-supplied state/epoch tables and animal-aware comparisons
+  - [x] Exact-axis animal-level inference for complete PSD and autocorrelation curves
   - [ ] Public sleep/state or long-duration worked example
 - [x] Multiscale long-duration summaries without unvalidated tonic/phasic biological labels
   - [x] Named physical-time scales with explicit step, coverage and sample gates
@@ -169,6 +170,7 @@
   - [x] Paired channel/site metadata, alignment, control, and crosstalk diagnostics
   - [x] Lagged and event/behavior-residualized association with blocked uncertainty
   - [x] State-conditioned coherence and phase after single-signal spectral validation
+  - [x] Exact-axis animal-level inference for complete lag-association and coherence curves
   - [x] Coordinate-aware mouse-level models for dense multi-fiber arrays
     - [x] Shared coordinate space/unit and complete pair/exclusion ledger
     - [x] Physical-distance bins and within-session node-label spatial null

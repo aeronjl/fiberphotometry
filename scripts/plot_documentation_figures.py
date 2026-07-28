@@ -32,6 +32,7 @@ def main() -> None:
     _peri_event(args.output_dir / "peri-event-inference.svg")
     _population_boundary(args.output_dir / "population-inference-boundary.svg")
     _population_interaction(args.output_dir / "population-interaction-boundary.svg")
+    _population_curves(args.output_dir / "population-curve-boundary.svg")
     _multiverse(args.output_dir / "multiverse-robustness.svg")
     _method_map(args.output_dir / "method-question-map.svg")
     _event_kernel(args.output_dir / "event-kernel-validation.svg")
@@ -376,6 +377,87 @@ def _population_interaction(path: Path) -> None:
         ha="center",
         color=MUTED,
         fontsize=8,
+    )
+    _save(figure, path)
+
+
+def _population_curves(path: Path) -> None:
+    rng = np.random.default_rng(580)
+    curve_axis = np.linspace(0, 1, 90)
+    source_curves = np.vstack(
+        [
+            0.12 * index
+            + 0.55 * np.exp(-(((curve_axis - 0.55) / 0.16) ** 2))
+            + rng.normal(0, 0.035, len(curve_axis))
+            for index in range(3)
+        ]
+    )
+    point_support = np.round(320 - 150 * curve_axis).astype(int)
+    animal_curve = np.mean(source_curves, axis=0)
+    contrast = 0.28 * np.exp(-(((curve_axis - 0.55) / 0.18) ** 2)) - 0.02
+    pointwise = 0.07 + 0.035 * curve_axis
+    simultaneous = pointwise * 1.55
+
+    figure, axes = plt.subplots(1, 3, figsize=(11.5, 3.8))
+    for curve in source_curves:
+        axes[0].plot(curve_axis, curve, color=PURPLE, alpha=0.35)
+    support_axis = axes[0].twinx()
+    support_axis.fill_between(
+        curve_axis, 0, point_support, color=AMBER, alpha=0.12, linewidth=0
+    )
+    support_axis.set_yticks([])
+    support_axis.spines["right"].set_visible(False)
+    axes[0].text(
+        0.03,
+        0.94,
+        "orange area · pairs / windows",
+        transform=axes[0].transAxes,
+        color=AMBER,
+        fontsize=7,
+        va="top",
+    )
+    axes[0].set_title("Session curves + pointwise support")
+
+    axes[1].plot(curve_axis, animal_curve, color=TEAL, linewidth=2.2)
+    axes[1].fill_between(
+        curve_axis,
+        np.min(source_curves, axis=0),
+        np.max(source_curves, axis=0),
+        color=TEAL,
+        alpha=0.13,
+    )
+    axes[1].set_title("Equal-session animal curve")
+
+    axes[2].fill_between(
+        curve_axis,
+        contrast - simultaneous,
+        contrast + simultaneous,
+        color=TEAL,
+        alpha=0.16,
+        label="simultaneous",
+    )
+    axes[2].fill_between(
+        curve_axis,
+        contrast - pointwise,
+        contrast + pointwise,
+        color=PURPLE,
+        alpha=0.28,
+        label="pointwise",
+    )
+    axes[2].plot(curve_axis, contrast, color=PURPLE, linewidth=2.2)
+    axes[2].axhline(0, color=LIGHT)
+    axes[2].set_title("Animal-level population contrast")
+    axes[2].legend(frameon=False, fontsize=7)
+
+    for axis in axes:
+        axis.set_xlabel("Frequency or lag")
+        axis.grid(color="#f0edf3")
+    axes[0].set_ylabel("Session estimate")
+    axes[1].set_ylabel("Animal estimate")
+    axes[2].set_ylabel("Condition contrast")
+    figure.suptitle(
+        "The complete axis crosses the population boundary without losing support",
+        weight="bold",
     )
     _save(figure, path)
 
