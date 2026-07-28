@@ -37,6 +37,7 @@ directly with their method pages:
 | `gap-aware-spectral-contract.svg` | Show that gaps and state boundaries partition valid spectral evidence |
 | `multiscale-long-duration-contract.svg` | Show named physical-time scales, acceptance evidence, and window-to-animal aggregation without biological labels |
 | `multisignal-evidence-contract.svg` | Separate paired-signal identity, optical review, association, and animal inference |
+| `spatial-network-contract.svg` | Separate declared array geometry, gap-aware edge evidence, within-session spatial summaries, and edge-to-session-to-mouse inference |
 | `optical-unmixing-contract.svg` | Separate independent matrix identification, pre-outcome gates, pattern-specific application, and reconstruction diagnostics |
 | `optical-validity-contract.svg` | Separate prospective pulse masks, observed artifact diagnostics, and versioned sensor-validity gates |
 | `transient-product-evidence.svg` | Separate threshold calibration, outcome detection, native cutouts, waveform QC, and quantification |
