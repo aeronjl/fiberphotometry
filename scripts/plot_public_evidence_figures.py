@@ -6,8 +6,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
+from figure_style import apply_publication_style, save_figure
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULT = ROOT / "benchmarks/dandi-000971-tutorial-v0.1/multiverse.json"
@@ -23,15 +23,7 @@ def _label(universe: dict[str, Any]) -> str:
 
 def main() -> None:
     """Plot the frozen DANDI reward multiverse without reaccessing source data."""
-    mpl.rcParams.update(
-        {
-            "font.family": "DejaVu Sans",
-            "font.size": 9,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "svg.hashsalt": "fiberphotometry-public-evidence-v1",
-        }
-    )
+    apply_publication_style(hashsalt="fiberphotometry-public-evidence-v1")
     payload = json.loads(RESULT.read_text(encoding="utf-8"))
     universes = sorted(payload["universes"], key=lambda item: item["estimate"])
 
@@ -67,13 +59,7 @@ def main() -> None:
     )
     axis.grid(axis="x", color="#e7e5e4", linewidth=0.7)
     figure.tight_layout()
-    figure.savefig(OUTPUT, format="svg", metadata={"Date": None})
-    plt.close(figure)
-    svg = OUTPUT.read_text(encoding="utf-8")
-    OUTPUT.write_text(
-        "\n".join(line.rstrip() for line in svg.splitlines()) + "\n",
-        encoding="utf-8",
-    )
+    save_figure(figure, OUTPUT)
     print(OUTPUT)
 
 

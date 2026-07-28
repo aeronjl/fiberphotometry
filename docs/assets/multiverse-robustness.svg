@@ -177,43 +177,43 @@ z
 " clip-path="url(#p19be3f0306)" style="fill: #ffffff; stroke: #563d7c; stroke-width: 1.25; stroke-linejoin: miter"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #563d7c" x="65.79" y="131.838882" transform="rotate(-0 65.79 131.838882)">Fixed estimand</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #563d7c" x="65.79" y="131.838882" transform="rotate(-0 65.79 131.838882)">Fixed estimand</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="65.79" y="153.938793" transform="rotate(-0 65.79 153.938793)">same animals · contrast · unit</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="65.79" y="153.938793" transform="rotate(-0 65.79 153.938793)">same animals · contrast · unit</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #23877c" x="202.5" y="55.830642" transform="rotate(-0 202.5 55.830642)">Correction</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #23877c" x="202.5" y="55.830642" transform="rotate(-0 202.5 55.830642)">Correction</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="202.5" y="69.448233" transform="rotate(-0 202.5 69.448233)">OLS · robust</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="202.5" y="69.448233" transform="rotate(-0 202.5 69.448233)">OLS · robust</text>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #23877c" x="202.5" y="111.270642" transform="rotate(-0 202.5 111.270642)">Normalization</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #23877c" x="202.5" y="111.270642" transform="rotate(-0 202.5 111.270642)">Normalization</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="202.5" y="124.888233" transform="rotate(-0 202.5 124.888233)">subtract · divide</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="202.5" y="124.888233" transform="rotate(-0 202.5 124.888233)">subtract · divide</text>
    </g>
    <g id="text_7">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #23877c" x="202.5" y="166.710642" transform="rotate(-0 202.5 166.710642)">Window</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #23877c" x="202.5" y="166.710642" transform="rotate(-0 202.5 166.710642)">Window</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="202.5" y="180.328233" transform="rotate(-0 202.5 180.328233)">early · late</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="202.5" y="180.328233" transform="rotate(-0 202.5 180.328233)">early · late</text>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #c47a2c" x="350.37" y="130.508322" transform="rotate(-0 350.37 130.508322)">Complete ledger</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #c47a2c" x="350.37" y="130.508322" transform="rotate(-0 350.37 130.508322)">Complete ledger</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="350.37" y="156.378153" transform="rotate(-0 350.37 156.378153)">success · blocked · incompatible · failed</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="350.37" y="156.378153" transform="rotate(-0 350.37 156.378153)">success · blocked · incompatible · failed</text>
    </g>
    <g id="text_11">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #563d7c" x="514.98" y="130.508322" transform="rotate(-0 514.98 130.508322)">Robustness summary</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #563d7c" x="514.98" y="130.508322" transform="rotate(-0 514.98 130.508322)">Robustness summary</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="514.98" y="156.378153" transform="rotate(-0 514.98 156.378153)">range · direction · practical effect · LOO</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="514.98" y="156.378153" transform="rotate(-0 514.98 156.378153)">range · direction · practical effect · LOO</text>
    </g>
    <g id="text_13">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #26212e" x="314.1" y="26.604" transform="rotate(-0 314.1 26.604)">Reasonable alternatives become an auditable sensitivity analysis</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #26212e" x="314.1" y="26.604" transform="rotate(-0 314.1 26.604)">Reasonable alternatives become an auditable sensitivity analysis</text>
    </g>
   </g>
  </g>

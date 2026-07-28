@@ -6,9 +6,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+from figure_style import apply_publication_style, save_figure
 
 
 def main() -> None:
@@ -33,15 +33,7 @@ def main() -> None:
         "session_progress_minus_session_progress_plus_lagged_dms"
     ]["left_minus_right"]
 
-    mpl.rcParams.update(
-        {
-            "font.family": "DejaVu Sans",
-            "font.size": 9,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "svg.hashsalt": "ibl-unspool-longitudinal-v1",
-        }
-    )
+    apply_publication_style(hashsalt="ibl-unspool-longitudinal-v1")
     figure, axes = plt.subplots(
         1, 2, figsize=(10.5, 4.8), gridspec_kw={"width_ratios": [1.8, 1]}
     )
@@ -82,13 +74,7 @@ def main() -> None:
     )
     figure.tight_layout()
     output = repository / "docs/assets/ibl-unspool-longitudinal-v0.1.svg"
-    figure.savefig(output, format="svg", metadata={"Date": None})
-    plt.close(figure)
-    svg = output.read_text(encoding="utf-8")
-    output.write_text(
-        "\n".join(line.rstrip() for line in svg.splitlines()) + "\n",
-        encoding="utf-8",
-    )
+    save_figure(figure, output)
     print(output)
 
 

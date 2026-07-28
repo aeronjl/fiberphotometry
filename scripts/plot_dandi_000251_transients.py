@@ -7,6 +7,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from figure_style import apply_publication_style, save_figure
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULT = ROOT / "benchmarks/dandi-000251-transients-results-v0.1.json"
@@ -14,6 +15,7 @@ OUTPUT = ROOT / "docs/assets/dandi-000251-transient-robustness-v0.1.png"
 
 
 def main() -> None:
+    apply_publication_style(hashsalt="dandi-000251-transients-v0.1")
     payload = json.loads(RESULT.read_text())
     universe_ids = list(payload["aggregate"]["external_enrichment"])
     labels = [
@@ -97,9 +99,7 @@ def main() -> None:
         fontsize=15,
         fontweight="bold",
     )
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(OUTPUT, dpi=180, facecolor="white")
-    plt.close(figure)
+    save_figure(figure, OUTPUT)
 
 
 if __name__ == "__main__":

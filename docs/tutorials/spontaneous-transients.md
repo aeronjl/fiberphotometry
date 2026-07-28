@@ -5,7 +5,7 @@ keeping acquisition gaps out of the event-rate denominator? It also demonstrates
 why the detector should be treated as a small multiverse rather than a button.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="../assets/spontaneous-transient-contract.svg" alt="A fluorescence trace is split at an acquisition gap before peak candidates pass through local baseline, named threshold, and complete-shape gates, producing accepted events, explicit exclusions, and exposure-adjusted bins.">
+  <img src="../../assets/spontaneous-transient-contract.svg" alt="A fluorescence trace is split at an acquisition gap before peak candidates pass through local baseline, named threshold, and complete-shape gates, producing accepted events, explicit exclusions, and exposure-adjusted bins.">
   <figcaption><strong>The detector is a sequence of auditable decisions.</strong> Missing acquisition splits the trace first; no later measurement may bridge it.</figcaption>
 </figure>
 

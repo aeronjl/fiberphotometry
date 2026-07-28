@@ -10,7 +10,7 @@ missing samples, timestamp gaps, and state boundaries do not become invisible
 signal continuity.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/gap-aware-spectral-contract.svg" alt="A sampled signal is split into valid runs at a missing-data gap and again at user-supplied state boundaries; analysis windows remain inside one run and one state.">
+  <img src="../assets/gap-aware-spectral-contract.svg" alt="A sampled signal is split into valid runs at a missing-data gap and again at user-supplied state boundaries; analysis windows remain inside one run and one state.">
   <figcaption><strong>Every estimate is assembled from bounded evidence.</strong> Autocorrelation pairs and spectral windows stay within a regular valid run. State-conditioned workflows add user-declared epoch boundaries; they never join equal labels across separate epochs.</figcaption>
 </figure>
 

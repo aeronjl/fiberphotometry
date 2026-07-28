@@ -34,11 +34,17 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
 markdown_extensions:
   - admonition
   - attr_list
   - footnotes
   - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
@@ -64,50 +70,68 @@ nav:
       - Import TDT data: tdt-import-v0.1.md
       - Import native acquisition files: native-acquisition-import-v0.1.md
   - Methods:
-      - Methods catalog: methods/index.md
-      - Public-data evidence atlas: methods/public-evidence-atlas.md
-      - Capability matrix: methods/capability-matrix.md
-      - Preprocessing and QC: pipeline-v0.1.md
-      - Irregular sampling: irregular-sampling-v0.1.md
-      - Optogenetic artifacts and sensor validity: optical-validity-v0.1.md
-      - Sensor-kinetic modeling: sensor-kinetic-modeling-v0.1.md
-      - Wavelength-aware optical unmixing: optical-unmixing-v0.1.md
-      - Experimental design and inference: inference-design-v0.1.md
-      - Peri-event inference: peri-event-inference-v0.1.md
-      - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
-      - Event-kernel model multiverses: event-kernel-multiverse-v0.1.md
-      - Predictor-family contributions: predictor-family-contributions-v0.1.md
-      - Event-kernel interval calibration: event-kernel-interval-calibration-v0.1.md
-      - Spontaneous transients: spontaneous-transients-v0.1.md
-      - Time, frequency, and state analysis: spectral-state-analysis-v0.1.md
-      - Multiscale long-duration summaries: multiscale-long-duration-v0.1.md
-      - Multi-site and multi-color association: multisite-multicolor-analysis-v0.1.md
-      - Coordinate-aware dense arrays: spatial-network-v0.1.md
-      - Robustness multiverses: multiverse-contract-v0.1.md
-      - Scalar mixed models: scalar-mixed-model-v0.1.md
-      - Behavioral ecosystem interoperability: ecosystem-interoperability-v0.1.md
-      - Native ndx-pose interoperability: ndx-pose-interoperability-v0.1.md
-      - Auditable interval and bout policies: interval-policy-v0.1.md
-      - Clock synchronization: clock-synchronization-v0.1.md
-      - Across-session comparability: session-comparability-v0.1.md
-      - Longitudinal behavior with Unspool: unspool-interoperability-v0.1.md
+      - Choose a method:
+          - Methods map: methods/index.md
+          - Capability and gap matrix: methods/capability-matrix.md
+          - Public-data evidence atlas: methods/public-evidence-atlas.md
+      - Signal formation and validity:
+          - Category guide: methods/signal-validity.md
+          - Preprocessing and QC: pipeline-v0.1.md
+          - Irregular sampling: irregular-sampling-v0.1.md
+          - Optogenetic artifacts and sensor validity: optical-validity-v0.1.md
+          - Sensor-kinetic modeling: sensor-kinetic-modeling-v0.1.md
+          - Wavelength-aware optical unmixing: optical-unmixing-v0.1.md
+      - Event-locked responses and encoding:
+          - Category guide: methods/event-locked.md
+          - Peri-event inference: peri-event-inference-v0.1.md
+          - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
+          - Event-kernel model multiverses: event-kernel-multiverse-v0.1.md
+          - Predictor-family contributions: predictor-family-contributions-v0.1.md
+          - Event-kernel interval calibration: event-kernel-interval-calibration-v0.1.md
+          - Auditable interval and bout policies: interval-policy-v0.1.md
+      - Spontaneous and continuous dynamics:
+          - Category guide: methods/continuous-dynamics.md
+          - Spontaneous transients: spontaneous-transients-v0.1.md
+          - Time, frequency, and state analysis: spectral-state-analysis-v0.1.md
+          - Multiscale long-duration summaries: multiscale-long-duration-v0.1.md
+      - Multi-signal and spatial analysis:
+          - Category guide: methods/multisignal-spatial.md
+          - Multi-site and multi-color association: multisite-multicolor-analysis-v0.1.md
+          - Coordinate-aware dense arrays: spatial-network-v0.1.md
+      - Population inference and robustness:
+          - Category guide: methods/inference-robustness.md
+          - Experimental design and inference: inference-design-v0.1.md
+          - Robustness multiverses: multiverse-contract-v0.1.md
+          - Scalar mixed models: scalar-mixed-model-v0.1.md
+      - Behavior and longitudinal integration:
+          - Category guide: methods/behavior-longitudinal.md
+          - Behavioral ecosystem interoperability: ecosystem-interoperability-v0.1.md
+          - Native ndx-pose interoperability: ndx-pose-interoperability-v0.1.md
+          - Clock synchronization: clock-synchronization-v0.1.md
+          - Across-session comparability: session-comparability-v0.1.md
+          - Longitudinal behavior with Unspool: unspool-interoperability-v0.1.md
   - Worked examples:
       - Examples overview: tutorials/index.md
-      - Public IBL event report: tutorials/ibl-feedback-report.md
-      - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
-      - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
-      - Public transient validation: dandi-000251-transient-results-v0.1.md
-      - Event-kernel simulation: tutorials/event-kernel-simulation.md
-      - Previous-outcome event kernels: tutorials/event-kernel-history.md
-      - Variable-duration behavior kernels: tutorials/variable-duration-kernels.md
-      - Event-kernel model multiverse: event-kernel-multiverse-v0.1.md
-      - Predictor-family contributions: predictor-family-contributions-v0.1.md
-      - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
-      - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md
-      - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
-      - Native ndx-pose round trip: ndx-pose-interoperability-v0.1.md
-      - Interval and bout policies: interval-policy-v0.1.md
-      - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
+      - Paper-figure correspondence: tutorials/paper-figure-roadmap.md
+      - Event-locked and encoding:
+          - Public IBL event report: tutorials/ibl-feedback-report.md
+          - Event-kernel simulation: tutorials/event-kernel-simulation.md
+          - Previous-outcome event kernels: tutorials/event-kernel-history.md
+          - Variable-duration behavior kernels: tutorials/variable-duration-kernels.md
+          - Public event-kernel reanalysis: tutorials/dandi-000971-event-kernel.md
+          - Event-kernel model multiverse: event-kernel-multiverse-v0.1.md
+          - Predictor-family contributions: predictor-family-contributions-v0.1.md
+      - Spontaneous and continuous:
+          - Public transient validation: dandi-000251-transient-results-v0.1.md
+          - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
+      - Robustness and public evidence:
+          - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
+          - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
+      - Behavior and longitudinal:
+          - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
+          - Native ndx-pose round trip: ndx-pose-interoperability-v0.1.md
+          - Interval and bout policies: interval-policy-v0.1.md
+          - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
   - Data and interoperability:
       - Native acquisition files: native-acquisition-import-v0.1.md
       - Behavioral ecosystem contract: ecosystem-interoperability-v0.1.md
@@ -133,6 +157,7 @@ nav:
       - Roadmap: roadmap.md
   - Reference:
       - Python API: reference/index.md
+      - Publication-quality figures: reference/figure-style.md
       - Figure provenance: reference/figure-provenance.md
       - Stability policy: api-stability-v0.1.md
       - Release readiness: release-readiness-v0.1.md

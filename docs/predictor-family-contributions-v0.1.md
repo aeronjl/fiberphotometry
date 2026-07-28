@@ -6,7 +6,7 @@
     variable. It is conditional on two declared models and their validation data.
 
 <figure markdown="span">
-  <img src="assets/predictor-family-contributions.svg" alt="A full cue, reward, and movement model branches to literal models omitting reward or movement, then rejoins as paired animal-level held-out R-squared differences with a sensitivity interval.">
+  <img src="../assets/predictor-family-contributions.svg" alt="A full cue, reward, and movement model branches to literal models omitting reward or movement, then rejoins as paired animal-level held-out R-squared differences with a sensitivity interval.">
   <figcaption>Conceptual workflow. Positive deltas mean the full model predicted held-out animals better than the literal drop-family model.</figcaption>
 </figure>
 

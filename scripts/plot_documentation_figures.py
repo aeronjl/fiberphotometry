@@ -5,9 +5,9 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+from figure_style import apply_publication_style, save_figure
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 ROOT = Path(__file__).parents[1]
@@ -40,23 +40,7 @@ def main() -> None:
 
 
 def _style() -> None:
-    mpl.rcParams.update(
-        {
-            "axes.edgecolor": "#cbc5d2",
-            "axes.labelcolor": INK,
-            "axes.spines.right": False,
-            "axes.spines.top": False,
-            "figure.facecolor": "white",
-            "font.family": "DejaVu Sans",
-            "font.size": 9,
-            "savefig.facecolor": "white",
-            "svg.fonttype": "none",
-            "svg.hashsalt": "fiberphotometry-docs-v1",
-            "text.color": INK,
-            "xtick.color": MUTED,
-            "ytick.color": MUTED,
-        }
-    )
+    apply_publication_style(hashsalt="fiberphotometry-docs-v1")
 
 
 def _box(
@@ -117,15 +101,7 @@ def _canvas(
 
 
 def _save(figure: plt.Figure, path: Path) -> None:
-    figure.savefig(path, format="svg", bbox_inches="tight", metadata={"Date": None})
-    plt.close(figure)
-    # Matplotlib writes path-data lines with trailing spaces. Normalizing them keeps
-    # generated assets friendly to Git's whitespace checks and stable in reviews.
-    svg = path.read_text(encoding="utf-8")
-    path.write_text(
-        "\n".join(line.rstrip() for line in svg.splitlines()) + "\n",
-        encoding="utf-8",
-    )
+    save_figure(figure, path)
 
 
 def _evidence_path(path: Path) -> None:

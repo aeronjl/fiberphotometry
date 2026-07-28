@@ -6,7 +6,7 @@
     specification and show whether conclusions survive plausible alternatives.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/transient-product-evidence.svg" alt="A separate baseline or negative-control recording produces candidate-scale scores and a frozen channel threshold. An outcome recording passes through its named detector and that additional frozen score gate. Every retained candidate then receives a native gap-bounded waveform cutout and a pass, warning, or fail quality status before optional quantification.">
+  <img src="../assets/transient-product-evidence.svg" alt="A separate baseline or negative-control recording produces candidate-scale scores and a frozen channel threshold. An outcome recording passes through its named detector and that additional frozen score gate. Every retained candidate then receives a native gap-bounded waveform cutout and a pass, warning, or fail quality status before optional quantification.">
   <figcaption><strong>Threshold learning and outcome analysis stay separate.</strong> Frozen source evidence adds a detector-score gate; native cutouts retain boundary, rail, flat-step, and neighboring-event evidence before kinetics are quantified.</figcaption>
 </figure>
 

@@ -15,7 +15,7 @@ shrink after the signal is inspected, while recovery, saturation, wavelength, an
 reference-channel diagnostics remain visible evidence alongside the analysis.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/optical-validity-contract.svg" alt="A declared pulse ledger creates a fixed time-only validity mask, while observed signal and control traces create a separate recovery diagnostic. Versioned sensor metadata and channel observations create a pass, warning, or fail validity assessment. Both evidence streams remain auditable and feed downstream analysis without automatically correcting the signal.">
+  <img src="../assets/optical-validity-contract.svg" alt="A declared pulse ledger creates a fixed time-only validity mask, while observed signal and control traces create a separate recovery diagnostic. Versioned sensor metadata and channel observations create a pass, warning, or fail validity assessment. Both evidence streams remain auditable and feed downstream analysis without automatically correcting the signal.">
   <figcaption><strong>Two contracts, no circular masking.</strong> Stimulation times determine exclusions; observed optical data determine warnings. A versioned sensor profile constrains interpretation without pretending to prove biological specificity.</figcaption>
 </figure>
 

@@ -24,6 +24,7 @@ jobs:
           enable-cache: true
       - run: uv sync --group docs --locked
       - run: uv run --group docs mkdocs build --strict
+      - run: uv run --group docs python scripts/check_built_docs.py site
       - if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
       - if: github.event_name != 'pull_request'

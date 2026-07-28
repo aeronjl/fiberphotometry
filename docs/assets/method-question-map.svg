@@ -134,40 +134,40 @@ z
 " clip-path="url(#p9a75ccd86a)" style="fill: #7b7484; stroke: #7b7484; stroke-width: 1.1; stroke-linecap: round"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #563d7c" x="308.52" y="145.698882" transform="rotate(-0 308.52 145.698882)">Scientific question</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #563d7c" x="308.52" y="145.698882" transform="rotate(-0 308.52 145.698882)">Scientific question</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="308.52" y="167.798793" transform="rotate(-0 308.52 167.798793)">choose method by estimand</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="308.52" y="167.798793" transform="rotate(-0 308.52 167.798793)">choose method by estimand</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #23877c" x="83.925" y="54.499731" transform="rotate(-0 83.925 54.499731)">Event contrast</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #23877c" x="83.925" y="54.499731" transform="rotate(-0 83.925 54.499731)">Event contrast</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="83.925" y="71.887593" transform="rotate(-0 83.925 71.887593)">peri-event bands</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="83.925" y="71.887593" transform="rotate(-0 83.925 71.887593)">peri-event bands</text>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #c47a2c" x="83.925" y="242.996082" transform="rotate(-0 83.925 242.996082)">Preprocessing sensitivity</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #c47a2c" x="83.925" y="242.996082" transform="rotate(-0 83.925 242.996082)">Preprocessing sensitivity</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="83.925" y="260.383593" transform="rotate(-0 83.925 260.383593)">multiverse</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="83.925" y="260.383593" transform="rotate(-0 83.925 260.383593)">multiverse</text>
    </g>
    <g id="text_7">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #23877c" x="524.745" y="54.500082" transform="rotate(-0 524.745 54.500082)">Overlapping events</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #23877c" x="524.745" y="54.500082" transform="rotate(-0 524.745 54.500082)">Overlapping events</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="524.745" y="71.887593" transform="rotate(-0 524.745 71.887593)">event kernels</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="524.745" y="71.887593" transform="rotate(-0 524.745 71.887593)">event kernels</text>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #c47a2c" x="524.745" y="242.996082" transform="rotate(-0 524.745 242.996082)">Population effect</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #c47a2c" x="524.745" y="242.996082" transform="rotate(-0 524.745 242.996082)">Population effect</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="524.745" y="260.383593" transform="rotate(-0 524.745 260.383593)">scalar mixed model</text>
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="524.745" y="260.383593" transform="rotate(-0 524.745 260.383593)">scalar mixed model</text>
    </g>
    <g id="text_11">
-    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #c47a2c" x="308.52" y="26.604" transform="rotate(-0 308.52 26.604)">Availability is not validation</text>
+    <text style="font-weight: 700; font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #c47a2c" x="308.52" y="26.604" transform="rotate(-0 308.52 26.604)">Availability is not validation</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #7b7484" x="308.52" y="276.084" transform="rotate(-0 308.52 276.084)">Each route keeps its own assumptions and evidence boundary</text>
+    <text style="font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #7b7484" x="308.52" y="276.084" transform="rotate(-0 308.52 276.084)">Each route keeps its own assumptions and evidence boundary</text>
    </g>
   </g>
  </g>

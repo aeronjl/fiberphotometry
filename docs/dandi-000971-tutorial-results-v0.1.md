@@ -33,6 +33,23 @@ visible rather than repaired by subsampling or trial-level weighting tricks.
 
 ## Primary result
 
+### Bounded source-panel reproduction
+
+<figure class="doc-figure doc-figure--wide">
+  <img src="../assets/dandi-000971-source-figure-bounded-v0.1.svg" alt="Rewarded and unrewarded nose-poke time courses for DMS and DLS are shown separately for PR, DPR, and PS phenotypes, with two individual animals per phenotype and a final panel showing each animal's rewarded-maximum minus unrewarded-minimum peak score.">
+  <figcaption><strong>Partial reproduction of Seiler et al. Figures 3E–F and 4E–F.</strong> Thin traces are animals; heavy traces are animal-equal phenotype means; shading is SEM across two animals and is descriptive. The right panels use the source paper's maximum rewarded minus minimum unrewarded PSTH value from 0–1.5 s. Unlike the source figures, this checksum-pinned teaching cohort has one session from only two animals per phenotype and cannot reproduce training-stage effects or the full-cohort statistics. Processing matches the source OLS fitted-reference dF/F and session z-score, with this tutorial's declared 3 Hz zero-phase filter.</figcaption>
+</figure>
+
+This figure deliberately mirrors the source panel's estimand and visual grammar
+before introducing the package's alternative robustness analysis. It is a
+**partial source-panel reproduction**, not numerical parity with the full study.
+See the [paper-figure correspondence register](tutorials/paper-figure-roadmap.md)
+and regenerate it from the six pinned NWB assets with:
+
+```bash
+uv run --extra nwb --extra plots python scripts/plot_dandi_000971_source_figure.py
+```
+
 The frozen reference workflow—3 Hz zero-phase filtering, robust IRLS reference
 fit, fitted-reference dF/F, and a 0-1.5 second response—estimated:
 
@@ -92,6 +109,8 @@ one rerunnable result.
   sample of the source population.
 - The same public recordings underlie the source paper, so qualitative agreement
   is a reanalysis rather than independent replication.
+- The source-panel reproduction is limited to one session from two animals per
+  phenotype; its SEM is descriptive and must not be read as full-cohort precision.
 - The scalar mean-window contrast is not the source paper's peak-based statistic.
 - The isosbestic measurement is a reference channel, not guaranteed motion-only
   or biologically inert ground truth.

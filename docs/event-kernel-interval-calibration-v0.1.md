@@ -7,7 +7,7 @@
     intervals only.
 
 <figure markdown="span">
-  <img src="assets/event-kernel-interval-coverage-v0.1.svg" alt="Across six 80-study scenarios, multiplier simultaneous coverage is higher than whole-family coverage from pointwise bands, but normalized-progress coverage is 82.5 percent and falls below the frozen 85 percent gate.">
+  <img src="../assets/event-kernel-interval-coverage-v0.1.svg" alt="Across six 80-study scenarios, multiplier simultaneous coverage is higher than whole-family coverage from pointwise bands, but normalized-progress coverage is 82.5 percent and falls below the frozen 85 percent gate.">
   <figcaption><strong>Frozen 480-study benchmark.</strong> The dashed line is the prospective whole-family acceptance threshold, not an outcome-selected target.</figcaption>
 </figure>
 

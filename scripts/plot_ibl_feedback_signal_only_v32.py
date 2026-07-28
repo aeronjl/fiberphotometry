@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from figure_style import apply_publication_style, save_figure
+
 from fiberphotometry.plotting import SpecificationCurveEntry, plot_specification_curve
 
 
@@ -46,6 +48,7 @@ def main() -> None:
         default=repository / "docs/figures",
     )
     args = parser.parse_args()
+    apply_publication_style(hashsalt="ibl-feedback-signal-only-v0.3.2")
     payload = json.loads(args.input.read_text())
     args.output_directory.mkdir(parents=True, exist_ok=True)
     for units, stem, label in (
@@ -65,7 +68,7 @@ def main() -> None:
             effect_label=label,
         )
         output = args.output_directory / f"ibl-feedback-signal-only-{stem}-v0.3.2.svg"
-        figure.savefig(output, metadata={"Date": None})
+        save_figure(figure, output)
 
 
 if __name__ == "__main__":
