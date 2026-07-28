@@ -120,13 +120,18 @@ residualization, blocked within-session nulls, crosstalk review flags,
 state-conditioned coherence/phase, and session-to-animal inference. See
 [multi-site and multi-color association](../multisite-multicolor-analysis-v0.1.md).
 
+Coordinate-aware dense arrays are an **experimental first-class workflow**. Three
+or more channels in one declared geometry produce a complete edge/exclusion
+ledger, physical-distance summaries, a node-label spatial null, and fixed
+edge→session→mouse inference. See
+[coordinate-aware dense multi-fiber networks](../spatial-network-v0.1.md).
+
 The remaining questions are scientifically important but **not yet first-class
 workflows**:
 
 - native behavioral learning-trajectory models; use the experimental
   [Unspool interoperability contract](../unspool-interoperability-v0.1.md) instead;
 - across-session photometry comparability before handing summaries to Unspool;
-- coordinate-aware dense-array models beyond guarded pairwise summaries;
 - sensor-kinetic deconvolution or concentration calibration.
 
 The [capability matrix](capability-matrix.md) explains why these gaps matter and

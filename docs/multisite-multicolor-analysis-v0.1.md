@@ -67,8 +67,9 @@ pair = SignalPairMetadata(
 
 Roles are declared, not inferred from wavelength or row position. Use
 `role="unclassified"` when the biological role is genuinely unknown. Optional
-coordinates are metadata for future dense-array models; the current pairwise API
-does not treat sites as independent animals.
+coordinates feed the separate
+[dense-array spatial workflow](spatial-network-v0.1.md); neither API treats sites
+as independent animals.
 
 Every analysis accepts one timestamp vector. `alignment_policy` can be:
 
