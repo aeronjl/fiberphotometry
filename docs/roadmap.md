@@ -141,10 +141,10 @@
   - [x] Prospective three-animal public dLight construct validation with retained detector disagreement
   - [x] Separate candidate detection from quantification on non-z-scored dF/F
   - [x] Named GuPPY, PASTa, and prominence-compatible detector families
-  - [ ] Baseline/control-derived frozen thresholds, compound events, and cut-waveform QC
-    - [ ] Baseline/control-derived frozen threshold objects
+  - [x] Baseline/control-derived frozen thresholds, compound events, and cut-waveform QC
+    - [x] Baseline/control-derived frozen threshold objects
     - [x] Compound-event group and rank metadata
-    - [ ] Gap-aware cut waveforms and boundary QC
+    - [x] Gap-aware cut waveforms and boundary QC
   - [x] Animal-aware rate and kinetic inference
   - [ ] Raw-signal and manual-annotation validation across two sensors/acquisition systems
 - [ ] Multi-site/multi-color paired and conditional association workflows
