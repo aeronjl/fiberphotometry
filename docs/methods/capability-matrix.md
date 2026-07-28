@@ -15,7 +15,7 @@ experiment belongs in one package.
 | Hemodynamic and spectral crosstalk correction | **Gap** | Requires wavelength-aware mixing model and controls |
 | Multi-color spectral unmixing | **Gap** | Extend channel metadata and mixing diagnostics |
 | Event alignment and window summaries | **Supported** | Retains events, sessions and animals |
-| Interval/bout alignment and normalized progress | **Experimental / partial** | Typed intervals, explicit onset/offset, aligned duration values, and first-class progress kernels exist; add merge/split/filter and overlap policies |
+| Interval/bout alignment and normalized progress | **Experimental** | Typed intervals, explicit onset/offset, duration and progress kernels; ordered filter/merge/split/context/overlap policies retain a complete source-lineage ledger and evidence fingerprint |
 | Animal-level scalar inference | **Supported/experimental** | t intervals supported; resampling and mixed models experimental |
 | Whole-waveform intervals | **Supported** | Animal-level pointwise and simultaneous bands |
 | Published waveform bootstrap/permutation parity | **Partial** | Related animal-level resampling exists; add an explicit literature reproduction and estimand comparison |

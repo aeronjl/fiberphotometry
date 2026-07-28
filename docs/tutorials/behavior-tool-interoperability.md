@@ -159,6 +159,46 @@ aggregated = annotations_from_boris_aggregated_file(
 The analyst then chooses onset, offset, duration or progress according to the
 scientific question.
 
+Before projecting intervals into a neural model, declare any cleanup or contextual
+rules as an ordered policy. Do not edit adapter output in place:
+
+```python
+from fiberphotometry import (
+    ContextualizeIntervals,
+    FilterIntervals,
+    IntervalPolicy,
+    MergeIntervals,
+    apply_interval_policy,
+)
+
+policy = IntervalPolicy(
+    (
+        MergeIntervals(
+            "merge-short-gaps",
+            labels=("rear",),
+            maximum_gap_s=0.1,
+        ),
+        FilterIntervals("minimum-duration", minimum_duration_s=0.25),
+        ContextualizeIntervals(
+            "task-context",
+            context_source="task-epochs",
+            multiple_matches="reject",
+        ),
+    )
+)
+policy_result = apply_interval_policy(
+    moseq,
+    policy,
+    context_sources={"task-epochs": task_epochs},
+)
+moseq = policy_result.annotations
+```
+
+The result retains kept and removed denominators plus the lineage of merged, split,
+relabelled, and trimmed intervals. Its fingerprint changes if a threshold or
+operation order changes. See the full
+[interval-policy method and example](../interval-policy-v0.1.md).
+
 ## 5. Align a pose covariate without bridging missing spans
 
 Fit the clock mapping before interpolation. Pulse correspondence is explicit: the

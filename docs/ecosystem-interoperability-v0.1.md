@@ -210,7 +210,9 @@ The immediate FiberPhotometry composition is:
    through `prepare_unspool_study()`.
 
 See the [worked interoperability tutorial](tutorials/behavior-tool-interoperability.md)
-and the separate [Unspool contract](unspool-interoperability-v0.1.md).
+and the [auditable interval-policy contract](interval-policy-v0.1.md). The separate
+[Unspool contract](unspool-interoperability-v0.1.md) begins only after declared
+neural summaries and across-session comparability evidence exist.
 
 ## Gaps exposed by the examples
 
@@ -218,7 +220,7 @@ and the separate [Unspool contract](unspool-interoperability-v0.1.md).
 |---|---|---|
 | P0 | extend the now-complete one-version fixture matrix across a second released version and one real camera-to-photometry synchronization record | adapter validation in FiberPhotometry |
 | P1 | direct `ndx-pose` read/write path and NWB round trip | FiberPhotometry I/O |
-| P1 | interval merge/split/filter, contextual-label and overlap policies | FiberPhotometry inference |
+| P1 | broaden interval-policy fixtures to real multi-label annotations and a second source-tool version | FiberPhotometry interoperability validation |
 | P1 | multi-animal identity-switch diagnostics at the neural-alignment boundary | source-tool QC plus FiberPhotometry preflight |
 | P1 | versioned behavioral interchange artifact with hashes and confidence semantics | shared package after a second consumer adopts it |
 | P2 | adapters for SimBA, B-SOiD and user-supplied state probabilities | thin FiberPhotometry adapters |
