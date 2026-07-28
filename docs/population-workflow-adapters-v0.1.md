@@ -145,3 +145,8 @@ multi-factor models remain explicit gaps.
 
 The governing rationale is recorded in
 [SDR-0057](decisions/0057-preserve-domain-denominators-at-one-population-boundary.md).
+
+For complete PSD, autocorrelation, lag-association, or coherence outcomes, use the
+[vector population-curve workflow](population-curve-inference-v0.1.md). It retains
+the full frequency or lag axis and lower-level support at every point rather than
+requiring a scalar band or lag summary.

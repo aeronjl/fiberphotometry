@@ -223,6 +223,11 @@ contract. See [population inference across core workflows](population-workflow-a
 The existing specialist function remains the route for ratio estimands and paired
 sign-flip evidence.
 
+Use the [population-curve workflow](population-curve-inference-v0.1.md) when the
+estimand is the complete PSD or autocorrelation curve rather than a declared scalar
+band. It requires identical session axes and reports both pointwise and whole-axis
+simultaneous population uncertainty.
+
 ## Evidence to retain
 
 Every base result includes a serializable `ContinuityEvidence` object:

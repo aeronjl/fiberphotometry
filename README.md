@@ -142,6 +142,9 @@ Typed [cross-workflow materializers](docs/population-workflow-adapters-v0.1.md)
 now bring spontaneous-transient, state-band-power, and multi-signal association
 cells to that same population boundary while retaining their exposure, window,
 and pair-count denominators.
+Complete [frequency and lag curve inference](docs/population-curve-inference-v0.1.md)
+extends that boundary to PSD, autocorrelation, lag-association, and coherence with
+pointwise lower-level support and whole-axis simultaneous bands.
 The experimental [event-kernel model workflow](docs/event-kernel-encoding-v0.1.md)
 jointly estimates overlapping events and continuous behavioral covariates. Its
 [model-multiverse layer](docs/event-kernel-multiverse-v0.1.md) compares named

@@ -18,7 +18,8 @@ class PopulationUnitEstimate:
 
     ``source_units`` and ``observation_count`` retain how the estimate was formed;
     a zero observation count is valid for an exposure-supported count outcome.
-    ``support`` records the number of finite source-unit estimates at each point.
+    ``support`` records the number of finite source-unit estimates at each point,
+    while optional ``observation_support`` retains pointwise lower-level counts.
     Scalar outcomes use one-element tuples, so the same contract can serve curves,
     spectra, transient summaries, and other derived outcomes.
     """
@@ -29,6 +30,7 @@ class PopulationUnitEstimate:
     support: tuple[int, ...]
     source_units: tuple[str, ...]
     observation_count: int
+    observation_support: tuple[int, ...] | None = None
 
     def __post_init__(self) -> None:
         if not self.unit_id or not self.level:
@@ -37,6 +39,14 @@ class PopulationUnitEstimate:
             raise ValueError("population estimate and support must share a shape")
         if any(value < 0 for value in self.support):
             raise ValueError("population support cannot be negative")
+        if self.observation_support is not None and (
+            len(self.observation_support) != len(self.estimate)
+            or any(value < 0 for value in self.observation_support)
+        ):
+            raise ValueError(
+                "population observation support must be non-negative and share "
+                "the estimate shape"
+            )
         if not self.source_units or self.observation_count < 0:
             raise ValueError(
                 "population estimates require source units and a non-negative "
@@ -438,6 +448,9 @@ def infer_population_interaction(
                 observation_count=(
                     numerator.observation_count + denominator.observation_count
                 ),
+                observation_support=_combine_observation_support(
+                    numerator, denominator
+                ),
             )
         )
 
@@ -482,6 +495,22 @@ def _matrix(
     return (
         np.asarray([lookup[name].estimate for name in names], dtype=float),
         names,
+    )
+
+
+def _combine_observation_support(
+    numerator: PopulationUnitEstimate,
+    denominator: PopulationUnitEstimate,
+) -> tuple[int, ...] | None:
+    if numerator.observation_support is None or denominator.observation_support is None:
+        return None
+    return tuple(
+        first + second
+        for first, second in zip(
+            numerator.observation_support,
+            denominator.observation_support,
+            strict=True,
+        )
     )
 
 

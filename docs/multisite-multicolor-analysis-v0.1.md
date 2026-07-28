@@ -306,6 +306,12 @@ call `.contrast()` or `.interaction()` while retaining the actual pair/window
 support as provenance. See
 [population inference across core workflows](population-workflow-adapters-v0.1.md).
 
+For complete lag-association or coherence curves, use the
+[population-curve workflow](population-curve-inference-v0.1.md). It retains valid
+pairs or complete joint Welch windows at every axis point and provides simultaneous
+animal-level uncertainty across the declared lag or frequency range. Population
+phase inference is intentionally not implied by this coherence route.
+
 `session_estimate_from_lagged` provides the corresponding physical-lag route and
 retains its pair-count support and blocked zero-lag probability when available.
 

@@ -21,6 +21,7 @@ The following SVGs are generated deterministically by
 | `peri-event-inference.svg` | Distinguish animal curves, pointwise intervals, and simultaneous bands |
 | `population-inference-boundary.svg` | Materialize session and animal estimates before paired or independent population inference |
 | `population-interaction-boundary.svg` | Form repeated-condition contrasts within animals before comparing disjoint groups |
+| `population-curve-boundary.svg` | Carry complete frequency or lag axes, pointwise lower-level support, animal curves, and whole-axis uncertainty through one population boundary |
 | `multiverse-robustness.svg` | Explain fixed-estimand robustness with a complete execution ledger |
 | `method-question-map.svg` | Route scientific questions to distinct method contracts |
 | `event-kernel-validation.svg` | Connect overlapping-event estimation to held-out-group validation |
