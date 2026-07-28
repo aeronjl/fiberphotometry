@@ -19,7 +19,7 @@ Normalized progress supplements physical time. It does not turn a long and short
 bout into the same physical process.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="../assets/variable-duration-kernels.svg" alt="Two bouts retain their physical onset, offset, and unequal durations; both map to one normalized-progress trajectory, while samples outside the bouts remain zero-valued design rows rather than missing observations.">
+  <img src="../../assets/variable-duration-kernels.svg" alt="Two bouts retain their physical onset, offset, and unequal durations; both map to one normalized-progress trajectory, while samples outside the bouts remain zero-valued design rows rather than missing observations.">
   <figcaption><strong>Progress is an additional coordinate.</strong> Physical interval bounds remain available, and the continuous-recording denominator is preserved.</figcaption>
 </figure>
 

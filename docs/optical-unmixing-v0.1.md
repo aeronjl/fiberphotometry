@@ -10,7 +10,7 @@ measured; it does not generate mixing coefficients. Coefficients must come from 
 versioned independent calibration or be explicitly marked as user-declared.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/optical-unmixing-contract.svg" alt="Known component and optical-channel values from an independent calibration create a versioned mixing matrix, which passes rank and conditioning gates before identifiable channel patterns in a biological recording are solved; underidentified samples remain unsolved.">
+  <img src="../assets/optical-unmixing-contract.svg" alt="Known component and optical-channel values from an independent calibration create a versioned mixing matrix, which passes rank and conditioning gates before identifiable channel patterns in a biological recording are solved; underidentified samples remain unsolved.">
   <figcaption><strong>The matrix is identified before the outcome is corrected.</strong> Missing-channel subsets are solved only when they still identify every declared component. Overdetermined systems add leave-one-channel-out reconstruction evidence; a square system cannot manufacture that validation.</figcaption>
 </figure>
 

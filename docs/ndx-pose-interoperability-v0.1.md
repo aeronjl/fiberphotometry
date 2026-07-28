@@ -6,7 +6,7 @@ FiberPhotometry adapter reads and writes the extension directly while keeping po
 discovery in those upstream tools.
 
 <figure class="fp-figure">
-  <img src="assets/ndx-pose-roundtrip-v0.1.svg" alt="A native ndx-pose NWB file is first inspected, then an explicitly selected PoseEstimation container is copied into two- or three-dimensional PoseTrajectory objects. Those trajectories feed gap-safe covariates or can be written back with skeleton and provenance metadata. Unsupported device or video links remain named omissions.">
+  <img src="../assets/ndx-pose-roundtrip-v0.1.svg" alt="A native ndx-pose NWB file is first inspected, then an explicitly selected PoseEstimation container is copied into two- or three-dimensional PoseTrajectory objects. Those trajectories feed gap-safe covariates or can be written back with skeleton and provenance metadata. Unsupported device or video links remain named omissions.">
   <figcaption>Figure 1. The adapter preserves scientific arrays and declares structural omissions instead of pretending that a file path is a camera or video link.</figcaption>
 </figure>
 

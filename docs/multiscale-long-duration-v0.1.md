@@ -11,7 +11,7 @@ every window denominator, and carries one chosen summary through session-to-anim
 inference.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/multiscale-long-duration-contract.svg" alt="A long signal is split at acquisition gaps and supplied state boundaries, covered with short, medium, and long physical-time windows, and aggregated from windows through sessions to animals.">
+  <img src="../assets/multiscale-long-duration-contract.svg" alt="A long signal is split at acquisition gaps and supplied state boundaries, covered with short, medium, and long physical-time windows, and aggregated from windows through sessions to animals.">
   <figcaption><strong>Scales describe observation windows, not biology.</strong> Every candidate window retains coverage and acceptance evidence. Inferential comparisons aggregate windows within sessions and sessions within animals before resampling animals.</figcaption>
 </figure>
 

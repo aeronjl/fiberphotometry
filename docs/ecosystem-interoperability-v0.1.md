@@ -11,7 +11,7 @@ discover behavioral states, or record an ethogram.
     [validation matrix](interoperability-validation-v0.1.md).
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/behavior-ecosystem-v0.1.svg" alt="DeepLabCut and SLEAP pose trajectories, Keypoint-MoSeq state bouts, and BORIS annotations enter typed pose, covariate, point-event, and interval boundaries. FiberPhotometry relates them to neural signals and exports trial summaries to Unspool for longitudinal modelling.">
+  <img src="../assets/behavior-ecosystem-v0.1.svg" alt="DeepLabCut and SLEAP pose trajectories, Keypoint-MoSeq state bouts, and BORIS annotations enter typed pose, covariate, point-event, and interval boundaries. FiberPhotometry relates them to neural signals and exports trial summaries to Unspool for longitudinal modelling.">
   <figcaption><strong>Each package keeps the job it is good at.</strong> Pose estimators retain keypoints and confidence, behavior tools retain point-versus-state semantics, FiberPhotometry owns neural alignment and inference, and Unspool owns longitudinal clocks and models.</figcaption>
 </figure>
 

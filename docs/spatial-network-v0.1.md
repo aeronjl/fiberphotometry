@@ -7,7 +7,7 @@ the spatial organization of their association. It extends the guarded
 or edges into independent experimental units.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/spatial-network-contract.svg" alt="A four-fiber coordinate map is converted to gap-aware pairwise edges, summarized by physical-distance bins and a node-label spatial null, then reduced from edges to sessions and equally weighted mouse summaries before a condition contrast.">
+  <img src="../assets/spatial-network-contract.svg" alt="A four-fiber coordinate map is converted to gap-aware pairwise edges, summarized by physical-distance bins and a node-label spatial null, then reduced from edges to sessions and equally weighted mouse summaries before a condition contrast.">
   <figcaption><strong>Geometry is evidence, not replication.</strong> Every edge retains its joint-validity denominator. Spatial structure is tested within a session by permuting coordinates across nodes; condition inference proceeds through session summaries to one value per mouse and condition.</figcaption>
 </figure>
 

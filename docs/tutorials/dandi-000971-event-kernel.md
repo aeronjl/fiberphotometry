@@ -1,4 +1,4 @@
-# Public behavioral event-kernel reproduction
+# Public behavioral event-kernel reanalysis
 
 !!! warning "Experimental result with weak held-out prediction"
     The workflow executed correctly, but the declared events did not predict a
@@ -16,8 +16,10 @@ This example uses Seiler et al.'s public recordings from
 study examined dopamine signaling during rewarded and unrewarded active nose
 pokes and its relationship to compulsive behavior
 ([Seiler et al., 2022](https://doi.org/10.1016/j.cub.2022.01.055)). Our narrower
-reanalysis tests the product's continuous encoding workflow. It is neither an
-independent replication nor a reproduction of every source-study model.
+reanalysis tests the product's continuous encoding workflow. It is an **adapted
+reanalysis**, not a source-panel reproduction: the joint regularized kernel and
+complete-animal held-out prediction were not source-paper analyses. See the
+[paper-figure correspondence register](paper-figure-roadmap.md).
 
 ## Why two event predictors?
 

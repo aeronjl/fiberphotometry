@@ -1,5 +1,9 @@
 # Worked examples
 
+Each empirical example now carries a source-correspondence label. See the
+[paper-figure register](paper-figure-roadmap.md) before interpreting “reanalysis,”
+“partial reproduction,” or “reproduction” as interchangeable claims.
+
 ## Spontaneous events and long recordings
 
 The [spontaneous-transient sensitivity tutorial](spontaneous-transients.md) starts
@@ -62,14 +66,14 @@ recording denominator.
 
 [Open the variable-duration tutorial](variable-duration-kernels.md)
 
-## Public DANDI event-kernel reproduction
+## Public DANDI event-kernel reanalysis
 
 Fit joint active-poke and reward-increment kernels to DMS and DLS recordings from
 six checksum-pinned public animals. The example foregrounds weak held-out
 prediction and a boundary-selected ridge penalty rather than hiding them behind
 pooled coefficient shapes.
 
-[Open the public event-kernel reproduction](dandi-000971-event-kernel.md)
+[Open the public event-kernel reanalysis](dandi-000971-event-kernel.md)
 
 ## Public IBL longitudinal neural–behavioral forecast
 
@@ -91,11 +95,6 @@ behavior models.
 
 ## Literature reproductions to add
 
-The capability audit identifies the next examples needed for field coverage:
-
-1. a trial-level functional mixed-model reproduction of Loewinger et al.;
-2. a multi-site/multi-color association example;
-3. a long-duration tonic/phasic and spontaneous-transient example;
-4. a spectrally resolved or hemodynamic-correction example with real controls.
-
-These are roadmap commitments, not currently supported tutorials.
+The maintained [paper-figure register](paper-figure-roadmap.md) names exact source
+panels, current departures, and acceptance criteria. This replaces an open-ended
+list of papers with testable reproduction targets.

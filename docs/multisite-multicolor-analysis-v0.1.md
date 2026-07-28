@@ -15,7 +15,7 @@ None of those claims, alone or together, establishes neural communication or
 causality.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/multisignal-evidence-contract.svg" alt="Two explicitly identified photometry channels pass through shared-clock and joint-validity checks, then branch to crosstalk review, lagged association, coherence and phase, and animal-level inference.">
+  <img src="../assets/multisignal-evidence-contract.svg" alt="Two explicitly identified photometry channels pass through shared-clock and joint-validity checks, then branch to crosstalk review, lagged association, coherence and phase, and animal-level inference.">
   <figcaption><strong>One pair, four evidence layers.</strong> Signal identity and joint continuity come first. Optical review remains distinct from statistical association; session summaries enter animal-level inference only after sessions have been aggregated within animals.</figcaption>
 </figure>
 

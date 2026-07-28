@@ -6,9 +6,9 @@ import argparse
 import json
 from pathlib import Path
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+from figure_style import apply_publication_style, save_figure
 
 ROOT = Path(__file__).parents[1]
 DEFAULT_INPUT = ROOT / "benchmarks" / "event-kernel-interval-coverage-v0.1.json"
@@ -47,23 +47,7 @@ def main() -> None:
         [summaries[item]["marginal_pointwise_coverage"] for item in scenarios]
     )
 
-    mpl.rcParams.update(
-        {
-            "axes.edgecolor": "#cbc5d2",
-            "axes.labelcolor": INK,
-            "axes.spines.right": False,
-            "axes.spines.top": False,
-            "figure.facecolor": "white",
-            "font.family": "DejaVu Sans",
-            "font.size": 9,
-            "savefig.facecolor": "white",
-            "svg.fonttype": "none",
-            "svg.hashsalt": "event-kernel-interval-coverage-v0.1",
-            "text.color": INK,
-            "xtick.color": MUTED,
-            "ytick.color": MUTED,
-        }
-    )
+    apply_publication_style(hashsalt="event-kernel-interval-coverage-v0.1")
     figure, axis = plt.subplots(figsize=(11.4, 4.8))
     x = np.arange(len(scenarios))
     width = 0.29
@@ -124,19 +108,7 @@ def main() -> None:
         fontsize=8,
     )
     figure.tight_layout()
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(
-        args.output,
-        format="svg",
-        bbox_inches="tight",
-        metadata={"Date": None},
-    )
-    plt.close(figure)
-    svg = args.output.read_text(encoding="utf-8")
-    args.output.write_text(
-        "\n".join(line.rstrip() for line in svg.splitlines()) + "\n",
-        encoding="utf-8",
-    )
+    save_figure(figure, args.output)
     print(args.output)
 
 

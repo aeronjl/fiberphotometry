@@ -10,7 +10,7 @@ source, sampling grid, run-boundary assumption, baseline policy and regularizati
 choice.
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="assets/sensor-kinetic-modeling-contract.svg" alt="A descriptive sensor profile remains separate from a versioned executable response model. Forward prediction always follows the model through gap-bounded convolution. Deconvolution must pass calibration, sampling, duration, transfer and regularization gates, then returns a conditional latent estimate with reconstruction and boundary diagnostics.">
+  <img src="../assets/sensor-kinetic-modeling-contract.svg" alt="A descriptive sensor profile remains separate from a versioned executable response model. Forward prediction always follows the model through gap-bounded convolution. Deconvolution must pass calibration, sampling, duration, transfer and regularization gates, then returns a conditional latent estimate with reconstruction and boundary diagnostics.">
   <figcaption><strong>Forward is a model consequence; inverse is an assumption-sensitive estimate.</strong> Gaps reset state in both directions. A good reconstruction shows that the regularized estimate reproduces the observed signal under the declared model—it does not establish that the model is biologically correct.</figcaption>
 </figure>
 

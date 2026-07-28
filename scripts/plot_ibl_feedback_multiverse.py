@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from figure_style import apply_publication_style, save_figure
+
 from fiberphotometry.plotting import SpecificationCurveEntry, plot_specification_curve
 
 
@@ -41,14 +43,14 @@ def main() -> None:
         default=repository / "docs/figures/ibl-feedback-specification-curve-v0.1.svg",
     )
     args = parser.parse_args()
+    apply_publication_style(hashsalt="ibl-feedback-multiverse-v0.1")
     payload = json.loads(args.input.read_text())
     figure, _ = plot_specification_curve(
         load_entries(payload),
         decision_order=("correction", "window"),
         effect_label="Correct - incorrect response (dF/F)",
     )
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(args.output, metadata={"Date": None})
+    save_figure(figure, args.output)
 
 
 if __name__ == "__main__":

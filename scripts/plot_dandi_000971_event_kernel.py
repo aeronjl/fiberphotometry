@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from figure_style import apply_publication_style, save_figure
 
 
 def main() -> None:
@@ -22,6 +23,7 @@ def main() -> None:
         default=Path("docs/assets/dandi-000971-event-kernels-v0.2.png"),
     )
     args = parser.parse_args()
+    apply_publication_style(hashsalt="dandi-000971-event-kernels-v0.2")
     payload = json.loads(args.result.read_text(encoding="utf-8"))
     figure, axes = plt.subplots(2, 2, figsize=(9, 5.8), sharex=True)
     colors = {"active_poke": "#5e35b1", "reward_increment": "#00897b"}
@@ -77,8 +79,7 @@ def main() -> None:
         "DANDI:000971 pooled FIR kernels with grouped-jackknife sensitivity intervals"
     )
     figure.tight_layout()
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(args.output, dpi=180, bbox_inches="tight")
+    save_figure(figure, args.output)
     print(args.output)
 
 

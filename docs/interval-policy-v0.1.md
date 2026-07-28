@@ -5,7 +5,7 @@ repeat that discovery, but scientists still need to state which bouts enter a ne
 analysis and how adjacent, long, contextual, or overlapping bouts are treated.
 
 <figure class="fp-figure">
-  <img src="assets/interval-policy-pipeline-v0.1.svg" alt="External behavior bouts pass through an explicitly ordered filter, merge, split, context, and overlap policy. The result retains transformed intervals, a complete lineage ledger, a fingerprint, and direct encoding-model inputs.">
+  <img src="../assets/interval-policy-pipeline-v0.1.svg" alt="External behavior bouts pass through an explicitly ordered filter, merge, split, context, and overlap policy. The result retains transformed intervals, a complete lineage ledger, a fingerprint, and direct encoding-model inputs.">
   <figcaption>Figure 1. Policy order is part of the estimand. Every operation records its inputs, outputs, reason, and source interval lineage.</figcaption>
 </figure>
 
