@@ -28,6 +28,12 @@ These functions describe a processed signal. They do not decide whether a band i
 biologically meaningful, infer sleep or behavior states, repair an irregular
 clock, or turn optical power into neural firing.
 
+For descriptive location, spread, magnitude, or trend over several physical-time
+scales—including irregular timestamps—use the separate
+[multiscale long-duration workflow](multiscale-long-duration-v0.1.md). It shares
+the hard gap and epoch boundary principle but does not impose a Fourier regularity
+model.
+
 ## Common continuity policy
 
 ```python
