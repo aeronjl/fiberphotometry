@@ -28,6 +28,7 @@ behavior = ["h5py>=3.11", "pandas>=2.2", "tables>=3.10"]
 plots = ["matplotlib>=3.9"]
 nwb = [
     "ndx-fiber-photometry>=0.2.3",
+    "ndx-pose>=0.3.0",
     "pynwb>=3.0",
     "remfile>=0.1.13",
 ]

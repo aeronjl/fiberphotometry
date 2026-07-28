@@ -82,6 +82,7 @@ nav:
       - Robustness multiverses: multiverse-contract-v0.1.md
       - Scalar mixed models: scalar-mixed-model-v0.1.md
       - Behavioral ecosystem interoperability: ecosystem-interoperability-v0.1.md
+      - Native ndx-pose interoperability: ndx-pose-interoperability-v0.1.md
       - Auditable interval and bout policies: interval-policy-v0.1.md
       - Clock synchronization: clock-synchronization-v0.1.md
       - Across-session comparability: session-comparability-v0.1.md
@@ -100,11 +101,13 @@ nav:
       - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
       - Public event-kernel reproduction: tutorials/dandi-000971-event-kernel.md
       - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
+      - Native ndx-pose round trip: ndx-pose-interoperability-v0.1.md
       - Interval and bout policies: interval-policy-v0.1.md
       - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
   - Data and interoperability:
       - Native acquisition files: native-acquisition-import-v0.1.md
       - Behavioral ecosystem contract: ecosystem-interoperability-v0.1.md
+      - Native ndx-pose files: ndx-pose-interoperability-v0.1.md
       - Interval-policy evidence: interval-policy-v0.1.md
       - Clock synchronization: clock-synchronization-v0.1.md
       - Behavioral adapter validation: interoperability-validation-v0.1.md

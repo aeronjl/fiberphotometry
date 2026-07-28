@@ -110,6 +110,27 @@ The human-readable labels are study metadata, not a claim that syllable 1 has a
 universal biological meaning. Preserve the fitted model, any reindexing operation,
 and its version beside the analysis.
 
+If pose has already been standardized in NWB, inspect and load the native
+`ndx-pose` container instead of returning to a tool-specific export:
+
+```python
+from fiberphotometry import inspect_ndx_pose_nwb, poses_from_ndx_pose_nwb
+
+inspection = inspect_ndx_pose_nwb("mouse-07-day-04.nwb")
+poses = poses_from_ndx_pose_nwb(
+    "mouse-07-day-04.nwb",
+    subject="mouse-07",
+    session="day-04",
+    clock_id="video",
+    processing_module_name="behavior",
+    pose_estimation_name="TopCameraPose",
+)
+```
+
+This route preserves physical conversion, optional z, confidence, reference frame,
+skeleton and source-software metadata. See the
+[native round-trip guide](../ndx-pose-interoperability-v0.1.md).
+
 For a variable-duration analysis, retain physical bounds and aligned duration
 values rather than replacing time:
 

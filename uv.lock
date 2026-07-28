@@ -503,6 +503,7 @@ behavior = [
 ]
 nwb = [
     { name = "ndx-fiber-photometry" },
+    { name = "ndx-pose" },
     { name = "pynwb" },
     { name = "remfile" },
 ]
@@ -545,6 +546,7 @@ requires-dist = [
     { name = "h5py", marker = "extra == 'behavior'", specifier = ">=3.11" },
     { name = "matplotlib", marker = "extra == 'plots'", specifier = ">=3.9" },
     { name = "ndx-fiber-photometry", marker = "extra == 'nwb'", specifier = ">=0.2.3" },
+    { name = "ndx-pose", marker = "extra == 'nwb'", specifier = ">=0.3.0" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", marker = "extra == 'acquisition'", specifier = ">=2.2" },
     { name = "pandas", marker = "extra == 'behavior'", specifier = ">=2.2" },
@@ -1583,6 +1585,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/72/7c/32a962a126ac82d13736d9c990aee92464434e111788bae3505c3e499305/ndx_ophys_devices-0.3.1.tar.gz", hash = "sha256:4d76f3f78b50d7f79fe76c2f281ceb057eb708ca84f86b0576adca23716992b7", size = 27674, upload-time = "2025-09-19T15:16:52.803Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/58/21/974d8249b771198066a895288e70a820f374ea0ec75dc85e9c1462f351e8/ndx_ophys_devices-0.3.1-py2.py3-none-any.whl", hash = "sha256:1bf2756ae13f8bd8ad58d62c25f7edf1336aa37f0aeaf5312253178f3f944af0", size = 17891, upload-time = "2025-09-19T15:16:48.489Z" },
+]
+
+[[package]]
+name = "ndx-pose"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hdmf" },
+    { name = "pynwb" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/99/01/5069add7735b754b543493d97c9d994b4b591d7a22f113388b63471b19ea/ndx_pose-0.3.0.tar.gz", hash = "sha256:4b356c730bda0d273b49e44576343162be26f42c292662d7358efebd252324cb", size = 101911, upload-time = "2026-06-02T21:29:10.238Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6b/41/015b830d4816df0dedadf6d5e32dda648b0627f798f8099db568d5852f9f/ndx_pose-0.3.0-py3-none-any.whl", hash = "sha256:9ba50c8869f8b7817ff7d83c9c97d40655c123f0f1273b4e65ce34367c12c20e", size = 15961, upload-time = "2026-06-02T21:29:09.24Z" },
 ]
 
 [[package]]

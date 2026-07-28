@@ -21,13 +21,16 @@ Neither validates a biological analysis.
 | SLEAP | standard and MATLAB-compatible Analysis HDF5 axis orders | Analysis HDF5 with stored or explicitly declared dimensions | **Pass: official legacy plus current standard export** | legacy scores/axes and a real 1,100-frame SLP exported by sleap-io 0.9.2 both pass |
 | Keypoint-MoSeq | frame-level integer syllable sequence to duration-preserving bouts | `results.h5/<recording>/syllable` | **Pass: 0.6.8 writer contract** | pinned `save_hdf5` output preserves syllables and exact bout boundaries |
 | BORIS | aggregated POINT/STATE columns | aggregated CSV/TSV plus tabular CSV with START/STOP pairing | **Pass: official tabular and aggregated exports** | explicit subject/observation selection preserves both point events and state intervals |
+| ndx-pose | `PoseEstimation` objects with 2D/3D series | NWB processing-module discovery and explicit estimator selection | **Pass: 0.3.0 extension writer contract** | schema-valid PyNWB round trip preserves conversion/offset, timestamps, confidence missingness, reference frames, skeleton and source metadata; unsupplied object links are reported |
 | Unspool | canonical trial-level column handoff | optional `Study` construction | **Pass: public cross-package benchmark** | explicit chronology, retained neural columns, fingerprint and prospective fold composition |
 | Clock synchronization | explicit one-to-one source/target pulse pairs | versioned JSON evidence artifact | **Synthetic only** | known affine offset/drift recovery, residual and drift refusal, bounded extrapolation, and pose/covariate/annotation composition are tested |
 
 No adapter in this matrix now relies only on an in-test schema facsimile. The
-DeepLabCut and Keypoint-MoSeq files are deliberately labelled writer-contract
-artifacts because their values were declared for the test; SLEAP and BORIS also
-have official upstream payloads.
+DeepLabCut, Keypoint-MoSeq, and ndx-pose files are deliberately labelled
+writer-contract artifacts because their values were declared for the test; SLEAP
+and BORIS also have official upstream payloads. The ndx-pose fixture is generated
+inside a temporary directory by the real 0.3.0 extension and validated by PyNWB,
+rather than committed as another binary copy.
 
 ## Pinned artifacts
 
@@ -107,6 +110,8 @@ positive-duration intervals.
    executable compatibility claim rather than a one-version snapshot.
 2. Add a model-produced Keypoint-MoSeq result retaining syllable-reindexing and
    fitted-model provenance; the current fixture validates serialization only.
-3. Exercise all four against photometry timestamps with a real synchronization
+3. Exercise every behavioral source against photometry timestamps with a real synchronization
    record; synthetic affine recovery and file parity do not validate
    acquisition-specific clock alignment.
+4. Add a public ndx-pose file produced independently by DeepLabCut or SLEAP; the
+   current fixture validates the released extension writer and round-trip semantics.

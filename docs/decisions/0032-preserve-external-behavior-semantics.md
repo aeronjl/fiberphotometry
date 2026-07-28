@@ -48,8 +48,9 @@ the source tool. Longitudinal behavioral modelling remains in Unspool under
 - The initial API is experimental. Official SLEAP and BORIS files plus
   writer-contract DeepLabCut 3.0.0 and Keypoint-MoSeq 0.6.8 files now provide a
   complete one-version parity matrix without conflating fixture provenance.
-- Clock synchronisation, validity-mask-aware encoding, `ndx-pose`, multi-animal
-  identity audits and duration kernels remain visible product gaps.
+- Multi-animal identity audits and real acquisition-specific clock validation remain
+  visible product gaps; later records close the initial validity-mask, duration, and
+  `ndx-pose` implementation gaps.
 - A boundary may be extracted into a shared ecosystem package only after it has an
   independent object model and at least two real consumers.
 
@@ -64,4 +65,7 @@ standard supersedes these types.
 [SDR-0038](0038-model-variable-duration-behavior-with-physical-intervals-and-progress.md)
 closed the first duration/progress-kernel gap with an aligned interval bundle and a
 full-denominator normalized-progress design. Merge/split/filter and overlap policies
-remain open.
+were subsequently closed by
+[SDR-0049](0049-make-interval-policy-order-explicit-and-auditable.md).
+[SDR-0050](0050-preserve-ndx-pose-values-and-declare-link-omissions.md) adds native
+loss-aware `ndx-pose` 0.3 inspection and NWB round trips.

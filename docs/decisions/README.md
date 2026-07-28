@@ -77,6 +77,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0047](0047-separate-prospective-optical-masks-from-observed-validity.md) | Accepted | Separate prospective optical masks from observed validity |
 | [SDR-0048](0048-freeze-transient-thresholds-and-retain-waveform-qc.md) | Accepted | Freeze transient thresholds and retain waveform QC |
 | [SDR-0049](0049-make-interval-policy-order-explicit-and-auditable.md) | Accepted | Make interval-policy order explicit and auditable |
+| [SDR-0050](0050-preserve-ndx-pose-values-and-declare-link-omissions.md) | Accepted | Preserve ndx-pose values and declare link omissions |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.
