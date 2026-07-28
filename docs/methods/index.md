@@ -126,13 +126,20 @@ ledger, physical-distance summaries, a node-label spatial null, and fixed
 edge→session→mouse inference. See
 [coordinate-aware dense multi-fiber networks](../spatial-network-v0.1.md).
 
+Sensor-kinetic modeling is an **experimental first-class workflow**. Versioned
+parametric or sampled response models support gap-bounded forward prediction,
+outcome-blind sampling/duration/transfer gates, and regularized inversion with a
+complete reconstruction and boundary ledger. Every recovered input remains
+conditional on its calibration and model. See
+[sensor-kinetic forward models and guarded deconvolution](../sensor-kinetic-modeling-v0.1.md).
+
 The remaining questions are scientifically important but **not yet first-class
 workflows**:
 
 - native behavioral learning-trajectory models; use the experimental
   [Unspool interoperability contract](../unspool-interoperability-v0.1.md) instead;
-- across-session photometry comparability before handing summaries to Unspool;
-- sensor-kinetic deconvolution or concentration calibration.
+- preparation-relevant concentration calibration and validated nonlinear sensor
+  models.
 
 The [capability matrix](capability-matrix.md) explains why these gaps matter and
 which should enter the roadmap.

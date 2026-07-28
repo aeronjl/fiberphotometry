@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Sensor-kinetic forward and inverse evidence contract</title>
+  <desc id="desc">Descriptive sensor kinetics remain separate from an executable calibrated or assumed response model. Forward prediction passes directly through gap-bounded convolution. Inversion must pass calibration, sampling, duration, transfer and regularization gates before returning a conditional latent estimate with reconstruction diagnostics.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7fbff"/><stop offset="1" stop-color="#fbf7ff"/></linearGradient>
+    <linearGradient id="forward" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e7f6f1"/><stop offset="1" stop-color="#edf7ff"/></linearGradient>
+    <linearGradient id="inverse" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff4e8"/><stop offset="1" stop-color="#f4efff"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#17233b" flood-opacity="0.10"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#60708a"/></marker>
+    <style>
+      .title{font:700 30px ui-sans-serif,system-ui,sans-serif;fill:#17233b}.step{font:700 18px ui-sans-serif,system-ui,sans-serif;fill:#1c2d4d}.label{font:600 14px ui-sans-serif,system-ui,sans-serif;fill:#31425f}.small{font:500 12px ui-sans-serif,system-ui,sans-serif;fill:#60708a}.tiny{font:600 11px ui-monospace,SFMono-Regular,monospace;fill:#495a75}.card{fill:#fff;stroke:#dbe3ef;stroke-width:1.5;rx:18;filter:url(#shadow)}.arrow{fill:none;stroke:#60708a;stroke-width:2.5;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1440" height="820" rx="28" fill="url(#bg)"/>
+  <text x="54" y="56" class="title">Sensor kinetics: predict freely, invert conditionally</text>
+  <text x="54" y="84" class="small">A response model is versioned scientific evidence—not a filter inferred from the outcome</text>
+
+  <rect x="46" y="122" width="330" height="218" class="card"/>
+  <text x="70" y="158" class="step">1 · Keep meanings separate</text>
+  <rect x="70" y="182" width="282" height="56" rx="12" fill="#eef6ff" stroke="#cde0f4"/>
+  <text x="86" y="205" class="label">Descriptive sensor profile</text>
+  <text x="86" y="225" class="tiny">rise / decay evidence · context</text>
+  <path d="M211 240L211 260" stroke="#c45858" stroke-width="2" stroke-dasharray="5 5"/>
+  <text x="228" y="257" class="small" fill="#a24444">never auto-convert</text>
+  <rect x="70" y="270" width="282" height="48" rx="12" fill="#f4efff" stroke="#d9cff8"/>
+  <text x="86" y="291" class="label">Executable model v1</text>
+  <text x="86" y="309" class="tiny">kernel · units · gain · calibration</text>
+
+  <rect x="410" y="122" width="362" height="218" class="card"/>
+  <text x="434" y="158" class="step">2 · Materialize the response</text>
+  <path d="M450 270 C475 270 480 210 520 210 C565 210 565 292 630 292 C675 292 700 282 732 282" fill="none" stroke="#6c4fd3" stroke-width="5" stroke-linecap="round"/>
+  <line x1="450" y1="300" x2="732" y2="300" stroke="#cfd8e6" stroke-width="2"/>
+  <text x="450" y="190" class="label">causal impulse response</text>
+  <text x="450" y="324" class="tiny">parametric OR sampled empirical response</text>
+  <path d="M378 230L400 230" class="arrow"/>
+
+  <rect x="806" y="122" width="588" height="218" class="card"/>
+  <text x="830" y="158" class="step">3 · Respect continuity</text>
+  <text x="830" y="184" class="small">every valid run starts from an explicit zero state</text>
+  <path d="M842 254 C870 254 880 208 915 208 C950 208 960 264 1002 264" fill="none" stroke="#399478" stroke-width="4"/>
+  <rect x="1014" y="202" width="52" height="72" rx="8" fill="#fdecec" stroke="#d88787"/>
+  <path d="M1080 254 C1110 254 1120 220 1150 220 C1182 220 1190 266 1234 266" fill="none" stroke="#399478" stroke-width="4"/>
+  <rect x="1248" y="202" width="52" height="72" rx="8" fill="#fdecec" stroke="#d88787"/>
+  <path d="M1314 254 C1330 254 1340 236 1360 236" fill="none" stroke="#399478" stroke-width="4"/>
+  <text x="1024" y="294" class="tiny">gap</text><text x="1258" y="294" class="tiny">invalid</text>
+  <text x="830" y="320" class="label">no hidden tail crosses a missing region</text>
+  <path d="M774 230L796 230" class="arrow"/>
+
+  <rect x="46" y="382" width="632" height="314" rx="18" fill="url(#forward)" stroke="#bddfd4" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="70" y="420" class="step">Forward route · always available</text>
+  <text x="70" y="446" class="small">“If this latent input and model were true, what would the sensor show?”</text>
+  <g transform="translate(76,480)">
+    <line x1="0" y1="60" x2="190" y2="60" stroke="#b7c6d8" stroke-width="2"/>
+    <path d="M0 60L35 60L35 10L42 60L112 60L112 25L119 60L190 60" fill="none" stroke="#1f7898" stroke-width="4"/>
+    <text x="0" y="90" class="tiny">candidate latent input</text>
+  </g>
+  <path d="M286 540L350 540" class="arrow"/>
+  <circle cx="388" cy="540" r="32" fill="#fff" stroke="#6c4fd3" stroke-width="3"/>
+  <text x="370" y="545" class="tiny">h(t)</text>
+  <path d="M426 540L484 540" class="arrow"/>
+  <g transform="translate(492,480)">
+    <line x1="0" y1="60" x2="150" y2="60" stroke="#b7c6d8" stroke-width="2"/>
+    <path d="M0 60C25 60 28 15 55 15C82 15 86 60 100 60C116 60 118 34 132 34C145 34 146 58 150 58" fill="none" stroke="#399478" stroke-width="4"/>
+    <text x="0" y="90" class="tiny">predicted fluorescence</text>
+  </g>
+  <rect x="70" y="620" width="584" height="48" rx="12" fill="#fff" stroke="#bddfd4"/>
+  <text x="88" y="649" class="label">Simulation · experimental design · bandwidth intuition</text>
+
+  <rect x="712" y="382" width="682" height="314" rx="18" fill="url(#inverse)" stroke="#e5c9a7" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="736" y="420" class="step">Inverse route · gated and regularized</text>
+  <text x="736" y="446" class="small">“Which conditional latent input can reconstruct this trace?”</text>
+  <g transform="translate(736,476)">
+    <rect x="0" y="0" width="118" height="46" rx="10" fill="#fff" stroke="#dfbd95"/><text x="16" y="20" class="tiny">calibration</text><text x="16" y="36" class="tiny">source</text>
+    <rect x="128" y="0" width="118" height="46" rx="10" fill="#fff" stroke="#dfbd95"/><text x="145" y="20" class="tiny">sampling</text><text x="145" y="36" class="tiny">per rise</text>
+    <rect x="256" y="0" width="118" height="46" rx="10" fill="#fff" stroke="#dfbd95"/><text x="273" y="20" class="tiny">run / kernel</text><text x="273" y="36" class="tiny">duration</text>
+    <rect x="384" y="0" width="118" height="46" rx="10" fill="#fff" stroke="#dfbd95"/><text x="402" y="20" class="tiny">transfer</text><text x="402" y="36" class="tiny">condition</text>
+    <rect x="512" y="0" width="118" height="46" rx="10" fill="#fff" stroke="#dfbd95"/><text x="528" y="20" class="tiny">sourced λ</text><text x="528" y="36" class="tiny">regularizer</text>
+  </g>
+  <path d="M1052 532L1052 566" class="arrow"/>
+  <rect x="808" y="578" width="488" height="82" rx="14" fill="#fff" stroke="#d9cff8"/>
+  <text x="832" y="605" class="label">Conditional latent estimate</text>
+  <text x="832" y="629" class="small">solved mask · excluded runs · reconstruction · roughness</text>
+  <text x="832" y="648" class="tiny">model + data + regularization → evidence fingerprint</text>
+
+  <rect x="46" y="732" width="1348" height="54" rx="15" fill="#17233b"/>
+  <text x="72" y="765" style="font:700 15px ui-sans-serif,system-ui,sans-serif;fill:#fff">Reconstruction fits the model, not the biology · recovered input remains conditional · gaps reset state</text>
+</svg>
