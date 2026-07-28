@@ -29,6 +29,7 @@ class EventAnalysisConfig:
     channel: str
     preprocessing_kind: Literal["reference", "signal_only"]
     preprocessing_method: str
+    factor_assignment_unit: Literal["event", "session", "animal"] = "event"
     normalization: Literal["divide", "subtract"] = "divide"
     rolling_window_s: float = 60.0
     resample_rate_hz: float | Literal["median"] | None = None
@@ -82,7 +83,11 @@ class EventAnalysisConfig:
         inference = _table(payload, "inference")
         timecourse = _table(payload, "timecourse", required=False)
         quality = _table(payload, "quality", required=False)
-        _reject_unknown(contrast, {"factor", "numerator", "denominator"}, "contrast")
+        _reject_unknown(
+            contrast,
+            {"factor", "assignment_unit", "numerator", "denominator"},
+            "contrast",
+        )
         _reject_unknown(channel, {"name"}, "channel")
         _reject_unknown(
             preprocessing,
@@ -111,7 +116,15 @@ class EventAnalysisConfig:
         _reject_unknown(quality, {"blocking_warnings"}, "quality")
         _reject_unknown(
             timecourse,
-            {"enabled", "window", "rate_hz", "confidence", "draws", "seed"},
+            {
+                "enabled",
+                "window",
+                "rate_hz",
+                "confidence",
+                "draws",
+                "seed",
+                "design",
+            },
             "timecourse",
         )
         kind = str(_required(preprocessing, "kind"))
@@ -161,6 +174,11 @@ class EventAnalysisConfig:
         if contrast_unit not in {None, "session"}:
             raise ValueError("inference.contrast_unit must be 'session' when supplied")
         timecourse_spec = _timecourse(timecourse)
+        assignment_unit = str(contrast.get("assignment_unit", "event"))
+        if assignment_unit not in {"event", "session", "animal"}:
+            raise ValueError(
+                "contrast.assignment_unit must be 'event', 'session', or 'animal'"
+            )
         return cls(
             title=str(payload.get("title", "Fiber photometry event contrast")),
             numerator=str(_required(contrast, "numerator")),
@@ -169,6 +187,7 @@ class EventAnalysisConfig:
             channel=str(_required(channel, "name")),
             preprocessing_kind=kind,  # type: ignore[arg-type]
             preprocessing_method=method,
+            factor_assignment_unit=assignment_unit,  # type: ignore[arg-type]
             normalization=normalization,  # type: ignore[arg-type]
             rolling_window_s=float(preprocessing.get("rolling_window_s", 60.0)),
             resample_rate_hz=resample_rate_hz,
@@ -226,6 +245,7 @@ class EventAnalysisConfig:
             baseline=self.baseline,
             response=self.response,
             factor_name=self.factor_name,
+            factor_assignment_unit=self.factor_assignment_unit,
             title=self.title,
             randomized=self.randomized,
             intent=self.intent,
@@ -290,6 +310,7 @@ def _timecourse(payload: dict[str, Any]) -> PeriEventInferenceSpec | None:
         confidence=float(payload.get("confidence", 0.95)),
         draws=int(payload.get("draws", 2000)),
         seed=int(payload.get("seed", 0)),
+        design=str(payload.get("design", "paired")),  # type: ignore[arg-type]
     )
 
 

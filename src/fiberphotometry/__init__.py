@@ -352,6 +352,13 @@ from fiberphotometry.planning import (
     execute_analysis_plan,
     welch_power_sensitivity,
 )
+from fiberphotometry.population import (
+    PopulationContrastResult,
+    PopulationContrastSpec,
+    PopulationInfluence,
+    PopulationUnitEstimate,
+    infer_population_contrast,
+)
 from fiberphotometry.preprocess import (
     baseline_dff,
     lowpass_filter,
@@ -464,6 +471,7 @@ from fiberphotometry.stability import artifact_schema
 from fiberphotometry.timecourse import (
     PeriEventInferenceResult,
     PeriEventInferenceSpec,
+    PeriEventSessionEstimate,
     infer_peri_event_contrast,
 )
 from fiberphotometry.transient_inference import (
@@ -692,10 +700,15 @@ __all__ = [
     "PastaTransientDetectorSpec",
     "PeriEventInferenceResult",
     "PeriEventInferenceSpec",
+    "PeriEventSessionEstimate",
     "PermutationPlan",
     "PipelineCompatibility",
     "PipelineResult",
     "PipelineSpec",
+    "PopulationContrastResult",
+    "PopulationContrastSpec",
+    "PopulationInfluence",
+    "PopulationUnitEstimate",
     "PoseTrajectory",
     "PowerSensitivity",
     "PredictorFamilyContribution",
@@ -885,6 +898,7 @@ __all__ = [
     "infer_association_animals",
     "infer_multiscale_animals",
     "infer_peri_event_contrast",
+    "infer_population_contrast",
     "infer_spatial_network_animals",
     "infer_state_band_power",
     "infer_transient_animals",

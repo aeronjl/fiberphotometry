@@ -37,6 +37,13 @@ and missing-data models are rejected or deferred rather than guessed.
 
 ## Initial inference operations
 
+For already-derived scalar or vector outcomes,
+[`PopulationUnitEstimate`](population-inference-v0.1.md) provides the common
+animal boundary. It retains the source sessions and observation count before a
+paired or independent population contrast is computed. Peri-event inference is
+the first end-to-end integration; other method families will adopt the contract
+without replacing their domain-specific denominators.
+
 - `hierarchical_bootstrap` recursively samples a declared unit path and retains
   distinct identities for duplicate sampled units.
 - `permutation_test` supports paired sign flips and label shuffling at an

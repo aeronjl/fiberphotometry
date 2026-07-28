@@ -132,7 +132,10 @@ separate event-level sensitivity analysis with explicit convergence and variance
 diagnostics; it does not silently replace the primary animal-level estimand.
 An optional [animal-level peri-event evidence lane](docs/peri-event-inference-v0.1.md)
 reports separate pointwise and whole-window simultaneous confidence bands without
-treating trials as independent replicates.
+treating trials as independent replicates. It uses the reusable
+[population-inference boundary](docs/population-inference-v0.1.md) to retain
+session and animal estimates, support, exclusions, paired or independent group
+semantics, and leave-one-animal-out influence.
 The experimental [event-kernel model workflow](docs/event-kernel-encoding-v0.1.md)
 jointly estimates overlapping events and continuous behavioral covariates. Its
 [model-multiverse layer](docs/event-kernel-multiverse-v0.1.md) compares named

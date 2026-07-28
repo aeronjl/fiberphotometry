@@ -178,3 +178,63 @@ def test_scientist_workflow_can_add_animal_level_timecourse() -> None:
     assert "Animal-level peri-event contrast" in html
     assert "simultaneous band covers the whole declared window" in html
     assert "whole-window significance test" in html
+
+
+def test_scientist_workflow_supports_independent_animal_groups() -> None:
+    sessions = []
+    for group, response in (("control", 0.02), ("drug", 0.10)):
+        for animal_index in range(3):
+            time = np.arange(0, 60, 0.05)
+            reference = 1 + 0.04 * np.sin(time / 7)
+            signal = 2 + 0.5 * reference
+            event_times = [15.0, 25.0, 35.0, 45.0]
+            for event_time in event_times:
+                selected = (time >= event_time) & (time < event_time + 0.5)
+                signal[selected] += response + animal_index * 0.002
+            animal = f"{group}-{animal_index}"
+            recording = make_recording(
+                time=time,
+                signal=signal,
+                reference=reference,
+                channel_names=["DMS"],
+                subject=animal,
+                session=f"{animal}:session",
+            )
+            sessions.append(
+                EventSession.from_arrays(
+                    recording, event_times, [group] * len(event_times)
+                )
+            )
+    study = EventAnalysis(
+        tuple(sessions),
+        numerator="drug",
+        denominator="control",
+        channel="DMS",
+        preprocessing=Preprocessing.reference(),
+        factor_assignment_unit="animal",
+        timecourse=PeriEventInferenceSpec(design="independent", draws=100, seed=5),
+    )
+    plan = study.plan()
+
+    assert plan.method == "welch_t"
+    result = study.run(acknowledged_assumptions=plan.required_assumptions)
+
+    assert result.pipeline.analysis is not None
+    assert result.pipeline.analysis.estimate > 0
+    assert result.timecourse is not None
+    assert result.timecourse.population.design == "independent"
+    assert result.timecourse.animal_count == 6
+    assert "3 drug and 3 control animals" in result.to_html()
+
+
+def test_timecourse_design_must_match_factor_assignment_unit() -> None:
+    with pytest.raises(ValueError, match="conflicts with factor_assignment_unit"):
+        EventAnalysis(
+            _sessions(),
+            numerator="correct",
+            denominator="incorrect",
+            channel="DMS",
+            preprocessing=Preprocessing.reference(),
+            factor_assignment_unit="animal",
+            timecourse=PeriEventInferenceSpec(design="paired"),
+        )

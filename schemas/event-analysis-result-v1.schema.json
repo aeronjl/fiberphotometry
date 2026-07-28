@@ -69,7 +69,7 @@
             "animal_count",
             "method"
           ],
-          "properties": {"schema_version": {"const": "1"}}
+          "properties": {"schema_version": {"enum": ["1", "2"]}}
         }
       ]
     },

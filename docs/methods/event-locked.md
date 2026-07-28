@@ -8,7 +8,7 @@ a jointly estimated response to overlapping predictors, or predictive value.
 
 | Scientific question | Workflow | Output |
 |---|---|---|
-| What is the response around one event definition? | [Peri-event inference](../peri-event-inference-v0.1.md) | trial-complete alignment and animal-level time course |
+| What is the response around one event definition? | [Peri-event inference](../peri-event-inference-v0.1.md) | auditable session estimates and paired or independent animal-level time course |
 | What is associated with each of several overlapping events? | [Event-kernel encoding](../event-kernel-encoding-v0.1.md) | regularized kernels with complete-group validation |
 | Does the result survive plausible design choices? | [Event-kernel model multiverses](../event-kernel-multiverse-v0.1.md) | paired design alternatives and failure ledger |
 | Does one predictor family add held-out information? | [Predictor-family contributions](../predictor-family-contributions-v0.1.md) | paired full-minus-reduced held-out score |

@@ -234,6 +234,43 @@ def _timecourse_section(result: EventAnalysisResult) -> str:
         else '<span class="quiet-chip">Stable animal support</span>'
     )
     confidence = f"{inference.confidence:.0%}"
+    population = inference.population
+    numerator_count = len(
+        {
+            item.unit_id
+            for item in population.unit_estimates
+            if item.level == population.numerator
+        }
+    )
+    denominator_count = len(
+        {
+            item.unit_id
+            for item in population.unit_estimates
+            if item.level == population.denominator
+        }
+    )
+    most_influential = max(
+        population.influence,
+        key=lambda item: item.maximum_absolute_change,
+        default=None,
+    )
+    influence_text = (
+        "No influence estimate was available."
+        if most_influential is None
+        else (
+            f"Largest leave-one-animal-out change: "
+            f"{most_influential.maximum_absolute_change:.3g} "
+            f"({escape(most_influential.unit_id)})."
+        )
+    )
+    design_text = (
+        f"{len(population.included_units)} complete paired animals"
+        if population.design == "paired"
+        else (
+            f"{numerator_count} {escape(population.numerator)} and "
+            f"{denominator_count} {escape(population.denominator)} animals"
+        )
+    )
     return f"""<section>
     <div class="section-head"><div><p class="eyebrow">TIME-COURSE INFERENCE</p>
     <h2>Animal-level peri-event contrast</h2></div>
@@ -251,9 +288,12 @@ def _timecourse_section(result: EventAnalysisResult) -> str:
     class="axis-label">{time[-1]:g} s</text></svg></div>
     <div class="chips coverage-warnings">{warning_markup}</div>
     <p class="coverage-dispositions">Equal session-condition means were formed
-    within each animal before {inference.animal_count} animal curves were resampled
-    {inference.draws:,} times (seed {inference.seed}). The pointwise band is not a
-    whole-window significance test.</p></section>"""
+    within each animal before {design_text} were contrasted and resampled
+    {inference.draws:,} times (seed {inference.seed}). The result retains
+    {len(inference.session_estimates)} session-condition estimates and
+    {len(population.unit_estimates)} animal-condition estimates.
+    {influence_text} The pointwise band is not a whole-window significance test.</p>
+    </section>"""
 
 
 def _line_paths(

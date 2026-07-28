@@ -64,6 +64,11 @@ def test_peri_event_inference_resamples_animals_and_separates_bands() -> None:
     assert result.simultaneous_critical_value > 1.96
     assert set(result.animals_per_time) == {10}
     assert json.loads(result.to_json())["method"].startswith("animal_bootstrap")
+    assert len(result.session_estimates) == 40
+    assert len(result.population.unit_estimates) == 20
+    assert result.population.included_units == tuple(f"a{i}" for i in range(10))
+    assert len(result.population.influence) == 10
+    assert result.schema_version == "2"
 
 
 def test_peri_event_inference_is_seeded_and_requires_animals() -> None:
@@ -124,3 +129,67 @@ def test_duplicating_events_does_not_create_inferential_precision() -> None:
     assert duplicated.standard_error == pytest.approx(original.standard_error)
     assert duplicated.simultaneous_lower == pytest.approx(original.simultaneous_lower)
     assert duplicated.simultaneous_upper == pytest.approx(original.simultaneous_upper)
+
+
+def test_peri_event_inference_supports_independent_animal_groups() -> None:
+    rng = np.random.default_rng(3)
+    time = np.linspace(-0.5, 1.0, 16)
+    values = []
+    animals = []
+    sessions = []
+    conditions = []
+    effect = 0.5 * np.exp(-(((time - 0.25) / 0.2) ** 2))
+    for group, offset in (("control", 0.0), ("drug", 1.0)):
+        for animal_index in range(4):
+            animal = f"{group}-{animal_index}"
+            animal_noise = rng.normal(0, 0.02, len(time))
+            for session_index in range(2):
+                for _ in range(3):
+                    values.append(
+                        animal_noise + offset * effect + rng.normal(0, 0.02, len(time))
+                    )
+                    animals.append(animal)
+                    sessions.append(f"{animal}:s{session_index}")
+                    conditions.append(group)
+
+    result = infer_peri_event_contrast(
+        np.asarray(values),
+        time,
+        animals=tuple(animals),
+        sessions=tuple(sessions),
+        conditions=tuple(conditions),
+        numerator="drug",
+        denominator="control",
+        design="independent",
+        draws=200,
+        seed=11,
+    )
+
+    assert result.population.design == "independent"
+    assert result.animal_count == 8
+    assert set(result.animals_per_time) == {8}
+    assert set(result.population.numerator_units_per_point) == {4}
+    assert set(result.population.denominator_units_per_point) == {4}
+    assert np.max(np.abs(np.asarray(result.estimate) - effect)) < 0.05
+    assert len(result.session_estimates) == 16
+    assert len(result.population.influence) == 8
+
+
+def test_peri_event_inference_exposes_incomplete_paired_animals() -> None:
+    values, time, animals, sessions, conditions, _ = _curves()
+    selected = ~((np.asarray(animals) == "a9") & (np.asarray(conditions) == "control"))
+
+    result = infer_peri_event_contrast(
+        values[selected],
+        time,
+        animals=tuple(np.asarray(animals)[selected]),
+        sessions=tuple(np.asarray(sessions)[selected]),
+        conditions=tuple(np.asarray(conditions)[selected]),
+        numerator="stimulus",
+        denominator="control",
+        draws=100,
+    )
+
+    assert result.animal_count == 9
+    assert result.population.excluded_units == ("a9",)
+    assert "incomplete_paired_animals_excluded" in result.warnings

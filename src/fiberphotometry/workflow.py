@@ -232,7 +232,7 @@ class EventAnalysisResult:
 
 @dataclass(frozen=True)
 class EventAnalysis:
-    """High-level, explicit workflow for a within-animal event contrast."""
+    """High-level workflow for a paired or independent animal event contrast."""
 
     sessions: tuple[EventSession, ...]
     numerator: str
@@ -242,6 +242,7 @@ class EventAnalysis:
     baseline: tuple[float, float] = (-0.5, 0.0)
     response: tuple[float, float] = (0.0, 0.5)
     factor_name: str = "condition"
+    factor_assignment_unit: Literal["event", "session", "animal"] = "event"
     title: str = "Fiber photometry event contrast"
     randomized: bool | None = False
     intent: Literal["confirmatory", "exploratory", "descriptive"] = "exploratory"
@@ -266,6 +267,15 @@ class EventAnalysis:
         missing = {self.numerator, self.denominator} - levels
         if missing:
             raise ValueError(f"contrast levels absent from sessions: {sorted(missing)}")
+        if self.timecourse is not None:
+            expected = (
+                "independent" if self.factor_assignment_unit == "animal" else "paired"
+            )
+            if self.timecourse.design != expected:
+                raise ValueError(
+                    "time-course design conflicts with factor_assignment_unit: "
+                    f"expected {expected!r}"
+                )
 
     def plan(self, *, acknowledged_assumptions: Sequence[str] = ()) -> AnalysisPlan:
         """Create the inference plan without reading fluorescence outcome values."""
@@ -348,7 +358,12 @@ class EventAnalysis:
                 Unit("event", "event_id", "session"),
             ),
             factors=(
-                Factor(self.factor_name, self.factor_name, "categorical", "event"),
+                Factor(
+                    self.factor_name,
+                    self.factor_name,
+                    "categorical",
+                    self.factor_assignment_unit,
+                ),
             ),
         )
 
@@ -475,6 +490,7 @@ class EventAnalysis:
             conditions=tuple(conditions),
             numerator=self.numerator,
             denominator=self.denominator,
+            design=self.timecourse.design,
             confidence=self.timecourse.confidence,
             draws=self.timecourse.draws,
             seed=self.timecourse.seed,

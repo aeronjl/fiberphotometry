@@ -5,15 +5,22 @@ from __future__ import annotations
 import json
 import warnings
 from dataclasses import asdict, dataclass
+from typing import Literal
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.stats import t as student_t
+
+from fiberphotometry.population import (
+    PopulationContrastResult,
+    PopulationContrastSpec,
+    PopulationUnitEstimate,
+    infer_population_contrast,
+)
 
 
 @dataclass(frozen=True)
 class PeriEventInferenceSpec:
-    """Declared alignment and uncertainty choices for a peri-event contrast."""
+    """Declared alignment, population design, and uncertainty choices."""
 
     window: tuple[float, float] = (-1.0, 2.0)
     rate_hz: float = 20.0
@@ -21,6 +28,7 @@ class PeriEventInferenceSpec:
     draws: int = 2000
     seed: int = 0
     within_animal: str = "equal_session_means"
+    design: Literal["paired", "independent"] = "paired"
 
     def __post_init__(self) -> None:
         if self.window[0] >= self.window[1]:
@@ -33,11 +41,25 @@ class PeriEventInferenceSpec:
             raise ValueError("time-course inference requires at least 100 draws")
         if self.within_animal != "equal_session_means":
             raise ValueError("unsupported within-animal aggregation policy")
+        if self.design not in {"paired", "independent"}:
+            raise ValueError("time-course design must be 'paired' or 'independent'")
+
+
+@dataclass(frozen=True)
+class PeriEventSessionEstimate:
+    """One session-condition curve before equal-session animal aggregation."""
+
+    subject: str
+    session: str
+    level: str
+    estimate: tuple[float, ...]
+    events_per_time: tuple[int, ...]
+    event_count: int
 
 
 @dataclass(frozen=True)
 class PeriEventInferenceResult:
-    """A contrast curve with distinct local and whole-window uncertainty."""
+    """A contrast curve plus its complete session-to-population evidence chain."""
 
     relative_time: tuple[float, ...]
     estimate: tuple[float, ...]
@@ -54,10 +76,12 @@ class PeriEventInferenceResult:
     simultaneous_critical_value: float
     method: str
     warnings: tuple[str, ...]
-    schema_version: str = "1"
+    session_estimates: tuple[PeriEventSessionEstimate, ...]
+    population: PopulationContrastResult
+    schema_version: str = "2"
 
     def to_json(self) -> str:
-        """Serialize arrays and inferential semantics without hidden defaults."""
+        """Serialize arrays, unit ledgers, and inferential semantics."""
         return json.dumps(asdict(self), indent=2, sort_keys=True)
 
 
@@ -70,6 +94,7 @@ def infer_peri_event_contrast(
     conditions: tuple[str, ...],
     numerator: str,
     denominator: str,
+    design: Literal["paired", "independent"] = "paired",
     confidence: float = 0.95,
     draws: int = 2000,
     seed: int = 0,
@@ -77,8 +102,8 @@ def infer_peri_event_contrast(
     """Infer a curve after equal-session aggregation within each animal.
 
     ``values`` is event by relative-time. Events are never treated as independent
-    inferential units: session-condition means are formed first, followed by
-    animal-condition means, and only animal contrast curves are resampled.
+    inferential units. Paired designs contrast levels within animals; independent
+    designs compare two disjoint groups of animal estimates.
     """
     matrix = np.asarray(values, dtype=float)
     time = np.asarray(relative_time, dtype=float)
@@ -96,7 +121,7 @@ def infer_peri_event_contrast(
     if numerator == denominator:
         raise ValueError("time-course contrast levels must differ")
 
-    curves, names = _animal_contrasts(
+    session_estimates, animal_estimates = _materialize_estimates(
         matrix,
         animals,
         sessions,
@@ -104,115 +129,113 @@ def infer_peri_event_contrast(
         numerator,
         denominator,
     )
-    if len(curves) < 2:
-        raise ValueError("time-course inference requires two complete animals")
-    finite_counts = np.sum(np.isfinite(curves), axis=0)
-    valid = finite_counts >= 2
-    if not valid.any():
-        raise ValueError("no time point has two finite animal contrasts")
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=RuntimeWarning)
-        estimate = np.nanmean(curves, axis=0)
-        standard_error = np.nanstd(curves, axis=0, ddof=1) / np.sqrt(finite_counts)
-    estimate[~valid] = np.nan
-    standard_error[~valid] = np.nan
-
-    rng = np.random.default_rng(seed)
-    sampled = rng.integers(0, len(curves), size=(draws, len(curves)))
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=RuntimeWarning)
-        distribution = np.nanmean(curves[sampled], axis=1)
-    alpha = 1 - confidence
-    pointwise_lower = np.nanquantile(distribution, alpha / 2, axis=0)
-    pointwise_upper = np.nanquantile(distribution, 1 - alpha / 2, axis=0)
-    studentized = np.abs((distribution - estimate) / standard_error)
-    usable = valid & np.isfinite(standard_error) & (standard_error > 0)
-    maxima = np.nanmax(np.where(usable, studentized, np.nan), axis=1)
-    finite_maxima = maxima[np.isfinite(maxima)]
-    bootstrap_critical = (
-        float(np.quantile(finite_maxima, confidence))
-        if len(finite_maxima)
-        else float("nan")
+    try:
+        population = infer_population_contrast(
+            animal_estimates,
+            PopulationContrastSpec(
+                numerator=numerator,
+                denominator=denominator,
+                design=design,
+                confidence=confidence,
+                draws=draws,
+                seed=seed,
+            ),
+        )
+    except ValueError as error:
+        message = str(error).replace("population inference", "time-course inference")
+        message = message.replace("units", "animals")
+        raise ValueError(message) from error
+    result_warnings = tuple(
+        warning.replace("unit", "animal") for warning in population.warnings
     )
-    t_floor = float(student_t.ppf(0.5 + confidence / 2, len(curves) - 1))
-    critical = max(bootstrap_critical, t_floor)
-    simultaneous_lower = estimate - critical * standard_error
-    simultaneous_upper = estimate + critical * standard_error
-    for array in (
-        pointwise_lower,
-        pointwise_upper,
-        simultaneous_lower,
-        simultaneous_upper,
-    ):
-        array[~valid] = np.nan
-
-    result_warnings = []
-    if len(set(finite_counts[valid].tolist())) > 1:
-        result_warnings.append("animal_support_varies_across_time")
-    if not np.all(valid):
-        result_warnings.append("insufficient_animals_at_some_time_points")
-    if not usable.all():
-        result_warnings.append("simultaneous_band_undefined_at_zero_variance_points")
     return PeriEventInferenceResult(
-        tuple(time.tolist()),
-        _tuple(estimate),
-        _tuple(standard_error),
-        _tuple(pointwise_lower),
-        _tuple(pointwise_upper),
-        _tuple(simultaneous_lower),
-        _tuple(simultaneous_upper),
-        tuple(int(value) for value in finite_counts),
-        len(names),
-        confidence,
-        draws,
-        seed,
-        critical,
-        (
-            "animal_bootstrap_percentile_pointwise_and_fixed_se_max_t_simultaneous_"
-            "with_animal_t_floor"
-        ),
-        tuple(result_warnings),
+        relative_time=tuple(time.tolist()),
+        estimate=population.estimate,
+        standard_error=population.standard_error,
+        pointwise_lower=population.pointwise_lower,
+        pointwise_upper=population.pointwise_upper,
+        simultaneous_lower=population.simultaneous_lower,
+        simultaneous_upper=population.simultaneous_upper,
+        animals_per_time=population.contrast_units_per_point,
+        animal_count=len(population.included_units),
+        confidence=confidence,
+        draws=draws,
+        seed=seed,
+        simultaneous_critical_value=population.simultaneous_critical_value,
+        method="animal_bootstrap_" + population.method,
+        warnings=result_warnings,
+        session_estimates=session_estimates,
+        population=population,
     )
 
 
-def _animal_contrasts(
+def _materialize_estimates(
     values: NDArray[np.float64],
     animals: tuple[str, ...],
     sessions: tuple[str, ...],
     conditions: tuple[str, ...],
     numerator: str,
     denominator: str,
-) -> tuple[NDArray[np.float64], tuple[str, ...]]:
-    output = []
-    names = []
+) -> tuple[tuple[PeriEventSessionEstimate, ...], tuple[PopulationUnitEstimate, ...]]:
+    session_output: list[PeriEventSessionEstimate] = []
+    animal_output: list[PopulationUnitEstimate] = []
     animal_array = np.asarray(animals, dtype=str)
     session_array = np.asarray(sessions, dtype=str)
     condition_array = np.asarray(conditions, dtype=str)
     for animal in sorted(set(animals)):
-        level_curves = []
+        selected_animal = animal_array == animal
         for level in (numerator, denominator):
-            session_curves = []
-            selected_animal = animal_array == animal
+            session_curves: list[NDArray[np.float64]] = []
+            session_ids: list[str] = []
+            event_count = 0
             for session in sorted(set(session_array[selected_animal].tolist())):
                 selected = (
                     selected_animal
                     & (session_array == session)
                     & (condition_array == level)
                 )
-                if selected.any():
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", category=RuntimeWarning)
-                        session_curves.append(np.nanmean(values[selected], axis=0))
+                if not selected.any():
+                    continue
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", category=RuntimeWarning)
+                    curve = np.nanmean(values[selected], axis=0)
+                events_per_time = np.sum(np.isfinite(values[selected]), axis=0)
+                count = int(np.sum(selected))
+                session_curves.append(curve)
+                session_ids.append(session)
+                event_count += count
+                session_output.append(
+                    PeriEventSessionEstimate(
+                        subject=animal,
+                        session=session,
+                        level=level,
+                        estimate=_tuple(curve),
+                        events_per_time=_integer_tuple(events_per_time),
+                        event_count=count,
+                    )
+                )
             if not session_curves:
-                break
+                continue
+            stack = np.asarray(session_curves, dtype=float)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=RuntimeWarning)
-                level_curves.append(np.nanmean(session_curves, axis=0))
-        if len(level_curves) == 2:
-            output.append(level_curves[0] - level_curves[1])
-            names.append(animal)
-    return np.asarray(output, dtype=float), tuple(names)
+                animal_curve = np.nanmean(stack, axis=0)
+            animal_output.append(
+                PopulationUnitEstimate(
+                    unit_id=animal,
+                    level=level,
+                    estimate=_tuple(animal_curve),
+                    support=_integer_tuple(np.sum(np.isfinite(stack), axis=0)),
+                    source_units=tuple(session_ids),
+                    observation_count=event_count,
+                )
+            )
+    return tuple(session_output), tuple(animal_output)
 
 
 def _tuple(values: NDArray[np.float64]) -> tuple[float, ...]:
     return tuple(float(value) for value in values)
+
+
+def _integer_tuple(values: NDArray[np.integer]) -> tuple[int, ...]:
+    return tuple(int(value) for value in values)

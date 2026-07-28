@@ -89,3 +89,17 @@ def test_signal_only_config_declares_regularization_before_asls() -> None:
     assert config.resample_max_gap_factor == 1.5
     assert study.preprocessing.operations[0].kind == "resample"
     assert study.preprocessing.operations[1].kind == "baseline_dff"
+
+
+def test_config_declares_independent_population_design() -> None:
+    raw = Path("examples/feedback-analysis.toml").read_text()
+    raw = raw.replace(
+        'factor = "feedback"', 'factor = "feedback"\nassignment_unit = "animal"'
+    )
+    raw = raw.replace("[timecourse]\n", '[timecourse]\ndesign = "independent"\n')
+
+    config = EventAnalysisConfig.from_toml(raw)
+
+    assert config.factor_assignment_unit == "animal"
+    assert config.timecourse is not None
+    assert config.timecourse.design == "independent"
