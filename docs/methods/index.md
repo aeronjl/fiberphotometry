@@ -60,9 +60,11 @@ have a prospective public three-animal sensitivity audit.
 Candidate detection is now separate from quantification on non-z-scored dF/F, with
 named GuPPY-, PASTa-, and prominence-compatible families, compound-event metadata,
 exposure-adjusted session summaries, and animal-aware rate/kinetic contrasts.
-Control-derived frozen thresholds, gap-aware cut-waveform QC, and broader raw-signal
-validation remain gaps. Long-window bins are descriptive and do not label slow
-fluorescence as a biological tonic component.
+Detector-bound baseline/control threshold objects, native gap-bounded waveform
+cutouts, explicit boundary/rail/flat-step/neighbor QC, and optional pre-quantification
+refusal are available. Broader raw-signal/manual validation remains a gap. Long-window
+bins are descriptive and do not label slow fluorescence as a biological tonic
+component.
 
 ## Explain overlapping events and behavior
 

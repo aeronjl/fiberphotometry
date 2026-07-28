@@ -75,6 +75,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0045](0045-never-bridge-gaps-or-state-boundaries-in-spectral-analysis.md) | Accepted | Never bridge gaps or state boundaries in spectral analysis |
 | [SDR-0046](0046-require-explicit-pairs-and-shared-evidence-for-multisignal-analysis.md) | Accepted | Require explicit pairs and shared evidence for multisignal analysis |
 | [SDR-0047](0047-separate-prospective-optical-masks-from-observed-validity.md) | Accepted | Separate prospective optical masks from observed validity |
+| [SDR-0048](0048-freeze-transient-thresholds-and-retain-waveform-qc.md) | Accepted | Freeze transient thresholds and retain waveform QC |
 
 Use four-digit monotonically increasing identifiers. Copy
 [`template.md`](template.md), fill every heading, and add the record to this index.

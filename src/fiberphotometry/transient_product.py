@@ -2,20 +2,25 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+import hashlib
+import json
+from dataclasses import asdict, dataclass, replace
 from itertools import pairwise
 from typing import Literal, TypeAlias
 
 import numpy as np
 import xarray as xr
-from scipy.signal import find_peaks
+from scipy.signal import find_peaks, peak_prominences
 
 from fiberphotometry.model import validate_recording
 
 DetectorFamily: TypeAlias = Literal["guppy", "pasta", "prominence"]
 BaselineMethod: TypeAlias = Literal["mean", "minimum", "last_local_minimum"]
 CandidateExclusionReason: TypeAlias = Literal[
-    "insufficient_baseline", "missing_local_minimum", "below_threshold"
+    "insufficient_baseline",
+    "missing_local_minimum",
+    "below_threshold",
+    "below_frozen_threshold",
 ]
 QuantificationExclusionReason: TypeAlias = Literal[
     "candidate_mismatch",
@@ -23,7 +28,12 @@ QuantificationExclusionReason: TypeAlias = Literal[
     "missing_local_minimum",
     "nonpositive_amplitude",
     "incomplete_shape",
+    "waveform_qc_failed",
 ]
+ThresholdEstimator: TypeAlias = Literal["median_mad", "empirical_quantile"]
+ThresholdSourceRole: TypeAlias = Literal["baseline", "negative_control"]
+WaveformIssueSeverity: TypeAlias = Literal["warning", "error"]
+WaveformStatus: TypeAlias = Literal["pass", "warning", "fail"]
 
 
 @dataclass(frozen=True)
@@ -83,6 +93,7 @@ class TransientCandidate:
     detection_amplitude: float | None
     detection_threshold: float
     detection_score: float
+    frozen_score_threshold: float | None = None
 
 
 @dataclass(frozen=True)
@@ -94,6 +105,8 @@ class TransientCandidateExclusion:
     sample_index: int
     peak_time: float
     reason: CandidateExclusionReason
+    observed_score: float | None = None
+    required_score: float | None = None
 
 
 @dataclass(frozen=True)
@@ -104,6 +117,107 @@ class TransientCandidateResult:
     variable: str
     candidates: tuple[TransientCandidate, ...]
     exclusions: tuple[TransientCandidateExclusion, ...]
+    frozen_thresholds: FrozenTransientThresholds | None = None
+
+
+@dataclass(frozen=True)
+class TransientThresholdCalibrationSpec:
+    """How candidate-scale scores are converted into frozen thresholds."""
+
+    estimator: ThresholdEstimator = "median_mad"
+    mad_multiplier: float = 6.0
+    quantile: float = 0.999
+    minimum_score_count: int = 20
+
+    def __post_init__(self) -> None:
+        if self.estimator not in {"median_mad", "empirical_quantile"}:
+            raise ValueError("unsupported transient threshold estimator")
+        if not np.isfinite(self.mad_multiplier) or self.mad_multiplier <= 0:
+            raise ValueError("mad_multiplier must be finite and positive")
+        if not np.isfinite(self.quantile) or not 0 < self.quantile < 1:
+            raise ValueError("quantile must lie strictly between zero and one")
+        if self.minimum_score_count < 3:
+            raise ValueError("minimum_score_count must be at least three")
+
+
+@dataclass(frozen=True)
+class ChannelFrozenTransientThreshold:
+    """One channel-specific threshold and its calibration denominator."""
+
+    channel: str
+    threshold: float
+    score_count: int
+    finite_sample_count: int
+    continuity_run_count: int
+    analyzed_duration_s: float
+    score_median: float
+    score_mad: float
+    score_quantile: float
+    maximum_score: float
+
+    def __post_init__(self) -> None:
+        if not self.channel.strip():
+            raise ValueError("frozen threshold channel must be non-empty")
+        if not np.isfinite(self.threshold) or self.threshold < 0:
+            raise ValueError(
+                "frozen transient threshold must be finite and non-negative"
+            )
+        if self.score_count < 3 or self.finite_sample_count < self.score_count:
+            raise ValueError("frozen threshold calibration counts are inconsistent")
+        if self.continuity_run_count < 1 or self.analyzed_duration_s < 0:
+            raise ValueError("frozen threshold continuity evidence is invalid")
+        for name in (
+            "score_median",
+            "score_mad",
+            "score_quantile",
+            "maximum_score",
+        ):
+            if not np.isfinite(getattr(self, name)):
+                raise ValueError(f"{name} must be finite")
+
+
+@dataclass(frozen=True)
+class FrozenTransientThresholds:
+    """Immutable control/baseline thresholds bound to one detector contract."""
+
+    detector_spec: TransientDetectorSpec
+    detector_variable: str
+    source_role: ThresholdSourceRole
+    source_id: str
+    preprocessing_fingerprint: str
+    calibration_spec: TransientThresholdCalibrationSpec
+    channels: tuple[ChannelFrozenTransientThreshold, ...]
+    calibration_fingerprint: str
+    interpretation: str = (
+        "thresholds_are_frozen_from_separate_source_evidence_and_not_reestimated"
+    )
+    schema_version: str = "1"
+
+    def __post_init__(self) -> None:
+        if self.source_role not in {"baseline", "negative_control"}:
+            raise ValueError("unsupported threshold source role")
+        for name in (
+            "detector_variable",
+            "source_id",
+            "preprocessing_fingerprint",
+            "calibration_fingerprint",
+        ):
+            if not str(getattr(self, name)).strip():
+                raise ValueError(f"{name} must be non-empty")
+        channel_names = [item.channel for item in self.channels]
+        if not channel_names or len(set(channel_names)) != len(channel_names):
+            raise ValueError("frozen thresholds require unique channel names")
+
+    def for_channel(self, channel: str) -> ChannelFrozenTransientThreshold:
+        """Resolve one channel, refusing absent or duplicate calibration."""
+        matches = [item for item in self.channels if item.channel == channel]
+        if len(matches) != 1:
+            raise KeyError(f"no unique frozen transient threshold for {channel!r}")
+        return matches[0]
+
+    def to_json(self) -> str:
+        """Serialize threshold values, source identity, and denominators."""
+        return json.dumps(asdict(self), indent=2, sort_keys=True)
 
 
 @dataclass(frozen=True)
@@ -117,6 +231,8 @@ class TransientQuantificationSpec:
     require_complete_shape: bool = True
     compound_window_s: float = 2.0
     bin_width_s: float | None = 30.0
+    require_waveform_qc: bool = False
+    allow_waveform_warnings: bool = True
 
 
 @dataclass(frozen=True)
@@ -141,6 +257,7 @@ class QuantifiedTransient:
     full_width_half_height_s: float
     auc_above_baseline: float
     previous_interval_s: float | None
+    frozen_score_threshold: float | None = None
     compound_group: int | None = None
     compound_rank: int = 0
 
@@ -180,6 +297,233 @@ class TransientQuantificationResult:
     exclusions: tuple[TransientQuantificationExclusion, ...]
     summaries: tuple[TransientQuantificationSummary, ...]
     bins: xr.Dataset | None
+    waveform_fingerprint: str | None = None
+
+
+@dataclass(frozen=True)
+class TransientWaveformSpec:
+    """Prospective cutout window and observable waveform-QC thresholds."""
+
+    pre_peak_s: float = 1.0
+    post_peak_s: float = 2.0
+    maximum_gap_factor: float = 3.0
+    require_complete_window: bool = True
+    maximum_flat_step_fraction_warning: float = 0.05
+    maximum_flat_step_fraction_error: float = 0.20
+    detector_floor: float | None = None
+    detector_ceiling: float | None = None
+    saturation_tolerance: float = 0.0
+    maximum_saturation_fraction_warning: float = 0.001
+    maximum_saturation_fraction_error: float = 0.01
+    warn_nearby_candidates: bool = True
+
+    def __post_init__(self) -> None:
+        for name in ("pre_peak_s", "post_peak_s", "maximum_gap_factor"):
+            value = getattr(self, name)
+            if not np.isfinite(value) or value <= 0:
+                raise ValueError(f"{name} must be finite and positive")
+        _validate_nested_maximum(
+            self.maximum_flat_step_fraction_warning,
+            self.maximum_flat_step_fraction_error,
+            "flat-step fraction",
+        )
+        _validate_nested_maximum(
+            self.maximum_saturation_fraction_warning,
+            self.maximum_saturation_fraction_error,
+            "saturation fraction",
+        )
+        if (self.detector_floor is None) != (self.detector_ceiling is None):
+            raise ValueError(
+                "detector_floor and detector_ceiling must be supplied together"
+            )
+        if self.detector_floor is not None:
+            assert self.detector_ceiling is not None
+            if not (
+                np.isfinite(self.detector_floor)
+                and np.isfinite(self.detector_ceiling)
+                and self.detector_floor < self.detector_ceiling
+            ):
+                raise ValueError("detector bounds must be finite and increasing")
+        if not np.isfinite(self.saturation_tolerance) or self.saturation_tolerance < 0:
+            raise ValueError("saturation_tolerance must be finite and non-negative")
+
+
+@dataclass(frozen=True)
+class TransientWaveformIssue:
+    """One actionable concern attached to a retained candidate waveform."""
+
+    severity: WaveformIssueSeverity
+    code: str
+    candidate_id: str
+    message: str
+    value: float | str | None = None
+
+
+@dataclass(frozen=True)
+class TransientWaveform:
+    """One non-resampled, gap-bounded cutout with explicit QC evidence."""
+
+    candidate_id: str
+    channel: str
+    peak_time: float
+    sample_index: int
+    relative_time_s: tuple[float, ...]
+    values: tuple[float, ...]
+    sample_count: int
+    requested_start_s: float
+    requested_stop_s: float
+    observed_start_s: float
+    observed_stop_s: float
+    pre_coverage_s: float
+    post_coverage_s: float
+    coverage_fraction: float
+    baseline_median: float | None
+    baseline_standard_deviation: float | None
+    baseline_slope_per_s: float | None
+    flat_step_fraction: float
+    saturation_fraction: float | None
+    nearby_candidate_ids: tuple[str, ...]
+    issues: tuple[TransientWaveformIssue, ...]
+    status: WaveformStatus
+
+
+@dataclass(frozen=True)
+class TransientWaveformResult:
+    """All candidate cutouts, QC outcomes, and a stable evidence fingerprint."""
+
+    spec: TransientWaveformSpec
+    variable: str
+    detector_variable: str
+    waveforms: tuple[TransientWaveform, ...]
+    evidence_fingerprint: str
+    method: str = "nonresampled_gap_bounded_candidate_cutouts"
+    schema_version: str = "1"
+
+    def for_candidate(self, candidate_id: str) -> TransientWaveform:
+        """Resolve exactly one retained candidate cutout."""
+        matches = [item for item in self.waveforms if item.candidate_id == candidate_id]
+        if len(matches) != 1:
+            raise KeyError(f"no unique transient waveform for {candidate_id!r}")
+        return matches[0]
+
+    def to_json(self) -> str:
+        """Serialize cutout values, QC evidence, and identity."""
+        return json.dumps(asdict(self), indent=2, sort_keys=True)
+
+    def to_xarray(self) -> xr.Dataset:
+        """Return padded values and native relative times without interpolation."""
+        maximum = max((item.sample_count for item in self.waveforms), default=0)
+        values = np.full((len(self.waveforms), maximum), np.nan, dtype=float)
+        relative = np.full_like(values, np.nan)
+        present = np.zeros_like(values, dtype=bool)
+        for index, item in enumerate(self.waveforms):
+            length = item.sample_count
+            values[index, :length] = item.values
+            relative[index, :length] = item.relative_time_s
+            present[index, :length] = True
+        return xr.Dataset(
+            data_vars={
+                "value": (("event", "sample"), values),
+                "relative_time_s": (("event", "sample"), relative),
+                "present": (("event", "sample"), present),
+                "status": ("event", [item.status for item in self.waveforms]),
+            },
+            coords={
+                "event": [item.candidate_id for item in self.waveforms],
+                "channel": ("event", [item.channel for item in self.waveforms]),
+                "peak_time": ("event", [item.peak_time for item in self.waveforms]),
+                "sample": np.arange(maximum),
+            },
+            attrs={
+                "variable": self.variable,
+                "detector_variable": self.detector_variable,
+                "evidence_fingerprint": self.evidence_fingerprint,
+                "interpretation": "native samples padded only; no interpolation",
+            },
+        )
+
+
+def calibrate_transient_thresholds(
+    recording: xr.Dataset,
+    *,
+    variable: str,
+    detector_spec: TransientDetectorSpec,
+    source_role: ThresholdSourceRole,
+    source_id: str,
+    preprocessing_fingerprint: str,
+    calibration_spec: TransientThresholdCalibrationSpec | None = None,
+) -> FrozenTransientThresholds:
+    """Freeze channel-specific detector-score gates from separate source evidence."""
+    chosen = calibration_spec or TransientThresholdCalibrationSpec()
+    _validate_detector_spec(detector_spec)
+    source_id = _nonempty(source_id, "source_id")
+    preprocessing_fingerprint = _nonempty(
+        preprocessing_fingerprint, "preprocessing_fingerprint"
+    )
+    if source_role not in {"baseline", "negative_control"}:
+        raise ValueError("source_role must be 'baseline' or 'negative_control'")
+    time, values, channels = _recording_values(recording, variable)
+    sample_step = float(np.median(np.diff(time)))
+    maximum_gap = detector_spec.maximum_gap_factor * sample_step
+    frozen = []
+    for channel_index, channel in enumerate(channels):
+        signal = values[:, channel_index]
+        runs = _finite_runs(time, signal, maximum_gap)
+        scores = _calibration_scores(
+            time,
+            signal,
+            runs,
+            sample_step,
+            detector_spec,
+        )
+        if len(scores) < chosen.minimum_score_count:
+            raise ValueError(
+                f"channel {channel!r} has {len(scores)} calibration scores; "
+                f"at least {chosen.minimum_score_count} are required"
+            )
+        median = float(np.median(scores))
+        mad = float(np.median(np.abs(scores - median)))
+        quantile = float(np.quantile(scores, chosen.quantile))
+        threshold = (
+            median + chosen.mad_multiplier * max(1.4826 * mad, np.finfo(float).eps)
+            if chosen.estimator == "median_mad"
+            else quantile
+        )
+        frozen.append(
+            ChannelFrozenTransientThreshold(
+                channel=channel,
+                threshold=float(threshold),
+                score_count=len(scores),
+                finite_sample_count=int(np.count_nonzero(np.isfinite(signal))),
+                continuity_run_count=len(runs),
+                analyzed_duration_s=_analyzed_duration(time, signal, maximum_gap),
+                score_median=median,
+                score_mad=mad,
+                score_quantile=quantile,
+                maximum_score=float(np.max(scores)),
+            )
+        )
+    fingerprint = _threshold_fingerprint(
+        time,
+        values,
+        detector_spec,
+        variable,
+        source_role,
+        source_id,
+        preprocessing_fingerprint,
+        chosen,
+        frozen,
+    )
+    return FrozenTransientThresholds(
+        detector_spec,
+        variable,
+        source_role,
+        source_id,
+        preprocessing_fingerprint,
+        chosen,
+        tuple(frozen),
+        fingerprint,
+    )
 
 
 def detect_transient_candidates(
@@ -187,36 +531,120 @@ def detect_transient_candidates(
     *,
     variable: str,
     spec: TransientDetectorSpec,
+    frozen_thresholds: FrozenTransientThresholds | None = None,
 ) -> TransientCandidateResult:
     """Detect candidate locations without assigning quantification-scale kinetics."""
     time, values, channels = _recording_values(recording, variable)
     _validate_detector_spec(spec)
     sample_step = float(np.median(np.diff(time)))
     maximum_gap = spec.maximum_gap_factor * sample_step
+    _validate_frozen_thresholds(frozen_thresholds, spec, variable, channels)
     candidates: list[TransientCandidate] = []
     exclusions: list[TransientCandidateExclusion] = []
     for channel_index, channel in enumerate(channels):
         signal = values[:, channel_index]
+        frozen_score = (
+            frozen_thresholds.for_channel(channel).threshold
+            if frozen_thresholds is not None
+            else None
+        )
         for run_index, run in enumerate(_finite_runs(time, signal, maximum_gap)):
             if len(run) < 3:
                 continue
             if isinstance(spec, PastaTransientDetectorSpec):
                 detected, rejected = _detect_pasta(
-                    time, signal, run, channel, run_index, sample_step, spec
+                    time,
+                    signal,
+                    run,
+                    channel,
+                    run_index,
+                    sample_step,
+                    spec,
+                    frozen_score,
                 )
             elif isinstance(spec, GuppyTransientDetectorSpec):
                 detected, rejected = _detect_guppy(
-                    time, signal, run, channel, run_index, sample_step, spec
+                    time,
+                    signal,
+                    run,
+                    channel,
+                    run_index,
+                    sample_step,
+                    spec,
+                    frozen_score,
                 )
             else:
                 detected, rejected = _detect_prominence(
-                    time, signal, run, channel, run_index, sample_step, spec
+                    time,
+                    signal,
+                    run,
+                    channel,
+                    run_index,
+                    sample_step,
+                    spec,
+                    frozen_score,
                 )
             candidates.extend(detected)
             exclusions.extend(rejected)
     candidates.sort(key=lambda item: (item.channel, item.peak_time, item.sample_index))
     return TransientCandidateResult(
-        spec, variable, tuple(candidates), tuple(exclusions)
+        spec, variable, tuple(candidates), tuple(exclusions), frozen_thresholds
+    )
+
+
+def cut_transient_waveforms(
+    recording: xr.Dataset,
+    candidates: TransientCandidateResult,
+    *,
+    variable: str,
+    spec: TransientWaveformSpec | None = None,
+) -> TransientWaveformResult:
+    """Retain native candidate cutouts without crossing gaps or interpolating."""
+    chosen = spec or TransientWaveformSpec()
+    time, values, channels = _recording_values(recording, variable)
+    channel_indices = {channel: index for index, channel in enumerate(channels)}
+    sample_step = float(np.median(np.diff(time)))
+    maximum_gap = chosen.maximum_gap_factor * sample_step
+    runs_by_channel = {
+        channel: _finite_runs(time, values[:, index], maximum_gap)
+        for index, channel in enumerate(channels)
+    }
+    candidate_ids = [item.candidate_id for item in candidates.candidates]
+    if len(set(candidate_ids)) != len(candidate_ids):
+        raise ValueError("transient candidate IDs must be unique")
+    cutouts = []
+    for candidate in candidates.candidates:
+        channel_index = channel_indices.get(candidate.channel)
+        if channel_index is None or not _candidate_matches(time, candidate):
+            raise ValueError(
+                f"candidate {candidate.candidate_id!r} does not match the recording"
+            )
+        _, run = _run_containing(
+            runs_by_channel[candidate.channel], candidate.sample_index
+        )
+        if run is None:
+            raise ValueError(
+                f"candidate {candidate.candidate_id!r} is outside finite continuity"
+            )
+        signal = values[:, channel_index]
+        cutouts.append(
+            _cut_waveform(
+                time,
+                signal,
+                run,
+                candidate,
+                candidates.candidates,
+                chosen,
+                sample_step,
+            )
+        )
+    fingerprint = _waveform_fingerprint(chosen, variable, candidates, tuple(cutouts))
+    return TransientWaveformResult(
+        chosen,
+        variable,
+        candidates.variable,
+        tuple(cutouts),
+        fingerprint,
     )
 
 
@@ -226,10 +654,22 @@ def quantify_transient_candidates(
     *,
     variable: str,
     spec: TransientQuantificationSpec | None = None,
+    waveforms: TransientWaveformResult | None = None,
 ) -> TransientQuantificationResult:
     """Measure candidates on a possibly different, non-normalized signal stream."""
     chosen = spec or TransientQuantificationSpec()
     _validate_quantification_spec(chosen)
+    if chosen.require_waveform_qc and waveforms is None:
+        raise ValueError("require_waveform_qc requires waveform evidence")
+    if waveforms is not None:
+        if waveforms.variable != variable:
+            raise ValueError("waveform evidence variable must match quantification")
+        if waveforms.detector_variable != candidates.variable:
+            raise ValueError("waveform detector variable must match candidates")
+        waveform_ids = {item.candidate_id for item in waveforms.waveforms}
+        expected_ids = {item.candidate_id for item in candidates.candidates}
+        if waveform_ids != expected_ids:
+            raise ValueError("waveform evidence must cover exactly the candidate set")
     time, values, channels = _recording_values(recording, variable)
     channel_indices = {channel: index for index, channel in enumerate(channels)}
     sample_step = float(np.median(np.diff(time)))
@@ -242,6 +682,17 @@ def quantify_transient_candidates(
         for channel_index, channel in enumerate(channels)
     }
     for candidate in candidates.candidates:
+        if chosen.require_waveform_qc:
+            assert waveforms is not None
+            waveform = waveforms.for_candidate(candidate.candidate_id)
+            unacceptable = waveform.status == "fail" or (
+                waveform.status == "warning" and not chosen.allow_waveform_warnings
+            )
+            if unacceptable:
+                exclusions.append(
+                    _quantification_exclusion(candidate, "waveform_qc_failed")
+                )
+                continue
         channel_index = channel_indices.get(candidate.channel)
         if channel_index is None or not _candidate_matches(time, candidate):
             exclusions.append(
@@ -308,6 +759,7 @@ def quantify_transient_candidates(
                 detection_value=candidate.detection_value,
                 detection_threshold=candidate.detection_threshold,
                 detection_score=candidate.detection_score,
+                frozen_score_threshold=candidate.frozen_score_threshold,
                 peak_value=peak_value,
                 baseline=baseline,
                 amplitude=amplitude,
@@ -341,6 +793,7 @@ def quantify_transient_candidates(
         tuple(exclusions),
         summaries,
         bins,
+        waveforms.evidence_fingerprint if waveforms is not None else None,
     )
 
 
@@ -352,6 +805,7 @@ def _detect_pasta(
     run_index: int,
     sample_step: float,
     spec: PastaTransientDetectorSpec,
+    frozen_score_threshold: float | None,
 ) -> tuple[list[TransientCandidate], list[TransientCandidateExclusion]]:
     distance = max(1, int(np.ceil(spec.minimum_distance_s / sample_step)))
     peaks, _ = find_peaks(signal[run], distance=distance)
@@ -374,7 +828,28 @@ def _detect_pasta(
         amplitude = float(signal[peak] - baseline)
         if amplitude < spec.amplitude_threshold:
             rejected.append(
-                _candidate_exclusion(spec, channel, peak, time, "below_threshold")
+                _candidate_exclusion(
+                    spec,
+                    channel,
+                    peak,
+                    time,
+                    "below_threshold",
+                    amplitude,
+                    spec.amplitude_threshold,
+                )
+            )
+            continue
+        if frozen_score_threshold is not None and amplitude < frozen_score_threshold:
+            rejected.append(
+                _candidate_exclusion(
+                    spec,
+                    channel,
+                    peak,
+                    time,
+                    "below_frozen_threshold",
+                    amplitude,
+                    frozen_score_threshold,
+                )
             )
             continue
         accepted.append(
@@ -389,6 +864,7 @@ def _detect_pasta(
                 amplitude,
                 spec.amplitude_threshold,
                 amplitude,
+                frozen_score_threshold,
             )
         )
     return accepted, rejected
@@ -402,9 +878,11 @@ def _detect_guppy(
     run_index: int,
     sample_step: float,
     spec: GuppyTransientDetectorSpec,
+    frozen_score_threshold: float | None,
 ) -> tuple[list[TransientCandidate], list[TransientCandidateExclusion]]:
     chunk_samples = max(3, int(np.ceil(spec.chunk_duration_s / sample_step)))
     accepted: list[TransientCandidate] = []
+    rejected: list[TransientCandidateExclusion] = []
     for chunk_start in range(0, len(run), chunk_samples):
         chunk = run[chunk_start : chunk_start + chunk_samples]
         if len(chunk) < 3:
@@ -427,6 +905,22 @@ def _detect_guppy(
         for position in peaks:
             peak = int(chunk[position])
             amplitude = float(signal[peak] - filtered_median)
+            if (
+                frozen_score_threshold is not None
+                and amplitude < frozen_score_threshold
+            ):
+                rejected.append(
+                    _candidate_exclusion(
+                        spec,
+                        channel,
+                        peak,
+                        time,
+                        "below_frozen_threshold",
+                        amplitude,
+                        frozen_score_threshold,
+                    )
+                )
+                continue
             accepted.append(
                 _candidate(
                     spec,
@@ -439,9 +933,10 @@ def _detect_guppy(
                     amplitude,
                     threshold,
                     amplitude,
+                    frozen_score_threshold,
                 )
             )
-    return accepted, []
+    return accepted, rejected
 
 
 def _detect_prominence(
@@ -452,6 +947,7 @@ def _detect_prominence(
     run_index: int,
     sample_step: float,
     spec: ProminenceTransientDetectorSpec,
+    frozen_score_threshold: float | None,
 ) -> tuple[list[TransientCandidate], list[TransientCandidateExclusion]]:
     values = signal[run]
     if spec.detrend_window_s is not None:
@@ -473,22 +969,40 @@ def _detect_prominence(
         distance=distance,
     )
     prominences = np.asarray(properties["prominences"], dtype=float)
-    accepted = [
-        _candidate(
-            spec,
-            channel,
-            run_index,
-            int(run[position]),
-            time,
-            float(zscore[position]),
-            0.0,
-            float(zscore[position]),
-            spec.minimum_height_z,
-            float(prominence),
+    accepted = []
+    rejected = []
+    for position, prominence in zip(peaks, prominences, strict=True):
+        peak = int(run[position])
+        score = float(prominence)
+        if frozen_score_threshold is not None and score < frozen_score_threshold:
+            rejected.append(
+                _candidate_exclusion(
+                    spec,
+                    channel,
+                    peak,
+                    time,
+                    "below_frozen_threshold",
+                    score,
+                    frozen_score_threshold,
+                )
+            )
+            continue
+        accepted.append(
+            _candidate(
+                spec,
+                channel,
+                run_index,
+                peak,
+                time,
+                float(zscore[position]),
+                0.0,
+                float(zscore[position]),
+                spec.minimum_height_z,
+                score,
+                frozen_score_threshold,
+            )
         )
-        for position, prominence in zip(peaks, prominences, strict=True)
-    ]
-    return accepted, []
+    return accepted, rejected
 
 
 def _candidate(
@@ -502,6 +1016,7 @@ def _candidate(
     amplitude: float | None,
     threshold: float,
     score: float,
+    frozen_score_threshold: float | None = None,
 ) -> TransientCandidate:
     return TransientCandidate(
         candidate_id=f"{channel}:run-{run_index}:sample-{peak}",
@@ -514,6 +1029,7 @@ def _candidate(
         detection_amplitude=amplitude,
         detection_threshold=float(threshold),
         detection_score=float(score),
+        frozen_score_threshold=frozen_score_threshold,
     )
 
 
@@ -523,9 +1039,17 @@ def _candidate_exclusion(
     peak: int,
     time: np.ndarray,
     reason: CandidateExclusionReason,
+    observed_score: float | None = None,
+    required_score: float | None = None,
 ) -> TransientCandidateExclusion:
     return TransientCandidateExclusion(
-        spec.family, channel, peak, float(time[peak]), reason
+        spec.family,
+        channel,
+        peak,
+        float(time[peak]),
+        reason,
+        observed_score,
+        required_score,
     )
 
 
@@ -535,6 +1059,336 @@ def _quantification_exclusion(
     return TransientQuantificationExclusion(
         candidate.candidate_id, candidate.channel, candidate.peak_time, reason
     )
+
+
+def _calibration_scores(
+    time: np.ndarray,
+    signal: np.ndarray,
+    runs: list[np.ndarray],
+    sample_step: float,
+    spec: TransientDetectorSpec,
+) -> np.ndarray:
+    scores = []
+    for run in runs:
+        if len(run) < 3:
+            continue
+        if isinstance(spec, PastaTransientDetectorSpec):
+            distance = max(1, int(np.ceil(spec.minimum_distance_s / sample_step)))
+            peaks, _ = find_peaks(signal[run], distance=distance)
+            for position in peaks:
+                peak = int(run[position])
+                rows = _baseline_rows(time, run, peak, spec)
+                if len(rows) < 2:
+                    continue
+                baseline = _baseline_value(signal, rows, spec.baseline_method)
+                if baseline is not None:
+                    scores.append(float(signal[peak] - baseline))
+        elif isinstance(spec, GuppyTransientDetectorSpec):
+            chunk_samples = max(3, int(np.ceil(spec.chunk_duration_s / sample_step)))
+            for chunk_start in range(0, len(run), chunk_samples):
+                chunk = run[chunk_start : chunk_start + chunk_samples]
+                if len(chunk) < 3:
+                    continue
+                values = signal[chunk]
+                median = float(np.median(values))
+                mad = float(np.median(np.abs(values - median)))
+                high = median + spec.high_amplitude_mad * mad
+                filtered = values[values <= high]
+                if not len(filtered):
+                    continue
+                baseline = float(np.median(filtered))
+                peaks, _ = find_peaks(values)
+                scores.extend(float(values[position] - baseline) for position in peaks)
+        else:
+            values = _prominence_values(signal[run], sample_step, spec)
+            if values is None:
+                continue
+            distance = max(1, int(np.ceil(spec.minimum_distance_s / sample_step)))
+            peaks, _ = find_peaks(values, distance=distance)
+            if len(peaks):
+                scores.extend(
+                    float(value) for value in peak_prominences(values, peaks)[0]
+                )
+    array = np.asarray(scores, dtype=float)
+    return np.asarray(array[np.isfinite(array) & (array >= 0)], dtype=float)
+
+
+def _prominence_values(
+    values: np.ndarray,
+    sample_step: float,
+    spec: ProminenceTransientDetectorSpec,
+) -> np.ndarray | None:
+    prepared = np.asarray(values, dtype=float)
+    if spec.detrend_window_s is not None:
+        window = min(len(prepared), max(1, round(spec.detrend_window_s / sample_step)))
+        kernel = np.ones(window, dtype=float)
+        moving = np.convolve(prepared, kernel, mode="same") / np.convolve(
+            np.ones(len(prepared)), kernel, mode="same"
+        )
+        prepared = prepared - moving
+    standard_deviation = float(np.std(prepared))
+    if standard_deviation <= np.finfo(float).eps:
+        return None
+    return (prepared - float(np.mean(prepared))) / standard_deviation
+
+
+def _validate_frozen_thresholds(
+    thresholds: FrozenTransientThresholds | None,
+    detector_spec: TransientDetectorSpec,
+    variable: str,
+    channels: list[str],
+) -> None:
+    if thresholds is None:
+        return
+    if thresholds.detector_spec != detector_spec:
+        raise ValueError("frozen thresholds are bound to a different detector spec")
+    if thresholds.detector_variable != variable:
+        raise ValueError("frozen thresholds are bound to a different variable")
+    calibrated = [item.channel for item in thresholds.channels]
+    if calibrated != channels:
+        raise ValueError("frozen threshold channels must exactly match the recording")
+
+
+def _threshold_fingerprint(
+    time: np.ndarray,
+    values: np.ndarray,
+    detector_spec: TransientDetectorSpec,
+    variable: str,
+    source_role: ThresholdSourceRole,
+    source_id: str,
+    preprocessing_fingerprint: str,
+    calibration_spec: TransientThresholdCalibrationSpec,
+    channels: list[ChannelFrozenTransientThreshold],
+) -> str:
+    digest = hashlib.sha256()
+    digest.update(np.asarray(time, dtype="<f8").tobytes())
+    digest.update(np.asarray(values, dtype="<f8").tobytes())
+    digest.update(
+        json.dumps(
+            {
+                "detector_spec": asdict(detector_spec),
+                "variable": variable,
+                "source_role": source_role,
+                "source_id": source_id,
+                "preprocessing_fingerprint": preprocessing_fingerprint,
+                "calibration_spec": asdict(calibration_spec),
+                "channels": [asdict(item) for item in channels],
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+    )
+    return digest.hexdigest()
+
+
+def _cut_waveform(
+    time: np.ndarray,
+    signal: np.ndarray,
+    run: np.ndarray,
+    candidate: TransientCandidate,
+    all_candidates: tuple[TransientCandidate, ...],
+    spec: TransientWaveformSpec,
+    sample_step: float,
+) -> TransientWaveform:
+    requested_start = candidate.peak_time - spec.pre_peak_s
+    requested_stop = candidate.peak_time + spec.post_peak_s
+    selected = run[(time[run] >= requested_start) & (time[run] <= requested_stop)]
+    if not len(
+        selected
+    ):  # pragma: no cover - matching finite candidate guarantees this
+        raise ValueError(
+            f"candidate {candidate.candidate_id!r} has no waveform samples"
+        )
+    observed_time = time[selected]
+    observed_values = signal[selected]
+    relative = observed_time - candidate.peak_time
+    pre_coverage = float(candidate.peak_time - observed_time[0])
+    post_coverage = float(observed_time[-1] - candidate.peak_time)
+    complete_pre = pre_coverage + sample_step * 1.01 >= spec.pre_peak_s
+    complete_post = post_coverage + sample_step * 1.01 >= spec.post_peak_s
+    coverage = float(
+        (min(pre_coverage, spec.pre_peak_s) + min(post_coverage, spec.post_peak_s))
+        / (spec.pre_peak_s + spec.post_peak_s)
+    )
+    issues: list[TransientWaveformIssue] = []
+    boundary_severity: WaveformIssueSeverity = (
+        "error" if spec.require_complete_window else "warning"
+    )
+    if not complete_pre:
+        issues.append(
+            TransientWaveformIssue(
+                boundary_severity,
+                "pre_window_truncated",
+                candidate.candidate_id,
+                "pre-peak cutout stops at a recording boundary or acquisition gap",
+                pre_coverage,
+            )
+        )
+    if not complete_post:
+        issues.append(
+            TransientWaveformIssue(
+                boundary_severity,
+                "post_window_truncated",
+                candidate.candidate_id,
+                "post-peak cutout stops at a recording boundary or acquisition gap",
+                post_coverage,
+            )
+        )
+    baseline_values = observed_values[relative < 0]
+    baseline_time = relative[relative < 0]
+    baseline_median = (
+        float(np.median(baseline_values)) if len(baseline_values) else None
+    )
+    baseline_sd = float(np.std(baseline_values)) if len(baseline_values) else None
+    baseline_slope = (
+        float(np.polyfit(baseline_time, baseline_values, 1)[0])
+        if len(baseline_values) >= 2
+        else None
+    )
+    flat_fraction = _waveform_flat_fraction(observed_values)
+    _maximum_waveform_issue(
+        flat_fraction,
+        spec.maximum_flat_step_fraction_warning,
+        spec.maximum_flat_step_fraction_error,
+        "flat_step_fraction",
+        candidate.candidate_id,
+        issues,
+    )
+    saturation = _waveform_saturation_fraction(observed_values, spec)
+    if saturation is not None:
+        _maximum_waveform_issue(
+            saturation,
+            spec.maximum_saturation_fraction_warning,
+            spec.maximum_saturation_fraction_error,
+            "detector_saturation_fraction",
+            candidate.candidate_id,
+            issues,
+        )
+    nearby = tuple(
+        item.candidate_id
+        for item in all_candidates
+        if item.candidate_id != candidate.candidate_id
+        and item.channel == candidate.channel
+        and requested_start <= item.peak_time <= requested_stop
+    )
+    if nearby and spec.warn_nearby_candidates:
+        issues.append(
+            TransientWaveformIssue(
+                "warning",
+                "nearby_candidate_in_window",
+                candidate.candidate_id,
+                "another detected candidate lies inside the requested cutout",
+                ",".join(nearby),
+            )
+        )
+    status: WaveformStatus = (
+        "fail"
+        if any(item.severity == "error" for item in issues)
+        else "warning"
+        if issues
+        else "pass"
+    )
+    return TransientWaveform(
+        candidate.candidate_id,
+        candidate.channel,
+        candidate.peak_time,
+        candidate.sample_index,
+        tuple(float(value) for value in relative),
+        tuple(float(value) for value in observed_values),
+        len(selected),
+        requested_start,
+        requested_stop,
+        float(observed_time[0]),
+        float(observed_time[-1]),
+        pre_coverage,
+        post_coverage,
+        coverage,
+        baseline_median,
+        baseline_sd,
+        baseline_slope,
+        flat_fraction,
+        saturation,
+        nearby,
+        tuple(issues),
+        status,
+    )
+
+
+def _waveform_flat_fraction(values: np.ndarray) -> float:
+    if len(values) < 2:
+        return float("nan")
+    return float(np.mean(np.diff(values) == 0))
+
+
+def _waveform_saturation_fraction(
+    values: np.ndarray, spec: TransientWaveformSpec
+) -> float | None:
+    if spec.detector_floor is None or spec.detector_ceiling is None:
+        return None
+    saturated = (values <= spec.detector_floor + spec.saturation_tolerance) | (
+        values >= spec.detector_ceiling - spec.saturation_tolerance
+    )
+    return float(np.mean(saturated))
+
+
+def _maximum_waveform_issue(
+    value: float,
+    warning: float,
+    error: float,
+    code: str,
+    candidate_id: str,
+    issues: list[TransientWaveformIssue],
+) -> None:
+    if not np.isfinite(value) or value <= warning:
+        return
+    severity: WaveformIssueSeverity = "error" if value > error else "warning"
+    issues.append(
+        TransientWaveformIssue(
+            severity,
+            code,
+            candidate_id,
+            f"{code.replace('_', ' ')} crosses the {severity} threshold",
+            value,
+        )
+    )
+
+
+def _waveform_fingerprint(
+    spec: TransientWaveformSpec,
+    variable: str,
+    candidates: TransientCandidateResult,
+    waveforms: tuple[TransientWaveform, ...],
+) -> str:
+    return hashlib.sha256(
+        json.dumps(
+            {
+                "spec": asdict(spec),
+                "variable": variable,
+                "detector_variable": candidates.variable,
+                "candidate_ids": [item.candidate_id for item in candidates.candidates],
+                "frozen_threshold_fingerprint": (
+                    candidates.frozen_thresholds.calibration_fingerprint
+                    if candidates.frozen_thresholds is not None
+                    else None
+                ),
+                "waveforms": [asdict(item) for item in waveforms],
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+    ).hexdigest()
+
+
+def _validate_nested_maximum(warning: float, error: float, name: str) -> None:
+    if not 0 <= warning <= error <= 1:
+        raise ValueError(f"{name} thresholds must satisfy 0 <= warning <= error <= 1")
+
+
+def _nonempty(value: str, name: str) -> str:
+    cleaned = str(value).strip()
+    if not cleaned:
+        raise ValueError(f"{name} must be non-empty")
+    return cleaned
 
 
 def _recording_values(

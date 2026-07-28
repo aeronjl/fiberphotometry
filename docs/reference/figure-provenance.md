@@ -37,6 +37,7 @@ directly with their method pages:
 | `gap-aware-spectral-contract.svg` | Show that gaps and state boundaries partition valid spectral evidence |
 | `multisignal-evidence-contract.svg` | Separate paired-signal identity, optical review, association, and animal inference |
 | `optical-validity-contract.svg` | Separate prospective pulse masks, observed artifact diagnostics, and versioned sensor-validity gates |
+| `transient-product-evidence.svg` | Separate threshold calibration, outcome detection, native cutouts, waveform QC, and quantification |
 
 ## Public-data evidence figures
 
