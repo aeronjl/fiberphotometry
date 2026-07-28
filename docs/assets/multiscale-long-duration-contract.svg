@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 520" role="img" aria-labelledby="title desc">
+  <title id="title">Multiscale long-duration summary contract</title>
+  <desc id="desc">A long trace is split at a gap and state boundary, summarized using short, medium, and long physical-time windows, then aggregated from windows to sessions to animals.</desc>
+  <defs>
+    <linearGradient id="trace" x1="0" x2="1">
+      <stop offset="0" stop-color="#6d4aff"/>
+      <stop offset="1" stop-color="#10a7a0"/>
+    </linearGradient>
+    <style>
+      .label{font:600 17px ui-sans-serif,system-ui,sans-serif;fill:#28243d}
+      .small{font:500 14px ui-sans-serif,system-ui,sans-serif;fill:#625e73}
+      .tiny{font:600 12px ui-sans-serif,system-ui,sans-serif;fill:#625e73}
+      .axis{stroke:#c8c3d6;stroke-width:2}
+      .break{stroke:#e05858;stroke-width:2;stroke-dasharray:7 7}
+      .short{fill:#6d4aff;fill-opacity:.15;stroke:#6d4aff;stroke-width:2}
+      .medium{fill:#10a7a0;fill-opacity:.14;stroke:#10a7a0;stroke-width:2}
+      .long{fill:#f0a33a;fill-opacity:.16;stroke:#d88618;stroke-width:2}
+      .box{fill:#fff;stroke:#c8c3d6;stroke-width:2}
+      .arrow{stroke:#625e73;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#625e73"/></marker>
+  </defs>
+  <rect width="1120" height="520" rx="20" fill="#fbfaff"/>
+  <text x="55" y="48" class="label">1. Keep physical time and hard evidence boundaries</text>
+  <line x1="65" y1="132" x2="1055" y2="132" class="axis"/>
+  <path d="M70 130 C105 87,135 166,170 128 S235 86,270 130 S335 170,370 128 S435 84,470 130" fill="none" stroke="url(#trace)" stroke-width="4"/>
+  <rect x="482" y="84" width="78" height="96" fill="#fde5e5" rx="10"/>
+  <text x="504" y="137" class="small">gap</text>
+  <path d="M572 130 C607 84,637 170,672 128 S737 88,772 130 S837 168,872 128 S937 86,972 130 S1020 168,1048 128" fill="none" stroke="url(#trace)" stroke-width="4"/>
+  <line x1="482" y1="70" x2="482" y2="194" class="break"/>
+  <line x1="560" y1="70" x2="560" y2="194" class="break"/>
+  <line x1="800" y1="70" x2="800" y2="194" class="break"/>
+  <text x="704" y="101" class="tiny">supplied state edge</text>
+
+  <text x="55" y="228" class="label">2. Ask the same observable question at declared scales</text>
+  <text x="66" y="269" class="small">short</text>
+  <rect x="145" y="248" width="120" height="34" rx="7" class="short"/><rect x="275" y="248" width="120" height="34" rx="7" class="short"/><rect x="405" y="248" width="120" height="34" rx="7" class="short"/>
+  <text x="66" y="319" class="small">medium</text>
+  <rect x="145" y="298" width="250" height="34" rx="7" class="medium"/><rect x="405" y="298" width="250" height="34" rx="7" class="medium"/>
+  <text x="66" y="369" class="small">long</text>
+  <rect x="145" y="348" width="510" height="34" rx="7" class="long"/>
+  <rect x="685" y="248" width="370" height="134" rx="12" class="box"/>
+  <text x="710" y="278" class="small">Every candidate records</text>
+  <text x="710" y="307" class="tiny">coverage · samples · run · epoch · acceptance</text>
+  <text x="710" y="337" class="small">Every accepted window records</text>
+  <text x="710" y="366" class="tiny">named metric · value · physical unit</text>
+
+  <text x="55" y="430" class="label">3. Preserve the experimental unit</text>
+  <rect x="255" y="448" width="150" height="48" rx="10" class="box"/><text x="291" y="478" class="small">windows</text>
+  <path d="M410 472 L485 472" class="arrow"/>
+  <rect x="495" y="448" width="150" height="48" rx="10" class="box"/><text x="538" y="478" class="small">sessions</text>
+  <path d="M650 472 L725 472" class="arrow"/>
+  <rect x="735" y="448" width="150" height="48" rx="10" class="box"/><text x="782" y="478" class="small">animals</text>
+  <text x="905" y="468" class="tiny">bootstrap +</text><text x="905" y="485" class="tiny">randomization</text>
+</svg>

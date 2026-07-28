@@ -25,7 +25,7 @@ experiment belongs in one package.
 | Across-session photometry comparability | **Experimental** | Typed outcome-blind identity, preprocessing, coverage, baseline, reference-coupling and sampling diagnostics with warning/refusal states bound into the Unspool handoff |
 | Single-signal autocorrelation, PSD and spectrograms | **Experimental** | Gap-separated autocorrelation pairs and window-weighted Welch PSD; complete-window spectrograms retain edge and missing-data evidence |
 | State/epoch-conditioned spectral summaries | **Experimental** | User-supplied, non-overlapping epochs remain separate partitions; paired band-power inference aggregates sessions within animals |
-| Multiscale long-duration summaries | **Gap** | Keep observable summaries distinct from biological “tonic/phasic” claims |
+| Multiscale long-duration summaries | **Experimental** | Named physical-time scales; hard gap/epoch boundaries; sample- and time-weighted metrics; complete window ledger; session-to-animal contrasts without biological “tonic/phasic” claims |
 | Spontaneous transient detection | **Experimental** | Separate GuPPY-, PASTa-, and prominence-compatible candidate families; gap-aware detector evidence retained |
 | Spontaneous transient quantification | **Experimental** | Non-z-scored amplitude/half-width/AUC, compound groups, exposure-adjusted summaries, detector-bound frozen baseline/control score gates, native gap-bounded cutouts and optional waveform-QC refusal |
 | Spontaneous transient animal-level inference | **Experimental** | Paired/independent animal bootstrap and randomization for exposure-adjusted rate, amplitude, width, and AUC contrasts |

@@ -136,7 +136,11 @@
   - [x] Spectrograms with explicit detrending, edge, and missing-data evidence
   - [x] User-supplied state/epoch tables and animal-aware comparisons
   - [ ] Public sleep/state or long-duration worked example
-- [ ] Multiscale long-duration summaries without unvalidated tonic/phasic biological labels
+- [x] Multiscale long-duration summaries without unvalidated tonic/phasic biological labels
+  - [x] Named physical-time scales with explicit step, coverage and sample gates
+  - [x] Irregular-clock time weighting plus explicitly sample-weighted alternatives
+  - [x] Gap/state-bounded acceptance ledger and deterministic evidence fingerprint
+  - [x] Equal-session animal inference for paired and independent conditions
 - [x] Experimental spontaneous transient detection with local-baseline sensitivity analysis
   - [x] Prospective three-animal public dLight construct validation with retained detector disagreement
   - [x] Separate candidate detection from quantification on non-z-scored dF/F

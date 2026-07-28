@@ -98,6 +98,13 @@ EXPERIMENTAL_API_V0_1 = (
     "MergeIntervals",
     "MultiverseSpec",
     "MultiplierSimultaneousBandSpec",
+    "MultiscaleAnimalInferenceResult",
+    "MultiscaleAnimalInferenceSpec",
+    "MultiscaleContinuitySpec",
+    "MultiscaleStudySession",
+    "MultiscaleSummaryResult",
+    "MultiscaleSummarySpec",
+    "MultiscaleWindowSpec",
     "PoseTrajectory",
     "PredictorFamilyContribution",
     "PredictorFamilyContributionResult",
@@ -128,6 +135,7 @@ EXPERIMENTAL_API_V0_1 = (
     "fit_scalar_mixed_model",
     "hierarchical_bootstrap",
     "inspect_ndx_pose_nwb",
+    "infer_multiscale_animals",
     "materialize_encoding_multiverse",
     "materialize_multiverse",
     "permutation_test",
@@ -141,6 +149,7 @@ EXPERIMENTAL_API_V0_1 = (
     "resample_recording",
     "run_encoding_multiverse",
     "run_multiverse",
+    "summarize_multiscale",
 )
 
 ARTIFACT_SCHEMAS_V0_1 = {

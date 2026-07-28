@@ -101,7 +101,13 @@ Gap-aware single-signal analysis is now an **experimental first-class workflow**
 - user-supplied state epochs remain separate analysis partitions; and
 - band-power contrasts aggregate sessions before animal-level inference.
 
-See [gap-aware time, frequency, and state analysis](../spectral-state-analysis-v0.1.md).
+Physical-time long-duration analysis is also an **experimental first-class
+workflow**. Named seconds-to-hours windows expose temporal coverage, acquired
+samples, gap and epoch boundaries, sample- versus time-weighted observables, and
+window→session→animal contrasts without assigning biological tonic/phasic labels.
+
+See [gap-aware time, frequency, and state analysis](../spectral-state-analysis-v0.1.md)
+and [multiscale long-duration summaries](../multiscale-long-duration-v0.1.md).
 
 Guarded multi-site and multi-color analysis is also an **experimental first-class
 workflow**. It adds explicit pair/site/sensor/optical metadata, shared-clock and
@@ -116,8 +122,6 @@ workflows**:
 - native behavioral learning-trajectory models; use the experimental
   [Unspool interoperability contract](../unspool-interoperability-v0.1.md) instead;
 - across-session photometry comparability before handing summaries to Unspool;
-- multiscale long-duration descriptions without assuming a biological
-  tonic/phasic decomposition;
 - coordinate-aware dense-array models beyond guarded pairwise summaries;
 - sensor-kinetic deconvolution or concentration calibration.
 
