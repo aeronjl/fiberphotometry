@@ -37,6 +37,14 @@
   - [ ] Raw-system calibration and biological-recording validation across two sensor families
 - [x] Optogenetic-pulse artifact masks and recovery-window diagnostics
 - [x] Open, versioned sensor registry with kinetic, saturation, and interpretation constraints
+- [x] Sensor-kinetic forward models and guarded deconvolution
+  - [x] Versioned model/profile/calibration identity without converting descriptive kinetics
+  - [x] Difference-of-exponentials and sampled empirical causal kernels
+  - [x] Gap-bounded forward prediction with explicit zero-state boundary evidence
+  - [x] Prospective sampling, duration, transfer and regularization identifiability gates
+  - [x] Conditional unconstrained/nonnegative recovery with complete reconstruction evidence
+  - [ ] Cross-regularization robustness summary and calibrated latent uncertainty
+  - [ ] Independent calibration fixtures across two sensors and realistic model mismatch
 - [x] Initial three-scenario benchmark report with retained failure
 - [x] Seven-scenario v0.2 benchmark with retained failures
 - [x] Twelve-session, four-animal IBL channel-QC audit

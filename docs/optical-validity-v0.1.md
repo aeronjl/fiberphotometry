@@ -243,7 +243,12 @@ or convert fluorescence to analyte concentration.
 | Open, versioned sensor profiles | Package-maintained authoritative sensor database |
 | Wavelength, detector, fiber, role, and unit checks | Wavelength-aware hemodynamic correction and spectral unmixing |
 | Gap-aware isosbestic association, lag, and event diagnostics | Proof of biological inertness or concentration calibration |
-| Pass/warning/fail gates with JSON provenance | Validated sensor-specific deconvolution |
+| Pass/warning/fail gates with JSON provenance | Validated nonlinear or universal sensor deconvolution |
+
+The separate experimental
+[sensor-kinetic modeling workflow](sensor-kinetic-modeling-v0.1.md) now supports
+versioned linear forward models and guarded regularized inversion. It consumes
+this layer's validity evidence but does not weaken the biological claim boundary.
 
 See [SDR-0047](decisions/0047-separate-prospective-optical-masks-from-observed-validity.md)
 for the decision boundary and the [capability matrix](methods/capability-matrix.md)

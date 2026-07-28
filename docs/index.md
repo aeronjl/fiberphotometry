@@ -24,6 +24,7 @@ parameters, and uncertainty throughout the analysis.
 | Work from public NWB data | [DANDI tutorial](tutorials/dandi-000971-reward-multiverse.md) |
 | Combine DeepLabCut, SLEAP, MoSeq or BORIS with photometry | [Behavioral ecosystem tutorial](tutorials/behavior-tool-interoperability.md) |
 | Separate calibrated optical contributions | [Wavelength-aware optical unmixing](optical-unmixing-v0.1.md) |
+| Test or invert a declared sensor response | [Sensor-kinetic modeling](sensor-kinetic-modeling-v0.1.md) |
 | Analyze a coordinate-mapped multi-fiber array | [Coordinate-aware dense arrays](spatial-network-v0.1.md) |
 | Model neural summaries across learning | [Unspool interoperability](unspool-interoperability-v0.1.md) |
 | Describe a long recording at several time scales | [Multiscale long-duration summaries](multiscale-long-duration-v0.1.md) |
