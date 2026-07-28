@@ -5,8 +5,11 @@ import pytest
 
 from fiberphotometry import (
     PopulationContrastSpec,
+    PopulationGroupAssignment,
+    PopulationInteractionSpec,
     PopulationUnitEstimate,
     infer_population_contrast,
+    infer_population_interaction,
 )
 
 
@@ -146,6 +149,88 @@ def test_population_unit_estimate_validates_its_audit_shape() -> None:
         )
 
 
+def test_population_interaction_contrasts_within_unit_differences_between_groups() -> (
+    None
+):
+    estimates = []
+    assignments = []
+    for group, differences in (("control", (0.1, 0.2, 0.3)), ("drug", (0.7, 0.8, 0.9))):
+        for index, difference in enumerate(differences):
+            animal = f"{group}-{index}"
+            assignments.append(PopulationGroupAssignment(animal, group))
+            estimates.extend(
+                (
+                    _unit(animal, "pre", (0.2, 0.3)),
+                    _unit(animal, "post", (0.2 + difference, 0.3 + difference)),
+                )
+            )
+    spec = PopulationInteractionSpec(
+        group_numerator="drug",
+        group_denominator="control",
+        condition_numerator="post",
+        condition_denominator="pre",
+        draws=200,
+        seed=4,
+    )
+
+    result = infer_population_interaction(tuple(estimates), tuple(assignments), spec)
+
+    assert result.population.estimate == pytest.approx((0.6, 0.6))
+    assert len(result.within_unit_contrasts) == 6
+    assert result.excluded_units == ()
+    assert result.population.spec.design == "independent"
+    assert result.population.effect_size_method == "hedges_g_independent_pooled_sd"
+    assert json.loads(result.to_json())["spec"]["condition_factor"] == "condition"
+
+
+def test_population_interaction_retains_incomplete_condition_units() -> None:
+    estimates = (
+        _unit("control-a", "pre", (0.0,)),
+        _unit("control-a", "post", (0.1,)),
+        _unit("control-b", "pre", (0.0,)),
+        _unit("control-b", "post", (0.2,)),
+        _unit("drug-a", "pre", (0.0,)),
+        _unit("drug-a", "post", (0.7,)),
+        _unit("drug-b", "pre", (0.0,)),
+        _unit("drug-b", "post", (0.8,)),
+        _unit("drug-incomplete", "post", (0.9,)),
+    )
+    assignments = tuple(
+        PopulationGroupAssignment(
+            item,
+            "control" if item.startswith("control") else "drug",
+        )
+        for item in ("control-a", "control-b", "drug-a", "drug-b", "drug-incomplete")
+    )
+
+    result = infer_population_interaction(
+        estimates,
+        assignments,
+        PopulationInteractionSpec("drug", "control", "post", "pre", draws=100),
+    )
+
+    assert result.excluded_units == ("drug-incomplete",)
+    assert "incomplete_condition_units_excluded" in result.warnings
+    assert "drug-incomplete" not in result.population.included_units
+
+
+def test_population_interaction_requires_explicit_unique_group_assignments() -> None:
+    estimates = (_unit("a", "pre", (0.0,)), _unit("a", "post", (0.2,)))
+    spec = PopulationInteractionSpec("drug", "control", "post", "pre", draws=100)
+
+    with pytest.raises(ValueError, match="unique units"):
+        infer_population_interaction(
+            estimates,
+            (
+                PopulationGroupAssignment("a", "drug"),
+                PopulationGroupAssignment("a", "control"),
+            ),
+            spec,
+        )
+    with pytest.raises(ValueError, match="missing group assignments"):
+        infer_population_interaction(estimates, (), spec)
+
+
 @pytest.mark.parametrize("design", ["paired", "independent"])
 def test_scalar_population_band_has_gaussian_small_sample_coverage(
     design: str,
@@ -190,6 +275,47 @@ def test_scalar_population_band_has_gaussian_small_sample_coverage(
         )
         covered += (
             result.simultaneous_lower[0] <= true_effect <= result.simultaneous_upper[0]
+        )
+
+    assert covered / scenario_count >= 0.88
+
+
+def test_population_interaction_band_has_gaussian_small_sample_coverage() -> None:
+    rng = np.random.default_rng(731)
+    true_interaction = 0.4
+    covered = 0
+    scenario_count = 60
+    for scenario in range(scenario_count):
+        estimates = []
+        assignments = []
+        for group, group_effect in (("control", 0.1), ("drug", 0.5)):
+            for index in range(9):
+                animal = f"{group}-{index}"
+                baseline = rng.normal(0, 0.45)
+                difference = rng.normal(group_effect, 0.3)
+                assignments.append(PopulationGroupAssignment(animal, group))
+                estimates.extend(
+                    (
+                        _unit(animal, "pre", (baseline,)),
+                        _unit(animal, "post", (baseline + difference,)),
+                    )
+                )
+        result = infer_population_interaction(
+            tuple(estimates),
+            tuple(assignments),
+            PopulationInteractionSpec(
+                "drug",
+                "control",
+                "post",
+                "pre",
+                draws=200,
+                seed=scenario,
+            ),
+        )
+        covered += (
+            result.population.simultaneous_lower[0]
+            <= true_interaction
+            <= result.population.simultaneous_upper[0]
         )
 
     assert covered / scenario_count >= 0.88

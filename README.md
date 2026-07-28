@@ -135,7 +135,9 @@ reports separate pointwise and whole-window simultaneous confidence bands withou
 treating trials as independent replicates. It uses the reusable
 [population-inference boundary](docs/population-inference-v0.1.md) to retain
 session and animal estimates, support, exclusions, paired or independent group
-semantics, and leave-one-animal-out influence.
+semantics, and leave-one-animal-out influence. A constrained
+[group-by-condition interaction](docs/population-interactions-v0.1.md) forms one
+repeated-condition difference per animal before comparing independent groups.
 The experimental [event-kernel model workflow](docs/event-kernel-encoding-v0.1.md)
 jointly estimates overlapping events and continuous behavioral covariates. Its
 [model-multiverse layer](docs/event-kernel-multiverse-v0.1.md) compares named

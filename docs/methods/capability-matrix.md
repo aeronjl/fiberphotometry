@@ -17,6 +17,7 @@ experiment belongs in one package.
 | Event alignment and window summaries | **Supported** | Retains events, sessions and animals |
 | Interval/bout alignment and normalized progress | **Experimental** | Typed intervals, explicit onset/offset, duration and progress kernels; ordered filter/merge/split/context/overlap policies retain a complete source-lineage ledger and evidence fingerprint |
 | Animal-level scalar/vector inference | **Supported/experimental** | Auditable animal-estimate ledger, paired and independent two-level contrasts, t intervals, animal bootstrap, standardized effects, support, and leave-one-animal-out influence; richer designs remain experimental or planned |
+| Group-by-condition animal interactions | **Experimental** | Explicit two-group × two-condition difference in differences; complete animal-condition ledger, missing-cell exclusions, simultaneous bands, and animal influence |
 | Whole-waveform intervals | **Supported** | Paired or independent animal-level pointwise and simultaneous bands with retained session-to-animal evidence |
 | Published waveform bootstrap/permutation parity | **Partial** | Related animal-level resampling exists; add an explicit literature reproduction and estimand comparison |
 | Trial-level functional mixed models | **Planned** | `fastFMM` bridge and numerical-parity fixtures |

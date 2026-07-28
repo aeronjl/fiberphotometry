@@ -355,9 +355,13 @@ from fiberphotometry.planning import (
 from fiberphotometry.population import (
     PopulationContrastResult,
     PopulationContrastSpec,
+    PopulationGroupAssignment,
     PopulationInfluence,
+    PopulationInteractionResult,
+    PopulationInteractionSpec,
     PopulationUnitEstimate,
     infer_population_contrast,
+    infer_population_interaction,
 )
 from fiberphotometry.preprocess import (
     baseline_dff,
@@ -471,8 +475,10 @@ from fiberphotometry.stability import artifact_schema
 from fiberphotometry.timecourse import (
     PeriEventInferenceResult,
     PeriEventInferenceSpec,
+    PeriEventInteractionResult,
     PeriEventSessionEstimate,
     infer_peri_event_contrast,
+    infer_peri_event_interaction,
 )
 from fiberphotometry.transient_inference import (
     TransientAnimalEstimate,
@@ -700,6 +706,7 @@ __all__ = [
     "PastaTransientDetectorSpec",
     "PeriEventInferenceResult",
     "PeriEventInferenceSpec",
+    "PeriEventInteractionResult",
     "PeriEventSessionEstimate",
     "PermutationPlan",
     "PipelineCompatibility",
@@ -707,7 +714,10 @@ __all__ = [
     "PipelineSpec",
     "PopulationContrastResult",
     "PopulationContrastSpec",
+    "PopulationGroupAssignment",
     "PopulationInfluence",
+    "PopulationInteractionResult",
+    "PopulationInteractionSpec",
     "PopulationUnitEstimate",
     "PoseTrajectory",
     "PowerSensitivity",
@@ -898,7 +908,9 @@ __all__ = [
     "infer_association_animals",
     "infer_multiscale_animals",
     "infer_peri_event_contrast",
+    "infer_peri_event_interaction",
     "infer_population_contrast",
+    "infer_population_interaction",
     "infer_spatial_network_animals",
     "infer_state_band_power",
     "infer_transient_animals",

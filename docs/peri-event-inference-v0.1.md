@@ -118,5 +118,11 @@ The low-level `infer_peri_event_contrast` API accepts an event-by-time matrix pl
 animal, session, and condition labels for integrations outside `EventAnalysis`.
 Its `design` argument is required whenever the intended design is independent.
 
+When two independent groups each contribute both repeated conditions, use
+`infer_peri_event_interaction()` rather than running separate group analyses. The
+[group-by-condition interaction contract](population-interactions-v0.1.md) retains
+the same session and animal evidence while directly estimating the difference in
+differences.
+
 The shared result semantics are described in
 [Animal estimates and population contrasts](population-inference-v0.1.md).

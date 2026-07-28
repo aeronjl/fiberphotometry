@@ -9,6 +9,7 @@ depends on one defensible workflow choice.
 | Need | Workflow | Status |
 |---|---|---|
 | Materialize animal estimates and contrast a population | [Animal estimates and population contrasts](../population-inference-v0.1.md) | Supported contract; resampling is experimental |
+| Test whether a within-animal condition contrast differs between groups | [Group-by-condition animal interactions](../population-interactions-v0.1.md) | Experimental two-group × two-condition contract |
 | Select the experimental unit, estimand, and resampling design | [Experimental design and inference](../inference-design-v0.1.md) | Supported guidance and APIs |
 | Quantify sensitivity to named analytic alternatives | [Robustness multiverses](../multiverse-contract-v0.1.md) | Supported |
 | Fit an optional scalar hierarchical sensitivity model | [Scalar mixed models](../scalar-mixed-model-v0.1.md) | Experimental |
@@ -26,6 +27,11 @@ animal estimates. It retains source sessions, observation counts, pointwise
 support, exclusions, and leave-one-animal-out influence. Domain-specific
 denominators—such as finite recording exposure for transient rates—remain the
 responsibility of the originating analysis.
+
+For repeated conditions across independent treatment groups, the interaction route
+first forms one condition difference per complete animal and then compares those
+animal differences between groups. It does not substitute separate within-group
+tests for the interaction.
 
 ## Coverage gaps this category exposes
 

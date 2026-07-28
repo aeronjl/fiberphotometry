@@ -14,6 +14,8 @@ GENERATED = {
     "method-question-map.svg",
     "multiverse-robustness.svg",
     "peri-event-inference.svg",
+    "population-inference-boundary.svg",
+    "population-interaction-boundary.svg",
     "predictor-family-contributions.svg",
     "preprocessing-sequence.svg",
     "publication-provenance.svg",
