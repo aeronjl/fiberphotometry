@@ -119,6 +119,7 @@
 - [x] Opt-in scalar mixed-model sensitivity summaries
 - [ ] `fastFMM` bridge and numerical-parity fixtures
 - [x] Animal-level peri-event pointwise and simultaneous interval reporting
+- [x] Common animal-level materialization and interaction boundary across peri-event, transient, state-band-power, and multi-signal workflows
 - [ ] Behavioral/event-kernel GLMs with grouped cross-validation
   - [x] Typed Gaussian FIR model for overlapping events and continuous covariates
   - [x] Leakage-safe animal/session-held-out ridge selection

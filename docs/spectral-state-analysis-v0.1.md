@@ -217,6 +217,12 @@ Use `effect_scale="ratio"` only when the denominator state has positive band pow
 the randomization test then operates on log ratios while the reported estimate
 remains the mean ratio.
 
+Use `materialize_state_band_power_population()` when the same animal-state cells
+need the package-wide support, influence, simultaneous-band, or group-by-condition
+contract. See [population inference across core workflows](population-workflow-adapters-v0.1.md).
+The existing specialist function remains the route for ratio estimands and paired
+sign-flip evidence.
+
 ## Evidence to retain
 
 Every base result includes a serializable `ContinuityEvidence` object:

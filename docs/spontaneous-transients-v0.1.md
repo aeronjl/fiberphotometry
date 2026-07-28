@@ -277,6 +277,12 @@ retains every animal estimate and reports incomplete paired animals explicitly.
 This API does not deconvolve sensor kinetics, assign events to neurotransmitter
 release episodes, or infer a biological tonic/phasic decomposition.
 
+For the shared support, influence, simultaneous-band, and group-by-condition
+contract, use `materialize_transient_population()` and then call `.contrast()` or
+`.interaction()`. The [cross-workflow population guide](population-workflow-adapters-v0.1.md)
+shows the complete evidence boundary. The materializer retains zero-event rate
+cells when analyzed exposure is positive.
+
 ## Sources
 
 - Donka et al., [PASTa: flexible photometry analysis including spontaneous

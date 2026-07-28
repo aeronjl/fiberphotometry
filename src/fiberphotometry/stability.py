@@ -116,6 +116,9 @@ EXPERIMENTAL_API_V0_1 = (
     "PopulationInteractionResult",
     "PopulationInteractionSpec",
     "PopulationUnitEstimate",
+    "AssociationPopulationMaterialization",
+    "StateBandPowerPopulationMaterialization",
+    "TransientPopulationMaterialization",
     "MergeIntervals",
     "MultiverseSpec",
     "MultiplierSimultaneousBandSpec",
@@ -172,6 +175,9 @@ EXPERIMENTAL_API_V0_1 = (
     "infer_peri_event_interaction",
     "infer_population_contrast",
     "infer_population_interaction",
+    "materialize_association_population",
+    "materialize_state_band_power_population",
+    "materialize_transient_population",
     "infer_spatial_network_animals",
     "kinetic_kernel",
     "materialize_encoding_multiverse",
@@ -204,6 +210,9 @@ ARTIFACT_SCHEMAS_V0_1 = {
     "event_coverage": "embedded schema_version 1",
     "peri_event_inference": "embedded schema_version 2",
     "peri_event_interaction": "embedded schema_version 1",
+    "transient_population_materialization": "embedded schema_version 1",
+    "state_band_power_population_materialization": "embedded schema_version 1",
+    "association_population_materialization": "embedded schema_version 1",
 }
 
 

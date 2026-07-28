@@ -299,6 +299,13 @@ inference = infer_association_animals(
 )
 ```
 
+For the shared support, influence, simultaneous-band, and group-by-condition
+contract, pass the same session estimates to
+`materialize_association_population()`. The resulting animal-condition cells can
+call `.contrast()` or `.interaction()` while retaining the actual pair/window
+support as provenance. See
+[population inference across core workflows](population-workflow-adapters-v0.1.md).
+
 `session_estimate_from_lagged` provides the corresponding physical-lag route and
 retains its pair-count support and blocked zero-lag probability when available.
 
