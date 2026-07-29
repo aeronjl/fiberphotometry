@@ -1114,6 +1114,198 @@ def pose_from_sleap_analysis_h5(
     )
 
 
+_MOVEMENT_DIMENSION_ALIASES: Mapping[str, tuple[str, ...]] = {
+    "keypoint": ("keypoint", "keypoints"),
+    "individual": ("individual", "individuals"),
+}
+
+
+def _movement_dimension(dataset: Any, name: str) -> str:
+    present = [
+        alias for alias in _MOVEMENT_DIMENSION_ALIASES[name] if alias in dataset.sizes
+    ]
+    if len(present) != 1:
+        raise ValueError(
+            f"movement dataset must declare exactly one {name} dimension; "
+            f"observed {sorted(dataset.sizes)}"
+        )
+    return present[0]
+
+
+def _movement_label(
+    dataset: Any,
+    dimension: str,
+    requested: str | None,
+    *,
+    kind: str,
+) -> str:
+    labels = [str(value) for value in dataset.coords[dimension].values.ravel()]
+    if requested is None:
+        if len(labels) != 1:
+            raise ValueError(
+                f"movement {kind} is missing or ambiguous; observed {labels}. "
+                f"Declare {kind} explicitly."
+            )
+        return labels[0]
+    if requested not in labels:
+        raise ValueError(
+            f"movement dataset has no {kind} {requested!r}; observed {labels}"
+        )
+    return requested
+
+
+def _movement_selection(array: Any, selector: Mapping[str, str]) -> Any:
+    return array.sel(
+        {key: value for key, value in selector.items() if key in array.dims}
+    )
+
+
+def _movement_time(
+    dataset: Any,
+    length: int,
+    *,
+    time_s: ArrayLike | None,
+    fps: float | None,
+) -> NDArray[np.float64]:
+    if time_s is not None or fps is not None:
+        return _time_from_fps(length, time_s=time_s, fps=fps)
+    if str(dataset.attrs.get("time_unit", "")) != "seconds":
+        raise ValueError(
+            "movement dataset time is not expressed in seconds; declare time_s or fps"
+        )
+    return _readonly_float(dataset.coords["time"].values, name="time_s")
+
+
+def pose_from_movement(
+    dataset: Any,
+    *,
+    subject: str,
+    session: str,
+    keypoint: str | None = None,
+    individual: str | None = None,
+    time_s: ArrayLike | None = None,
+    fps: float | None = None,
+    coordinate_unit: str = "px",
+    clock_id: str = "video",
+    source: str | None = None,
+    reference_frame: str | None = None,
+    confidence_definition: str | None = None,
+    source_version: str | None = None,
+    source_artifact: str | None = None,
+) -> PoseTrajectory:
+    """Read one keypoint from a ``movement`` poses dataset.
+
+    ``movement`` (neuroinformatics-unit, BSD-3-Clause) is the maintained community
+    package for pose input and output. This adapter consumes its ``poses`` dataset
+    so that pose estimates loaded through ``movement.io.load_poses`` reach this
+    package's clock alignment, covariate and validity contracts. It duck-types on
+    the xarray interface and never imports ``movement``, so it adds no dependency
+    and no Python version floor. See SDR-0059 for why ``movement`` is consumed
+    rather than depended upon.
+
+    The dataset must carry ``position`` over ``time``, ``space`` and one keypoint
+    and individual dimension, and ``space`` labels ``x``/``y`` or ``x``/``y``/``z``.
+    Both the singular and plural dimension spellings used across ``movement``
+    releases are accepted.
+
+    ``keypoint`` and ``individual`` may be omitted only when the dataset declares
+    exactly one of each; otherwise selection is ambiguous and this function raises
+    rather than silently returning the first. Time is read from the dataset's own
+    coordinate only when it declares ``time_unit == "seconds"``; frame-indexed
+    datasets require an explicit ``time_s`` or ``fps``.
+
+    Confidence is copied through unmodified so that gating stays this package's
+    decision. Supply the dataset *before* ``movement.filtering.filter_by_confidence``
+    and threshold with :meth:`PoseTrajectory.speed`, which invalidates a step when
+    either endpoint fails the threshold. ``movement.kinematics.compute_speed`` uses
+    central differences, so on a confidence-filtered dataset it both emits a speed
+    at the gated sample and blanks its two well-estimated neighbours; this adapter
+    preserves the value/mask separation instead. Datasets whose ``confidence``
+    lacks the keypoint dimension are broadcast across keypoints, which is the only
+    reading their shape supports.
+
+    ``movement`` stores coordinates and confidence as ``float32``. Values are
+    widened to ``float64`` here, so the returned trajectory carries ``float32``
+    precision in a ``float64`` array and will not round-trip bit-identically
+    against a ``float64`` first-party reader.
+    """
+
+    for attribute in ("sizes", "coords", "attrs", "data_vars"):
+        if not hasattr(dataset, attribute):
+            raise TypeError("dataset must provide an xarray-like Dataset interface")
+    declared_type = str(dataset.attrs.get("ds_type", "poses"))
+    if declared_type != "poses":
+        raise ValueError(
+            f"movement dataset must be a poses dataset, not {declared_type!r}"
+        )
+    if "position" not in dataset.data_vars:
+        raise ValueError("movement dataset must contain a position variable")
+    if "time" not in dataset.sizes or "space" not in dataset.sizes:
+        raise ValueError("movement dataset must declare time and space dimensions")
+
+    keypoint_dimension = _movement_dimension(dataset, "keypoint")
+    individual_dimension = _movement_dimension(dataset, "individual")
+    selected_keypoint = _movement_label(
+        dataset, keypoint_dimension, keypoint, kind="keypoint"
+    )
+    selected_individual = _movement_label(
+        dataset, individual_dimension, individual, kind="individual"
+    )
+    selector = {
+        keypoint_dimension: selected_keypoint,
+        individual_dimension: selected_individual,
+    }
+
+    space = [str(value) for value in dataset.coords["space"].values.ravel()]
+    if space not in (["x", "y"], ["x", "y", "z"]):
+        raise ValueError(
+            f"movement space labels must be x/y or x/y/z; observed {space}"
+        )
+    position = _movement_selection(dataset["position"], selector).transpose(
+        "time", "space"
+    )
+    coordinates = np.asarray(position.values, dtype=float)
+
+    if "confidence" in dataset.data_vars:
+        confidence = np.asarray(
+            _movement_selection(dataset["confidence"], selector)
+            .transpose("time")
+            .values,
+            dtype=float,
+        )
+    else:
+        confidence = np.full(coordinates.shape[0], np.nan, dtype=float)
+
+    software = source or str(dataset.attrs.get("source_software", "")).lower()
+    if not software.strip():
+        raise ValueError(
+            "movement dataset declares no source_software; declare source explicitly"
+        )
+    stored_artifact = dataset.attrs.get("source_file")
+    return PoseTrajectory(
+        subject=subject,
+        session=session,
+        keypoint=selected_keypoint,
+        time_s=_movement_time(dataset, coordinates.shape[0], time_s=time_s, fps=fps),
+        x=coordinates[:, 0],
+        y=coordinates[:, 1],
+        z=coordinates[:, 2] if len(space) == 3 else None,
+        confidence=confidence,
+        coordinate_unit=coordinate_unit,
+        source=software,
+        clock_id=clock_id,
+        individual=selected_individual,
+        reference_frame=reference_frame,
+        confidence_definition=confidence_definition,
+        source_version=source_version,
+        source_artifact=(
+            source_artifact
+            if source_artifact is not None
+            else (str(stored_artifact) if stored_artifact is not None else None)
+        ),
+    )
+
+
 def _decode_text(value: Any) -> str:
     if isinstance(value, bytes):
         return value.decode()

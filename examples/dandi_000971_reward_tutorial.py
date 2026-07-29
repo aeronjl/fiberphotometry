@@ -14,16 +14,11 @@ from urllib.request import Request, urlopen
 import numpy as np
 
 from fiberphotometry import (
-    ChoiceRef,
     Contrast,
-    DecisionAlternative,
-    DecisionNode,
     Estimand,
     EventSummarySpec,
     Factor,
     LowpassFilterOperation,
-    MultiverseReportGroup,
-    MultiverseSpec,
     ObservationTable,
     PipelineSpec,
     QualityGateSpec,
@@ -31,8 +26,6 @@ from fiberphotometry import (
     ReferenceDFFOperation,
     StudyDesign,
     Unit,
-    create_analysis_plan,
-    run_multiverse,
     run_pipeline,
 )
 from fiberphotometry.io.dandi import resolve_dandi_download_url
@@ -40,6 +33,15 @@ from fiberphotometry.io.dandi_000971 import (
     from_dandi_000971_nwb,
     rewarded_unrewarded_nose_pokes,
 )
+from fiberphotometry.multiverse import (
+    ChoiceRef,
+    DecisionAlternative,
+    DecisionNode,
+    MultiverseReportGroup,
+    MultiverseSpec,
+    run_multiverse,
+)
+from fiberphotometry.planning import create_analysis_plan
 
 DEFAULT_MANIFEST = Path("benchmarks/dandi-000971-tutorial-manifest-v0.1.json")
 DEFAULT_CACHE = Path.home() / "Library/Caches/fiberphotometry/dandi-000971-tutorial"

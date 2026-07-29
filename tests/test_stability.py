@@ -15,6 +15,43 @@ def test_declared_supported_and_experimental_names_are_exported() -> None:
     assert all(hasattr(fiberphotometry, name) for name in supported | experimental)
 
 
+def test_every_public_export_is_classified_supported_or_experimental() -> None:
+    exported = set(fiberphotometry.__all__)
+    classified = set(SUPPORTED_API_V0_1) | set(EXPERIMENTAL_API_V0_1)
+
+    assert not exported - classified, (
+        "every name in fiberphotometry.__all__ must be declared in "
+        "SUPPORTED_API_V0_1 or EXPERIMENTAL_API_V0_1; unclassified: "
+        f"{sorted(exported - classified)}"
+    )
+    assert not classified - exported, (
+        "stability declarations must not name unexported symbols; stale: "
+        f"{sorted(classified - exported)}"
+    )
+
+
+def test_declared_names_are_unique_within_each_stability_tier() -> None:
+    assert len(SUPPORTED_API_V0_1) == len(set(SUPPORTED_API_V0_1))
+    assert len(EXPERIMENTAL_API_V0_1) == len(set(EXPERIMENTAL_API_V0_1))
+    assert len(fiberphotometry.__all__) == len(set(fiberphotometry.__all__))
+
+
+def test_the_scientific_core_path_is_supported_not_unclassified() -> None:
+    core = {
+        "make_recording",
+        "reference_dff",
+        "baseline_dff",
+        "lowpass_filter",
+        "resample_recording",
+        "assess_recording",
+        "align_events",
+        "summarize_event_windows",
+        "run_pipeline",
+    }
+
+    assert core <= set(SUPPORTED_API_V0_1)
+
+
 def test_event_analysis_schema_fixes_the_complete_top_level_ledger() -> None:
     assert ARTIFACT_SCHEMAS_V0_1["event_analysis_result"].endswith(".schema.json")
     schema = fiberphotometry.artifact_schema("event_analysis_result")

@@ -14,6 +14,7 @@ TransientMetric: TypeAlias = Literal["rate_per_minute", "amplitude", "width_s", 
 TransientDesign: TypeAlias = Literal["independent", "paired"]
 EffectScale: TypeAlias = Literal["difference", "ratio"]
 Aggregation: TypeAlias = Literal["mean", "median"]
+SessionAggregation: TypeAlias = Literal["mean", "median", "exposure_weighted"]
 
 
 @dataclass(frozen=True)
@@ -28,7 +29,14 @@ class TransientStudySession:
 
 @dataclass(frozen=True)
 class TransientAnimalInferenceSpec:
-    """Declare an animal-level contrast for event rate or kinetics."""
+    """Declare an animal-level contrast for event rate or kinetics.
+
+    ``session_aggregation`` selects how sessions are combined within an animal.
+    ``None`` requests the metric-appropriate default: ``exposure_weighted`` for
+    ``rate_per_minute``, which pools event counts over acquired exposure, and
+    ``median`` for kinetic metrics. ``exposure_weighted`` is defined only for
+    ``rate_per_minute`` and is refused for kinetic metrics.
+    """
 
     metric: TransientMetric
     condition_a: str
@@ -36,7 +44,7 @@ class TransientAnimalInferenceSpec:
     channel: str
     design: TransientDesign = "independent"
     effect_scale: EffectScale = "difference"
-    session_aggregation: Aggregation = "median"
+    session_aggregation: SessionAggregation | None = None
     confidence_level: float = 0.95
     bootstrap_resamples: int = 10_000
     permutation_resamples: int = 10_000
@@ -71,6 +79,7 @@ class TransientAnimalInferenceResult:
     excluded_subjects: tuple[str, ...]
     bootstrap_resamples: int
     permutation_resamples: int
+    session_aggregation: SessionAggregation
 
 
 def infer_transient_animals(
@@ -82,7 +91,8 @@ def infer_transient_animals(
     if not sessions:
         raise ValueError("transient inference requires at least one session")
     _validate_sessions(sessions)
-    estimates = _animal_estimates(sessions, spec)
+    aggregation = _resolve_session_aggregation(spec)
+    estimates = _animal_estimates(sessions, spec, aggregation)
     by_condition = {
         condition: {
             estimate.subject: estimate
@@ -152,12 +162,30 @@ def infer_transient_animals(
         excluded_subjects=tuple(excluded),
         bootstrap_resamples=spec.bootstrap_resamples,
         permutation_resamples=actual_permutations,
+        session_aggregation=aggregation,
     )
+
+
+def _resolve_session_aggregation(
+    spec: TransientAnimalInferenceSpec,
+) -> SessionAggregation:
+    if spec.session_aggregation is None:
+        return "exposure_weighted" if spec.metric == "rate_per_minute" else "median"
+    if spec.session_aggregation == "exposure_weighted" and (
+        spec.metric != "rate_per_minute"
+    ):
+        raise ValueError(
+            "session_aggregation='exposure_weighted' is defined only for "
+            f"metric='rate_per_minute'; metric={spec.metric!r} summarizes sessions "
+            "with 'mean' or 'median'"
+        )
+    return spec.session_aggregation
 
 
 def _animal_estimates(
     sessions: tuple[TransientStudySession, ...] | list[TransientStudySession],
     spec: TransientAnimalInferenceSpec,
+    aggregation: SessionAggregation,
 ) -> list[TransientAnimalEstimate]:
     grouped: dict[tuple[str, str], list[TransientStudySession]] = {}
     for session in sessions:
@@ -174,14 +202,12 @@ def _animal_estimates(
         if not usable:
             continue
         session_values = [float(item[0]) for item in usable if item[0] is not None]
-        if spec.metric == "rate_per_minute":
-            event_count = sum(item[1] for item in usable)
-            duration = sum(item[2] for item in usable)
+        event_count = sum(item[1] for item in usable)
+        duration = sum(item[2] for item in usable)
+        if aggregation == "exposure_weighted":
             value = 60 * event_count / duration if duration > 0 else float("nan")
         else:
-            event_count = sum(item[1] for item in usable)
-            duration = sum(item[2] for item in usable)
-            value = _aggregate(session_values, spec.session_aggregation)
+            value = _aggregate(session_values, aggregation)
         if not np.isfinite(value):
             continue
         estimates.append(
@@ -316,6 +342,12 @@ def _validate_spec(spec: TransientAnimalInferenceSpec) -> None:
         raise ValueError("transient conditions must differ")
     if not spec.channel.strip():
         raise ValueError("transient inference channel must be non-empty")
+    if spec.session_aggregation is not None and spec.session_aggregation not in {
+        "mean",
+        "median",
+        "exposure_weighted",
+    }:
+        raise ValueError("unsupported transient session aggregation")
     if not 0 < spec.confidence_level < 1:
         raise ValueError("confidence_level must be between zero and one")
     if spec.bootstrap_resamples < 100 or spec.permutation_resamples < 100:

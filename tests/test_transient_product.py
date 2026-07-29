@@ -2,8 +2,10 @@ import json
 
 import numpy as np
 import pytest
+from scipy.signal import find_peaks
 
-from fiberphotometry import (
+from fiberphotometry import make_recording
+from fiberphotometry.transient_product import (
     GuppyTransientDetectorSpec,
     PastaTransientDetectorSpec,
     ProminenceTransientDetectorSpec,
@@ -15,7 +17,6 @@ from fiberphotometry import (
     calibrate_transient_thresholds,
     cut_transient_waveforms,
     detect_transient_candidates,
-    make_recording,
     quantify_transient_candidates,
 )
 
@@ -432,3 +433,113 @@ def test_quantification_requires_matching_waveform_evidence_when_requested() -> 
             variable="dff",
             spec=TransientQuantificationSpec(require_waveform_qc=True),
         )
+
+
+def _pasta_reference_scores(
+    time: np.ndarray, signal: np.ndarray, spec: PastaTransientDetectorSpec
+) -> np.ndarray:
+    step = float(np.median(np.diff(time)))
+    distance = max(1, int(np.ceil(spec.minimum_distance_s / step)))
+    peaks, _ = find_peaks(signal, distance=distance)
+    scores = []
+    for position in peaks:
+        left = int(
+            np.searchsorted(time, time[position] - spec.baseline_start_s, side="left")
+        )
+        right = int(
+            np.searchsorted(time, time[position] - spec.baseline_end_s, side="left")
+        )
+        if right - left < 2:
+            continue
+        scores.append(float(signal[position] - np.mean(signal[left:right])))
+    return np.asarray(scores, dtype=float)
+
+
+def _control_detector() -> PastaTransientDetectorSpec:
+    return PastaTransientDetectorSpec(
+        amplitude_threshold=0.001,
+        baseline_method="mean",
+        baseline_start_s=1.0,
+        baseline_end_s=0.2,
+        minimum_distance_s=0.0,
+    )
+
+
+def _calibrate(time: np.ndarray, control: np.ndarray):
+    return calibrate_transient_thresholds(
+        _recording(time, dff=control),
+        variable="dff",
+        detector_spec=_control_detector(),
+        source_role="negative_control",
+        source_id="negative-control-01",
+        preprocessing_fingerprint="sha256:control",
+        calibration_spec=TransientThresholdCalibrationSpec(
+            estimator="median_mad", mad_multiplier=6.0, minimum_score_count=20
+        ),
+    )
+
+
+def test_median_mad_calibration_keeps_the_complete_signed_score_population() -> None:
+    rng = np.random.default_rng(2024)
+    time = np.arange(0, 400, 0.05)
+    control = rng.normal(0, 0.05, len(time))
+    reference = _pasta_reference_scores(time, control, _control_detector())
+    median = float(np.median(reference))
+    mad = float(np.median(np.abs(reference - median)))
+
+    channel = _calibrate(time, control).for_channel("green")
+
+    assert np.mean(reference < 0) > 0.1
+    assert channel.score_count == len(reference)
+    assert channel.score_median == pytest.approx(median)
+    assert channel.score_mad == pytest.approx(mad)
+    assert channel.threshold == pytest.approx(median + 6 * 1.4826 * mad)
+
+
+def test_degenerate_calibration_dispersion_is_refused_not_floored() -> None:
+    pattern = np.concatenate([np.arange(20), np.arange(20, 0, -1)]) * 0.001
+    control = np.tile(pattern, 100)
+    time = np.arange(len(control)) * 0.05
+
+    with pytest.raises(ValueError, match="zero median absolute deviation"):
+        _calibrate(time, control)
+
+
+def test_guppy_records_peaks_lost_to_a_chunk_boundary() -> None:
+    rng = np.random.default_rng(5)
+    time = np.arange(0, 30, 0.05)
+    signal = rng.normal(0, 0.1, len(time))
+    signal[200] = 5.0
+    signal[300] = 5.0
+    result = detect_transient_candidates(
+        _recording(time, zscore=signal),
+        variable="zscore",
+        spec=GuppyTransientDetectorSpec(chunk_duration_s=10, detection_mad=20),
+    )
+
+    boundary = [item for item in result.exclusions if item.reason == "chunk_boundary"]
+    assert [item.sample_index for item in result.candidates] == [300]
+    assert [item.sample_index for item in boundary] == [200]
+    assert boundary[0].observed_score == pytest.approx(5.0)
+    assert boundary[0].required_score is not None
+    assert boundary[0].observed_score > boundary[0].required_score
+
+
+def test_guppy_multipliers_scale_the_unscaled_mad_unlike_transients() -> None:
+    rng = np.random.default_rng(3)
+    sigma = 0.25
+    time = np.arange(0, 400, 0.05)
+    signal = rng.normal(0, sigma, len(time))
+    signal[4000] = 20 * sigma
+    result = detect_transient_candidates(
+        _recording(time, zscore=signal),
+        variable="zscore",
+        spec=GuppyTransientDetectorSpec(chunk_duration_s=400, detection_mad=3),
+    )
+
+    candidate = next(item for item in result.candidates if item.sample_index == 4000)
+
+    assert candidate.detection_threshold == pytest.approx(3 * 0.6745 * sigma, rel=0.03)
+    assert candidate.detection_threshold / (3 * sigma) == pytest.approx(
+        0.6745, rel=0.03
+    )

@@ -302,7 +302,7 @@ class StateBandPowerEstimate:
 
 @dataclass(frozen=True)
 class StateBandPowerInferenceResult:
-    """Paired state contrast with animal-level bootstrap and sign flips."""
+    """Paired state contrast whose estimate, interval, and test share one scale."""
 
     spec: StateBandPowerInferenceSpec
     estimates: tuple[StateBandPowerEstimate, ...]
@@ -313,6 +313,9 @@ class StateBandPowerInferenceResult:
     included_subjects: tuple[str, ...]
     excluded_subjects: tuple[str, ...]
     permutation_resamples: int
+    estimand: str
+    interval_scale: str
+    null_value: float
     method: str = "equal_session_animal_bootstrap_and_paired_sign_flip"
 
 
@@ -455,7 +458,14 @@ def infer_state_band_power(
     sessions: tuple[StatePSDSession, ...] | list[StatePSDSession],
     spec: StateBandPowerInferenceSpec,
 ) -> StateBandPowerInferenceResult:
-    """Contrast band power without treating sessions or windows as animals."""
+    """Contrast band power without treating sessions or windows as animals.
+
+    The point estimate, bootstrap interval, and sign-flip test share one functional.
+    A ``difference`` contrast reports the arithmetic mean of paired differences
+    against a null of zero; a ``ratio`` contrast reports the geometric mean of
+    paired ratios, with its interval computed on the log scale and back
+    transformed, against a null of one. ``estimand`` names the reported functional.
+    """
     if not sessions:
         raise ValueError("state band-power inference requires sessions")
     identities = [(item.subject, item.session) for item in sessions]
@@ -494,28 +504,40 @@ def infer_state_band_power(
     if spec.effect_scale == "ratio" and np.any(second <= 0):
         raise ValueError("ratio effects require positive denominator band power")
     contrasts = first - second if spec.effect_scale == "difference" else first / second
-    estimate = float(np.mean(contrasts))
+    analyzed = contrasts if spec.effect_scale == "difference" else np.log(contrasts)
     rng = np.random.default_rng(spec.seed)
-    indices = rng.integers(
-        0, len(contrasts), (spec.bootstrap_resamples, len(contrasts))
-    )
-    bootstrap = np.mean(contrasts[indices], axis=1)
+    indices = rng.integers(0, len(analyzed), (spec.bootstrap_resamples, len(analyzed)))
+    bootstrap = np.mean(analyzed[indices], axis=1)
     alpha = 1 - spec.confidence_level
     low, high = np.quantile(bootstrap, [alpha / 2, 1 - alpha / 2])
-    centered = contrasts if spec.effect_scale == "difference" else np.log(contrasts)
-    observed = abs(float(np.mean(centered)))
-    null, actual = _sign_flip_distribution(centered, spec, rng)
-    pvalue = float((1 + np.count_nonzero(np.abs(null) >= observed)) / (len(null) + 1))
+    center = float(np.mean(analyzed))
+    null, actual = _sign_flip_distribution(analyzed, spec, rng)
+    pvalue = float(
+        (1 + np.count_nonzero(np.abs(null) >= abs(center))) / (len(null) + 1)
+    )
+    if spec.effect_scale == "ratio":
+        estimate, low, high = np.exp(center), np.exp(low), np.exp(high)
+        estimand = "geometric_mean_of_paired_state_ratios"
+        interval_scale = "bootstrap_percentile_of_mean_log_ratio_back_transformed"
+        null_value = 1.0
+    else:
+        estimate = center
+        estimand = "arithmetic_mean_of_paired_state_differences"
+        interval_scale = "bootstrap_percentile_of_mean_difference"
+        null_value = 0.0
     return StateBandPowerInferenceResult(
         spec,
         estimates,
-        estimate,
+        float(estimate),
         float(low),
         float(high),
         pvalue,
         included,
         excluded,
         actual,
+        estimand,
+        interval_scale,
+        null_value,
     )
 
 

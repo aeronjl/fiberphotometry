@@ -1,6 +1,6 @@
 from test_t_inference import paired_table
 
-from fiberphotometry import recommend_inference
+from fiberphotometry.inference import recommend_inference
 
 
 def test_router_requires_randomization_claim_for_exact_test() -> None:

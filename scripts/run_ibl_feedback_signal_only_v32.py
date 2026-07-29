@@ -365,7 +365,7 @@ def _load_session(one: ONE, row: dict[str, Any]):
 
 
 def _materialized_by_choices(protocol: dict[str, Any], spec: Any):
-    from fiberphotometry import materialize_multiverse
+    from fiberphotometry.multiverse import materialize_multiverse
 
     output = {}
     for universe in materialize_multiverse(spec):

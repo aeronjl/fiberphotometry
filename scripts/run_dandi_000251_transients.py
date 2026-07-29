@@ -13,11 +13,8 @@ from typing import Any
 import numpy as np
 from pynwb import NWBHDF5IO
 
-from fiberphotometry import (
-    TransientDetectionSpec,
-    detect_transients,
-    make_recording,
-)
+from fiberphotometry import make_recording
+from fiberphotometry.transients import TransientDetectionSpec, detect_transients
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "benchmarks/dandi-000251-transients-manifest-v0.1.json"

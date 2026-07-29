@@ -6,7 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from fiberphotometry import materialize_multiverse
+from fiberphotometry.multiverse import materialize_multiverse
 
 
 def _load_protocol_module() -> Any:

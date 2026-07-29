@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import Literal
 
 import numpy as np
 import xarray as xr
+from numpy.typing import NDArray
 
 from fiberphotometry.model import validate_recording
 
@@ -19,11 +21,21 @@ def align_events(
     variable: str = "dff",
     event_ids: Sequence[str] | None = None,
     max_gap_s: float | None = None,
+    baseline: tuple[float, float] | None = None,
+    normalization: Literal["none", "baseline_z", "robust_z"] = "none",
 ) -> xr.DataArray:
     """Interpolate a signal onto a common peri-event time axis.
 
     Events outside the recorded interval are retained with NaNs. No averaging is
     performed, preserving the event/session/animal hierarchy for later inference.
+
+    ``normalization`` rescales each event and channel by statistics of its own
+    ``baseline`` window, measured on the aligned grid with an inclusive start and
+    an exclusive stop. ``baseline_z`` divides the mean-centred trace by the
+    baseline standard deviation; ``robust_z`` divides the median-centred trace by
+    ``1.4826 * MAD``. An event whose baseline scale is zero or non-finite becomes
+    NaN rather than an arbitrarily large number, and is counted in the output
+    ``degenerate_baseline_count`` attribute.
     """
     validate_recording(recording)
     if variable not in recording:
@@ -35,6 +47,12 @@ def align_events(
         raise ValueError("rate must be positive")
     if max_gap_s is not None and max_gap_s <= 0:
         raise ValueError("max_gap_s must be positive when provided")
+    if normalization not in {"none", "baseline_z", "robust_z"}:
+        raise ValueError("normalization must be 'none', 'baseline_z', or 'robust_z'")
+    if normalization != "none" and baseline is None:
+        raise ValueError("normalization requires a baseline window")
+    if baseline is not None and not start <= baseline[0] < baseline[1] <= stop:
+        raise ValueError("baseline window must lie inside the alignment window")
 
     events = np.asarray(event_times, dtype=float)
     ids = list(event_ids or [str(index) for index in range(len(events))])
@@ -57,6 +75,22 @@ def align_events(
                 max_gap_s=max_gap_s,
             )
 
+    degenerate = 0
+    if normalization != "none" and baseline is not None:
+        selected = (relative_time >= baseline[0]) & (relative_time < baseline[1])
+        if selected.sum() < 2:
+            raise ValueError("baseline window must span at least two aligned samples")
+        center, scale = _baseline_statistics(
+            values[:, selected, :], normalization, axis=1
+        )
+        usable, safe_scale = _usable_baseline(center, scale)
+        degenerate = int(np.count_nonzero(~usable))
+        values = np.where(
+            usable[:, np.newaxis, :],
+            (values - center[:, np.newaxis, :]) / safe_scale[:, np.newaxis, :],
+            np.nan,
+        )
+
     return xr.DataArray(
         values,
         dims=("event", "relative_time", "channel"),
@@ -72,6 +106,10 @@ def align_events(
             "source_variable": variable,
             "alignment_rate_hz": rate,
             "max_bridgeable_gap_s": max_gap_s,
+            "normalization": normalization,
+            "baseline_window": str(baseline),
+            "units": _normalized_units(variable, normalization),
+            "degenerate_baseline_count": degenerate,
         },
         name=f"event_aligned_{variable}",
     )
@@ -83,18 +121,30 @@ def summarize_event_windows(
     *,
     baseline: tuple[float, float],
     response: tuple[float, float],
-    variable: str = "signal",
+    variable: str = "dff",
+    normalization: Literal["none", "baseline_z", "robust_z"] = "none",
 ) -> xr.Dataset:
     """Summarize actual acquired samples without interpolating or averaging events.
 
     Window starts are inclusive and stops exclusive. Events remain a dimension,
-    so downstream inference retains the session and animal hierarchy.
+    so downstream inference retains the session and animal hierarchy. A session
+    with no events of a condition returns an empty result rather than raising.
+
+    ``normalization`` rescales each event and channel by statistics of its own
+    ``baseline`` window. ``baseline_z`` divides by the baseline standard
+    deviation about the baseline mean; ``robust_z`` divides by ``1.4826 * MAD``
+    about the baseline median. Because both are affine, applying them to the
+    window means is identical to applying them sample by sample. An event whose
+    baseline scale is zero or non-finite becomes NaN rather than an arbitrarily
+    large number, and is counted in the ``degenerate_baseline_count`` attribute.
     """
     validate_recording(recording)
     if variable not in recording:
         raise ValueError(f"recording does not contain {variable!r}")
     if baseline[0] >= baseline[1] or response[0] >= response[1]:
         raise ValueError("window starts must be earlier than stops")
+    if normalization not in {"none", "baseline_z", "robust_z"}:
+        raise ValueError("normalization must be 'none', 'baseline_z', or 'robust_z'")
     events = np.asarray(event_times, dtype=float)
     times = np.asarray(recording.time.values, dtype=float)
     values = np.asarray(recording[variable].values, dtype=float)
@@ -114,14 +164,34 @@ def summarize_event_windows(
     disposition[baseline_missing & response_missing] = (
         "baseline_and_response_intersect_gap"
     )
-    event_rows = np.asarray([int(np.argmin(abs(times - event))) for event in events])
+    event_rows = np.asarray(
+        [int(np.argmin(abs(times - event))) for event in events], dtype=int
+    )
     event_missing = ~np.isfinite(values[event_rows, :])
     disposition[event_missing] = "event_inside_gap"
+    degenerate = 0
+    if normalization != "none":
+        center, scale = _window_baseline_statistics(
+            values, times, events, baseline, normalization
+        )
+        usable, safe_scale = _usable_baseline(center, scale)
+        degenerate = int(np.count_nonzero(~usable))
+        baseline_means = np.where(
+            usable, (baseline_means - center) / safe_scale, np.nan
+        )
+        response_means = np.where(
+            usable, (response_means - center) / safe_scale, np.nan
+        )
+    units = _normalized_units(variable, normalization)
     return xr.Dataset(
         data_vars={
-            "baseline_mean": (("event", "channel"), baseline_means),
-            "response_mean": (("event", "channel"), response_means),
-            "delta": (("event", "channel"), response_means - baseline_means),
+            "baseline_mean": (("event", "channel"), baseline_means, {"units": units}),
+            "response_mean": (("event", "channel"), response_means, {"units": units}),
+            "delta": (
+                ("event", "channel"),
+                response_means - baseline_means,
+                {"units": units},
+            ),
             "baseline_finite_fraction": (
                 ("event", "channel"),
                 baseline_fraction,
@@ -151,6 +221,9 @@ def summarize_event_windows(
             "source_variable": variable,
             "baseline_window": str(baseline),
             "response_window": str(response),
+            "normalization": normalization,
+            "units": units,
+            "degenerate_baseline_count": degenerate,
         },
     )
 
@@ -176,6 +249,65 @@ def _window_means(
             valid = counts == selected.sum()
             output[index, valid] = sums[valid] / counts[valid]
     return output, fractions
+
+
+def _window_baseline_statistics(
+    values: np.ndarray,
+    times: np.ndarray,
+    events: np.ndarray,
+    window: tuple[float, float],
+    normalization: str,
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """Measure each event's and channel's baseline centre and scale."""
+    center = np.full((len(events), values.shape[1]), np.nan)
+    scale = np.full((len(events), values.shape[1]), np.nan)
+    for index, event in enumerate(events):
+        if not np.isfinite(event):
+            continue
+        selected = (times >= event + window[0]) & (times < event + window[1])
+        if selected.sum() < 2:
+            continue
+        center[index], scale[index] = _baseline_statistics(
+            values[selected], normalization
+        )
+    return center, scale
+
+
+def _baseline_statistics(
+    values: NDArray[np.float64], normalization: str, *, axis: int = 0
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """Return the centre and dispersion the requested normalization divides by.
+
+    A non-finite baseline sample propagates to both statistics, so an incomplete
+    baseline window is rejected rather than silently summarized over the rest.
+    """
+    if normalization == "baseline_z":
+        return (
+            np.asarray(np.mean(values, axis=axis), dtype=np.float64),
+            np.asarray(np.std(values, axis=axis), dtype=np.float64),
+        )
+    median = np.median(values, axis=axis, keepdims=True)
+    deviation = 1.4826 * np.median(np.abs(values - median), axis=axis)
+    return (
+        np.asarray(np.squeeze(median, axis=axis), dtype=np.float64),
+        np.asarray(deviation, dtype=np.float64),
+    )
+
+
+def _usable_baseline(
+    center: NDArray[np.float64], scale: NDArray[np.float64]
+) -> tuple[NDArray[np.bool_], NDArray[np.float64]]:
+    """Reject a baseline whose scale cannot normalize, never clamping it to eps."""
+    usable = np.isfinite(center) & np.isfinite(scale) & (scale > 0)
+    return usable, np.where(usable, scale, 1.0)
+
+
+def _normalized_units(variable: str, normalization: str) -> str:
+    if normalization == "baseline_z":
+        return "baseline SD"
+    if normalization == "robust_z":
+        return "baseline robust SD (1.4826 * MAD)"
+    return "dF/F" if variable == "dff" else "acquired units"
 
 
 def condition_exclusion_warning(

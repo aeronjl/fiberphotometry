@@ -4,13 +4,13 @@ from dataclasses import replace
 
 import pytest
 
-from fiberphotometry import (
-    ObservationTable,
+from fiberphotometry import ObservationTable
+from fiberphotometry.comparability import (
     SessionComparabilityRecord,
     SessionComparabilitySpec,
     assess_session_comparability,
-    prepare_unspool_study,
 )
+from fiberphotometry.unspool import prepare_unspool_study
 
 
 def _records() -> tuple[SessionComparabilityRecord, ...]:

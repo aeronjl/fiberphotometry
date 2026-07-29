@@ -3,22 +3,28 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry import (
-    AssociationSessionEstimate,
+from fiberphotometry.association_inference import AssociationSessionEstimate
+from fiberphotometry.population import (
     PopulationContrastSpec,
     PopulationGroupAssignment,
     PopulationInteractionSpec,
-    SpectralAnalysisSpec,
-    StateEpoch,
-    StatePSDSession,
-    TransientQuantificationResult,
-    TransientQuantificationSpec,
-    TransientQuantificationSummary,
-    TransientStudySession,
+)
+from fiberphotometry.population_workflows import (
     materialize_association_population,
     materialize_state_band_power_population,
     materialize_transient_population,
+)
+from fiberphotometry.spectral import (
+    SpectralAnalysisSpec,
+    StateEpoch,
+    StatePSDSession,
     state_conditioned_psd,
+)
+from fiberphotometry.transient_inference import TransientStudySession
+from fiberphotometry.transient_product import (
+    TransientQuantificationResult,
+    TransientQuantificationSpec,
+    TransientQuantificationSummary,
 )
 
 

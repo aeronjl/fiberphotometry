@@ -1,13 +1,16 @@
 import pytest
 
-from fiberphotometry import (
-    QuantifiedTransient,
+from fiberphotometry.transient_inference import (
+    SessionAggregation,
     TransientAnimalInferenceSpec,
+    TransientStudySession,
+    infer_transient_animals,
+)
+from fiberphotometry.transient_product import (
+    QuantifiedTransient,
     TransientQuantificationResult,
     TransientQuantificationSpec,
     TransientQuantificationSummary,
-    TransientStudySession,
-    infer_transient_animals,
 )
 
 
@@ -73,6 +76,78 @@ def _session(
         condition=condition,
         result=result,
     )
+
+
+def _unequal_exposure_sessions() -> list[TransientStudySession]:
+    return [
+        _session("m1", "control", session_index=1, count=10, duration=600),
+        _session("m1", "control", session_index=2, count=6, duration=60),
+        _session("m1", "control", session_index=3, count=2, duration=60),
+        _session("m1", "drug", count=8, duration=60),
+        _session("m2", "control", count=3, duration=60),
+        _session("m2", "drug", count=9, duration=60),
+    ]
+
+
+def _rate_spec(aggregation: SessionAggregation | None) -> TransientAnimalInferenceSpec:
+    return TransientAnimalInferenceSpec(
+        metric="rate_per_minute",
+        condition_a="control",
+        condition_b="drug",
+        channel="NAc",
+        design="paired",
+        session_aggregation=aggregation,
+        bootstrap_resamples=100,
+        permutation_resamples=100,
+        seed=4,
+    )
+
+
+def test_session_aggregation_changes_reported_rates_instead_of_being_ignored() -> None:
+    sessions = _unequal_exposure_sessions()
+
+    pooled = infer_transient_animals(sessions, _rate_spec(None))
+    mean_rate = infer_transient_animals(sessions, _rate_spec("mean"))
+    median_rate = infer_transient_animals(sessions, _rate_spec("median"))
+
+    def control(result: object) -> float:
+        assert isinstance(result, type(pooled))
+        return next(
+            estimate.value
+            for estimate in result.estimates
+            if estimate.subject == "m1" and estimate.condition == "control"
+        )
+
+    assert control(pooled) == pytest.approx(60 * 18 / 720)
+    assert control(mean_rate) == pytest.approx((1 + 6 + 2) / 3)
+    assert control(median_rate) == pytest.approx(2.0)
+    assert control(mean_rate) != pytest.approx(control(median_rate))
+    assert pooled.estimate != pytest.approx(mean_rate.estimate)
+    assert mean_rate.estimate != pytest.approx(median_rate.estimate)
+    assert pooled.session_aggregation == "exposure_weighted"
+    assert mean_rate.session_aggregation == "mean"
+
+
+def test_exposure_weighted_aggregation_is_refused_for_kinetic_metrics() -> None:
+    sessions = [
+        _session("m1", "control", count=1, duration=60, amplitudes=(1.0,)),
+        _session("m1", "drug", count=1, duration=60, amplitudes=(2.0,)),
+        _session("m2", "control", count=1, duration=60, amplitudes=(1.5,)),
+        _session("m2", "drug", count=1, duration=60, amplitudes=(2.5,)),
+    ]
+    spec = TransientAnimalInferenceSpec(
+        metric="amplitude",
+        condition_a="control",
+        condition_b="drug",
+        channel="NAc",
+        design="paired",
+        session_aggregation="exposure_weighted",
+        bootstrap_resamples=100,
+        permutation_resamples=100,
+    )
+
+    with pytest.raises(ValueError, match="defined only for"):
+        infer_transient_animals(sessions, spec)
 
 
 def test_paired_rate_inference_pools_exposure_then_resamples_animals() -> None:

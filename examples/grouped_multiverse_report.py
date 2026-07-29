@@ -7,31 +7,33 @@ import numpy as np
 
 from fiberphotometry import (
     BaselineDFFOperation,
-    ChoiceRef,
-    CompatibilityRule,
     Contrast,
-    DecisionAlternative,
-    DecisionNode,
     Estimand,
     EventSummarySpec,
     Factor,
     LowpassFilterOperation,
-    MultiverseReportGroup,
-    MultiverseResult,
-    MultiverseSpec,
     ObservationTable,
     PipelineSpec,
     PreprocessingSpec,
     QualityGateSpec,
     RecordingInput,
-    RobustnessSummary,
     StudyDesign,
     Unit,
-    UniverseResult,
-    create_analysis_plan,
     make_recording,
+)
+from fiberphotometry.multiverse import (
+    ChoiceRef,
+    CompatibilityRule,
+    DecisionAlternative,
+    DecisionNode,
+    MultiverseReportGroup,
+    MultiverseResult,
+    MultiverseSpec,
+    RobustnessSummary,
+    UniverseResult,
     materialize_multiverse,
 )
+from fiberphotometry.planning import create_analysis_plan
 
 
 def _inputs() -> tuple[RecordingInput, ...]:

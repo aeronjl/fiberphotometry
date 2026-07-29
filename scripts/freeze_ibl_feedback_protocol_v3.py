@@ -11,23 +11,25 @@ from typing import Any
 
 from fiberphotometry import (
     BaselineDFFOperation,
-    ChoiceRef,
-    CompatibilityRule,
     Contrast,
-    DecisionAlternative,
-    DecisionNode,
     Estimand,
     EventSummarySpec,
     Factor,
-    MultiverseSpec,
     ObservationTable,
     PipelineSpec,
     QualityGateSpec,
     StudyDesign,
     Unit,
-    create_analysis_plan,
+)
+from fiberphotometry.multiverse import (
+    ChoiceRef,
+    CompatibilityRule,
+    DecisionAlternative,
+    DecisionNode,
+    MultiverseSpec,
     materialize_multiverse,
 )
+from fiberphotometry.planning import create_analysis_plan
 
 WINDOWS = {
     "standard": ((-0.5, 0.0), (0.0, 0.5)),

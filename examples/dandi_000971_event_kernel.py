@@ -11,14 +11,13 @@ from typing import Any
 
 import numpy as np
 
-from fiberphotometry import (
+from fiberphotometry import lowpass_filter, reference_dff
+from fiberphotometry.encoding import (
     EncodingModelResult,
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
     fit_event_kernel_model,
-    lowpass_filter,
-    reference_dff,
 )
 from fiberphotometry.io.dandi_000971 import (
     from_dandi_000971_nwb,

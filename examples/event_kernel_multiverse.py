@@ -6,16 +6,20 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry import (
-    EncodingModelAlternative,
+from fiberphotometry.encoding import (
     EncodingModelSpec,
-    EncodingMultiverseSpec,
     EncodingSession,
     EventKernelSpec,
+    RaisedCosineBasisSpec,
+)
+from fiberphotometry.encoding_contributions import (
     PredictorFamilyContributionSpec,
     PredictorFamilyDropSpec,
-    RaisedCosineBasisSpec,
     assess_predictor_family_contributions,
+)
+from fiberphotometry.encoding_multiverse import (
+    EncodingModelAlternative,
+    EncodingMultiverseSpec,
     run_encoding_multiverse,
 )
 
@@ -133,7 +137,7 @@ def run() -> None:
             comparison.family,
             comparison.status,
             comparison.delta_mean_r_squared,
-            comparison.group_interval,
+            comparison.group_dispersion,
         )
 
 

@@ -88,17 +88,38 @@ class PredictorFamilyGroupDelta:
 
 
 @dataclass(frozen=True)
-class PredictorFamilyDeltaInterval:
-    """Non-simultaneous paired-group sensitivity interval."""
+class PredictorFamilyDeltaDispersion:
+    """Spread of paired group deltas; not a calibrated confidence interval.
 
-    method: Literal["paired_group_t_sensitivity"]
-    confidence_level: float
+    Held-out groups share overlapping training sets, so their delta scores are
+    positively dependent. The Student-*t* arithmetic below therefore understates
+    the variance of the mean delta, and no unbiased estimator of k-fold
+    cross-validation variance exists (Bengio & Grandvalet 2004). The bounds are a
+    dispersion summary at the requested nominal level, they are not calibrated,
+    and they are not simultaneous across the declared families.
+    """
+
+    method: Literal["paired_group_t_dispersion_uncalibrated"]
+    nominal_level: float
     groups: int
     mean_delta_r_squared: float
-    standard_error: float
-    lower: float
-    upper: float
+    group_standard_deviation: float
+    dependence_naive_standard_error: float
+    range_lower: float
+    range_upper: float
+    simultaneous_comparisons: int
+    calibrated: bool = False
     simultaneous: bool = False
+    dependence: str = (
+        "held-out group deltas share overlapping training sets and are positively "
+        "dependent; the naive standard error understates the true variance and the "
+        "range under-covers the mean delta"
+    )
+    multiplicity: str = (
+        "one range is reported per declared predictor family with no multiplicity "
+        "adjustment; divide the complement of nominal_level by "
+        "simultaneous_comparisons to read the bounds simultaneously"
+    )
 
 
 @dataclass(frozen=True)
@@ -120,7 +141,7 @@ class PredictorFamilyContribution:
     reduced_selected_alpha: float | None
     delta_mean_r_squared: float | None
     group_deltas: tuple[PredictorFamilyGroupDelta, ...]
-    group_interval: PredictorFamilyDeltaInterval | None
+    group_dispersion: PredictorFamilyDeltaDispersion | None
     reason: str
 
 
@@ -148,6 +169,13 @@ def assess_predictor_family_contributions(
     Positive deltas mean that the full model predicted held-out observations better
     than the reduced model. They are predictive sensitivity summaries, not causal
     effects, unique variance partitions, or evidence that a predictor is necessary.
+
+    Each family reports a ``group_dispersion`` summary rather than a
+    calibrated confidence interval: held-out groups share overlapping training
+    sets, so their deltas are positively dependent and the Student-*t* range
+    under-covers. No multiplicity adjustment is applied across families; the
+    number of simultaneous comparisons is recorded on every dispersion summary so
+    a reader can adjust the nominal level explicitly.
     """
 
     universes = {item.name: item for item in multiverse.universes}
@@ -167,7 +195,11 @@ def assess_predictor_family_contributions(
         )
     comparisons = tuple(
         _compare_family(
-            full, universes[item.reduced_model], item, spec.confidence_level
+            full,
+            universes[item.reduced_model],
+            item,
+            spec.confidence_level,
+            len(spec.families),
         )
         for item in spec.families
     )
@@ -178,7 +210,8 @@ def _compare_family(
     full: EncodingUniverseResult,
     reduced: EncodingUniverseResult,
     family: PredictorFamilyDropSpec,
-    confidence_level: float,
+    nominal_level: float,
+    simultaneous_comparisons: int,
 ) -> PredictorFamilyContribution:
     full_score = _score(full.model_result)
     reduced_score = _score(reduced.model_result)
@@ -207,7 +240,7 @@ def _compare_family(
             ),
             delta_mean_r_squared=None,
             group_deltas=(),
-            group_interval=None,
+            group_dispersion=None,
             reason=_failure_reason(full, reduced),
         )
     assert full.model_result is not None
@@ -232,7 +265,7 @@ def _compare_family(
             reduced_selected_alpha=reduced.model_result.selected_alpha,
             delta_mean_r_squared=None,
             group_deltas=(),
-            group_interval=None,
+            group_dispersion=None,
             reason="retained sample indices differ between full and reduced models",
         )
     full_groups = {
@@ -261,7 +294,7 @@ def _compare_family(
             reduced_selected_alpha=reduced.model_result.selected_alpha,
             delta_mean_r_squared=None,
             group_deltas=(),
-            group_interval=None,
+            group_dispersion=None,
             reason="held-out group identities or observation counts differ",
         )
     deltas = tuple(
@@ -294,7 +327,9 @@ def _compare_family(
         reduced_selected_alpha=reduced.model_result.selected_alpha,
         delta_mean_r_squared=full_score - reduced_score,
         group_deltas=deltas,
-        group_interval=_paired_interval(deltas, confidence_level),
+        group_dispersion=_paired_dispersion(
+            deltas, nominal_level, simultaneous_comparisons
+        ),
         reason=(
             "literal predictor drop with identical retained observations, tuning "
             "policy, and paired held-out groups"
@@ -313,25 +348,30 @@ def _failure_reason(
     return "full or reduced model failed; " + "; ".join(failures)
 
 
-def _paired_interval(
-    groups: tuple[PredictorFamilyGroupDelta, ...], confidence_level: float
-) -> PredictorFamilyDeltaInterval:
+def _paired_dispersion(
+    groups: tuple[PredictorFamilyGroupDelta, ...],
+    nominal_level: float,
+    simultaneous_comparisons: int,
+) -> PredictorFamilyDeltaDispersion:
     values = [item.delta_r_squared for item in groups]
     count = len(values)
     if count < 2:
-        raise ValueError("paired contribution interval requires at least two groups")
+        raise ValueError("paired contribution dispersion requires at least two groups")
     estimate = mean(values)
-    standard_error = stdev(values) / sqrt(count)
-    critical = float(student_t.ppf((1.0 + confidence_level) / 2.0, count - 1))
+    deviation = stdev(values)
+    standard_error = deviation / sqrt(count)
+    critical = float(student_t.ppf((1.0 + nominal_level) / 2.0, count - 1))
     margin = critical * standard_error
-    return PredictorFamilyDeltaInterval(
-        method="paired_group_t_sensitivity",
-        confidence_level=confidence_level,
+    return PredictorFamilyDeltaDispersion(
+        method="paired_group_t_dispersion_uncalibrated",
+        nominal_level=nominal_level,
         groups=count,
         mean_delta_r_squared=estimate,
-        standard_error=standard_error,
-        lower=estimate - margin,
-        upper=estimate + margin,
+        group_standard_deviation=deviation,
+        dependence_naive_standard_error=standard_error,
+        range_lower=estimate - margin,
+        range_upper=estimate + margin,
+        simultaneous_comparisons=simultaneous_comparisons,
     )
 
 

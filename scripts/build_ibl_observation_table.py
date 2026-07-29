@@ -21,12 +21,12 @@ from fiberphotometry import (
     RecordingInput,
     StudyDesign,
     Unit,
-    create_analysis_plan,
     run_pipeline,
     validate_design,
 )
 from fiberphotometry.events import summarize_event_windows
 from fiberphotometry.io.ibl import from_ibl_tables
+from fiberphotometry.planning import create_analysis_plan
 
 SESSIONS = (
     ("fip_13", "b6913f93-e7b1-4faf-ab4d-54261b0e31ea"),

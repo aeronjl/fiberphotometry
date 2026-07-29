@@ -12,7 +12,7 @@ from typing import Any
 
 from freeze_ibl_feedback_protocol_v31 import build_spec as build_v31_spec
 
-from fiberphotometry import (
+from fiberphotometry.multiverse import (
     ChoiceRef,
     CompatibilityRule,
     materialize_multiverse,

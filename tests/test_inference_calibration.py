@@ -8,9 +8,12 @@ from fiberphotometry import (
     ObservationTable,
     StudyDesign,
     Unit,
-    exact_sign_flip_test,
 )
-from fiberphotometry.inference import ResamplingPlan, hierarchical_bootstrap
+from fiberphotometry.inference import (
+    ResamplingPlan,
+    exact_sign_flip_test,
+    hierarchical_bootstrap,
+)
 
 
 def _paired_table() -> tuple[ObservationTable, StudyDesign, Estimand]:

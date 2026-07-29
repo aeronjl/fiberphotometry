@@ -13,11 +13,11 @@ from fiberphotometry import (
     Estimand,
     Factor,
     ObservationTable,
-    ResamplingPlan,
     StudyDesign,
     Unit,
     hierarchical_bootstrap,
 )
+from fiberphotometry.inference import ResamplingPlan
 
 
 def main() -> None:

@@ -9,4 +9,18 @@ repository-code: "https://github.com/aeronjl/fiberphotometry"
 license: "BSD-3-Clause"
 version: "0.1.0-dev"
 date-released: "2026-07-26"
+references:
+  - type: article
+    title: "Dopamine encodes deep network teaching signals for individual learning trajectories"
+    authors:
+      - family-names: "Liebana Garcia"
+        given-names: "Samuel"
+      - family-names: "Laffere"
+        given-names: "Aeron"
+    journal: "Cell"
+    volume: 188
+    start: 3789
+    year: 2025
+    doi: "10.1016/j.cell.2025.05.025"
+    notes: "Motivating longitudinal photometry study. Its Figure 1 result is reproduced from public data in the sibling package unspool."
 

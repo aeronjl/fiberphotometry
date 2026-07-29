@@ -15,10 +15,21 @@ from fiberphotometry.model import validate_recording
 BaselineStatistic = Literal["mean", "median", "minimum"]
 ThresholdMode = Literal["absolute", "global_mad", "rolling_mad"]
 
+_ScaleFailure = Literal["degenerate_noise_scale", "insufficient_noise_samples"]
+_MINIMUM_SCALE_SAMPLES = 3
+
 
 @dataclass(frozen=True)
 class TransientDetectionSpec:
-    """Declare one reproducible spontaneous-transient detection universe."""
+    """Declare one reproducible spontaneous-transient detection universe.
+
+    In the ``global_mad`` and ``rolling_mad`` families ``threshold`` is a
+    robust-sigma multiple: the noise scale is ``1.4826 * MAD``, so
+    ``threshold=3.0`` gates at three Gaussian standard deviations.
+    ``fiberphotometry.transient_product.GuppyTransientDetectorSpec`` uses the
+    opposite convention and multiplies the unscaled MAD, so the same number
+    means a different gate there.
+    """
 
     threshold_mode: ThresholdMode = "rolling_mad"
     threshold: float = 3.0
@@ -62,6 +73,8 @@ class TransientExclusion:
         "below_threshold",
         "incomplete_shape",
         "nonpositive_amplitude",
+        "degenerate_noise_scale",
+        "insufficient_noise_samples",
     ]
 
 
@@ -81,7 +94,11 @@ class TransientChannelSummary:
 
 @dataclass(frozen=True)
 class TransientDetectionResult:
-    """Accepted events, rejected candidates, summaries, and long-window bins."""
+    """Accepted events, rejected candidates, summaries, and long-window bins.
+
+    Every considered local maximum appears in exactly one of ``events`` or
+    ``exclusions``, so the two ledgers can be counted without double-counting.
+    """
 
     spec: TransientDetectionSpec
     events: tuple[TransientEvent, ...]
@@ -103,6 +120,12 @@ def detect_transients(
     Shape measurements and AUC use half-height crossings relative to the local
     pre-peak baseline. Long-window bins are descriptive summaries, not a claim
     that their variation is a biological "tonic" component.
+
+    A MAD family carries no threshold where its noise estimate degenerates. A
+    flat or quantization-locked window whose MAD is zero excludes its candidates
+    as ``degenerate_noise_scale``, and a window holding fewer than three samples
+    excludes them as ``insufficient_noise_samples``. Neither is clamped to a
+    floor, because a floored scale accepts every local maximum in the window.
     """
     validate_recording(recording)
     if variable not in recording:
@@ -160,9 +183,14 @@ def detect_transients(
                         )
                     )
                     continue
-                threshold = _threshold(
+                threshold, scale_failure = _threshold(
                     time, signal, run, run_time, peak, chosen, run_scale
                 )
+                if scale_failure is not None:
+                    exclusions.append(
+                        TransientExclusion(channel, float(time[peak]), scale_failure)
+                    )
+                    continue
                 if amplitude < threshold:
                     exclusions.append(
                         TransientExclusion(
@@ -174,12 +202,12 @@ def detect_transients(
                     time, signal, run, peak, int(relative_peak), baseline
                 )
                 if crossings is None:
-                    exclusions.append(
-                        TransientExclusion(
-                            channel, float(time[peak]), "incomplete_shape"
-                        )
-                    )
                     if chosen.require_complete_shape:
+                        exclusions.append(
+                            TransientExclusion(
+                                channel, float(time[peak]), "incomplete_shape"
+                            )
+                        )
                         continue
                     onset = offset = float("nan")
                     auc = float("nan")
@@ -264,8 +292,10 @@ def _baseline(values: np.ndarray, statistic: BaselineStatistic) -> float:
 
 
 def _robust_scale(values: np.ndarray) -> float:
+    if len(values) < _MINIMUM_SCALE_SAMPLES:
+        return float("nan")
     median = float(np.median(values))
-    return max(1.4826 * float(np.median(np.abs(values - median))), np.finfo(float).eps)
+    return 1.4826 * float(np.median(np.abs(values - median)))
 
 
 def _threshold(
@@ -276,18 +306,20 @@ def _threshold(
     peak: int,
     spec: TransientDetectionSpec,
     run_scale: float,
-) -> float:
+) -> tuple[float, _ScaleFailure | None]:
     if spec.threshold_mode == "absolute":
-        return spec.threshold
+        return spec.threshold, None
     scale = run_scale
     if spec.threshold_mode == "rolling_mad":
         half = spec.noise_window_s / 2
         left = int(np.searchsorted(run_time, time[peak] - half, side="left"))
         right = int(np.searchsorted(run_time, time[peak] + half, side="right"))
-        local = run[left:right]
-        if len(local) >= 3:
-            scale = _robust_scale(signal[local])
-    return float(spec.threshold * scale)
+        scale = _robust_scale(signal[run[left:right]])
+    if not np.isfinite(scale):
+        return float("nan"), "insufficient_noise_samples"
+    if scale <= 0:
+        return float("nan"), "degenerate_noise_scale"
+    return float(spec.threshold * scale), None
 
 
 def _half_height_crossings(

@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import asdict, dataclass, field
-from itertools import combinations, pairwise, product
+from itertools import combinations, pairwise, permutations, product
+from math import factorial
 from typing import Literal, TypeAlias
 
 import numpy as np
@@ -31,6 +32,8 @@ SpatialInferenceMetric: TypeAlias = Literal[
 ]
 Design: TypeAlias = Literal["paired", "independent"]
 Aggregation: TypeAlias = Literal["mean", "median"]
+
+_MAXIMUM_EXACT_PERMUTATIONS = 40_320
 
 
 @dataclass(frozen=True)
@@ -126,7 +129,12 @@ class SpatialDistanceBin:
 
 @dataclass(frozen=True)
 class SpatialNodePermutationSpec:
-    """Node-label randomization for distance-edge structure within a session."""
+    """Node-label randomization for distance-edge structure within a session.
+
+    When the node-label permutation group is no larger than ``resamples`` it is
+    enumerated exactly instead of sampled, so the reported p-value is never finer
+    than the design supports.
+    """
 
     resamples: int = 1_000
     seed: int = 0
@@ -219,7 +227,12 @@ class SpatialDistanceSummary:
 
 @dataclass(frozen=True)
 class SpatialNodePermutationResult:
-    """Within-session node-label null for distance-edge association."""
+    """Within-session node-label null for distance-edge association.
+
+    ``resamples`` is the requested count. ``effective_resamples`` is the number of
+    permutations that actually entered the null after undefined ones were dropped,
+    and ``pvalue_resolution`` is the finest p-value that count can express.
+    """
 
     performed: bool
     statistic: str
@@ -229,6 +242,11 @@ class SpatialNodePermutationResult:
     seed: int
     edge_count: int
     exclusion_reason: str | None
+    permutation_group_size: int
+    exhaustive: bool
+    effective_resamples: int
+    undefined_resamples: int
+    pvalue_resolution: float | None
 
 
 @dataclass(frozen=True)
@@ -703,30 +721,44 @@ def _spatial_node_null(
     permutation = spec.node_permutation
     assert permutation is not None
     statistic_name = "distance_transformed_edge_pearson_correlation"
+    node_count = len(metadata.channels)
+    group_size = factorial(node_count)
+    exhaustive = group_size <= min(permutation.resamples, _MAXIMUM_EXACT_PERMUTATIONS)
+    attempted = group_size if exhaustive else permutation.resamples
     if len(edges) < 3:
         return SpatialNodePermutationResult(
-            False,
-            statistic_name,
-            None,
-            None,
-            permutation.resamples,
-            permutation.seed,
-            len(edges),
-            "fewer_than_three_retained_edges",
+            performed=False,
+            statistic=statistic_name,
+            observed_value=None,
+            pvalue=None,
+            resamples=permutation.resamples,
+            seed=permutation.seed,
+            edge_count=len(edges),
+            exclusion_reason="fewer_than_three_retained_edges",
+            permutation_group_size=group_size,
+            exhaustive=exhaustive,
+            effective_resamples=0,
+            undefined_resamples=0,
+            pvalue_resolution=None,
         )
     values = np.asarray([edge.transformed_value for edge in edges])
     distances = np.asarray([edge.distance for edge in edges])
     observed = _safe_correlation(distances, values)
     if observed is None:
         return SpatialNodePermutationResult(
-            False,
-            statistic_name,
-            None,
-            None,
-            permutation.resamples,
-            permutation.seed,
-            len(edges),
-            "constant_distance_or_edge_values",
+            performed=False,
+            statistic=statistic_name,
+            observed_value=None,
+            pvalue=None,
+            resamples=permutation.resamples,
+            seed=permutation.seed,
+            edge_count=len(edges),
+            exclusion_reason="constant_distance_or_edge_values",
+            permutation_group_size=group_size,
+            exhaustive=exhaustive,
+            effective_resamples=0,
+            undefined_resamples=0,
+            pvalue_resolution=None,
         )
     lookup = {
         channel.channel_id: index for index, channel in enumerate(metadata.channels)
@@ -736,9 +768,13 @@ def _spatial_node_null(
         for edge in edges
     ]
     rng = np.random.default_rng(permutation.seed)
-    null = np.empty(permutation.resamples)
-    for draw in range(permutation.resamples):
-        labels = rng.permutation(len(metadata.channels))
+    labelings = (
+        (np.asarray(item) for item in permutations(range(node_count)))
+        if exhaustive
+        else (rng.permutation(node_count) for _ in range(permutation.resamples))
+    )
+    defined: list[float] = []
+    for labels in labelings:
         permuted_distances = np.asarray(
             [
                 np.linalg.norm(coordinates[labels[first]] - coordinates[labels[second]])
@@ -746,19 +782,33 @@ def _spatial_node_null(
             ]
         )
         value = _safe_correlation(permuted_distances, values)
-        null[draw] = 0.0 if value is None else value
+        if value is not None:
+            defined.append(value)
+    undefined = attempted - len(defined)
+    if len(defined) < max(2, (attempted + 1) // 2):
+        raise ValueError(
+            f"spatial node permutation null is undefined for {undefined} of "
+            f"{attempted} permutations, leaving {len(defined)} usable draws; "
+            "the retained edge geometry cannot support a randomization p-value"
+        )
+    null = np.asarray(defined)
     pvalue = float(
         (1 + np.count_nonzero(np.abs(null) >= abs(observed))) / (len(null) + 1)
     )
     return SpatialNodePermutationResult(
-        True,
-        statistic_name,
-        observed,
-        pvalue,
-        permutation.resamples,
-        permutation.seed,
-        len(edges),
-        None,
+        performed=True,
+        statistic=statistic_name,
+        observed_value=observed,
+        pvalue=pvalue,
+        resamples=permutation.resamples,
+        seed=permutation.seed,
+        edge_count=len(edges),
+        exclusion_reason=None,
+        permutation_group_size=group_size,
+        exhaustive=exhaustive,
+        effective_resamples=len(null),
+        undefined_resamples=undefined,
+        pvalue_resolution=1 / (len(null) + 1),
     )
 
 

@@ -2,12 +2,15 @@ import hashlib
 import json
 import subprocess
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
+from fiberphotometry import cli
 from fiberphotometry.cli import main
 from fiberphotometry.comparison import compare_project_evidence
+from fiberphotometry.io.nwb import series_provenance
 from fiberphotometry.project import TabularProjectConfig
 from fiberphotometry.publication import PUBLICATION_NAMESPACE
 from fiberphotometry.results import read_project_evidence
@@ -905,15 +908,14 @@ def test_cli_exports_valid_provenance_complete_nwb(tmp_path) -> None:
             "fiberphotometry_analysis",
             "fiberphotometry_metadata_completeness",
             "fiberphotometry_project",
+            "fiberphotometry_series_attributes",
+            "fiberphotometry_series_channels",
             "fiberphotometry_session_preflight",
             "fiberphotometry_session_qc",
         }
-        comments = (
-            nwbfile.processing["fiberphotometry"]
-            .data_interfaces["ProcessedFiberPhotometrySignal"]
-            .comments
-        )
-        assert "fiberphotometry_operations" in comments
+        provenance = series_provenance(nwbfile, "ProcessedFiberPhotometrySignal")
+        assert json.loads(provenance["fiberphotometry_operations"])
+        assert provenance["source_variable"] == "dff"
     manifest = json.loads((output / "manifest.json").read_text())
     for path in paths:
         name = f"nwb/{path.name}"
@@ -950,6 +952,8 @@ def test_cli_exports_multiverse_provenance_without_duplicate_signals(tmp_path) -
             "fiberphotometry_multiverse_result",
             "fiberphotometry_project",
             "fiberphotometry_robustness_summary",
+            "fiberphotometry_series_attributes",
+            "fiberphotometry_series_channels",
             "fiberphotometry_session_preflight",
             "fiberphotometry_session_qc",
         }
@@ -1096,3 +1100,436 @@ def test_cli_explicit_regularization_makes_jittered_asls_compatible(tmp_path) ->
     assert operation["kind"] == "resample"
     assert operation["rate_policy"] == "median"
     assert operation["max_gap_factor"] == 1.5
+
+
+def _write_table(path: Path, columns: dict[str, np.ndarray]) -> Path:
+    names = list(columns)
+    rows = zip(*(columns[name] for name in names), strict=True)
+    path.write_text(
+        ",".join(names)
+        + "\n"
+        + "".join(",".join(repr(float(value)) for value in row) + "\n" for row in rows)
+    )
+    return path
+
+
+def _paired_recording(
+    path: Path,
+    *,
+    slope: float = 3.0,
+    intercept: float = 0.5,
+    rate_hz: float = 20.0,
+    duration_s: float = 120.0,
+) -> Path:
+    time = np.round(np.arange(int(duration_s * rate_hz)) / rate_hz, 6)
+    reference = 1 + 0.05 * np.sin(2 * np.pi * 0.01 * time)
+    return _write_table(
+        path,
+        {"time": time, "signal": intercept + slope * reference, "reference": reference},
+    )
+
+
+def _transient_recording(
+    path: Path,
+    *,
+    amplitude: float = 0.25,
+    sigma_s: float = 0.3,
+    onsets: tuple[float, ...] = (20.0, 45.0, 70.0, 95.0),
+) -> Path:
+    time = np.round(np.arange(2400) * 0.05, 6)
+    reference = 1 + 0.05 * np.sin(2 * np.pi * 0.01 * time)
+    dff = np.zeros_like(time)
+    for onset in onsets:
+        dff += amplitude * np.exp(-0.5 * ((time - onset) / sigma_s) ** 2)
+    return _write_table(
+        path,
+        {
+            "time": time,
+            "signal": (2.0 + 0.5 * reference) * (1 + dff),
+            "reference": reference,
+        },
+    )
+
+
+def _run(capsys, argv: list[str]) -> dict:
+    assert main(argv) == 0
+    return json.loads(capsys.readouterr().out)
+
+
+def test_qc_recovers_the_analytic_rate_slope_and_correlation(tmp_path, capsys) -> None:
+    source = _paired_recording(tmp_path / "recording.csv", slope=3.0, intercept=0.5)
+
+    report = _run(capsys, ["qc", str(source), "--quiet"])
+
+    recording = report["recording"]
+    channel = report["channels"][0]
+    assert recording["estimated_rate_hz"] == pytest.approx(20.0, abs=1e-9)
+    assert recording["duration_s"] == pytest.approx(119.95, abs=1e-9)
+    assert recording["samples"] == 2400
+    assert channel["signal_reference_correlation"] == pytest.approx(1.0, abs=1e-9)
+    assert channel["ols_slope"] == pytest.approx(3.0, abs=1e-9)
+    assert channel["ols_intercept"] == pytest.approx(0.5, abs=1e-9)
+    assert channel["irls_slope"] == pytest.approx(3.0, abs=1e-9)
+    assert channel["ols_residual_rmse"] == pytest.approx(0.0, abs=1e-9)
+    assert report["status"] == "ok"
+    assert report["warnings"] == []
+
+
+def test_dff_recovers_the_injected_transient_amplitude(tmp_path, capsys) -> None:
+    source = _transient_recording(
+        tmp_path / "recording.csv", amplitude=0.25, onsets=(30.0,)
+    )
+
+    result = _run(capsys, ["dff", str(source), "--quiet"])
+
+    time = np.asarray(result["samples"]["time_s"], dtype=float)
+    recovered = np.asarray(result["samples"]["channels"]["signal"], dtype=float)
+    assert result["units"] == "dF/F"
+    assert np.max(recovered) == pytest.approx(0.25, abs=1e-6)
+    assert time[int(np.argmax(recovered))] == pytest.approx(30.0, abs=1e-9)
+    assert np.max(np.abs(recovered[np.abs(time - 30.0) > 3.0])) < 1e-6
+    assert result["provenance"] == [
+        {
+            "kind": "reference_dff",
+            "max_iterations": 50,
+            "method": "irls",
+            "tolerance": 1e-8,
+        }
+    ]
+
+
+def test_align_baseline_z_returns_the_analytic_z_score(tmp_path, capsys) -> None:
+    time = np.round(np.arange(800) * 0.05, 6)
+    signal = np.ones_like(time)
+    baseline = (time >= 9.0) & (time < 10.0)
+    signal[baseline] = np.where(np.arange(int(baseline.sum())) % 2 == 0, 1.2, 0.8)
+    signal[(time >= 10.0) & (time < 11.0)] = 1.5
+    source = _write_table(tmp_path / "recording.csv", {"time": time, "signal": signal})
+    events = tmp_path / "events.csv"
+    events.write_text("time,event_id\n10.0,cue-1\n")
+
+    result = _run(
+        capsys,
+        [
+            "align",
+            str(source),
+            "--events",
+            str(events),
+            "--event-id-column",
+            "event_id",
+            "--variable",
+            "signal",
+            "--baseline",
+            "-1",
+            "0",
+            "--response",
+            "0",
+            "1",
+            "--normalization",
+            "baseline_z",
+            "--quiet",
+        ],
+    )
+
+    row = result["per_event"][0]
+    assert result["units"] == "baseline SD"
+    assert row["event_id"] == "cue-1"
+    assert row["disposition"] == "complete"
+    assert row["baseline_mean"] == pytest.approx(0.0, abs=1e-12)
+    assert row["response_mean"] == pytest.approx(2.5, abs=1e-12)
+    assert row["delta"] == pytest.approx(2.5, abs=1e-12)
+    assert result["summary"][0]["mean_delta"] == pytest.approx(2.5, abs=1e-12)
+
+
+def test_transients_recover_the_injected_count_times_and_width(
+    tmp_path, capsys
+) -> None:
+    onsets = (20.0, 45.0, 70.0, 95.0)
+    source = _transient_recording(
+        tmp_path / "recording.csv", amplitude=0.25, sigma_s=0.3, onsets=onsets
+    )
+
+    result = _run(
+        capsys,
+        [
+            "transients",
+            str(source),
+            "--detector",
+            "absolute",
+            "--threshold",
+            "0.1",
+            "--baseline-duration",
+            "2",
+            "--baseline-gap",
+            "2",
+            "--min-distance",
+            "2",
+            "--quiet",
+        ],
+    )
+
+    events = result["events"]
+    assert len(events) == len(onsets)
+    assert [event["peak_time"] for event in events] == pytest.approx(onsets, abs=1e-9)
+    for event in events:
+        assert event["amplitude"] == pytest.approx(0.25, abs=1e-6)
+        assert event["full_width_half_height_s"] == pytest.approx(
+            2 * 0.3 * np.sqrt(2 * np.log(2)), abs=2e-3
+        )
+    assert result["summaries"][0]["count"] == 4
+    assert result["summaries"][0]["rate_per_minute"] == pytest.approx(2.0, abs=1e-3)
+    accepted = {event["peak_time"] for event in events}
+    rejected = {item["peak_time"] for item in result["exclusions"]}
+    assert accepted.isdisjoint(rejected)
+    assert {item["reason"] for item in result["exclusions"]} <= {
+        "below_threshold",
+        "degenerate_noise_scale",
+        "incomplete_shape",
+        "insufficient_baseline",
+        "insufficient_noise_samples",
+        "nonpositive_amplitude",
+    }
+
+
+def _write_ppd(path: Path) -> Path:
+    header = {
+        "subject_ID": "mouse-01",
+        "date_time": "2026-01-01T12:00:00",
+        "mode": "2 colour pulsed",
+        "sampling_rate": 20,
+        "volts_per_division": [0.001, 0.001],
+        "version": "1.1",
+        "n_analog_signals": 2,
+        "n_digital_signals": 2,
+        "ADC_max_value": 32767,
+    }
+    encoded = json.dumps(header).encode()
+    words: list[int] = []
+    for index in range(200):
+        words.extend(
+            [
+                ((3000 + index) << 1) | (1 if 40 <= index < 50 else 0),
+                1000 << 1,
+                (2000 + index) << 1,
+                900 << 1,
+            ]
+        )
+    path.write_bytes(
+        len(encoded).to_bytes(2, "little")
+        + encoded
+        + np.asarray(words, dtype="<u2").tobytes()
+    )
+    return path
+
+
+def _write_doric(path: Path):
+    h5py = pytest.importorskip("h5py")
+    time = np.round(np.arange(1200) * 0.05, 6)
+    with h5py.File(path, "w") as file:
+        root = file.create_group("DataAcquisition/FPConsole/Signals/Series0001")
+        signal = root.create_group("AIN01xAOUT01-LockIn")
+        signal.create_dataset("Time", data=time)
+        signal.create_dataset("Values", data=2 + 0.5 * np.sin(time / 10))
+        reference = root.create_group("AIN01xAOUT02-LockIn")
+        reference.create_dataset("Time", data=time)
+        reference.create_dataset("Values", data=1 + 0.1 * np.sin(time / 10))
+        digital = root.create_group("DigitalIO/DIO01")
+        digital.create_dataset("Time", data=time)
+        digital.create_dataset("Values", data=(np.sin(time) > 0.99).astype(float))
+    return path
+
+
+def _write_neurophotometrics(path: Path) -> Path:
+    rows = ["FrameCounter,SystemTimestamp,LedState,Region0G"]
+    for index in range(1000):
+        led = 2 if index % 2 == 0 else 1
+        value = 3.0 + 0.01 * index if led == 2 else 1.0 + 0.001 * index
+        rows.append(f"{index},{index * 0.025:.4f},{led},{value:.6f}")
+    path.write_text("\n".join(rows) + "\n")
+    return path
+
+
+def test_qc_reads_pyphotometry_without_a_schema(tmp_path, capsys) -> None:
+    source = _write_ppd(tmp_path / "mouse.ppd")
+
+    report = _run(capsys, ["qc", str(source), "--quiet"])
+
+    assert report["source"]["format"] == "pyphotometry"
+    assert report["recording"]["has_reference"] is True
+    assert report["recording"]["estimated_rate_hz"] == pytest.approx(20.0, abs=1e-9)
+    assert report["recording"]["channel_names"] == ["analog_1"]
+
+
+def test_align_reads_doric_digital_events_without_a_schema(tmp_path, capsys) -> None:
+    source = _write_doric(tmp_path / "Console_Acq_0000.doric")
+
+    result = _run(
+        capsys,
+        ["align", str(source), "--baseline", "-1", "0", "--response", "0", "1", "-q"],
+    )
+
+    assert result["source"]["format"] == "doric"
+    assert result["events"]["count"] > 0
+    assert result["events"]["origin"] == "doric source"
+    assert result["units"] == "dF/F"
+    assert result["per_event"][0]["disposition"] == "complete"
+
+
+def test_qc_reads_neurophotometrics_without_a_schema(tmp_path, capsys) -> None:
+    source = _write_neurophotometrics(tmp_path / "fpdata.csv")
+
+    report = _run(capsys, ["qc", str(source), "--quiet"])
+
+    assert report["source"]["format"] == "neurophotometrics"
+    assert report["recording"]["channel_names"] == ["Region0G"]
+    assert report["recording"]["has_reference"] is True
+
+
+def test_qc_reads_a_tdt_block_without_a_schema(tmp_path, capsys, monkeypatch) -> None:
+    block = tmp_path / "Subject-Block-1"
+    block.mkdir()
+    (block / "Subject.tsq").write_bytes(b"")
+    time = np.arange(1200) / 20
+    stream = SimpleNamespace(
+        data=np.vstack([2 + 0.5 * np.sin(time / 10), 3 + 0.5 * np.sin(time / 10)]),
+        fs=20.0,
+        start_time=0.0,
+    )
+    reference = SimpleNamespace(
+        data=np.vstack([1 + 0.1 * np.sin(time / 10), 1 + 0.1 * np.sin(time / 10)]),
+        fs=20.0,
+        start_time=0.0,
+    )
+    block_data = SimpleNamespace(
+        streams=SimpleNamespace(x465A=stream, x405A=reference),
+        epocs=SimpleNamespace(
+            Trl_=SimpleNamespace(
+                onset=np.asarray([5.0, 25.0]),
+                offset=np.asarray([5.1, 25.1]),
+                data=np.asarray([1.0, 2.0]),
+            )
+        ),
+    )
+    monkeypatch.setattr(cli, "_tdt_reader", lambda: lambda path, **kwargs: block_data)
+
+    report = _run(capsys, ["qc", str(block), "--quiet"])
+
+    assert report["source"]["format"] == "tdt"
+    assert report["recording"]["channel_names"] == ["x465A_1", "x465A_2"]
+    assert report["recording"]["estimated_rate_hz"] == pytest.approx(20.0, abs=1e-9)
+
+
+def test_dff_round_trips_through_nwb(tmp_path, capsys) -> None:
+    pytest.importorskip("pynwb")
+    source = _paired_recording(tmp_path / "recording.csv")
+    destination = tmp_path / "session.nwb"
+
+    assert (
+        main(
+            [
+                "dff",
+                str(source),
+                "--output",
+                str(destination),
+                "--session-start-time",
+                "2026-01-01T12:00:00+00:00",
+                "--quiet",
+            ]
+        )
+        == 0
+    )
+    report = _run(capsys, ["qc", str(destination), "--quiet"])
+
+    assert destination.is_file()
+    assert report["source"]["format"] == "nwb"
+    assert report["recording"]["samples"] == 2400
+    assert report["recording"]["estimated_rate_hz"] == pytest.approx(20.0, abs=1e-9)
+
+
+def test_dff_csv_carries_provenance_inline_and_in_a_sidecar(tmp_path, capsys) -> None:
+    source = _paired_recording(tmp_path / "recording.csv")
+    destination = tmp_path / "dff.csv"
+
+    assert (
+        main(
+            [
+                "dff",
+                str(source),
+                "--format",
+                "csv",
+                "--output",
+                str(destination),
+                "--quiet",
+            ]
+        )
+        == 0
+    )
+
+    lines = destination.read_text().splitlines()
+    inline = json.loads(lines[0].removeprefix("# "))
+    sidecar = json.loads((tmp_path / "dff.csv.provenance.json").read_text())
+    assert inline["variable"] == "dff"
+    assert inline["operations"][0]["kind"] == "reference_dff"
+    assert lines[1] == "time_s,signal"
+    assert len(lines) == 2402
+    assert sidecar["provenance"] == inline["operations"]
+    assert "samples" not in sidecar
+    assert capsys.readouterr().out == ""
+
+
+def test_quiet_suppresses_the_human_summary(tmp_path, capsys) -> None:
+    source = _paired_recording(tmp_path / "recording.csv")
+
+    assert main(["qc", str(source)]) == 0
+    assert "status: ok" in capsys.readouterr().err
+    assert main(["qc", str(source), "--quiet"]) == 0
+    assert capsys.readouterr().err == ""
+
+
+@pytest.mark.parametrize(
+    ("argv", "code"),
+    [
+        (["qc", "absent.csv"], "acquisition_source_unreadable"),
+        (["qc", "notes.md"], "unrecognized_acquisition_format"),
+        (["qc", "recording.csv", "--channel", "absent"], "channel_not_found"),
+        (
+            ["dff", "signal-only.csv", "--method", "reference"],
+            "reference_channel_missing",
+        ),
+        (["align", "recording.csv"], "event_times_missing"),
+        (
+            [
+                "dff",
+                "jittered.csv",
+                "--method",
+                "baseline",
+                "--baseline-method",
+                "asls",
+            ],
+            "asls_requires_regular_sampling",
+        ),
+        (
+            ["dff", "recording.csv", "--output", "out.nwb"],
+            "nwb_session_start_time_missing",
+        ),
+    ],
+)
+def test_analysis_failures_use_stable_codes_and_name_a_next_step(
+    tmp_path, capsys, monkeypatch, argv, code
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    _paired_recording(tmp_path / "recording.csv")
+    (tmp_path / "notes.md").write_text("not a recording\n")
+    time = np.round(np.arange(400) * 0.05, 6)
+    _write_table(tmp_path / "signal-only.csv", {"time": time, "signal": 1 + time / 100})
+    jittered = time + np.concatenate([[0.0], np.tile([0.004, -0.004], 199), [0.0]])
+    _write_table(
+        tmp_path / "jittered.csv", {"time": jittered, "signal": 1 + jittered / 100}
+    )
+
+    assert main(argv) == 2
+
+    captured = capsys.readouterr()
+    assert captured.err.startswith(f"error: {code}: ")
+    assert "hint: " in captured.err
+    assert captured.out == ""

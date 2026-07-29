@@ -13,10 +13,10 @@ from fiberphotometry import (
     ResampleOperation,
     StudyDesign,
     Unit,
-    assess_pipeline_compatibility,
-    create_analysis_plan,
     make_recording,
 )
+from fiberphotometry.compatibility import assess_pipeline_compatibility
+from fiberphotometry.planning import create_analysis_plan
 
 
 def _spec(table, design, estimand, operations):

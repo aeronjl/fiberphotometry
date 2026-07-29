@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry import (
+from fiberphotometry.population import (
     PopulationContrastSpec,
     PopulationGroupAssignment,
     PopulationInteractionSpec,

@@ -10,15 +10,11 @@ import numpy as np
 from one.api import ONE
 
 from fiberphotometry import (
-    ChoiceRef,
     Contrast,
-    DecisionAlternative,
-    DecisionNode,
     Estimand,
     EventSummarySpec,
     Factor,
     LowpassFilterOperation,
-    MultiverseSpec,
     ObservationTable,
     PipelineSpec,
     QualityGateSpec,
@@ -27,11 +23,17 @@ from fiberphotometry import (
     ResampleOperation,
     StudyDesign,
     Unit,
-    create_analysis_plan,
-    run_multiverse,
 )
 from fiberphotometry.events import summarize_event_windows
 from fiberphotometry.io.ibl import from_ibl_tables
+from fiberphotometry.multiverse import (
+    ChoiceRef,
+    DecisionAlternative,
+    DecisionNode,
+    MultiverseSpec,
+    run_multiverse,
+)
+from fiberphotometry.planning import create_analysis_plan
 
 SESSIONS = (
     ("fip_13", "b6913f93-e7b1-4faf-ab4d-54261b0e31ea"),

@@ -62,6 +62,8 @@ def validate_remote_nwb_asset(
         raise ValueError("max_samples must be positive")
     download_url = resolve_dandi_download_url(asset_id)
 
+    _response_series_type()
+
     import h5py  # type: ignore[import-untyped]
     import remfile  # type: ignore[import-untyped]
     from pynwb import NWBHDF5IO  # type: ignore[import-untyped]
@@ -127,13 +129,27 @@ def resolve_dandi_download_url(asset_id: str) -> str:
 
 
 def _response_series(nwbfile: Any) -> Iterator[tuple[str, Any]]:
+    response_series = _response_series_type()
     for name, value in nwbfile.acquisition.items():
-        if type(value).__name__ == "FiberPhotometryResponseSeries":
+        if isinstance(value, response_series):
             yield f"acquisition/{name}", value
     for module_name, module in nwbfile.processing.items():
         for name, value in module.data_interfaces.items():
-            if type(value).__name__ == "FiberPhotometryResponseSeries":
+            if isinstance(value, response_series):
                 yield f"processing/{module_name}/{name}", value
+
+
+def _response_series_type() -> type:
+    try:
+        from ndx_fiber_photometry import (  # type: ignore[import-untyped]
+            FiberPhotometryResponseSeries,
+        )
+    except ImportError as error:
+        raise ValueError(
+            "reading fiber photometry NWB assets requires the optional 'nwb' "
+            "dependencies"
+        ) from error
+    return FiberPhotometryResponseSeries  # type: ignore[no-any-return]
 
 
 def _subject_id(nwbfile: Any) -> str:

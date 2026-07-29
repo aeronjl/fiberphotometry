@@ -12,7 +12,7 @@ from typing import Any
 
 from freeze_ibl_feedback_protocol_v3 import build_spec as build_v3_spec
 
-from fiberphotometry import materialize_multiverse
+from fiberphotometry.multiverse import materialize_multiverse
 
 
 def build_spec(manifest: dict[str, Any]):  # type annotation inferred from v0.3 builder

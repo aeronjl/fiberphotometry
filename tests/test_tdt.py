@@ -10,10 +10,10 @@ from fiberphotometry import (
     TDTEpocEvents,
     TDTEpocValue,
     TDTStreamChannel,
-    inspect_loaded_tabular_input,
     load_tdt_input,
 )
 from fiberphotometry.cli import run_project
+from fiberphotometry.io.tabular import inspect_loaded_tabular_input
 from fiberphotometry.project import TDTProjectConfig, load_project_config
 
 

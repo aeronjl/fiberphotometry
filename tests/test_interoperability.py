@@ -8,14 +8,15 @@ import h5py
 import numpy as np
 import pandas as pd
 import pytest
+import xarray as xr
 
-from fiberphotometry import (
+from fiberphotometry.encoding import EncodingSession
+from fiberphotometry.interoperability import (
     BehaviorAnnotations,
     BehaviorCovariate,
     BehaviorInterval,
     ClockPulseMatches,
     ClockSynchronizationSpec,
-    EncodingSession,
     annotations_from_boris,
     annotations_from_boris_tabular_file,
     annotations_from_moseq,
@@ -23,11 +24,72 @@ from fiberphotometry import (
     fit_clock_synchronization,
     pose_from_deeplabcut,
     pose_from_deeplabcut_file,
+    pose_from_movement,
     pose_from_sleap,
     pose_from_sleap_analysis_h5,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures" / "interoperability"
+
+
+def _movement_poses(
+    *,
+    position: np.ndarray,
+    confidence: np.ndarray | None = None,
+    keypoints: list[str],
+    individuals: list[str],
+    space: list[str] | None = None,
+    fps: float | None = 1.0,
+    source_software: str = "DeepLabCut",
+    dimension_names: tuple[str, str] = ("keypoint", "individual"),
+) -> xr.Dataset:
+    keypoint_dim, individual_dim = dimension_names
+    dims = ("time", "space", keypoint_dim, individual_dim)
+    coords: dict[str, object] = {
+        "space": space if space is not None else ["x", "y"],
+        keypoint_dim: keypoints,
+        individual_dim: individuals,
+    }
+    attrs: dict[str, object] = {"ds_type": "poses", "source_software": source_software}
+    if fps is not None:
+        coords["time"] = np.arange(position.shape[0], dtype=float) / fps
+        attrs["fps"] = fps
+        attrs["time_unit"] = "seconds"
+    else:
+        coords["time"] = np.arange(position.shape[0], dtype=float)
+        attrs["time_unit"] = "frames"
+    data_vars: dict[str, object] = {"position": (dims, position.astype(np.float32))}
+    if confidence is not None:
+        data_vars["confidence"] = (
+            ("time", keypoint_dim, individual_dim),
+            confidence.astype(np.float32),
+        )
+    return xr.Dataset(data_vars, coords=coords, attrs=attrs)
+
+
+def _single_keypoint_movement_poses(
+    x: list[float],
+    y: list[float],
+    likelihood: list[float] | None,
+    *,
+    fps: float | None = 1.0,
+    **kwargs: object,
+) -> xr.Dataset:
+    position = np.stack([np.asarray(x, dtype=float), np.asarray(y, dtype=float)])
+    position = position.T.reshape(len(x), 2, 1, 1)
+    confidence = (
+        np.asarray(likelihood, dtype=float).reshape(len(x), 1, 1)
+        if likelihood is not None
+        else None
+    )
+    return _movement_poses(
+        position=position,
+        confidence=confidence,
+        keypoints=["nose"],
+        individuals=["individual_0"],
+        fps=fps,
+        **kwargs,  # type: ignore[arg-type]
+    )
 
 
 class _Frame:
@@ -552,3 +614,163 @@ def test_moseq_documented_results_h5_shape(tmp_path: Path) -> None:
         "pause",
     ]
     assert annotations.source_artifact == str(path)
+
+
+def test_movement_dataset_matches_first_party_reader_values_and_mask() -> None:
+    x = [0.0, 1.0, 2.0, 30.0, 31.0]
+    y = [0.0, 0.0, 0.0, 0.0, 0.0]
+    likelihood = [0.99, 0.99, 0.2, 0.99, 0.99]
+    native = pose_from_deeplabcut(
+        _Frame(
+            {
+                ("network", "nose", "x"): x,
+                ("network", "nose", "y"): y,
+                ("network", "nose", "likelihood"): likelihood,
+            }
+        ),
+        subject="mouse-1",
+        session="day-1",
+        keypoint="nose",
+        fps=1.0,
+        scorer="network",
+    )
+    bridged = pose_from_movement(
+        _single_keypoint_movement_poses(x, y, likelihood),
+        subject="mouse-1",
+        session="day-1",
+    )
+
+    assert bridged.source == native.source == "deeplabcut"
+    assert bridged.keypoint == native.keypoint == "nose"
+    assert bridged.time_s.tolist() == native.time_s.tolist()
+    assert bridged.x.tolist() == pytest.approx(native.x.tolist())
+    assert bridged.y.tolist() == pytest.approx(native.y.tolist())
+    assert bridged.confidence.tolist() == pytest.approx(native.confidence.tolist())
+
+    bridged_speed = bridged.speed(minimum_confidence=0.9)
+    native_speed = native.speed(minimum_confidence=0.9)
+    assert bridged_speed.valid.tolist() == native_speed.valid.tolist()
+    assert bridged_speed.valid.tolist() == [False, True, False, False, True]
+    assert bridged_speed.values[1:].tolist() == pytest.approx(
+        native_speed.values[1:].tolist()
+    )
+    assert np.isnan(bridged_speed.values[0])
+
+
+def test_movement_speed_never_reports_a_confidence_gated_sample() -> None:
+    speed = pose_from_movement(
+        _single_keypoint_movement_poses(
+            [0.0, 1.0, 2.0, 30.0, 31.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0],
+            [0.99, 0.99, 0.2, 0.99, 0.99],
+        ),
+        subject="mouse-1",
+        session="day-1",
+    ).speed(minimum_confidence=0.9)
+
+    assert speed.values[3] == pytest.approx(28.0)
+    assert not speed.valid[3]
+    assert speed.valid[1]
+    assert speed.values[1] == pytest.approx(1.0)
+    assert 14.5 not in speed.values[speed.valid].tolist()
+
+
+def test_movement_dataset_requires_explicit_identity_when_ambiguous() -> None:
+    position = np.zeros((3, 2, 2, 2), dtype=float)
+    dataset = _movement_poses(
+        position=position,
+        confidence=np.ones((3, 2, 2), dtype=float),
+        keypoints=["nose", "tail_base"],
+        individuals=["mouse-a", "mouse-b"],
+    )
+
+    with pytest.raises(ValueError, match="keypoint is missing or ambiguous"):
+        pose_from_movement(dataset, subject="mouse-1", session="day-1")
+    with pytest.raises(ValueError, match="individual is missing or ambiguous"):
+        pose_from_movement(dataset, subject="mouse-1", session="day-1", keypoint="nose")
+    with pytest.raises(ValueError, match="no keypoint 'snout'"):
+        pose_from_movement(
+            dataset,
+            subject="mouse-1",
+            session="day-1",
+            keypoint="snout",
+            individual="mouse-a",
+        )
+
+    pose = pose_from_movement(
+        dataset,
+        subject="mouse-1",
+        session="day-1",
+        keypoint="tail_base",
+        individual="mouse-b",
+    )
+    assert pose.keypoint == "tail_base"
+    assert pose.individual == "mouse-b"
+
+
+def test_movement_dataset_refuses_frame_indexed_time_without_declaration() -> None:
+    dataset = _single_keypoint_movement_poses(
+        [0.0, 1.0, 2.0], [0.0, 0.0, 0.0], [1.0, 1.0, 1.0], fps=None
+    )
+
+    with pytest.raises(ValueError, match="not expressed in seconds"):
+        pose_from_movement(dataset, subject="mouse-1", session="day-1")
+
+    pose = pose_from_movement(dataset, subject="mouse-1", session="day-1", fps=25.0)
+    assert pose.time_s.tolist() == pytest.approx([0.0, 0.04, 0.08])
+
+
+def test_movement_dataset_carries_float32_precision_into_float64() -> None:
+    value = 382.74652904163474
+    pose = pose_from_movement(
+        _single_keypoint_movement_poses([value], [0.0], [1.0]),
+        subject="mouse-1",
+        session="day-1",
+    )
+
+    assert pose.x.dtype == np.float64
+    assert pose.x[0] != value
+    assert pose.x[0] == pytest.approx(value)
+    assert pose.x[0] == float(np.float32(value))
+
+
+def test_movement_dataset_reads_three_dimensional_and_plural_dimensions() -> None:
+    position = np.zeros((3, 3, 1, 1), dtype=float)
+    position[:, 2, 0, 0] = [0.0, 3.0, 6.0]
+    dataset = _movement_poses(
+        position=position,
+        confidence=np.ones((3, 1, 1), dtype=float),
+        keypoints=["nose"],
+        individuals=["id_0"],
+        space=["x", "y", "z"],
+        source_software="SLEAP",
+        dimension_names=("keypoints", "individuals"),
+    )
+
+    pose = pose_from_movement(dataset, subject="mouse-1", session="day-1")
+
+    assert pose.source == "sleap"
+    assert pose.z is not None
+    assert pose.z.tolist() == pytest.approx([0.0, 3.0, 6.0])
+    assert pose.speed(minimum_confidence=0.5).values[1:].tolist() == pytest.approx(
+        [3.0, 3.0]
+    )
+
+
+def test_movement_dataset_without_confidence_is_missing_not_certain() -> None:
+    pose = pose_from_movement(
+        _single_keypoint_movement_poses([0.0, 1.0, 2.0], [0.0, 0.0, 0.0], None),
+        subject="mouse-1",
+        session="day-1",
+    )
+
+    assert np.isnan(pose.confidence).all()
+    assert not pose.speed(minimum_confidence=0.0).valid.any()
+
+
+def test_movement_bboxes_dataset_is_refused() -> None:
+    dataset = _single_keypoint_movement_poses([0.0, 1.0], [0.0, 0.0], [1.0, 1.0])
+    dataset.attrs["ds_type"] = "bboxes"
+
+    with pytest.raises(ValueError, match="must be a poses dataset"):
+        pose_from_movement(dataset, subject="mouse-1", session="day-1")

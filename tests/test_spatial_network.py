@@ -1,5 +1,6 @@
 import json
 from dataclasses import replace
+from itertools import permutations
 
 import numpy as np
 import pytest
@@ -13,9 +14,11 @@ from fiberphotometry.spatial_network import (
     SpatialAnimalInferenceSpec,
     SpatialArrayMetadata,
     SpatialDistanceBin,
+    SpatialNetworkResult,
     SpatialNetworkSpec,
     SpatialNodePermutationSpec,
     SpatialStudySession,
+    _safe_correlation,
     estimate_spatial_network,
     infer_spatial_network_animals,
 )
@@ -231,6 +234,163 @@ def test_mouse_inference_aggregates_sessions_before_contrasting_conditions() -> 
         ),
     )
     assert local.estimate > 0.75
+
+
+def _hub_metadata(
+    positions: tuple[tuple[float, float, float], ...],
+) -> SpatialArrayMetadata:
+    channels = tuple(
+        ChannelIdentity(
+            channel_id=f"fiber-{index}",
+            site=f"site-{index}",
+            sensor="dLight1.3b",
+            role="sensor",
+            unit="dF/F",
+            fiber_id=f"fiber-{index}",
+            coordinate=SpatialCoordinate(x, y, z, unit="mm", space="implant"),
+        )
+        for index, (x, y, z) in enumerate(positions)
+    )
+    return SpatialArrayMetadata(
+        subject="mouse-hub",
+        session="session-hub",
+        array_id="array-hub",
+        channels=channels,
+        clock_id="photometry-clock",
+        alignment_policy="native_shared_clock",
+        preprocessing_fingerprint="sha256:preprocessing",
+    )
+
+
+def _hub_signals(
+    loadings: tuple[float, ...], seed: int = 11
+) -> tuple[np.ndarray, np.ndarray]:
+    rng = np.random.default_rng(seed)
+    spokes = len(loadings)
+    time = np.arange(0, 15.0 * spokes, 0.05)
+    count = len(time)
+    hub = rng.normal(size=count)
+    values = np.full((count, spokes + 1), np.nan)
+    values[:, 0] = hub
+    window = count // spokes
+    for index, loading in enumerate(loadings):
+        start = index * window
+        stop = count if index == spokes - 1 else start + window
+        segment = slice(start, stop)
+        values[segment, index + 1] = loading * hub[segment] + np.sqrt(
+            1 - loading**2
+        ) * rng.normal(size=stop - start)
+    return time, values
+
+
+def _hub_network_spec(resamples: int) -> SpatialNetworkSpec:
+    return SpatialNetworkSpec(
+        association=LaggedAssociationSpec(maximum_lag_s=0.2),
+        minimum_edge_support=100,
+        node_permutation=SpatialNodePermutationSpec(resamples=resamples, seed=5),
+    )
+
+
+def _enumerated_null(
+    result: object, positions: tuple[tuple[float, float, float], ...]
+) -> tuple[list[float], int, float]:
+    assert isinstance(result, SpatialNetworkResult)
+    coordinates = np.asarray(positions, dtype=float)
+    lookup = {f"fiber-{index}": index for index in range(len(positions))}
+    pairs = [
+        (lookup[edge.first_channel_id], lookup[edge.second_channel_id])
+        for edge in result.edges
+    ]
+    values = np.asarray([edge.transformed_value for edge in result.edges])
+    observed = _safe_correlation(
+        np.asarray([edge.distance for edge in result.edges]), values
+    )
+    assert observed is not None
+    defined: list[float] = []
+    undefined = 0
+    for labels in permutations(range(len(positions))):
+        permuted = np.asarray(
+            [
+                float(
+                    np.linalg.norm(
+                        coordinates[labels[first]] - coordinates[labels[second]]
+                    )
+                )
+                for first, second in pairs
+            ]
+        )
+        value = _safe_correlation(permuted, values)
+        if value is None:
+            undefined += 1
+        else:
+            defined.append(value)
+    return defined, undefined, observed
+
+
+def test_undefined_node_permutations_leave_the_null_instead_of_becoming_zero() -> None:
+    positions = ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0))
+    time, values = _hub_signals((0.8, 0.95, 0.5))
+
+    result = estimate_spatial_network(
+        time, values, _hub_metadata(positions), _hub_network_spec(200)
+    )
+
+    null = result.spatial_null
+    assert null is not None
+    assert null.performed is True
+    assert len(result.edges) == 3
+    defined, undefined, observed = _enumerated_null(result, positions)
+    extreme = np.count_nonzero(np.abs(np.asarray(defined)) >= abs(observed))
+    substituted = (1 + extreme) / (len(defined) + undefined + 1)
+    assert undefined == 6
+    assert null.pvalue == pytest.approx((1 + extreme) / (len(defined) + 1))
+    assert null.pvalue is not None
+    assert null.pvalue > substituted
+    assert null.undefined_resamples == undefined
+    assert null.effective_resamples == len(defined)
+    assert null.permutation_group_size == 24
+    assert null.exhaustive is True
+
+
+def test_node_permutation_reports_the_resolution_its_design_supports() -> None:
+    time, values = _clustered_signals()
+
+    result = estimate_spatial_network(
+        time,
+        values,
+        _metadata(),
+        replace(_network_spec(), node_permutation=SpatialNodePermutationSpec(1_000, 5)),
+    )
+
+    null = result.spatial_null
+    assert null is not None
+    assert null.pvalue is not None
+    assert null.pvalue >= 1 / 25
+    assert null.pvalue * 25 == pytest.approx(round(null.pvalue * 25))
+    assert null.exhaustive is True
+    assert null.permutation_group_size == 24
+    assert null.resamples == 1_000
+    assert null.effective_resamples == 24
+    assert null.pvalue_resolution == pytest.approx(1 / 25)
+    assert null.pvalue >= null.pvalue_resolution
+    assert null.pvalue_resolution > 1 / (null.resamples + 1)
+
+
+def test_mostly_undefined_node_permutations_refuse_to_report_a_pvalue() -> None:
+    height = float(np.sqrt(2 / 3))
+    positions = (
+        (0.5, float(np.sqrt(3) / 6), height),
+        (0.0, 0.0, 0.0),
+        (1.0, 0.0, 0.0),
+        (0.5, float(np.sqrt(3) / 2), 0.0),
+        (0.5, float(np.sqrt(3) / 6), -height),
+    )
+    time, values = _hub_signals((0.9, 0.7, 0.5, 0.3))
+
+    with pytest.raises(ValueError, match="cannot support a randomization p-value"):
+        estimate_spatial_network(
+            time, values, _hub_metadata(positions), _hub_network_spec(200)
+        )
 
 
 def test_spatial_inference_refuses_duplicate_session_identities() -> None:

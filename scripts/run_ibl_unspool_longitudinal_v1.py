@@ -20,9 +20,10 @@ from unspool import (
     compare_models,
 )
 
-from fiberphotometry import ObservationTable, prepare_unspool_study
+from fiberphotometry import ObservationTable
 from fiberphotometry.events import summarize_event_windows
 from fiberphotometry.preprocess import baseline_dff
+from fiberphotometry.unspool import prepare_unspool_study
 
 PROTOCOL_SHA256 = "cf52883f2d65b495b2d6a0f3d99a757965916706e5e0c62494606798087b2de9"
 

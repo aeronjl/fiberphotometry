@@ -5,15 +5,17 @@ import pytest
 from test_pipeline import _inputs, _spec
 
 from fiberphotometry import (
+    EventSummarySpec,
+    LowpassFilterOperation,
+    ReferenceDFFOperation,
+)
+from fiberphotometry.multiverse import (
     ChoiceRef,
     CompatibilityRule,
     DecisionAlternative,
     DecisionNode,
-    EventSummarySpec,
-    LowpassFilterOperation,
     MultiverseReportGroup,
     MultiverseSpec,
-    ReferenceDFFOperation,
     materialize_multiverse,
     run_multiverse,
 )

@@ -2,9 +2,8 @@ import json
 
 import pytest
 
-from fiberphotometry import (
-    BehaviorAnnotations,
-    BehaviorInterval,
+from fiberphotometry.interoperability import BehaviorAnnotations, BehaviorInterval
+from fiberphotometry.interval_policy import (
     ContextualizeIntervals,
     FilterIntervals,
     IntervalPolicy,

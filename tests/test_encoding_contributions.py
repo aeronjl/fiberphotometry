@@ -12,6 +12,8 @@ from fiberphotometry.encoding import (
 from fiberphotometry.encoding_contributions import (
     PredictorFamilyContributionSpec,
     PredictorFamilyDropSpec,
+    PredictorFamilyGroupDelta,
+    _paired_dispersion,
     assess_predictor_family_contributions,
 )
 from fiberphotometry.encoding_multiverse import (
@@ -146,15 +148,75 @@ def test_reports_paired_predictive_deltas_for_literal_family_drops() -> None:
     assert movement.full_selected_alpha in (0.1, 1.0)
     assert movement.reduced_selected_alpha in (0.1, 1.0)
     assert len(movement.group_deltas) == 6
-    assert movement.group_interval is not None
-    assert movement.group_interval.method == "paired_group_t_sensitivity"
-    assert movement.group_interval.groups == 6
+    assert movement.group_dispersion is not None
+    assert movement.group_dispersion.method == "paired_group_t_dispersion_uncalibrated"
+    assert movement.group_dispersion.groups == 6
+    assert movement.group_dispersion.calibrated is False
+    assert movement.group_dispersion.simultaneous is False
+    assert movement.group_dispersion.simultaneous_comparisons == 2
+    assert movement.group_dispersion.nominal_level == 0.95
+    assert "positively dependent" in movement.group_dispersion.dependence
+    assert "multiplicity" in movement.group_dispersion.multiplicity
     assert reward.status == "paired_predictive_comparison"
     assert reward.delta_mean_r_squared is not None
     assert reward.delta_mean_r_squared > 0.1
     payload = json.loads(result.to_json())
     assert payload["artifact_type"] == "predictor_family_contribution_result"
     assert payload["schema_version"] == "1"
+
+
+def _dispersion_coverage(correlation: float, trials: int = 2_000) -> float:
+    rng = np.random.default_rng(20260728)
+    groups = 6
+    truth = 0.05
+    scale = 0.02
+    covered = 0
+    for _ in range(trials):
+        shared = rng.normal(0.0, np.sqrt(correlation))
+        private = rng.normal(0.0, np.sqrt(1.0 - correlation), groups)
+        values = truth + scale * (shared + private)
+        deltas = tuple(
+            PredictorFamilyGroupDelta(
+                group=f"animal-{index}",
+                observations=200,
+                full_r_squared=0.4 + float(value),
+                reduced_r_squared=0.4,
+                delta_r_squared=float(value),
+            )
+            for index, value in enumerate(values)
+        )
+        summary = _paired_dispersion(deltas, 0.95, 1)
+        covered += summary.range_lower <= truth <= summary.range_upper
+    return covered / trials
+
+
+def test_paired_group_range_under_covers_when_held_out_deltas_are_dependent() -> None:
+    independent = _dispersion_coverage(0.0)
+    dependent = _dispersion_coverage(0.6)
+
+    assert 0.93 < independent < 0.97
+    assert dependent < 0.75
+
+    summary = _paired_dispersion(
+        tuple(
+            PredictorFamilyGroupDelta(
+                group=f"animal-{index}",
+                observations=200,
+                full_r_squared=0.4 + value,
+                reduced_r_squared=0.4,
+                delta_r_squared=value,
+            )
+            for index, value in enumerate((0.04, 0.05, 0.06, 0.05, 0.07, 0.03))
+        ),
+        0.95,
+        3,
+    )
+
+    assert summary.calibrated is False
+    assert summary.simultaneous is False
+    assert summary.method == "paired_group_t_dispersion_uncalibrated"
+    assert summary.simultaneous_comparisons == 3
+    assert not hasattr(summary, "confidence_level")
 
 
 def test_different_complete_case_evidence_is_descriptive_only() -> None:
@@ -167,7 +229,7 @@ def test_different_complete_case_evidence_is_descriptive_only() -> None:
     assert movement.exact_same_observations is False
     assert movement.delta_mean_r_squared is None
     assert movement.group_deltas == ()
-    assert movement.group_interval is None
+    assert movement.group_dispersion is None
 
 
 def test_rejects_changed_shared_predictors_or_tuning_policy() -> None:

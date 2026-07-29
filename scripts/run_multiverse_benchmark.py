@@ -9,16 +9,11 @@ from dataclasses import asdict
 import numpy as np
 
 from fiberphotometry import (
-    ChoiceRef,
-    CompatibilityRule,
     Contrast,
-    DecisionAlternative,
-    DecisionNode,
     Estimand,
     EventSummarySpec,
     Factor,
     LowpassFilterOperation,
-    MultiverseSpec,
     ObservationTable,
     PipelineSpec,
     QualityGateSpec,
@@ -26,11 +21,18 @@ from fiberphotometry import (
     ReferenceDFFOperation,
     StudyDesign,
     Unit,
-    create_analysis_plan,
     make_recording,
+)
+from fiberphotometry.multiverse import (
+    ChoiceRef,
+    CompatibilityRule,
+    DecisionAlternative,
+    DecisionNode,
+    MultiverseSpec,
     materialize_multiverse,
     run_multiverse,
 )
+from fiberphotometry.planning import create_analysis_plan
 
 EVENTS = np.asarray([5.0, 10.0, 15.0, 20.0, 25.0, 30.0])
 CONDITIONS = ("control", "drug", "control", "drug", "control", "drug")

@@ -8,6 +8,7 @@ from fiberphotometry.spectral import (
     GapHandlingSpec,
     SpectralAnalysisSpec,
     StateBandPowerInferenceSpec,
+    StateConditionedPSDResult,
     StateEpoch,
     StatePSDSession,
     autocorrelation,
@@ -211,3 +212,62 @@ def test_state_band_power_inference_aggregates_sessions_within_animals() -> None
     assert {item.session_count for item in result.estimates} == {2}
     assert result.interval_low > 0
     assert result.permutation_pvalue < 0.1
+    assert result.estimand == "arithmetic_mean_of_paired_state_differences"
+    assert result.interval_scale == "bootstrap_percentile_of_mean_difference"
+    assert result.null_value == 0.0
+
+
+def _ratio_sessions(log_ratios: tuple[float, ...]) -> list[StatePSDSession]:
+    rate = 20.0
+    time = np.arange(0, 20, 1 / rate)
+    epochs = (StateEpoch("active", 0, 10), StateEpoch("rest", 10, 20))
+    cache: dict[float, object] = {}
+    sessions = []
+    for index, log_ratio in enumerate(log_ratios):
+        if log_ratio not in cache:
+            amplitude = float(np.exp(log_ratio / 2))
+            values = np.where(
+                time < 10,
+                amplitude * np.sin(2 * np.pi * 3 * time),
+                np.sin(2 * np.pi * 3 * time),
+            )
+            cache[log_ratio] = state_conditioned_psd(
+                time, values, epochs, SpectralAnalysisSpec(window_duration_s=2)
+            )
+        result = cache[log_ratio]
+        assert isinstance(result, StateConditionedPSDResult)
+        sessions.append(StatePSDSession(f"animal-{index:02d}", "session-0", result))
+    return sessions
+
+
+def test_ratio_estimate_interval_and_permutation_share_one_functional() -> None:
+    log_ratios = (0.25,) * 36 + (-2.4,) * 4
+    sessions = _ratio_sessions(log_ratios)
+    ratios = np.exp(np.asarray(log_ratios))
+    arithmetic_mean = float(np.mean(ratios))
+    geometric_mean = float(np.exp(np.mean(np.log(ratios))))
+
+    result = infer_state_band_power(
+        sessions,
+        StateBandPowerInferenceSpec(
+            "active",
+            "rest",
+            (2.0, 4.0),
+            effect_scale="ratio",
+            bootstrap_resamples=4000,
+            permutation_resamples=4000,
+            seed=11,
+        ),
+    )
+
+    assert arithmetic_mean > 1 > geometric_mean
+    assert result.estimate == pytest.approx(geometric_mean)
+    assert result.estimate != pytest.approx(arithmetic_mean, rel=1e-3)
+    assert result.interval_low < result.estimate < result.interval_high
+    assert result.permutation_pvalue > 0.05
+    assert result.interval_low < 1 < result.interval_high
+    assert result.estimand == "geometric_mean_of_paired_state_ratios"
+    assert result.interval_scale == (
+        "bootstrap_percentile_of_mean_log_ratio_back_transformed"
+    )
+    assert result.null_value == 1.0

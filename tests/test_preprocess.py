@@ -218,7 +218,98 @@ def test_resampling_retains_source_and_does_not_bridge_large_gap() -> None:
     operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
     assert operation["kind"] == "resample"
     assert operation["max_gap_s"] == 1.1
-    assert operation["time_only_boolean_method"] == "nearest"
+    assert operation["time_only_boolean_method"] == "interval_overlap"
+
+
+def test_downsampling_retains_every_behavioural_event_sample() -> None:
+    time = np.arange(0, 60, 0.01)
+    recording = make_recording(
+        time=time,
+        signal=np.full_like(time, 1000.0),
+        subject="m",
+        session="s",
+    )
+    event_times = [5.0, 10.0, 15.02, 20.0, 25.03, 30.0]
+    lick = np.zeros(time.size, dtype=bool)
+    for event in event_times:
+        lick[int(np.argmin(np.abs(time - event)))] = True
+    recording["lick"] = (("time",), lick)
+
+    result = resample_recording(recording, rate_hz=5.0)
+
+    expected = np.zeros(result.sizes["time"], dtype=bool)
+    for event in event_times:
+        expected[int(np.argmin(np.abs(result.time.values - event)))] = True
+    assert np.array_equal(result.lick.values, expected)
+    assert int(result.lick.values.sum()) == 6
+    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    assert operation["time_only_boolean_true_counts"]["lick"] == {
+        "source_true_count": 6,
+        "output_true_count": 6,
+        "dropped_true_count": 0,
+        "merged_true_count": 0,
+    }
+
+
+def test_boolean_resampling_preserves_event_count_when_upsampling() -> None:
+    time = np.arange(0, 10, 0.1)
+    recording = make_recording(
+        time=time,
+        signal=np.full_like(time, 1.0),
+        subject="m",
+        session="s",
+    )
+    lick = np.zeros(time.size, dtype=bool)
+    lick[[10, 47, 80]] = True
+    recording["lick"] = (("time",), lick)
+
+    result = resample_recording(recording, rate_hz=40)
+
+    assert int(result.lick.values.sum()) == 3
+    assert np.array_equal(
+        np.round(result.time.values[result.lick.values], 3), [1.0, 4.7, 8.0]
+    )
+
+
+def test_boolean_resampling_never_moves_an_event_across_a_gap() -> None:
+    recording = make_recording(
+        time=[0.0, 0.5, 1.6, 4.4, 5.0],
+        signal=[1.0, 1.0, 1.0, 1.0, 1.0],
+        subject="m",
+        session="s",
+    )
+    recording["lick"] = (("time",), [False, False, True, True, False])
+
+    result = resample_recording(recording, rate_hz=1, max_gap_s=1.5)
+
+    assert np.array_equal(result.time.values, [0, 1, 2, 3, 4, 5])
+    assert np.array_equal(result.lick.values, [False, True, False, False, False, True])
+    assert np.array_equal(
+        result.protected_gap.values, [False, False, True, True, True, False]
+    )
+    assert not np.any(result.lick.values & result.protected_gap.values)
+    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    assert operation["time_only_boolean_true_counts"]["lick"]["dropped_true_count"] == 0
+
+
+def test_unrepresentable_event_is_warned_about_rather_than_silently_dropped() -> None:
+    recording = make_recording(
+        time=[0.0, 0.5, 1.6, 4.4, 5.0],
+        signal=[1.0, 1.0, 1.0, 1.0, 1.0],
+        subject="m",
+        session="s",
+    )
+    recording["lick"] = (("time",), [False, False, True, True, False])
+
+    with pytest.warns(UserWarning, match="dropped 1 of 2 True samples"):
+        result = resample_recording(recording, rate_hz=1, max_gap_s=1.0)
+
+    assert int(result.lick.values.sum()) == 1
+    counts = json.loads(result.attrs["fiberphotometry_operations"])[0][
+        "time_only_boolean_true_counts"
+    ]["lick"]
+    assert counts["dropped_true_count"] == 1
+    assert counts["output_true_count"] == 1
 
 
 def test_median_rate_regularization_reports_jitter_and_preserves_smooth_signal() -> (

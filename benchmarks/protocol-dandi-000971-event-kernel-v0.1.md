@@ -107,4 +107,4 @@ product limitation encountered during real-data execution.
 - Seiler et al. (2026), [immutable DANDI dataset](https://doi.org/10.48324/dandi.000971/0.260213.1851).
 - DANDI, [official example notebook](https://docs.dandiarchive.org/example-notebooks/000971/lernerlab/seiler_2024/fiber_photometry_example_notebook/).
 - Simpson et al. (2024), [fiber-photometry analysis primer](https://pmc.ncbi.nlm.nih.gov/articles/PMC10939905/).
-- [Event-kernel method contract](../docs/event-kernel-encoding-v0.1.md).
+- [Event-kernel method contract](../docs/event-kernel-encoding.md).

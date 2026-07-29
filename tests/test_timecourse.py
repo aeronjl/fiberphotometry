@@ -3,11 +3,9 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry import (
-    PopulationInteractionSpec,
-    infer_peri_event_contrast,
-    infer_peri_event_interaction,
-)
+from fiberphotometry import infer_peri_event_contrast
+from fiberphotometry.population import PopulationInteractionSpec
+from fiberphotometry.timecourse import infer_peri_event_interaction
 
 
 def _curves(seed: int = 7):

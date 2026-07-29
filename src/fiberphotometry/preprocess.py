@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import warnings
 from itertools import pairwise
 from typing import Literal
 
@@ -211,6 +212,10 @@ def resample_recording(
 
     Interpolation never crosses a source interval larger than ``max_gap_s``.
     The original arrays remain available on the separate ``source_time`` axis.
+    Boolean ``('time',)`` variables carry behavioural events rather than a
+    continuous quantity, so they are resampled by interval overlap: a target bin
+    is ``True`` when any source sample falling inside it is ``True``. Bins never
+    span a protected gap, and the recorded ``True`` counts make any loss visible.
     """
     validate_recording(recording)
     if rate_hz != "median" and rate_hz <= 0:
@@ -251,25 +256,31 @@ def resample_recording(
         },
         attrs=dict(recording.attrs),
     )
+    boolean_true_counts: dict[str, dict[str, int]] = {}
     for name, variable in recording.data_vars.items():
         if variable.dims == ("time",):
             source_mask = np.asarray(variable.values, dtype=bool)
-            right = np.searchsorted(source_time, target_time, side="left")
-            right = np.clip(right, 0, len(source_time) - 1)
-            left = np.maximum(right - 1, 0)
-            nearest = np.where(
-                abs(target_time - source_time[left])
-                <= abs(source_time[right] - target_time),
-                left,
-                right,
+            resampled_mask, dropped = _overlap_boolean_mask(
+                source_time,
+                source_mask,
+                target_time,
+                max_gap_s=resolved_max_gap_s,
             )
-            resampled_mask = source_mask[nearest]
-            if resolved_max_gap_s is not None:
-                for gap_left, gap_right in pairwise(source_time):
-                    if gap_right - gap_left > resolved_max_gap_s:
-                        resampled_mask[
-                            (target_time > gap_left) & (target_time < gap_right)
-                        ] = False
+            source_true = int(np.count_nonzero(source_mask))
+            output_true = int(np.count_nonzero(resampled_mask))
+            boolean_true_counts[str(name)] = {
+                "source_true_count": source_true,
+                "output_true_count": output_true,
+                "dropped_true_count": dropped,
+                "merged_true_count": source_true - dropped - output_true,
+            }
+            if dropped:
+                warnings.warn(
+                    f"resampling dropped {dropped} of {source_true} True samples "
+                    f"from {str(name)!r}; no target bin represents them",
+                    UserWarning,
+                    stacklevel=2,
+                )
             output[name] = (("time",), resampled_mask)
             output[f"source_{name}"] = (("source_time",), source_mask.copy())
             continue
@@ -341,7 +352,9 @@ def resample_recording(
             "interpolated_target_fraction": float(
                 np.mean((nearest_distance > exact_tolerance) & ~gap_mask)
             ),
-            "time_only_boolean_method": "nearest",
+            "time_only_boolean_method": "interval_overlap",
+            "time_only_boolean_rule": "logical_or_within_bin",
+            "time_only_boolean_true_counts": boolean_true_counts,
         },
     )
     return output
@@ -483,6 +496,39 @@ def reference_dff(
         },
     )
     return output
+
+
+def _overlap_boolean_mask(
+    source_time: NDArray[np.float64],
+    source_mask: NDArray[np.bool_],
+    target_time: NDArray[np.float64],
+    *,
+    max_gap_s: float | None,
+) -> tuple[NDArray[np.bool_], int]:
+    """Assign each source sample to one target bin and combine with a logical OR.
+
+    Bins are the intervals separated by the midpoints between target samples.
+    When ``max_gap_s`` is declared, a source sample is confined to the bins its
+    own contiguous segment spans, so no bin bridges a protected gap. The second
+    return value counts ``True`` samples that no target bin could represent.
+    """
+    edges = (target_time[:-1] + target_time[1:]) / 2
+    assigned = np.searchsorted(edges, source_time, side="right")
+    representable = np.ones(len(source_time), dtype=bool)
+    if max_gap_s is not None:
+        breaks = (np.flatnonzero(np.diff(source_time) > max_gap_s) + 1).tolist()
+        boundaries = [0, *breaks, len(source_time)]
+        for start, stop in pairwise(boundaries):
+            first, last = source_time[start], source_time[stop - 1]
+            lowest = int(np.searchsorted(target_time, first, side="left"))
+            highest = int(np.searchsorted(target_time, last, side="right")) - 1
+            if lowest > highest:
+                representable[start:stop] = False
+                continue
+            assigned[start:stop] = np.clip(assigned[start:stop], lowest, highest)
+    output = np.zeros(len(target_time), dtype=bool)
+    output[assigned[representable & source_mask]] = True
+    return output, int(np.count_nonzero(~representable & source_mask))
 
 
 def _finite_runs(values: NDArray[np.bool_]) -> list[tuple[int, int]]:

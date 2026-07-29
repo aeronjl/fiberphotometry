@@ -5,12 +5,12 @@ from __future__ import annotations
 import os
 import re
 import tempfile
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from fiberphotometry.io.nwb import add_recording_to_nwb
+from fiberphotometry.io.nwb import NWBAcquisitionMetadata, add_recording_to_nwb
 from fiberphotometry.metadata import assess_metadata_completeness
 from fiberphotometry.multiverse import MultiverseReportGroup, MultiverseResult
 from fiberphotometry.pipeline import RecordingInput, run_pipeline
@@ -25,8 +25,15 @@ def export_project_nwb(
     output_directory: Path,
     *,
     mixed_model_json: str | None = None,
+    acquisition_metadata: Mapping[str, NWBAcquisitionMetadata] | None = None,
 ) -> tuple[Path, ...]:
-    """Write one validated NWB file per session and return resolved paths."""
+    """Write one validated NWB file per session and return resolved paths.
+
+    ``acquisition_metadata`` maps a recording variable name onto the
+    ``ndx-fiber-photometry`` description of its channels. Variables absent from the
+    mapping are written without a ``FiberPhotometryTable`` region rather than with
+    invented hardware metadata.
+    """
     scratch = [
         (
             "fiberphotometry_analysis",
@@ -54,6 +61,7 @@ def export_project_nwb(
             "ProcessedFiberPhotometrySignal",
             tuple(scratch),
             "analysis",
+            dict(acquisition_metadata or {}),
         ),
     )
 
@@ -64,6 +72,8 @@ def export_project_multiverse_nwb(
     result: MultiverseResult,
     groups: Sequence[MultiverseReportGroup],
     output_directory: Path,
+    *,
+    acquisition_metadata: Mapping[str, NWBAcquisitionMetadata] | None = None,
 ) -> tuple[Path, ...]:
     """Archive one reference signal and the complete multiverse evidence ledger."""
     if project.nwb is None:
@@ -97,6 +107,7 @@ def export_project_multiverse_nwb(
                 ),
             ),
             "multiverse",
+            dict(acquisition_metadata or {}),
         ),
     )
 
@@ -110,6 +121,7 @@ class _NWBAnalysisExport:
     processed_name: str
     population_scratch: tuple[tuple[str, str, str], ...]
     identifier_label: str
+    acquisition_metadata: dict[str, NWBAcquisitionMetadata]
 
 
 def _export_project_nwb_files(
@@ -171,6 +183,7 @@ def _export_project_nwb_files(
             variable="signal",
             name="RawFiberPhotometrySignal",
             unit="a.u.",
+            acquisition_metadata=export.acquisition_metadata.get("signal"),
         )
         if "reference" in session.recording:
             add_recording_to_nwb(
@@ -179,6 +192,7 @@ def _export_project_nwb_files(
                 variable="reference",
                 name="RawFiberPhotometryReference",
                 unit="a.u.",
+                acquisition_metadata=export.acquisition_metadata.get("reference"),
             )
         processing = nwbfile.create_processing_module(
             "fiberphotometry",
@@ -191,6 +205,9 @@ def _export_project_nwb_files(
             name=export.processed_name,
             unit=export.processed_units,
             processing_module=processing,
+            acquisition_metadata=export.acquisition_metadata.get(
+                export.processed_variable
+            ),
         )
         _add_events(nwbfile, item)
         _add_json_scratch(

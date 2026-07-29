@@ -6,18 +6,18 @@ from typing import Any
 
 import numpy as np
 
-from fiberphotometry import (
+from fiberphotometry import ObservationTable
+from fiberphotometry.encoding import EncodingSession
+from fiberphotometry.interoperability import (
     ClockPulseMatches,
     ClockSynchronizationSpec,
-    EncodingSession,
-    ObservationTable,
     annotations_from_boris,
     annotations_from_moseq,
     fit_clock_synchronization,
     pose_from_deeplabcut,
     pose_from_sleap,
-    prepare_unspool_study,
 )
+from fiberphotometry.unspool import prepare_unspool_study
 
 
 class DLCResult:

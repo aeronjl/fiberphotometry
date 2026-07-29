@@ -5,7 +5,8 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry import RecordingInput, make_recording, run_multiverse
+from fiberphotometry import RecordingInput, make_recording
+from fiberphotometry.multiverse import run_multiverse
 
 
 def _tutorial_module():

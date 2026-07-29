@@ -21,6 +21,8 @@ CandidateExclusionReason: TypeAlias = Literal[
     "missing_local_minimum",
     "below_threshold",
     "below_frozen_threshold",
+    "chunk_boundary",
+    "degenerate_noise_scale",
 ]
 QuantificationExclusionReason: TypeAlias = Literal[
     "candidate_mismatch",
@@ -51,7 +53,18 @@ class PastaTransientDetectorSpec:
 
 @dataclass(frozen=True)
 class GuppyTransientDetectorSpec:
-    """GuPPY-compatible two-threshold MAD detector within fixed chunks."""
+    """GuPPY-compatible two-threshold MAD detector within fixed chunks.
+
+    Both multipliers scale the **unscaled** median absolute deviation, matching
+    the published GuPPy implementation. They are therefore not robust-sigma
+    multiples: for Gaussian noise ``detection_mad=3.0`` gates at
+    ``3 * 0.6745 = 2.02`` standard deviations, not three.
+    ``fiberphotometry.transients.TransientDetectionSpec.threshold`` and
+    ``TransientThresholdCalibrationSpec.mad_multiplier`` use the opposite
+    convention and scale by ``1.4826``, so the same number is a stricter gate
+    there. This divergence is deliberate reference compatibility, not an
+    oversight; do not compare the two multipliers as if they shared units.
+    """
 
     chunk_duration_s: float = 10.0
     high_amplitude_mad: float = 4.0
@@ -122,7 +135,20 @@ class TransientCandidateResult:
 
 @dataclass(frozen=True)
 class TransientThresholdCalibrationSpec:
-    """How candidate-scale scores are converted into frozen thresholds."""
+    """How candidate-scale scores are converted into frozen thresholds.
+
+    ``mad_multiplier`` is a robust-sigma multiple: the score dispersion is
+    ``1.4826 * MAD``, so ``6.0`` is six Gaussian standard deviations. This is
+    the opposite convention to ``GuppyTransientDetectorSpec``, whose own
+    multipliers scale the unscaled MAD.
+
+    The calibration population is every scored local maximum inside a finite
+    run, including negative scores and including maxima that the detector's own
+    native threshold would reject. Gating the population first would truncate
+    the null distribution and bias both the median and the MAD, so the frozen
+    value is a robust null over ungated scores rather than a statistic of the
+    detections it later gates.
+    """
 
     estimator: ThresholdEstimator = "median_mad"
     mad_multiplier: float = 6.0
@@ -484,8 +510,14 @@ def calibrate_transient_thresholds(
         median = float(np.median(scores))
         mad = float(np.median(np.abs(scores - median)))
         quantile = float(np.quantile(scores, chosen.quantile))
+        if chosen.estimator == "median_mad" and mad <= 0:
+            raise ValueError(
+                f"channel {channel!r} calibration scores have a zero median "
+                "absolute deviation; this source carries no usable score "
+                "dispersion for a median_mad threshold"
+            )
         threshold = (
-            median + chosen.mad_multiplier * max(1.4826 * mad, np.finfo(float).eps)
+            median + chosen.mad_multiplier * 1.4826 * mad
             if chosen.estimator == "median_mad"
             else quantile
         )
@@ -885,7 +917,14 @@ def _detect_guppy(
     rejected: list[TransientCandidateExclusion] = []
     for chunk_start in range(0, len(run), chunk_samples):
         chunk = run[chunk_start : chunk_start + chunk_samples]
+        maxima = _run_interior_maxima(signal, run, chunk)
         if len(chunk) < 3:
+            rejected.extend(
+                _candidate_exclusion(
+                    spec, channel, int(chunk[position]), time, "chunk_boundary"
+                )
+                for position in maxima
+            )
             continue
         chunk_values = signal[chunk]
         median = float(np.median(chunk_values))
@@ -896,7 +935,29 @@ def _detect_guppy(
             continue
         filtered_median = float(np.median(filtered))
         filtered_mad = float(np.median(np.abs(filtered - filtered_median)))
+        if filtered_mad <= 0:
+            rejected.extend(
+                _candidate_exclusion(
+                    spec, channel, int(chunk[position]), time, "degenerate_noise_scale"
+                )
+                for position in maxima
+            )
+            continue
         threshold = filtered_median + spec.detection_mad * filtered_mad
+        rejected.extend(
+            _candidate_exclusion(
+                spec,
+                channel,
+                int(chunk[position]),
+                time,
+                "chunk_boundary",
+                float(signal[chunk[position]]),
+                threshold,
+            )
+            for position in maxima
+            if position in (0, len(chunk) - 1)
+            and float(signal[chunk[position]]) > threshold
+        )
         thresholded = np.where(chunk_values > threshold, chunk_values, 0.0)
         peaks = 1 + np.flatnonzero(
             (thresholded[1:-1] > thresholded[:-2])
@@ -937,6 +998,19 @@ def _detect_guppy(
                 )
             )
     return accepted, rejected
+
+
+def _run_interior_maxima(
+    signal: np.ndarray, run: np.ndarray, chunk: np.ndarray
+) -> np.ndarray:
+    index = np.asarray(chunk, dtype=int)
+    interior = (index > int(run[0])) & (index < int(run[-1]))
+    inside = index[interior]
+    maximum = np.zeros(len(index), dtype=bool)
+    maximum[interior] = (signal[inside] > signal[inside - 1]) & (
+        signal[inside] > signal[inside + 1]
+    )
+    return np.flatnonzero(maximum)
 
 
 def _detect_prominence(
@@ -1110,7 +1184,7 @@ def _calibration_scores(
                     float(value) for value in peak_prominences(values, peaks)[0]
                 )
     array = np.asarray(scores, dtype=float)
-    return np.asarray(array[np.isfinite(array) & (array >= 0)], dtype=float)
+    return np.asarray(array[np.isfinite(array)], dtype=float)
 
 
 def _prominence_values(

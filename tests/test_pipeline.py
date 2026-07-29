@@ -19,10 +19,10 @@ from fiberphotometry import (
     ResampleOperation,
     StudyDesign,
     Unit,
-    create_analysis_plan,
     make_recording,
     run_pipeline,
 )
+from fiberphotometry.planning import create_analysis_plan
 
 
 def _inputs(*, missing: bool = False) -> tuple[RecordingInput, ...]:

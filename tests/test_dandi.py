@@ -1,11 +1,12 @@
 import io
 import json
 import os
-from types import SimpleNamespace
+from datetime import UTC, datetime
 
 import pytest
 
 from fiberphotometry.io import dandi
+from fiberphotometry.io.nwb import from_nwb_series
 
 
 class FakeResponse(io.BytesIO):
@@ -34,26 +35,71 @@ def test_resolve_dandi_download_url_prefers_public_s3(monkeypatch) -> None:
     assert url == "https://dandiarchive.s3.amazonaws.com/blobs/example"
 
 
-def test_response_series_discovery_covers_acquisition_and_processing() -> None:
-    response_type = type("FiberPhotometryResponseSeries", (), {})
-    raw = response_type()
-    processed = response_type()
-    other = SimpleNamespace()
-    nwbfile = SimpleNamespace(
-        acquisition={"raw": raw, "other": other},
-        processing={
-            "ophys": SimpleNamespace(
-                data_interfaces={"dff": processed, "segmentation": other}
-            )
-        },
+def test_response_series_discovery_covers_acquisition_and_processing(tmp_path) -> None:
+    pynwb = pytest.importorskip("pynwb")
+    ndx_fiber_photometry = pytest.importorskip("ndx_fiber_photometry")
+    from fiberphotometry import make_recording
+    from fiberphotometry.io.nwb import add_recording_to_nwb
+
+    recording = make_recording(
+        time=[0.0, 0.1, 0.2],
+        signal=[[1.0, 2.0], [1.5, 2.5], [2.0, 3.0]],
+        channel_names=["DMS", "DLS"],
+        subject="mouse-1",
+        session="session-1",
     )
+    nwbfile = pynwb.NWBFile(
+        session_description="discovery fixture",
+        identifier="discovery",
+        session_start_time=datetime.now(UTC),
+    )
+    add_recording_to_nwb(recording, nwbfile, name="RawFiberPhotometrySignal")
+    nwbfile.add_acquisition(
+        pynwb.TimeSeries(
+            name="UnrelatedSeries",
+            data=[0.0, 1.0, 2.0],
+            timestamps=[0.0, 0.1, 0.2],
+            unit="V",
+            description="a core TimeSeries that is not photometry",
+        )
+    )
+    module = nwbfile.create_processing_module("fiberphotometry", "derived signals")
+    add_recording_to_nwb(
+        recording,
+        nwbfile,
+        name="ProcessedFiberPhotometrySignal",
+        unit="dF/F",
+        processing_module=module,
+    )
+    module.add(
+        pynwb.TimeSeries(
+            name="UnrelatedProcessedSeries",
+            data=[0.0, 1.0, 2.0],
+            timestamps=[0.0, 0.1, 0.2],
+            unit="V",
+            description="a core TimeSeries that is not photometry",
+        )
+    )
+    path = tmp_path / "discovery.nwb"
+    with pynwb.NWBHDF5IO(path, "w") as handle:
+        handle.write(nwbfile)
 
-    discovered = list(dandi._response_series(nwbfile))
+    with pynwb.NWBHDF5IO(path, "r", load_namespaces=True) as handle:
+        read = handle.read()
+        discovered = list(dandi._response_series(read))
 
-    assert discovered == [
-        ("acquisition/raw", raw),
-        ("processing/ophys/dff", processed),
-    ]
+        assert [name for name, _ in discovered] == [
+            "acquisition/RawFiberPhotometrySignal",
+            "processing/fiberphotometry/ProcessedFiberPhotometrySignal",
+        ]
+        assert all(
+            isinstance(value, ndx_fiber_photometry.FiberPhotometryResponseSeries)
+            for _, value in discovered
+        )
+        restored = from_nwb_series(discovered[0][1])
+
+    assert restored.channel.values.tolist() == ["DMS", "DLS"]
+    assert restored.attrs["subject"] == "mouse-1"
 
 
 @pytest.mark.integration
