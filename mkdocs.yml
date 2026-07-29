@@ -60,15 +60,37 @@ plugins:
             show_root_heading: true
             show_source: false
 
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  nav:
+    omitted_files: warn
+    not_found: warn
+    absolute_links: warn
+  links:
+    not_found: warn
+    absolute_links: info
+    unrecognized_links: warn
+
+# Scientific decision records are a contributor resource. They build so that
+# in-repo links resolve, but they are deliberately kept out of the reader-facing
+# nav. Any OTHER page missing from the nav is a bug and fails the strict build.
+not_in_nav: |
+  /decisions/*
+
 nav:
   - Home: index.md
   - Start here:
+      - Install: getting-started/install.md
+      - Your first dF/F trace: getting-started/first-dff-trace.md
+      - Your first peri-event plot: getting-started/first-peri-event-plot.md
       - Choose a workflow: getting-started/index.md
-      - First event analysis: product-workflow-v0.1.md
-      - Configuration-first CLI: cli-v0.1.md
-      - Import tabular data: tabular-import-v0.1.md
-      - Import TDT data: tdt-import-v0.1.md
-      - Import native acquisition files: native-acquisition-import-v0.1.md
+      - First event analysis: product-workflow.md
+      - Command line: cli.md
+      - Import tabular data: tabular-import.md
+      - Import TDT data: tdt-import.md
+      - Import native acquisition files: native-acquisition-import.md
   - Methods:
       - Choose a method:
           - Methods map: methods/index.md
@@ -76,92 +98,69 @@ nav:
           - Public-data evidence atlas: methods/public-evidence-atlas.md
       - Signal formation and validity:
           - Category guide: methods/signal-validity.md
-          - Preprocessing and QC: pipeline-v0.1.md
-          - Irregular sampling: irregular-sampling-v0.1.md
-          - Optogenetic artifacts and sensor validity: optical-validity-v0.1.md
-          - Sensor-kinetic modeling: sensor-kinetic-modeling-v0.1.md
-          - Wavelength-aware optical unmixing: optical-unmixing-v0.1.md
+          - Preprocessing and QC: pipeline.md
+          - Irregular sampling: irregular-sampling.md
+          - Optogenetic artifacts and sensor validity: optical-validity.md
+          - Sensor-kinetic modeling: sensor-kinetic-modeling.md
+          - Wavelength-aware optical unmixing: optical-unmixing.md
       - Event-locked responses and encoding:
           - Category guide: methods/event-locked.md
-          - Peri-event inference: peri-event-inference-v0.1.md
-          - Behavioral event-kernel encoding: event-kernel-encoding-v0.1.md
-          - Event-kernel model multiverses: event-kernel-multiverse-v0.1.md
-          - Predictor-family contributions: predictor-family-contributions-v0.1.md
-          - Event-kernel interval calibration: event-kernel-interval-calibration-v0.1.md
-          - Auditable interval and bout policies: interval-policy-v0.1.md
+          - Peri-event inference: peri-event-inference.md
+          - Behavioral event-kernel encoding: event-kernel-encoding.md
+          - Event-kernel model multiverses: event-kernel-multiverse.md
+          - Predictor-family contributions: predictor-family-contributions.md
+          - Event-kernel interval calibration: event-kernel-interval-calibration.md
+          - Auditable interval and bout policies: interval-policy.md
       - Spontaneous and continuous dynamics:
           - Category guide: methods/continuous-dynamics.md
-          - Spontaneous transients: spontaneous-transients-v0.1.md
-          - Time, frequency, and state analysis: spectral-state-analysis-v0.1.md
-          - Multiscale long-duration summaries: multiscale-long-duration-v0.1.md
+          - Spontaneous transients: spontaneous-transients.md
+          - Time, frequency, and state analysis: spectral-state-analysis.md
+          - Multiscale long-duration summaries: multiscale-long-duration.md
       - Multi-signal and spatial analysis:
           - Category guide: methods/multisignal-spatial.md
-          - Multi-site and multi-color association: multisite-multicolor-analysis-v0.1.md
-          - Coordinate-aware dense arrays: spatial-network-v0.1.md
+          - Multi-site and multi-color association: multisite-multicolor-analysis.md
+          - Coordinate-aware dense arrays: spatial-network.md
       - Population inference and robustness:
           - Category guide: methods/inference-robustness.md
-          - Animal estimates and population contrasts: population-inference-v0.1.md
-          - Group-by-condition animal interactions: population-interactions-v0.1.md
-          - Population inference across core workflows: population-workflow-adapters-v0.1.md
-          - Population inference for frequency and lag curves: population-curve-inference-v0.1.md
-          - Experimental design and inference: inference-design-v0.1.md
-          - Robustness multiverses: multiverse-contract-v0.1.md
-          - Scalar mixed models: scalar-mixed-model-v0.1.md
+          - Animal estimates and population contrasts: population-inference.md
+          - Group-by-condition animal interactions: population-interactions.md
+          - Population inference across core workflows: population-workflow-adapters.md
+          - Population inference for frequency and lag curves: population-curve-inference.md
+          - Experimental design and inference: inference-design.md
+          - Robustness multiverses: multiverse-contract.md
+          - Grouped multiverse reports: grouped-multiverse-report.md
+          - Scalar mixed models: scalar-mixed-model.md
       - Behavior and longitudinal integration:
           - Category guide: methods/behavior-longitudinal.md
-          - Behavioral ecosystem interoperability: ecosystem-interoperability-v0.1.md
-          - Native ndx-pose interoperability: ndx-pose-interoperability-v0.1.md
-          - Clock synchronization: clock-synchronization-v0.1.md
-          - Across-session comparability: session-comparability-v0.1.md
-          - Longitudinal behavior with Unspool: unspool-interoperability-v0.1.md
+          - Behavioral ecosystem interoperability: ecosystem-interoperability.md
+          - Native ndx-pose interoperability: ndx-pose-interoperability.md
+          - Clock synchronization: clock-synchronization.md
+          - Across-session comparability: session-comparability.md
+          - Longitudinal behavior with Unspool: unspool-interoperability.md
   - Worked examples:
       - Examples overview: tutorials/index.md
+      - Public IBL event report: tutorials/ibl-feedback-report.md
+      - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
+      - Event-kernel simulation: tutorials/event-kernel-simulation.md
+      - Previous-outcome event kernels: tutorials/event-kernel-history.md
+      - Variable-duration behavior kernels: tutorials/variable-duration-kernels.md
+      - Public event-kernel reanalysis: tutorials/dandi-000971-event-kernel.md
+      - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
+      - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
+      - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
       - Paper-figure correspondence: tutorials/paper-figure-roadmap.md
-      - Event-locked and encoding:
-          - Public IBL event report: tutorials/ibl-feedback-report.md
-          - Event-kernel simulation: tutorials/event-kernel-simulation.md
-          - Previous-outcome event kernels: tutorials/event-kernel-history.md
-          - Variable-duration behavior kernels: tutorials/variable-duration-kernels.md
-          - Public event-kernel reanalysis: tutorials/dandi-000971-event-kernel.md
-          - Event-kernel model multiverse: event-kernel-multiverse-v0.1.md
-          - Predictor-family contributions: predictor-family-contributions-v0.1.md
-      - Spontaneous and continuous:
-          - Public transient validation: dandi-000251-transient-results-v0.1.md
-          - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
-      - Robustness and public evidence:
-          - DANDI NWB robustness analysis: tutorials/dandi-000971-reward-multiverse.md
-          - DANDI result interpretation: dandi-000971-tutorial-results-v0.1.md
-      - Behavior and longitudinal:
-          - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
-          - Native ndx-pose round trip: ndx-pose-interoperability-v0.1.md
-          - Interval and bout policies: interval-policy-v0.1.md
-          - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
-  - Data and interoperability:
-      - Native acquisition files: native-acquisition-import-v0.1.md
-      - Behavioral ecosystem contract: ecosystem-interoperability-v0.1.md
-      - Native ndx-pose files: ndx-pose-interoperability-v0.1.md
-      - Interval-policy evidence: interval-policy-v0.1.md
-      - Clock synchronization: clock-synchronization-v0.1.md
-      - Behavioral adapter validation: interoperability-validation-v0.1.md
-      - Metadata readiness: metadata-completeness-v0.1.md
-      - NWB and DANDI integration: dandi-001084-integration.md
-      - Evidence reader: evidence-reader-v0.1.md
-      - Reproducibility comparison: reproducibility-comparison-v0.1.md
+  - Data and provenance:
+      - NWB data model: nwb-data-model.md
+      - Metadata readiness: metadata-completeness.md
+      - Evidence reader: evidence-reader.md
+      - Reproducibility comparison: reproducibility-comparison.md
   - Publication:
-      - Sign evidence: publication-signing-v0.1.md
-      - Create DOI deposits: archive-deposition-v0.1.md
-      - Artifact schemas: artifact-schemas-v0.1.md
-  - Evidence and rationale:
-      - Literature and capability audit: literature-capability-audit-v0.2.md
-      - Scientific design: scientific-design.md
-      - Tool landscape: landscape.md
-      - Validation report: validation-report-v0.1.md
-      - Event-kernel interval calibration: event-kernel-interval-calibration-v0.1.md
-      - Scientific decisions: decisions/README.md
-      - Roadmap: roadmap.md
+      - Sign evidence: publication-signing.md
+      - Prepare a Zenodo deposit (unsubmitted): archive-deposition.md
+      - Artifact schemas: artifact-schemas.md
   - Reference:
       - Python API: reference/index.md
+      - Compatibility and error codes: pipeline-compatibility.md
       - Publication-quality figures: reference/figure-style.md
       - Figure provenance: reference/figure-provenance.md
-      - Stability policy: api-stability-v0.1.md
-      - Release readiness: release-readiness-v0.1.md
+      - Stability policy: api-stability.md

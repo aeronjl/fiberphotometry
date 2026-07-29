@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related method: [predictor-family contributions](../predictor-family-contributions-v0.1.md)
+- Related method: [predictor-family contributions](../predictor-family-contributions.md)
 
 ## Context
 

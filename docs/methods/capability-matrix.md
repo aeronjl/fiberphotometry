@@ -3,6 +3,23 @@
 The target is broad field utility, not a claim that every possible optical
 experiment belongs in one package.
 
+!!! warning "What these labels mean at pre-alpha"
+
+    The package is classified `Development Status :: 2 - Pre-Alpha` and has never
+    been released. **No row in this table means the method is validated for
+    scientific publication.** Read the labels as follows.
+
+    | Label | What it asserts | What it does not assert |
+    |---|---|---|
+    | **Supported** | Implemented, typed, covered by tests, and inside the [v0.1 stability boundary](../api-stability.md), so its call signature will not change without notice within a `0.1.x` line | That the numerical result has been validated against an independent implementation, a published reanalysis, or a field consensus |
+    | **Experimental** | Implemented and tested, but the API, defaults, or numerics may change whenever validation exposes a scientific problem | That it is ready to use for a result you intend to publish |
+    | **Partial** | Part of the contract exists; the named gap is real and unfinished | — |
+    | **Planned** | Not implemented. There is no code behind this row | — |
+
+    Where a method has been checked against public data, the frozen result and its
+    retained failures are linked from the
+    [public-data evidence atlas](public-evidence-atlas.md).
+
 | Scientific task | Status | Current route or required work |
 |---|---|---|
 | Tabular, TDT, NWB and selected public-data ingestion | **Supported** | Explicit schemas and channel roles |
@@ -37,7 +54,8 @@ experiment belongs in one package.
 | Sensor-kinetic modeling and deconvolution | **Experimental / caution** | Versioned calibrated or assumed parametric/sampled linear kernels; gap-bounded forward prediction; sampling, duration, transfer and regularization gates; conditional regularized recovery with reconstruction evidence; nonlinear models and latent uncertainty remain gaps |
 | Behavior/pose/state discovery | **Experimental interoperability boundary** | Typed file/in-memory adapters, matched-pulse clock synchronization, current DeepLabCut/Keypoint-MoSeq/SLEAP/BORIS fixtures, and native loss-aware `ndx-pose` 0.3 inspection plus 2D/3D NWB round trip; a real camera-to-photometry clock fixture remains a gap; Unspool owns longitudinal models |
 | Robustness multiverses | **Supported** | Named alternatives, compatibility, failures and provenance |
-| NWB evidence and archival publication | **Supported** | Export, verification, signing and draft DOI handoff |
+| NWB evidence and archival publication | **Supported** | Export, verification, signing and unsubmitted Zenodo draft creation; no DOI is minted |
+| Community `ndx-fiber-photometry` data model | **Experimental** | Response series always emitted; declared channel metadata builds `FiberPhotometryTable`, indicator and device objects; `pynwb.validate()` and NWB Inspector tests; wavelengths, indicator and hardware must be supplied, never defaulted ([contract](../nwb-data-model.md)) |
 
 “Gap” means the question is common enough to deserve either implementation or a
 clear interoperability route. It does not mean the safest response is necessarily

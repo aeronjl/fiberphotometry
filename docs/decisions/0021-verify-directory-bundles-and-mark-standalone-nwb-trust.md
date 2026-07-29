@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related contract: [Project evidence reader v0.1](../evidence-reader-v0.1.md)
+- Related contract: [Project evidence reader v0.1](../evidence-reader.md)
 
 ## Context
 

@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related evidence: [event-kernel interval calibration v0.1](../event-kernel-interval-calibration-v0.1.md)
+- Related evidence: [event-kernel interval calibration v0.1](../event-kernel-interval-calibration.md)
 
 ## Context
 

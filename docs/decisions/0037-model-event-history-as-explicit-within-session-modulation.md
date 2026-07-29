@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related method: [behavioral event-kernel encoding](../event-kernel-encoding-v0.1.md)
+- Related method: [behavioral event-kernel encoding](../event-kernel-encoding.md)
 
 ## Context
 

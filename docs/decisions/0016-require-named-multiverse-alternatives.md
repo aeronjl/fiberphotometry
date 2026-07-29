@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related contract: [Configuration-first CLI v0.1](../cli-v0.1.md)
+- Related contract: [Configuration-first CLI v0.1](../cli.md)
 
 ## Context
 

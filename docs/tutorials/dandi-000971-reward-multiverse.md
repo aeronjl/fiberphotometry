@@ -111,7 +111,7 @@ input fingerprints, estimates, and deterministic inferential results should not.
 The frozen reference execution is committed under
 [`benchmarks/dandi-000971-tutorial-v0.1`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-tutorial-v0.1/),
 and its scientific interpretation is reported in the
-[v0.1 results](../dandi-000971-tutorial-results-v0.1.md). Read those artifacts
+[v0.1 results](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000971-tutorial-results-v0.1.md). Read those artifacts
 before downloading the cohort if you only want to inspect the product output.
 
 ## What to change for your own study

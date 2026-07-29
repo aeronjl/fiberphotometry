@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-26
 - Decision owners: project maintainers
-- Related protocol/report: [CLI v0.1](../cli-v0.1.md)
+- Related protocol/report: [CLI v0.1](../cli.md)
 
 ## Context
 
@@ -55,3 +55,13 @@ On 2026-07-27, NWB export was extended to multiverse projects without inventing
 additional acquisition metadata. The storage boundary for processed workflows is
 governed by
 [SDR-0020](0020-store-one-reference-signal-and-the-complete-multiverse-ledger.md).
+
+On 2026-07-28, the revisit trigger was satisfied. `NWBAcquisitionMetadata` is the
+typed acquisition schema that requires and validates the fields
+`ndx-fiber-photometry` marks required, so extension-native writing is now
+available. Signals are always written as `FiberPhotometryResponseSeries` rather
+than core `TimeSeries`, and channel labels and preprocessing provenance moved from
+a private JSON document in `comments` to two documented scratch `DynamicTable`
+objects. The prohibition in the decision is unchanged: without declared metadata
+the writer emits no `FiberPhotometryTable` at all. See the
+[NWB data model](../nwb-data-model.md).

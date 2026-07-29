@@ -86,6 +86,9 @@ the original reasoning is not silently rewritten.
 | [SDR-0056](0056-form-interactions-from-animal-condition-contrasts.md) | Accepted | Form interactions from animal-condition contrasts |
 | [SDR-0057](0057-preserve-domain-denominators-at-one-population-boundary.md) | Accepted | Preserve domain denominators at one population boundary |
 | [SDR-0058](0058-require-explicit-axes-and-pointwise-support-for-population-curves.md) | Accepted | Require explicit axes and pointwise support for population curves |
+| [SDR-0059](0059-consume-movement-datasets-without-depending-on-movement.md) | Accepted | Consume movement datasets without depending on movement |
 
-Use four-digit monotonically increasing identifiers. Copy
-[`template.md`](template.md), fill every heading, and add the record to this index.
+Use four-digit monotonically increasing identifiers. Copy the structure of the most
+recent accepted record — a `# SDR-NNNN: <decision>` title, then `## Context`,
+`## Decision`, `## Consequences`, `## Alternatives considered`, and
+`## Revisit trigger` — fill every heading, and add the record to this index.

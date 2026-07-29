@@ -5,7 +5,7 @@
 - Decision owners: project maintainers
 - Related protocol/report:
   [protocol v0.2](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-control-free-v0.2.md),
-  [report v0.2](../control-free-benchmark-v0.2.md)
+  [report v0.2](https://github.com/aeronjl/fiberphotometry/blob/main/research/control-free-benchmark-v0.2.md)
 
 ## Context
 

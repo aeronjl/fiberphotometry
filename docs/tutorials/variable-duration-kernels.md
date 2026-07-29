@@ -50,7 +50,7 @@ annotations to the photometry clock first and retain that synchronization eviden
 ## Declare edge, duration, and progress terms
 
 ```python
-from fiberphotometry import (
+from fiberphotometry.encoding import (
     EncodingModelSpec,
     EventKernelSpec,
     EventModulationSpec,
@@ -116,6 +116,5 @@ Run the complete simulation:
 uv run python examples/variable_duration_kernels.py
 ```
 
-See [SDR-0038](../decisions/0038-model-variable-duration-behavior-with-physical-intervals-and-progress.md)
-for the decision and the [behavior-tool tutorial](behavior-tool-interoperability.md)
-for DeepLabCut, SLEAP, Keypoint-MoSeq, and BORIS inputs.
+See the [behavior-tool tutorial](behavior-tool-interoperability.md) for
+DeepLabCut, SLEAP, Keypoint-MoSeq, and BORIS inputs.

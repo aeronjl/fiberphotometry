@@ -8,11 +8,11 @@ whether optical or stimulation artifacts invalidate a biological claim.
 
 | Need | Workflow | Status | Important boundary |
 |---|---|---|---|
-| Inspect sampling, dropouts, flat steps, and channel health | [Preprocessing and QC](../pipeline-v0.1.md) | Supported | QC can refuse analysis; it does not silently delete observations |
-| Make irregular recordings safe for downstream methods | [Irregular sampling](../irregular-sampling-v0.1.md) | Supported | gaps remain gaps; resampling is explicit |
-| Mask declared stimulation and assess sensor/reference validity | [Optogenetic artifacts and sensor validity](../optical-validity-v0.1.md) | Experimental | masking is not artifact correction |
-| Account for indicator response dynamics | [Sensor-kinetic modeling](../sensor-kinetic-modeling-v0.1.md) | Experimental | deconvolution is conditional on a calibrated model |
-| Separate known fluorophores measured in overlapping channels | [Optical unmixing](../optical-unmixing-v0.1.md) | Experimental | the mixing matrix must be independently identified |
+| Inspect sampling, dropouts, flat steps, and channel health | [Preprocessing and QC](../pipeline.md) | Supported | QC can refuse analysis; it does not silently delete observations |
+| Make irregular recordings safe for downstream methods | [Irregular sampling](../irregular-sampling.md) | Supported | gaps remain gaps; resampling is explicit |
+| Mask declared stimulation and assess sensor/reference validity | [Optogenetic artifacts and sensor validity](../optical-validity.md) | Experimental | masking is not artifact correction |
+| Account for indicator response dynamics | [Sensor-kinetic modeling](../sensor-kinetic-modeling.md) | Experimental | deconvolution is conditional on a calibrated model |
+| Separate known fluorophores measured in overlapping channels | [Optical unmixing](../optical-unmixing.md) | Experimental | the mixing matrix must be independently identified |
 
 ## Coverage gaps this category exposes
 

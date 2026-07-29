@@ -50,6 +50,16 @@ directly with their method pages:
 | `optical-validity-contract.svg` | Separate prospective pulse masks, observed artifact diagnostics, and versioned sensor-validity gates |
 | `transient-product-evidence.svg` | Separate threshold calibration, outcome detection, native cutouts, waveform QC, and quantification |
 
+## Self-contained tutorial figures
+
+| Figure | Purpose |
+|---|---|
+| `first-peri-event-plot.png` | Output of the complete code block on [Your first peri-event plot](../getting-started/first-peri-event-plot.md) |
+
+This figure carries its own generator: the page that displays it contains the
+exact, seeded script that produces it. Its data is synthetic with a known
+response and it is not evidence about any experiment.
+
 ## Public-data evidence figures
 
 | Figure | Source and claim boundary |

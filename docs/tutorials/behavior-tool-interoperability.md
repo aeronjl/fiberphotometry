@@ -24,7 +24,7 @@ present. Install the lightweight file dependencies with
 `uv add "fiberphotometry[behavior]"`.
 
 ```python
-from fiberphotometry import pose_from_deeplabcut_file
+from fiberphotometry.interoperability import pose_from_deeplabcut_file
 
 nose = pose_from_deeplabcut_file(
     "mouse-07-day-04DLC.h5",
@@ -62,7 +62,7 @@ The file reader uses stored dimension metadata when present. Older files omit it
 so supply `dims` rather than guessing from array size.
 
 ```python
-from fiberphotometry import pose_from_sleap_analysis_h5
+from fiberphotometry.interoperability import pose_from_sleap_analysis_h5
 
 nose = pose_from_sleap_analysis_h5(
     "mouse-07-day-04.analysis.h5",
@@ -91,7 +91,7 @@ Run-length encoding turns consecutive equal states into bouts without discarding
 duration.
 
 ```python
-from fiberphotometry import annotations_from_moseq_results_h5
+from fiberphotometry.interoperability import annotations_from_moseq_results_h5
 
 moseq = annotations_from_moseq_results_h5(
     "moseq-project/model-a/results.h5",
@@ -114,7 +114,7 @@ If pose has already been standardized in NWB, inspect and load the native
 `ndx-pose` container instead of returning to a tool-specific export:
 
 ```python
-from fiberphotometry import inspect_ndx_pose_nwb, poses_from_ndx_pose_nwb
+from fiberphotometry.io.ndx_pose import inspect_ndx_pose_nwb, poses_from_ndx_pose_nwb
 
 inspection = inspect_ndx_pose_nwb("mouse-07-day-04.nwb")
 poses = poses_from_ndx_pose_nwb(
@@ -129,7 +129,7 @@ poses = poses_from_ndx_pose_nwb(
 
 This route preserves physical conversion, optional z, confidence, reference frame,
 skeleton and source-software metadata. See the
-[native round-trip guide](../ndx-pose-interoperability-v0.1.md).
+[native round-trip guide](../ndx-pose-interoperability.md).
 
 For a variable-duration analysis, retain physical bounds and aligned duration
 values rather than replacing time:
@@ -151,7 +151,7 @@ For a BORIS tabular CSV, the file reader skips the observation metadata preamble
 selects one source subject, and pairs START/STOP rows.
 
 ```python
-from fiberphotometry import annotations_from_boris_tabular_file
+from fiberphotometry.interoperability import annotations_from_boris_tabular_file
 
 boris = annotations_from_boris_tabular_file(
     "mouse-07-day-04-boris.csv",
@@ -167,7 +167,7 @@ intervals. Aggregated CSV/TSV files can be read directly without first building 
 column mapping:
 
 ```python
-from fiberphotometry import annotations_from_boris_aggregated_file
+from fiberphotometry.interoperability import annotations_from_boris_aggregated_file
 
 aggregated = annotations_from_boris_aggregated_file(
     "mouse-07-day-04-aggregated.tsv",
@@ -184,7 +184,7 @@ Before projecting intervals into a neural model, declare any cleanup or contextu
 rules as an ordered policy. Do not edit adapter output in place:
 
 ```python
-from fiberphotometry import (
+from fiberphotometry.interval_policy import (
     ContextualizeIntervals,
     FilterIntervals,
     IntervalPolicy,
@@ -218,7 +218,7 @@ moseq = policy_result.annotations
 The result retains kept and removed denominators plus the lineage of merged, split,
 relabelled, and trimmed intervals. Its fingerprint changes if a threshold or
 operation order changes. See the full
-[interval-policy method and example](../interval-policy-v0.1.md).
+[interval-policy method and example](../interval-policy.md).
 
 ## 5. Align a pose covariate without bridging missing spans
 
@@ -226,7 +226,7 @@ Fit the clock mapping before interpolation. Pulse correspondence is explicit: th
 function never guesses which pulses match.
 
 ```python
-from fiberphotometry import (
+from fiberphotometry.interoperability import (
     ClockPulseMatches,
     ClockSynchronizationSpec,
     fit_clock_synchronization,
@@ -276,7 +276,7 @@ For a complete synthetic session, point/bout onsets, physical intervals, aligned
 duration values, and a continuous movement covariate compose directly:
 
 ```python
-from fiberphotometry import EncodingSession
+from fiberphotometry.encoding import EncodingSession
 
 moseq_inputs = moseq.interval_encoding_inputs(edge="onset")
 boris_inputs = boris.interval_encoding_inputs(edge="onset")
@@ -308,7 +308,11 @@ prospective coverage floor appropriate to the study rather than relying only on
 the default:
 
 ```python
-from fiberphotometry import EncodingModelSpec, EventKernelSpec, fit_event_kernel_model
+from fiberphotometry.encoding import (
+    EncodingModelSpec,
+    EventKernelSpec,
+    fit_event_kernel_model,
+)
 
 spec = EncodingModelSpec(
     event_kernels=(EventKernelSpec("rear", (-1.0, 3.0)),),
@@ -322,7 +326,7 @@ print(result.validity.retained_fraction)
 Reason counts can overlap—for example, one timestamp may have both an invalid
 response and invalid pose—whereas `excluded_observations` is their union. Grouped
 validation and inference still follow the
-[event-kernel method contract](../event-kernel-encoding-v0.1.md).
+[event-kernel method contract](../event-kernel-encoding.md).
 
 ## 6. Pass neural summaries to Unspool
 
@@ -330,7 +334,8 @@ After FiberPhotometry estimates a declared trial- or session-level neural quanti
 attach it to explicit longitudinal coordinates.
 
 ```python
-from fiberphotometry import ObservationTable, prepare_unspool_study
+from fiberphotometry import ObservationTable
+from fiberphotometry.unspool import prepare_unspool_study
 
 summaries = ObservationTable.from_columns(
     {
@@ -366,4 +371,4 @@ known affine offset/drift recovery and refusal of
 bad pulse evidence, but a real synchronization record is still missing. None of
 this proves acquisition-specific clock accuracy, multi-animal identity stability,
 or a biological result. See the
-[validation matrix](../interoperability-validation-v0.1.md).
+[validation matrix](https://github.com/aeronjl/fiberphotometry/blob/main/research/interoperability-validation-v0.1.md).

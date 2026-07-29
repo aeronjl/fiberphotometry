@@ -8,9 +8,9 @@ be established before association is interpreted.
 
 | Geometry | Workflow | Output |
 |---|---|---|
-| Two or more named sites or colors | [Multi-site and multi-color association](../multisite-multicolor-analysis-v0.1.md) | lagged association, coherence, phase, and crosstalk review |
-| Three or more fibers with physical coordinates | [Coordinate-aware dense arrays](../spatial-network-v0.1.md) | edge ledger, distance summaries, spatial null, animal contrast |
-| Overlapping optical channels measuring known components | [Optical unmixing](../optical-unmixing-v0.1.md) | conditionally unmixed component signals |
+| Two or more named sites or colors | [Multi-site and multi-color association](../multisite-multicolor-analysis.md) | lagged association, coherence, phase, and crosstalk review |
+| Three or more fibers with physical coordinates | [Coordinate-aware dense arrays](../spatial-network.md) | edge ledger, distance summaries, spatial null, animal contrast |
+| Overlapping optical channels measuring known components | [Optical unmixing](../optical-unmixing.md) | conditionally unmixed component signals |
 
 ## Coverage gaps this category exposes
 

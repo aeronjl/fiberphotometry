@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related contract: [Multiverse scientific contract v0.1](../multiverse-contract-v0.1.md)
+- Related contract: [Multiverse scientific contract v0.1](../multiverse-contract.md)
 
 ## Context
 

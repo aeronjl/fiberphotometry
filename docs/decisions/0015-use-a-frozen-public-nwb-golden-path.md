@@ -60,5 +60,5 @@ testing shows the 2.20 GB full run blocks adoption.
 ## Evidence added later
 
 The frozen six-animal execution completed without source or workflow failures. See
-the [v0.1 result](../dandi-000971-tutorial-results-v0.1.md) and committed
+the [v0.1 result](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000971-tutorial-results-v0.1.md) and committed
 [evidence bundle](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-tutorial-v0.1/).

@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related protocol/report: [clock synchronization contract](../clock-synchronization-v0.1.md)
+- Related protocol/report: [clock synchronization contract](../clock-synchronization.md)
 
 ## Context
 

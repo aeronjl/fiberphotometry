@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related protocol/report: [behavioral event-kernel method contract](../event-kernel-encoding-v0.1.md)
+- Related protocol/report: [behavioral event-kernel method contract](../event-kernel-encoding.md)
 
 ## Context
 

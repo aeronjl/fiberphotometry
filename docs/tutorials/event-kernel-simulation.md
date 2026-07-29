@@ -54,4 +54,4 @@ response units, recovery of the motion coefficient, animal-held-out mean
 This establishes numerical recovery under known assumptions. It does **not** show
 that a Gaussian linear model is sufficient for real photometry, that motion is
 fully controlled, or that coefficients are causal. Read the
-[method contract](../event-kernel-encoding-v0.1.md) before adapting it to data.
+[method contract](../event-kernel-encoding.md) before adapting it to data.

@@ -12,7 +12,7 @@ trial outcome, after retaining the average cue response?
 
 This is an event-wise interaction. It is not a longitudinal learning model: the
 history resets at every session boundary, while cross-session trajectories remain
-the responsibility of [Unspool](../unspool-interoperability-v0.1.md).
+the responsibility of [Unspool](../unspool-interoperability.md).
 
 ## Declare rather than infer the history
 
@@ -21,7 +21,7 @@ are coded +0.5 and −0.5, so zero represents their midpoint. The first cue has 
 previous outcome and deliberately receives the declared unavailable value of zero.
 
 ```python
-from fiberphotometry import EncodingSession
+from fiberphotometry.encoding import EncodingSession
 
 session = EncodingSession.from_arrays(
     subject="mouse-1",
@@ -40,7 +40,7 @@ trial with missing metadata.
 ## Fit a main kernel and a history kernel
 
 ```python
-from fiberphotometry import (
+from fiberphotometry.encoding import (
     EncodingModelSpec,
     EventKernelSpec,
     EventModulationSpec,
@@ -92,6 +92,4 @@ recovers a known previous-outcome curve while holding out complete animals.
 - It does not rescue a model that fails group-held-out prediction.
 
 The serialized result records the source event, lag, value name, unavailable-value
-rule, basis, fitted curve, uncertainty, and grouped diagnostics. See
-[SDR-0037](../decisions/0037-model-event-history-as-explicit-within-session-modulation.md)
-for the complete decision.
+rule, basis, fitted curve, uncertainty, and grouped diagnostics.

@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related contract: [Archival deposition v0.1](../archive-deposition-v0.1.md)
+- Related contract: [Archival deposition v0.1](../archive-deposition.md)
 
 ## Context
 

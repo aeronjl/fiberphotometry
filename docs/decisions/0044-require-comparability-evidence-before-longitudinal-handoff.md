@@ -61,4 +61,3 @@ sensor-specific diagnostics, or a measurement-error model.
 Revisit after two external longitudinal datasets provide independently reviewed
 session exclusions, or after sensor/isobestic validity and calibration metadata can
 support more specific preflight rules.
-

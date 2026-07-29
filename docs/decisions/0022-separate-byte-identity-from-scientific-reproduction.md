@@ -4,7 +4,7 @@
 - Date: 2026-07-27
 - Decision owners: project maintainers
 - Related contract:
-  [Reproducibility comparison v0.1](../reproducibility-comparison-v0.1.md)
+  [Reproducibility comparison v0.1](../reproducibility-comparison.md)
 
 ## Context
 

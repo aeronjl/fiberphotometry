@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related contract: [Publication signing v0.1](../publication-signing-v0.1.md)
+- Related contract: [Publication signing v0.1](../publication-signing.md)
 
 ## Context
 

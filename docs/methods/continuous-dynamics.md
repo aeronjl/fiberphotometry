@@ -8,9 +8,9 @@ recording as one uninterrupted stationary signal.
 
 | Need | Workflow | Status |
 |---|---|---|
-| Detect candidate fluorescence transients, then quantify their rate and kinetics | [Spontaneous transients](../spontaneous-transients-v0.1.md) | Experimental |
-| Estimate autocorrelation, PSD, spectrograms, or state-conditioned band power | [Time, frequency, and state analysis](../spectral-state-analysis-v0.1.md) | Experimental |
-| Summarize seconds-to-hours windows with explicit coverage | [Multiscale long-duration summaries](../multiscale-long-duration-v0.1.md) | Experimental |
+| Detect candidate fluorescence transients, then quantify their rate and kinetics | [Spontaneous transients](../spontaneous-transients.md) | Experimental |
+| Estimate autocorrelation, PSD, spectrograms, or state-conditioned band power | [Time, frequency, and state analysis](../spectral-state-analysis.md) | Experimental |
+| Summarize seconds-to-hours windows with explicit coverage | [Multiscale long-duration summaries](../multiscale-long-duration.md) | Experimental |
 
 ## Required distinctions
 

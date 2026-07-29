@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related protocol/report: [event-kernel multiverse contract](../event-kernel-multiverse-v0.1.md)
+- Related protocol/report: [event-kernel multiverse contract](../event-kernel-multiverse.md)
 
 ## Context
 

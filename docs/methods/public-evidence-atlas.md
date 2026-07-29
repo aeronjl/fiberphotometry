@@ -18,7 +18,7 @@ answer, its experimental unit, and the limitation that controls interpretation.
 - **Do not conclude:** phenotype prevalence, source-study replication, or evidence for a nonzero population effect.
 
 [Run the raw-NWB tutorial](../tutorials/dandi-000971-reward-multiverse.md)
-or [read the frozen result](../dandi-000971-tutorial-results-v0.1.md).
+or [read the frozen result](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000971-tutorial-results-v0.1.md).
 
 ## Does a descriptive contrast survive a wider signal-only multiverse?
 
@@ -40,7 +40,7 @@ or [read the frozen result](../dandi-000971-tutorial-results-v0.1.md).
 - **Use it to learn:** compatible universes, structurally rejected workflows, separate unit lanes, and leave-one-animal-out diagnostics.
 - **Do not conclude:** causal effects of correctness or robustness to untested preprocessing families.
 
-[Read the complete frozen result and amendments](../ibl-feedback-signal-only-results-v0.3.2.md).
+[Read the complete frozen result and amendments](https://github.com/aeronjl/fiberphotometry/blob/main/research/ibl-feedback-signal-only-results-v0.3.2.md).
 
 ## Can overlapping behavioral events predict a new animal?
 

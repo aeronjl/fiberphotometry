@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related evidence: [event-kernel method contract](../event-kernel-encoding-v0.1.md)
+- Related evidence: [event-kernel method contract](../event-kernel-encoding.md)
 
 ## Context
 

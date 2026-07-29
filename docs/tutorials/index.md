@@ -47,7 +47,7 @@ Compare named cue, reward and motion design specifications under one fixed
 animal-held-out validation policy. Score deltas are only reported when models use
 the exact same retained timestamps, and failed designs remain in the ledger.
 
-[Open the model-multiverse method](../event-kernel-multiverse-v0.1.md)
+[Open the model-multiverse method](../event-kernel-multiverse.md)
 
 ## Previous-outcome event kernels
 
