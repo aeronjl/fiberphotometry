@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.spectral import (
+from fipha.spectral import (
     AutocorrelationSpec,
     GapHandlingSpec,
     SpectralAnalysisSpec,

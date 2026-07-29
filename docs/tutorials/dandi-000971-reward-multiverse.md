@@ -1,6 +1,6 @@
 # Tutorial: raw public NWB to an animal-level robustness report
 
-This is FiberPhotometry's canonical end-to-end product tutorial. It starts with
+This is fipha's canonical end-to-end product tutorial. It starts with
 six immutable public NWB files, validates their acquisition and event structure,
 runs a declared primary analysis and eight-universe preprocessing multiverse, and
 writes a checksummed evidence bundle.
@@ -14,7 +14,7 @@ to defensible preprocessing and response-window choices?
 
 It does **not** test phenotype differences, estimate phenotype prevalence, or
 independently confirm the source publication. Read the frozen
-[scientific protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
+[scientific protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
 before interpreting the output.
 
 ## Install
@@ -32,7 +32,7 @@ uv run python examples/dandi_000971_reward_tutorial.py
 ```
 
 The first run downloads 2.20 GB into
-`~/Library/Caches/fiberphotometry/dandi-000971-tutorial`. Every file is checked
+`~/Library/Caches/fipha/dandi-000971-tutorial`. Every file is checked
 against its frozen byte size and SHA-256 digest. Repeated runs reuse only verified
 files.
 
@@ -109,9 +109,9 @@ readable objects. Execution timestamps may differ; scientific specifications,
 input fingerprints, estimates, and deterministic inferential results should not.
 
 The frozen reference execution is committed under
-[`benchmarks/dandi-000971-tutorial-v0.1`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-tutorial-v0.1/),
+[`benchmarks/dandi-000971-tutorial-v0.1`](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-000971-tutorial-v0.1/),
 and its scientific interpretation is reported in the
-[v0.1 results](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000971-tutorial-results-v0.1.md). Read those artifacts
+[v0.1 results](https://github.com/aeronjl/fipha/blob/main/research/dandi-000971-tutorial-results-v0.1.md). Read those artifacts
 before downloading the cohort if you only want to inspect the product output.
 
 ## What to change for your own study

@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-07-28
-- **Decision owners:** FiberPhotometry maintainers
+- **Decision owners:** fipha maintainers
 - **Related:** SDR-0031, SDR-0047, SDR-0052
 
 ## Context
@@ -19,7 +19,7 @@ turning descriptive metadata into a kernel would create false precision.
 
 ## Decision
 
-FiberPhotometry will:
+fipha will:
 
 1. keep descriptive `SensorKinetics` separate from executable response models;
 2. version model identity, sensor-profile linkage, units, context, evidence,

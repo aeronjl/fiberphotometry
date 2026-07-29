@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.multiscale import (
+from fipha.multiscale import (
     MultiscaleAnimalInferenceSpec,
     MultiscaleContinuitySpec,
     MultiscaleStudySession,
@@ -12,7 +12,7 @@ from fiberphotometry.multiscale import (
     infer_multiscale_animals,
     summarize_multiscale,
 )
-from fiberphotometry.spectral import StateEpoch
+from fipha.spectral import StateEpoch
 
 
 def test_multiscale_summary_keeps_sample_and_time_weighting_distinct() -> None:

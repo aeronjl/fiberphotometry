@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from fiberphotometry import (
+from fipha import (
     BaselineDFFOperation,
     Contrast,
     Estimand,
@@ -21,7 +21,7 @@ from fiberphotometry import (
     StudyDesign,
     Unit,
 )
-from fiberphotometry.multiverse import (
+from fipha.multiverse import (
     ChoiceRef,
     CompatibilityRule,
     DecisionAlternative,
@@ -29,7 +29,7 @@ from fiberphotometry.multiverse import (
     MultiverseSpec,
     materialize_multiverse,
 )
-from fiberphotometry.planning import create_analysis_plan
+from fipha.planning import create_analysis_plan
 
 WINDOWS = {
     "standard": ((-0.5, 0.0), (0.0, 0.5)),

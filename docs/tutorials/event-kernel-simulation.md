@@ -20,7 +20,7 @@ uv run python examples/event_kernel_encoding.py
 ```
 
 The complete executable source is
-[`examples/event_kernel_encoding.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/event_kernel_encoding.py).
+[`examples/event_kernel_encoding.py`](https://github.com/aeronjl/fipha/blob/main/examples/event_kernel_encoding.py).
 Its essential model declaration is:
 
 ```python

@@ -2,7 +2,7 @@
 
 Status: **completed; retained structural failure** (26 July 2026)
 
-The [protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000351-parity-v0.1.md) froze direct
+The [protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-dandi-000351-parity-v0.1.md) froze direct
 sample alignment before aggregate execution. All four draft assets matched their
 pinned sizes and SHA-256 digests and exposed the expected `raw405,raw470` data,
 but none passed the timestamp/shape contract:
@@ -14,7 +14,7 @@ but none passed the timestamp/shape contract:
 
 Consequently no numerical parity cases were executed, and all scientific gates
 remain failed rather than being computed after an unregistered alignment choice.
-The [machine-readable result](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000351-parity-v0.1.json) retains
+The [machine-readable result](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-000351-parity-v0.1.json) retains
 all four failures.
 
 This is not evidence that the archived dF/F is incorrect. It establishes that the

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from fiberphotometry.io.dandi_000971 import (
+from fipha.io.dandi_000971 import (
     from_dandi_000971_nwb,
     rewarded_unrewarded_nose_pokes,
 )

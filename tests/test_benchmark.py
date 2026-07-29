@@ -1,4 +1,4 @@
-from fiberphotometry.benchmark import run_reference_benchmark
+from fipha.benchmark import run_reference_benchmark
 
 
 def test_large_transient_benchmark_reports_recovery_metrics() -> None:

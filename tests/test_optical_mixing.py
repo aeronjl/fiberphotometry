@@ -3,8 +3,8 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.multisignal import ChannelIdentity
-from fiberphotometry.optical_mixing import (
+from fipha.multisignal import ChannelIdentity
+from fipha.optical_mixing import (
     MixingCoefficientSource,
     OpticalComponent,
     OpticalMixingCalibrationSpec,

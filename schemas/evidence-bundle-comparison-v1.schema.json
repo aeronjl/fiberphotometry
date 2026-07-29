@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/evidence-bundle-comparison-v1.schema.json",
-  "title": "FiberPhotometry evidence bundle comparison v1",
+  "$id": "https://github.com/aeronjl/fipha/schemas/evidence-bundle-comparison-v1.schema.json",
+  "title": "fipha evidence bundle comparison v1",
   "type": "object",
   "additionalProperties": false,
   "required": [

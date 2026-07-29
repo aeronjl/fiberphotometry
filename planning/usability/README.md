@@ -4,7 +4,7 @@
 > no results exist. Everything below is the frozen study *design*.
 
 The study is intended to ask whether a practicing photometry scientist can
-correctly interpret FiberPhotometry's evidence report without help. It would be a
+correctly interpret fipha's evidence report without help. It would be a
 product test, not an evaluation of the participant and not evidence that the
 underlying synthetic scientific result is true.
 
@@ -17,7 +17,7 @@ underlying synthetic scientific result is true.
 - [`response-sheet-v0.1.md`](response-sheet-v0.1.md): one copy per participant.
 - [`scoring-key-v0.1.md`](scoring-key-v0.1.md): expected answers and error coding;
   keep this hidden during sessions.
-- [`https://github.com/aeronjl/fiberphotometry/blob/main/examples/grouped_multiverse_report.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/grouped_multiverse_report.py):
+- [`https://github.com/aeronjl/fipha/blob/main/examples/grouped_multiverse_report.py`](https://github.com/aeronjl/fipha/blob/main/examples/grouped_multiverse_report.py):
   deterministic illustrative stimulus generator.
 
 Generate the frozen stimulus from the repository root:

@@ -26,7 +26,7 @@ For each sample, the declared model is:
 
 where \(\mathbf{y}\) contains measured channels, \(\mathbf{s}\) contains declared
 component values, \(\mathbf{A}\) is a fixed mixing matrix, and \(\mathbf{b}\)
-contains fixed channel offsets. FiberPhotometry checks that \(\mathbf{A}\) has full
+contains fixed channel offsets. fipha checks that \(\mathbf{A}\) has full
 component rank and does not exceed the requested condition-number gate.
 
 It does not infer both \(\mathbf{A}\) and \(\mathbf{s}\) from the same biological
@@ -40,8 +40,8 @@ controlled or measured. Rows are calibration samples; columns have exactly the
 order declared in `components` and `channels`.
 
 ```python
-from fiberphotometry.multisignal import ChannelIdentity
-from fiberphotometry.optical_mixing import (
+from fipha.multisignal import ChannelIdentity
+from fipha.optical_mixing import (
     OpticalComponent,
     OpticalMixingCalibrationSpec,
     calibrate_optical_mixing,
@@ -121,7 +121,7 @@ fingerprint.
 When coefficients were estimated elsewhere, construct the same artifact directly:
 
 ```python
-from fiberphotometry.optical_mixing import (
+from fipha.optical_mixing import (
     OpticalMixingChannel,
     OpticalMixingDesign,
     assess_optical_mixing_design,
@@ -152,7 +152,7 @@ warning in the result rather than being presented as calibration evidence.
 The biological recording matrix must follow the channel order in the design:
 
 ```python
-from fiberphotometry.optical_mixing import (
+from fipha.optical_mixing import (
     OpticalUnmixingSpec,
     extract_unmixed_component,
     unmix_optical_signals,

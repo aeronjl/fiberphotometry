@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,

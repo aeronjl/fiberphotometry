@@ -30,7 +30,7 @@ This is a sensitivity estimand. It does not replace the primary animal-level
 analysis or guarantee the same weighting of sessions and trials. Disagreement is
 reported for scientific inspection.
 
-The frozen [v0.2 parity fixture](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/mixed-model-parity-v0.2.json)
+The frozen [v0.2 parity fixture](https://github.com/aeronjl/fipha/blob/main/benchmarks/mixed-model-parity-v0.2.json)
 matches direct statsmodels estimates, standard errors, and confidence intervals in
 unbalanced-event and unbalanced-nested-session scenarios. This validates numerical
 plumbing, not interval coverage or universal model adequacy. Statsmodels documents

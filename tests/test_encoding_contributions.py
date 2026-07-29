@@ -3,20 +3,20 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
     RaisedCosineBasisSpec,
 )
-from fiberphotometry.encoding_contributions import (
+from fipha.encoding_contributions import (
     PredictorFamilyContributionSpec,
     PredictorFamilyDropSpec,
     PredictorFamilyGroupDelta,
     _paired_dispersion,
     assess_predictor_family_contributions,
 )
-from fiberphotometry.encoding_multiverse import (
+from fipha.encoding_multiverse import (
     EncodingModelAlternative,
     EncodingMultiverseSpec,
     run_encoding_multiverse,

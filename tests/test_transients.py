@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from fiberphotometry import make_recording
-from fiberphotometry.transients import TransientDetectionSpec, detect_transients
+from fipha import make_recording
+from fipha.transients import TransientDetectionSpec, detect_transients
 
 
 def _recording(time: np.ndarray, signal: np.ndarray):

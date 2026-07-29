@@ -24,7 +24,7 @@ causality.
 ## Declare the pair
 
 ```python
-from fiberphotometry.multisignal import (
+from fipha.multisignal import (
     ChannelIdentity,
     SignalPairMetadata,
     SpatialCoordinate,
@@ -103,7 +103,7 @@ compresses time or forms cross-channel pairs across a missing region.
 ## Lagged association
 
 ```python
-from fiberphotometry.multisignal import (
+from fipha.multisignal import (
     BlockPermutationSpec,
     LaggedAssociationSpec,
     lagged_association,
@@ -179,7 +179,7 @@ the design explicitly rather than residualizing against event timestamps alone.
 ## Review possible crosstalk and shared drivers
 
 ```python
-from fiberphotometry.multisignal import assess_crosstalk
+from fipha.multisignal import assess_crosstalk
 
 review = assess_crosstalk(
     time_s,
@@ -208,8 +208,8 @@ signals automatically.
 ## Coherence and relative phase
 
 ```python
-from fiberphotometry.cross_spectral import coherence_phase, summarize_coherence_band
-from fiberphotometry.spectral import SpectralAnalysisSpec
+from fipha.cross_spectral import coherence_phase, summarize_coherence_band
+from fipha.spectral import SpectralAnalysisSpec
 
 spectral_spec = SpectralAnalysisSpec(
     window_duration_s=20.0,
@@ -244,8 +244,8 @@ are not treated as replicates.
 ## Condition coherence on supplied states
 
 ```python
-from fiberphotometry.cross_spectral import state_conditioned_coherence
-from fiberphotometry.spectral import StateEpoch
+from fipha.cross_spectral import state_conditioned_coherence
+from fipha.spectral import StateEpoch
 
 states = (
     StateEpoch("exploration", 12.0, 48.0, "bout-001"),
@@ -264,7 +264,7 @@ by_state = state_conditioned_coherence(
 
 State labels are user supplied and half-open. Overlap is refused. Separate epochs
 remain separate joint continuity runs even when they share a label or touch in
-time. FiberPhotometry does not discover behavior states; use the
+time. fipha does not discover behavior states; use the
 [behavioral interoperability boundary](ecosystem-interoperability.md) and
 bring the resulting intervals onto the declared photometry clock.
 
@@ -274,7 +274,7 @@ First extract one scalar per session—at a declared lag or across a declared
 frequency band—then contrast conditions:
 
 ```python
-from fiberphotometry.association_inference import (
+from fipha.association_inference import (
     AssociationAnimalInferenceSpec,
     infer_association_animals,
     session_estimate_from_coherence,

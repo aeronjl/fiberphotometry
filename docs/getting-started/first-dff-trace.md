@@ -8,7 +8,7 @@ data files, no repository checkout, and no optional extras — only the
 
 ```python
 import numpy as np
-from fiberphotometry import assess_recording, make_recording, reference_dff
+from fipha import assess_recording, make_recording, reference_dff
 
 # A five-minute, 100 Hz synthetic recording: shared photobleaching and motion in
 # both channels, plus a signal-only response every 25 s.
@@ -70,7 +70,7 @@ Attributes:
 ```
 
 Pass `reference=None` if you have no control channel. You then need
-`fiberphotometry.baseline_dff` instead, which is experimental — see
+`fipha.baseline_dff` instead, which is experimental — see
 [Preprocessing and QC](../pipeline.md).
 
 **`reference_dff`** fits the reference channel to the signal channel and forms

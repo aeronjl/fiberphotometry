@@ -6,7 +6,7 @@ import json
 
 import numpy as np
 
-from fiberphotometry import lowpass_filter, make_recording, resample_recording
+from fipha import lowpass_filter, make_recording, resample_recording
 
 
 def main() -> None:
@@ -60,8 +60,8 @@ def main() -> None:
         / len(time)
     )
     attenuation = 1 - projected_20hz_amplitude / 0.5
-    resample_operation = json.loads(resampled.attrs["fiberphotometry_operations"])[0]
-    filter_operation = json.loads(filtered.attrs["fiberphotometry_operations"])[0]
+    resample_operation = json.loads(resampled.attrs["fipha_operations"])[0]
+    filter_operation = json.loads(filtered.attrs["fipha_operations"])[0]
     results = {
         "resampling_rmse": resampling_rmse,
         "interpolated_samples_inside_gap": interpolated_inside_gap,

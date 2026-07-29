@@ -3,7 +3,7 @@
 *Applies to v0.1.*
 
 Longitudinal modeling is only meaningful when a declared neural series still
-refers to the same measurement across sessions. FiberPhotometry now performs an
+refers to the same measurement across sessions. fipha now performs an
 outcome-blind preflight before the trial table crosses into Unspool.
 
 This is an operational QC contract, not a test that two sessions are biologically
@@ -14,7 +14,7 @@ planned longitudinal analysis to proceed transparently?
 ## Declare one record per session and logical series
 
 ```python
-from fiberphotometry.comparability import (
+from fipha.comparability import (
     SessionComparabilityRecord,
     assess_session_comparability,
 )
@@ -134,6 +134,6 @@ measure of expression, correct biological drift, or certify a sensor model. It
 does not replace visual trace review, histology, sensor/isobestic validity checks,
 or an explicit model for measurement error. Those remain separate product work.
 
-It also does not fit trajectories. FiberPhotometry owns the measurement and its
+It also does not fit trajectories. fipha owns the measurement and its
 comparability evidence; Unspool owns longitudinal clocks, validation folds, and
 behavioral or cognitive model families.

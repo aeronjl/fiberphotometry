@@ -51,4 +51,4 @@ Maximum source distance reached 0.525 median samples, and AsLS baseline magnitud
 remained materially comparator-dependent despite near-identical short-window event
 deltas. Regularization therefore remains explicit and experimental rather than a
 silent or recommended default. See the
-[held-out report](https://github.com/aeronjl/fiberphotometry/blob/main/research/ibl-regularized-asls-results-v0.1.md).
+[held-out report](https://github.com/aeronjl/fipha/blob/main/research/ibl-regularized-asls-results-v0.1.md).

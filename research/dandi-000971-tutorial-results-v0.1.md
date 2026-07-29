@@ -4,16 +4,16 @@ Status: **completed descriptive product demonstration** (27 July 2026)
 
 ## What was executed
 
-The [prospectively frozen protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
+The [prospectively frozen protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-dandi-000971-tutorial-v0.1.md)
 was committed as `b004b8f` before the selected fluorescence outcomes were accessed.
 All six files from immutable DANDI:000971 version `0.260213.1851` matched their
 frozen byte sizes and SHA-256 digests. No asset was replaced and no source,
 schema, or event preflight failed.
 
-The committed [evidence bundle](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-tutorial-v0.1/) contains
+The committed [evidence bundle](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-000971-tutorial-v0.1/) contains
 the preflight, primary result, complete multiverse, self-contained HTML report,
 and checksum manifest. The executable source remains
-[`examples/dandi_000971_reward_tutorial.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/dandi_000971_reward_tutorial.py).
+[`examples/dandi_000971_reward_tutorial.py`](https://github.com/aeronjl/fipha/blob/main/examples/dandi_000971_reward_tutorial.py).
 
 ## Event denominator
 

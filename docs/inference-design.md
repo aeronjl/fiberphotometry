@@ -5,7 +5,7 @@ relationships needed for valid resampling. It does not impose a neuroscience
 ontology: `animal`, `fly`, `well`, or `organoid` can all be declared units.
 
 ```python
-from fiberphotometry import Factor, ObservationTable, StudyDesign, Unit
+from fipha import Factor, ObservationTable, StudyDesign, Unit
 
 observations = ObservationTable.from_columns(
     {
@@ -58,12 +58,12 @@ supported. Results retain the random seed and full sampled distribution. Paired
 inference rejects incomplete units instead of silently dropping them. No
 multiple-comparison correction or time-resolved simultaneous interval is
 implied. Calibration results are in
-[`benchmarks/results-v0.5.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/results-v0.5.md).
+[`benchmarks/results-v0.5.md`](https://github.com/aeronjl/fipha/blob/main/benchmarks/results-v0.5.md).
 
 `unit_t_interval()` provides Welch and paired-t comparators on aggregation-unit
 means. These encode stronger distributional assumptions than randomization
 inference but showed appropriate finite-sample Gaussian coverage in
-[`benchmarks/results-v0.7.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/results-v0.7.md).
+[`benchmarks/results-v0.7.md`](https://github.com/aeronjl/fipha/blob/main/benchmarks/results-v0.7.md).
 
 `recommend_inference()` is advisory and never executes a test. It uses declared
 assignment and aggregation levels but requires `randomized=True`, `False`, or
@@ -86,4 +86,4 @@ animal→session→event hierarchy validates successfully while retaining the
 imbalanced 1,850 correct and 657 incorrect trials. The script does not claim
 that feedback is randomized or that this four-animal contrast supports
 population inference; it demonstrates the data/design boundary. See
-[`benchmarks/ibl-observation-table-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-observation-table-v0.1.json).
+[`benchmarks/ibl-observation-table-v0.1.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/ibl-observation-table-v0.1.json).

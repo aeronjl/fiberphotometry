@@ -15,8 +15,8 @@ a standard virtual-reality session and a three-teleport session. The source pape
 quantified teleport-response peaks **0.6–2.1 s after teleport**, giving us an
 external timing criterion that existed before this analysis.
 
-The [protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000251-transients-v0.1.md),
-[asset manifest](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000251-transients-manifest-v0.1.json),
+The [protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-dandi-000251-transients-v0.1.md),
+[asset manifest](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-000251-transients-manifest-v0.1.json),
 and all eight detector universes were frozen before outcomes were inspected.
 
 ![Three-panel public-data result showing event-rate sensitivity, post-teleport enrichment against circular-shift null intervals, and low pairwise peak-set agreement](../docs/assets/dandi-000251-transient-robustness-v0.1.png)
@@ -61,7 +61,7 @@ uv run --extra nwb python scripts/run_dandi_000251_transients.py
 uv run --extra plots python scripts/plot_dandi_000251_transients.py
 ```
 
-The committed [result artifact](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000251-transients-results-v0.1.json)
+The committed [result artifact](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-000251-transients-results-v0.1.json)
 contains all session/universe peak times, exclusion counts, event summaries,
 external-validation statistics, pairwise agreements, and a deterministic SHA-256.
 

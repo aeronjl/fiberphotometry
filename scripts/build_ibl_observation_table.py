@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 from one.api import ONE
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     EventSummarySpec,
@@ -24,9 +24,9 @@ from fiberphotometry import (
     run_pipeline,
     validate_design,
 )
-from fiberphotometry.events import summarize_event_windows
-from fiberphotometry.io.ibl import from_ibl_tables
-from fiberphotometry.planning import create_analysis_plan
+from fipha.events import summarize_event_windows
+from fipha.io.ibl import from_ibl_tables
+from fipha.planning import create_analysis_plan
 
 SESSIONS = (
     ("fip_13", "b6913f93-e7b1-4faf-ab4d-54261b0e31ea"),
@@ -41,7 +41,7 @@ def main() -> None:
         name: [] for name in ("event_id", "animal", "session", "feedback", "dms_delta")
     }
     pipeline_inputs = []
-    with tempfile.TemporaryDirectory(prefix="fiberphotometry-ibl-design-") as cache:
+    with tempfile.TemporaryDirectory(prefix="fipha-ibl-design-") as cache:
         one = ONE(
             base_url="https://openalyx.internationalbrainlab.org",
             password="international",

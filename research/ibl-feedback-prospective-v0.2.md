@@ -4,7 +4,7 @@ Status: **stopped at the frozen readiness gate** (26 July 2026)
 
 ## Outcome-blind cohort lock
 
-The [frozen protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-feedback-prospective-v0.2.md)
+The [frozen protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-ibl-feedback-prospective-v0.2.md)
 required at least 12 eligible animals beyond development animals `fip_13`–`fip_16`
 before loading fluorescence outcomes or calculating feedback contrasts.
 
@@ -22,7 +22,7 @@ all 407 new sessions received the same machine-readable exclusion reason:
 
 The complete session/lab/subject inventory, exclusions, query environment, and
 fingerprint are in
-[`ibl-feedback-cohort-v0.2.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-feedback-cohort-v0.2.json).
+[`ibl-feedback-cohort-v0.2.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/ibl-feedback-cohort-v0.2.json).
 It was committed before any dF/F or feedback contrast was calculated.
 
 ## Why wavelength 0 was not treated as a reference

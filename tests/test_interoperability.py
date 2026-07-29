@@ -10,8 +10,8 @@ import pandas as pd
 import pytest
 import xarray as xr
 
-from fiberphotometry.encoding import EncodingSession
-from fiberphotometry.interoperability import (
+from fipha.encoding import EncodingSession
+from fipha.interoperability import (
     BehaviorAnnotations,
     BehaviorCovariate,
     BehaviorInterval,

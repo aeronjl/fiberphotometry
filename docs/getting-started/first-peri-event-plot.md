@@ -6,7 +6,7 @@ fiber photometry. This page draws one end to end.
 It needs the [base install](install.md) plus the `plots` extra:
 
 ```bash
-pip install "fiberphotometry[plots] @ git+https://github.com/aeronjl/fiberphotometry.git"
+pip install "fipha[plots] @ git+https://github.com/aeronjl/fipha.git"
 ```
 
 ## The whole thing
@@ -14,7 +14,7 @@ pip install "fiberphotometry[plots] @ git+https://github.com/aeronjl/fiberphotom
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
-from fiberphotometry import align_events, make_recording, reference_dff
+from fipha import align_events, make_recording, reference_dff
 
 # One synthetic session: events 25 s apart, response amplitude varying
 # trial to trial, on shared photobleaching.
@@ -97,7 +97,7 @@ channels, the corrected trace with event markers, and the event-aligned mean.
 It needs the `plots` extra for matplotlib:
 
 ```python
-from fiberphotometry import plot_event_diagnostics
+from fipha import plot_event_diagnostics
 
 fig, axes = plot_event_diagnostics(
     corrected,
@@ -118,7 +118,7 @@ baseline mean, a response mean, and their difference, without interpolating or
 averaging events away:
 
 ```python
-from fiberphotometry import summarize_event_windows
+from fipha import summarize_event_windows
 
 summary = summarize_event_windows(
     corrected,

@@ -50,7 +50,7 @@ annotations to the photometry clock first and retain that synchronization eviden
 ## Declare edge, duration, and progress terms
 
 ```python
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelSpec,
     EventKernelSpec,
     EventModulationSpec,
@@ -82,7 +82,7 @@ spec = EncodingModelSpec(
 The unmodulated edge kernel is the response at zero duration under raw-second
 coding, which may be an extrapolated reference. For a more meaningful main effect,
 the caller can supply an explicitly centered duration value under another name.
-FiberPhotometry does not center event values after seeing outcomes.
+fipha does not center event values after seeing outcomes.
 
 ## How progress fitting works
 

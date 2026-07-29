@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from fiberphotometry.io.dandi_000351 import from_dandi_000351_nwb
+from fipha.io.dandi_000351 import from_dandi_000351_nwb
 
 h5py = pytest.importorskip("h5py")
 

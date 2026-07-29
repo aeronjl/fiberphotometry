@@ -1,7 +1,7 @@
 # Reproducibility comparison v0.1
 
 `compare_project_evidence` compares two verified `ProjectEvidenceBundle` objects.
-The CLI exposes the same implementation through `fiberphotometry compare`.
+The CLI exposes the same implementation through `fipha compare`.
 
 ## Three distinct claims
 
@@ -33,6 +33,6 @@ values for every reported difference.
 ## Machine artifact
 
 `BundleComparison.to_json()` follows the normative
-[`evidence-bundle-comparison-v1` schema](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/evidence-bundle-comparison-v1.schema.json).
+[`evidence-bundle-comparison-v1` schema](https://github.com/aeronjl/fipha/blob/main/schemas/evidence-bundle-comparison-v1.schema.json).
 `to_markdown()` and `write_markdown()` provide human review artifacts from the
 same comparison object.

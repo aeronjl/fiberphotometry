@@ -5,12 +5,12 @@ from itertools import permutations
 import numpy as np
 import pytest
 
-from fiberphotometry.multisignal import (
+from fipha.multisignal import (
     ChannelIdentity,
     LaggedAssociationSpec,
     SpatialCoordinate,
 )
-from fiberphotometry.spatial_network import (
+from fipha.spatial_network import (
     SpatialAnimalInferenceSpec,
     SpatialArrayMetadata,
     SpatialDistanceBin,

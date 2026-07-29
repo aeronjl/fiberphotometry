@@ -3,14 +3,14 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.optogenetics import (
+from fipha.optogenetics import (
     OptogeneticMaskSpec,
     OptogeneticRecoverySpec,
     StimulationPulse,
     assess_optogenetic_artifacts,
     build_optogenetic_artifact_mask,
 )
-from fiberphotometry.spectral import SpectralAnalysisSpec, welch_psd
+from fipha.spectral import SpectralAnalysisSpec, welch_psd
 
 
 def test_pulse_mask_is_prospective_merged_and_composes_with_validity() -> None:

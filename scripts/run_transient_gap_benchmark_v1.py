@@ -11,12 +11,12 @@ from typing import Any
 
 import numpy as np
 
-from fiberphotometry.benchmark_resampling import (
+from fipha.benchmark_resampling import (
     TransientSpec,
     generate_transient,
     reconstruction_metrics,
 )
-from fiberphotometry.events import condition_exclusion_warning
+from fipha.events import condition_exclusion_warning
 
 PROTOCOL_HASHES = {
     "v0.1": "4e88ee8fbd851d605c94125ef7ba8afb002a58bca65b8f16faa09f28b7bc1a3c",

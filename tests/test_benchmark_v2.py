@@ -1,4 +1,4 @@
-from fiberphotometry.benchmark_v2 import run_benchmark_v2
+from fipha.benchmark_v2 import run_benchmark_v2
 
 
 def test_v2_clean_scenario_recovers_ground_truth() -> None:

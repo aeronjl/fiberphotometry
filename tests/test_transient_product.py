@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 from scipy.signal import find_peaks
 
-from fiberphotometry import make_recording
-from fiberphotometry.transient_product import (
+from fipha import make_recording
+from fipha.transient_product import (
     GuppyTransientDetectorSpec,
     PastaTransientDetectorSpec,
     ProminenceTransientDetectorSpec,

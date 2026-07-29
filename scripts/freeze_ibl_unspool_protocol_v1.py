@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Freeze the first FiberPhotometry-to-Unspool public IBL benchmark."""
+"""Freeze the first fipha-to-Unspool public IBL benchmark."""
 
 from __future__ import annotations
 
@@ -109,7 +109,7 @@ def main() -> None:
             ),
         },
         "software": {
-            "fiberphotometry_commit": "82483a2",
+            "fipha_commit": "82483a2",
             "unspool_commit": "1fca711574c3968cc5ff5b8609c6e40dbe99bf6c",
         },
     }

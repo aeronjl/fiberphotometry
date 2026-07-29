@@ -5,16 +5,16 @@ published `0.1.x` release; the current `0.1.0.dev0` build remains developmental.
 
 ## Two states, no third
 
-**Every name in `fiberphotometry.__all__` is declared `supported` or
+**Every name in `fipha.__all__` is declared `supported` or
 `experimental`.** There is no unclassified state. The declarations are
-`fiberphotometry.stability.SUPPORTED_API_V0_1` and `EXPERIMENTAL_API_V0_1`, and
+`fipha.stability.SUPPORTED_API_V0_1` and `EXPERIMENTAL_API_V0_1`, and
 `tests/test_stability.py` fails the build if a root export is missing from both,
 appears in both, or is declared without being exported.
 
 The root namespace is deliberately small. Names reachable only from their own
-module — `fiberphotometry.spectral.welch_psd`,
-`fiberphotometry.encoding.fit_event_kernel_model`,
-`fiberphotometry.multiverse.run_multiverse` — are outside the declared surface
+module — `fipha.spectral.welch_psd`,
+`fipha.encoding.fit_event_kernel_model`,
+`fipha.multiverse.run_multiverse` — are outside the declared surface
 entirely. They are importable and tested, but carry no compatibility promise and
 may be renamed, restructured, or removed without a deprecation cycle.
 

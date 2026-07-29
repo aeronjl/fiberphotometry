@@ -55,9 +55,9 @@ samples. The independent validation denominator remains six animals.
 
 ## Frozen model and result
 
-The [model protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-dandi-000971-event-kernel-v0.1.md)
+The [model protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-dandi-000971-event-kernel-v0.1.md)
 was committed before the original model outcomes were inspected. The separate
-[uncertainty and diagnostics protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-event-kernel-uncertainty-diagnostics-v0.1.md)
+[uncertainty and diagnostics protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-event-kernel-uncertainty-diagnostics-v0.1.md)
 was then frozen before those additions were implemented or run on this cohort.
 Together they retain prior use of the fluorescence traces and prespecify six
 leave-one-animal-out folds and ridge penalties from 0 to 1000.
@@ -128,8 +128,8 @@ uv run --extra nwb python examples/dandi_000971_event_kernel.py
 uv run --extra plots python scripts/plot_dandi_000971_event_kernel.py
 ```
 
-The committed [v0.2 result artifact](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-event-kernel-v0.2/result.json)
+The committed [v0.2 result artifact](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-000971-event-kernel-v0.2/result.json)
 retains both kernels, pointwise grouped-jackknife summaries, every out-of-fold
 group diagnostic, all candidate penalties, event denominators, and source
-checksums. The original [v0.1 result](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-000971-event-kernel-v0.1/result.json)
+checksums. The original [v0.1 result](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-000971-event-kernel-v0.1/result.json)
 remains unchanged.

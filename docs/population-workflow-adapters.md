@@ -1,6 +1,6 @@
 # Population inference across core workflows v0.1
 
-FiberPhotometry now exposes the same animal-level population boundary for three
+fipha now exposes the same animal-level population boundary for three
 additional method families: spontaneous transients, state-conditioned band power,
 and multi-signal association or coherence. Each adapter materializes inspectable
 animal-level cells before any population contrast is calculated.
@@ -30,8 +30,8 @@ Every materializer returns a typed object with:
 For spontaneous transient rates:
 
 ```python
-from fiberphotometry.population import PopulationContrastSpec
-from fiberphotometry.population_workflows import materialize_transient_population
+from fipha.population import PopulationContrastSpec
+from fipha.population_workflows import materialize_transient_population
 
 cells = materialize_transient_population(
     quantified_sessions,
@@ -61,7 +61,7 @@ The same materialized cells can test whether a repeated condition difference
 changes between two independent animal groups:
 
 ```python
-from fiberphotometry.population import (
+from fipha.population import (
     PopulationGroupAssignment,
     PopulationInteractionSpec,
 )

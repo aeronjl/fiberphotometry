@@ -89,7 +89,7 @@ def audit_site(site: Path, *, site_prefix: str) -> list[str]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("site", type=Path)
-    parser.add_argument("--site-prefix", default="/fiberphotometry/")
+    parser.add_argument("--site-prefix", default="/fipha/")
     args = parser.parse_args()
     defects = audit_site(args.site, site_prefix=args.site_prefix)
     if defects:

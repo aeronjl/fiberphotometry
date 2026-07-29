@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from fiberphotometry.interoperability import (
+from fipha.interoperability import (
     annotations_from_boris_aggregated_file,
     annotations_from_moseq_results_h5,
     pose_from_deeplabcut_file,

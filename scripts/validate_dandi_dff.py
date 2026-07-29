@@ -9,7 +9,7 @@ import numpy as np
 import remfile
 from pynwb import NWBHDF5IO
 
-from fiberphotometry.validation import compare_fitted_baseline_dff
+from fipha.validation import compare_fitted_baseline_dff
 
 URL = "https://dandiarchive.s3.amazonaws.com/blobs/efc/662/efc66290-fcb4-473a-abaf-7e71ed314402"
 SAMPLES = 1_000

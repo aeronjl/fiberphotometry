@@ -19,7 +19,14 @@ GRID = "#E8E4EC"
 
 
 def apply_publication_style(*, hashsalt: str = "fiberphotometry-figures-v1") -> None:
-    """Apply the deterministic, sans-serif-only project figure standard."""
+    """Apply the deterministic, sans-serif-only project figure standard.
+
+    ``hashsalt`` seeds the SVG element identifiers matplotlib emits. It is an
+    arbitrary constant whose only requirement is that it never changes: every
+    committed figure was generated under these salts, so renaming them would
+    rewrite the identifiers in each SVG for no reader-visible gain. They are
+    deliberately kept at the package's former name.
+    """
     mpl.rcParams.update(
         {
             "axes.edgecolor": "#CBC5D2",

@@ -11,16 +11,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 from figure_style import BLUE, GRID, MUTED, RED, apply_publication_style, save_figure
 
-from fiberphotometry.events import align_events
-from fiberphotometry.io.dandi_000971 import (
+from fipha.events import align_events
+from fipha.io.dandi_000971 import (
     from_dandi_000971_nwb,
     rewarded_unrewarded_nose_pokes,
 )
-from fiberphotometry.preprocess import lowpass_filter, reference_dff
+from fipha.preprocess import lowpass_filter, reference_dff
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "benchmarks/dandi-000971-tutorial-manifest-v0.1.json"
-DEFAULT_CACHE = Path.home() / "Library/Caches/fiberphotometry/dandi-000971-tutorial"
+DEFAULT_CACHE = Path.home() / "Library/Caches/fipha/dandi-000971-tutorial"
 DEFAULT_OUTPUT = ROOT / "docs/assets/dandi-000971-source-figure-bounded-v0.1.svg"
 
 

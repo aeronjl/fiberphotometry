@@ -2,8 +2,8 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from fiberphotometry import align_events, make_recording, summarize_event_windows
-from fiberphotometry.events import (
+from fipha import align_events, make_recording, summarize_event_windows
+from fipha.events import (
     condition_exclusion_warning,
     condition_reconstruction_warning,
 )

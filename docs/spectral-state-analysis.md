@@ -39,7 +39,7 @@ model.
 ## Common continuity policy
 
 ```python
-from fiberphotometry.spectral import GapHandlingSpec
+from fipha.spectral import GapHandlingSpec
 
 gap_policy = GapHandlingSpec(
     gap_factor=1.5,
@@ -68,7 +68,7 @@ contract.
 ## PSD and autocorrelation
 
 ```python
-from fiberphotometry.spectral import (
+from fipha.spectral import (
     AutocorrelationSpec,
     SpectralAnalysisSpec,
     autocorrelation,
@@ -121,7 +121,7 @@ an inferential interval.
 ## Spectrograms without hidden edge padding
 
 ```python
-from fiberphotometry.spectral import spectrogram
+from fipha.spectral import spectrogram
 
 time_frequency = spectrogram(
     time_s,
@@ -144,11 +144,11 @@ cutoff. The matrix is frequency by window in `power_density`.
 
 ## Condition on external states
 
-FiberPhotometry consumes state labels; it does not discover them. Import or create
+fipha consumes state labels; it does not discover them. Import or create
 half-open intervals in the same clock as the photometry signal:
 
 ```python
-from fiberphotometry.spectral import StateEpoch, state_conditioned_psd
+from fipha.spectral import StateEpoch, state_conditioned_psd
 
 epochs = (
     StateEpoch("exploration", 12.0, 48.5, epoch_id="bout-001"),
@@ -184,7 +184,7 @@ Attach subject and session identity to state-conditioned PSDs, then declare the
 paired state contrast:
 
 ```python
-from fiberphotometry.spectral import (
+from fipha.spectral import (
     StateBandPowerInferenceSpec,
     StatePSDSession,
     infer_state_band_power,

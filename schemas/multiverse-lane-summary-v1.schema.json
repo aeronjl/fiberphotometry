@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/multiverse-lane-summary-v1.schema.json",
-  "title": "FiberPhotometry multiverse lane summary v1",
+  "$id": "https://github.com/aeronjl/fipha/schemas/multiverse-lane-summary-v1.schema.json",
+  "title": "fipha multiverse lane summary v1",
   "type": "object",
   "additionalProperties": false,
   "required": ["artifact_type", "schema_version", "lanes"],

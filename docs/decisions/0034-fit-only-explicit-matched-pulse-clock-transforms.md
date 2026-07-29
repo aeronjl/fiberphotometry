@@ -20,7 +20,7 @@ an experimenter has identified on both clocks.
 
 ## Decision
 
-FiberPhotometry accepts only explicit, ordered, one-to-one pulse pairs for its
+fipha accepts only explicit, ordered, one-to-one pulse pairs for its
 first clock-synchronization boundary. It does not automatically match pulses.
 
 The v0.1 model is affine: target time equals intercept plus scale times source

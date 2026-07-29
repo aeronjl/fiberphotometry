@@ -1,11 +1,11 @@
-# FiberPhotometry
+# fipha
 
 **A Python library for fiber photometry: from raw signals to dF/F to inference
 across animals — with every choice recorded.**
 
 ```python
 import numpy as np
-from fiberphotometry import align_events, make_recording, reference_dff
+from fipha import align_events, make_recording, reference_dff
 
 recording = make_recording(
     time=time,  # seconds, 1-D
@@ -54,7 +54,7 @@ is fitted, where the baseline sits, which artefacts are excluded, how trials are
 aggregated, and whether the animal or the trial is treated as the experimental
 unit can each change the answer.
 
-FiberPhotometry keeps those choices explicit and attached to the result:
+fipha keeps those choices explicit and attached to the result:
 
 - one canonical labelled representation for signals, events, subjects, sessions,
   and channels, so nothing downstream has to guess what a column meant;

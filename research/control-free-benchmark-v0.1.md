@@ -2,9 +2,9 @@
 
 The first signal-only baseline benchmark is a retained partial failure. Its
 protocol and thresholds were frozen in
-[`benchmarks/protocol-control-free-v0.1.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-control-free-v0.1.md)
+[`benchmarks/protocol-control-free-v0.1.md`](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-control-free-v0.1.md)
 before aggregate execution. The complete 240-run result is
-[`benchmarks/control-free-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/control-free-v0.1.json).
+[`benchmarks/control-free-v0.1.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/control-free-v0.1.json).
 
 ## Results
 

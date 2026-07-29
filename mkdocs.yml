@@ -1,8 +1,8 @@
-site_name: FiberPhotometry
-site_description: Auditable fiber-photometry analysis from signals to animal-level inference
-site_url: https://aeronjl.github.io/fiberphotometry/
-repo_url: https://github.com/aeronjl/fiberphotometry
-repo_name: aeronjl/fiberphotometry
+site_name: fipha
+site_description: "Auditable fiber photometry analysis in Python: dF/F, peri-event and transient analysis, and NWB provenance from signals to animal-level inference"
+site_url: https://aeronjl.github.io/fipha/
+repo_url: https://github.com/aeronjl/fipha
+repo_name: aeronjl/fipha
 edit_uri: edit/main/docs/
 strict: true
 

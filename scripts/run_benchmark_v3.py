@@ -8,7 +8,7 @@ from dataclasses import asdict
 
 import numpy as np
 
-from fiberphotometry.benchmark_v3 import run_benchmark_v3
+from fipha.benchmark_v3 import run_benchmark_v3
 
 SCENARIOS = (
     "clean_linear",

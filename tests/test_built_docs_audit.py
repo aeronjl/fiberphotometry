@@ -24,13 +24,13 @@ def test_audit_accepts_prefixed_assets_and_math(tmp_path: Path) -> None:
     page = tmp_path / "method" / "index.html"
     page.parent.mkdir()
     page.write_text(
-        '<img src="/fiberphotometry/assets/figure.svg" alt="Evidence figure">'
-        '<script src="/fiberphotometry/javascripts/mathjax.js"></script>'
+        '<img src="/fipha/assets/figure.svg" alt="Evidence figure">'
+        '<script src="/fipha/javascripts/mathjax.js"></script>'
         '<script src="https://cdn.example/tex-mml-chtml.js"></script>'
         '<div class="arithmatex">equation</div>'
     )
 
-    assert module.audit_site(tmp_path, site_prefix="/fiberphotometry/") == []
+    assert module.audit_site(tmp_path, site_prefix="/fipha/") == []
 
 
 def test_audit_rejects_missing_asset_empty_alt_and_literal_tex(tmp_path: Path) -> None:
@@ -40,7 +40,7 @@ def test_audit_rejects_missing_asset_empty_alt_and_literal_tex(tmp_path: Path) -
         '<img src="assets/missing.svg" alt=""><p>\\mathbf{y} = \\mathbf{A}</p>'
     )
 
-    defects = module.audit_site(tmp_path, site_prefix="/fiberphotometry/")
+    defects = module.audit_site(tmp_path, site_prefix="/fipha/")
 
     assert any("missing img asset" in item for item in defects)
     assert any("empty alt text" in item for item in defects)

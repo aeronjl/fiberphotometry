@@ -18,7 +18,7 @@ candidate timestamps can come from a z-scored stream while amplitude, width, and
 area are measured on non-z-scored dF/F.
 
 ```python
-from fiberphotometry.transient_product import (
+from fipha.transient_product import (
     ProminenceTransientDetectorSpec,
     TransientQuantificationSpec,
     detect_transient_candidates,
@@ -58,7 +58,7 @@ scores inside uninterrupted runs and produces an immutable threshold for every
 channel:
 
 ```python
-from fiberphotometry.transient_product import (
+from fipha.transient_product import (
     ProminenceTransientDetectorSpec,
     TransientThresholdCalibrationSpec,
     calibrate_transient_thresholds,
@@ -124,7 +124,7 @@ Cutouts retain native samples and stop at missing acquisition, timestamp gaps, a
 recording boundaries. They are never interpolated onto a synthetic time grid:
 
 ```python
-from fiberphotometry.transient_product import (
+from fipha.transient_product import (
     TransientWaveformSpec,
     cut_transient_waveforms,
 )
@@ -196,7 +196,7 @@ The exact specification belongs in analysis provenance.
 `detect_transients()` remains available for the earlier single-variable workflow:
 
 ```python
-from fiberphotometry.transients import TransientDetectionSpec, detect_transients
+from fipha.transients import TransientDetectionSpec, detect_transients
 
 result = detect_transients(
     recording,
@@ -256,7 +256,7 @@ Attach subject, session, and condition identity to each quantified result, then
 declare a paired or independent contrast:
 
 ```python
-from fiberphotometry.transient_inference import (
+from fipha.transient_inference import (
     TransientAnimalInferenceSpec,
     TransientStudySession,
     infer_transient_animals,

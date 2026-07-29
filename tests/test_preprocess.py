@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry import (
+from fipha import (
     baseline_dff,
     lowpass_filter,
     make_recording,
@@ -27,7 +27,7 @@ def test_double_exponential_baseline_dff_recovers_known_trace() -> None:
 
     assert np.sqrt(np.mean((result.dff.values[:, 0] - neural) ** 2)) < 0.005
     assert "fitted_baseline" not in recording
-    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    operation = json.loads(result.attrs["fipha_baseline_dff"])
     assert operation["method"] == "double_exponential"
     assert operation["finite_run_policy"] == "independent"
 
@@ -63,7 +63,7 @@ def test_subtractive_baseline_output_retains_fluorescence_units() -> None:
 
     assert "baseline_subtracted" in result
     assert "dff" not in result
-    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    operation = json.loads(result.attrs["fipha_baseline_dff"])
     assert operation["normalization"] == "subtract"
     assert "/ fitted_baseline" not in operation["formula"]
 
@@ -82,7 +82,7 @@ def test_baseline_can_expose_both_normalizations_without_refitting() -> None:
         result.baseline_subtracted.values,
         equal_nan=True,
     )
-    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    operation = json.loads(result.attrs["fipha_baseline_dff"])
     assert operation["normalization"] == "both"
     assert len(operation["formula"]) == 2
 
@@ -98,7 +98,7 @@ def test_asls_smoothness_scales_with_sampling_rate() -> None:
 
     result = baseline_dff(recording, method="asls")
 
-    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    operation = json.loads(result.attrs["fipha_baseline_dff"])
     assert operation["sampling_rate_hz"] == pytest.approx(40)
     assert operation["effective_smoothness"] == pytest.approx(1.6e9)
 
@@ -118,7 +118,7 @@ def test_rolling_mean_matches_published_pandas_semantics(rate_hz: int) -> None:
     assert np.count_nonzero(np.isfinite(result.dff.values[:, 0])) == (
         len(time) - window_samples + 1
     )
-    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    operation = json.loads(result.attrs["fipha_baseline_dff"])
     assert operation["window_samples"] == window_samples
     assert operation["boundary_policy"] == "full_window_only"
 
@@ -138,7 +138,7 @@ def test_rolling_mean_does_not_bridge_timestamp_gaps() -> None:
     assert second_baseline == pytest.approx(3)
     assert np.isnan(result.fitted_baseline.sel(time=39.95, method="nearest").item())
     assert np.isnan(result.fitted_baseline.sel(time=50, method="nearest").item())
-    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    operation = json.loads(result.attrs["fipha_baseline_dff"])
     assert operation["gap_policy"] == "split_finite_runs"
 
 
@@ -151,7 +151,7 @@ def test_rolling_mean_short_runs_are_retained_as_failures() -> None:
     result = baseline_dff(recording, method="rolling_mean", rolling_window_s=60)
 
     assert np.all(np.isnan(result.dff.values))
-    operation = json.loads(result.attrs["fiberphotometry_baseline_dff"])
+    operation = json.loads(result.attrs["fipha_baseline_dff"])
     assert operation["failed_short_runs"] == 1
 
 
@@ -172,9 +172,7 @@ def test_reference_dff_recovers_known_linear_baseline() -> None:
     coefficients = corrected.reference_fit_coefficient.values[0]
     assert np.allclose(coefficients, [2, 3], atol=0.05)
     assert corrected.dff.values[50, 0] > 0.2
-    assert (
-        json.loads(corrected.attrs["fiberphotometry_reference_dff"])["method"] == "irls"
-    )
+    assert json.loads(corrected.attrs["fipha_reference_dff"])["method"] == "irls"
     assert "dff" not in recording
 
 
@@ -215,7 +213,7 @@ def test_resampling_retains_source_and_does_not_bridge_large_gap() -> None:
     assert np.array_equal(result.source_included.values, [True, True, False, True])
     assert result.protected_gap.sel(time=2.0).item()
     assert not result.interpolated.sel(time=2.0).item()
-    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    operation = json.loads(result.attrs["fipha_operations"])[0]
     assert operation["kind"] == "resample"
     assert operation["max_gap_s"] == 1.1
     assert operation["time_only_boolean_method"] == "interval_overlap"
@@ -242,7 +240,7 @@ def test_downsampling_retains_every_behavioural_event_sample() -> None:
         expected[int(np.argmin(np.abs(result.time.values - event)))] = True
     assert np.array_equal(result.lick.values, expected)
     assert int(result.lick.values.sum()) == 6
-    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    operation = json.loads(result.attrs["fipha_operations"])[0]
     assert operation["time_only_boolean_true_counts"]["lick"] == {
         "source_true_count": 6,
         "output_true_count": 6,
@@ -288,7 +286,7 @@ def test_boolean_resampling_never_moves_an_event_across_a_gap() -> None:
         result.protected_gap.values, [False, False, True, True, True, False]
     )
     assert not np.any(result.lick.values & result.protected_gap.values)
-    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    operation = json.loads(result.attrs["fipha_operations"])[0]
     assert operation["time_only_boolean_true_counts"]["lick"]["dropped_true_count"] == 0
 
 
@@ -305,7 +303,7 @@ def test_unrepresentable_event_is_warned_about_rather_than_silently_dropped() ->
         result = resample_recording(recording, rate_hz=1, max_gap_s=1.0)
 
     assert int(result.lick.values.sum()) == 1
-    counts = json.loads(result.attrs["fiberphotometry_operations"])[0][
+    counts = json.loads(result.attrs["fipha_operations"])[0][
         "time_only_boolean_true_counts"
     ]["lick"]
     assert counts["dropped_true_count"] == 1
@@ -328,7 +326,7 @@ def test_median_rate_regularization_reports_jitter_and_preserves_smooth_signal()
 
     result = resample_recording(recording, rate_hz="median", max_gap_factor=1.5)
 
-    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    operation = json.loads(result.attrs["fipha_operations"])[0]
     expected = np.sin(2 * np.pi * 0.5 * result.time.values)
     error = np.sqrt(np.nanmean((result.signal.values[:, 0] - expected) ** 2))
     assert error < 5e-5
@@ -358,6 +356,6 @@ def test_lowpass_retains_input_and_reports_edge_handling() -> None:
 
     assert np.array_equal(result.prefilter_signal.values, recording.signal.values)
     assert np.std(result.signal.values[:, 0] - low) < 0.03
-    operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+    operation = json.loads(result.attrs["fipha_operations"])[0]
     assert operation["method"] == "butterworth_sosfiltfilt"
     assert operation["edge_padding_samples"] > 0

@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-07-28
-- **Decision owners:** FiberPhotometry maintainers
+- **Decision owners:** fipha maintainers
 - **Related:** SDR-0046, SDR-0051
 
 ## Context
@@ -19,7 +19,7 @@ geometry or biological knowledge changes.
 
 ## Decision
 
-FiberPhotometry will:
+fipha will:
 
 1. require explicit coordinates in one shared named space and unit;
 2. estimate each edge through the existing joint-validity, gap-separated paired

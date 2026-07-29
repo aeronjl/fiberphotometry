@@ -1,6 +1,6 @@
 import numpy as np
 
-from fiberphotometry.simulate import simulate_recording
+from fipha.simulate import simulate_recording
 
 
 def test_simulation_is_reproducible_and_contains_ground_truth() -> None:

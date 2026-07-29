@@ -5,8 +5,8 @@ from datetime import UTC, datetime
 
 import pytest
 
-from fiberphotometry.io import dandi
-from fiberphotometry.io.nwb import from_nwb_series
+from fipha.io import dandi
+from fipha.io.nwb import from_nwb_series
 
 
 class FakeResponse(io.BytesIO):
@@ -38,8 +38,8 @@ def test_resolve_dandi_download_url_prefers_public_s3(monkeypatch) -> None:
 def test_response_series_discovery_covers_acquisition_and_processing(tmp_path) -> None:
     pynwb = pytest.importorskip("pynwb")
     ndx_fiber_photometry = pytest.importorskip("ndx_fiber_photometry")
-    from fiberphotometry import make_recording
-    from fiberphotometry.io.nwb import add_recording_to_nwb
+    from fipha import make_recording
+    from fipha.io.nwb import add_recording_to_nwb
 
     recording = make_recording(
         time=[0.0, 0.1, 0.2],
@@ -63,7 +63,7 @@ def test_response_series_discovery_covers_acquisition_and_processing(tmp_path) -
             description="a core TimeSeries that is not photometry",
         )
     )
-    module = nwbfile.create_processing_module("fiberphotometry", "derived signals")
+    module = nwbfile.create_processing_module("fipha", "derived signals")
     add_recording_to_nwb(
         recording,
         nwbfile,
@@ -90,7 +90,7 @@ def test_response_series_discovery_covers_acquisition_and_processing(tmp_path) -
 
         assert [name for name, _ in discovered] == [
             "acquisition/RawFiberPhotometrySignal",
-            "processing/fiberphotometry/ProcessedFiberPhotometrySignal",
+            "processing/fipha/ProcessedFiberPhotometrySignal",
         ]
         assert all(
             isinstance(value, ndx_fiber_photometry.FiberPhotometryResponseSeries)
@@ -104,8 +104,8 @@ def test_response_series_discovery_covers_acquisition_and_processing(tmp_path) -
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    os.environ.get("FIBERPHOTOMETRY_LIVE_DANDI") != "1",
-    reason="set FIBERPHOTOMETRY_LIVE_DANDI=1 for the bounded network test",
+    os.environ.get("FIPHA_LIVE_DANDI") != "1",
+    reason="set FIPHA_LIVE_DANDI=1 for the bounded network test",
 )
 def test_live_dandi_001084_bounded_stream() -> None:
     result = dandi.validate_remote_nwb_asset(

@@ -1,6 +1,6 @@
 # Contributing
 
-FiberPhotometry is pre-alpha. Contributions are welcome, but additions to the
+fipha is pre-alpha. Contributions are welcome, but additions to the
 scientific API require more than a working implementation.
 
 ## Scientific method checklist

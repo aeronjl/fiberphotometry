@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/event-analysis-result-v1.schema.json",
-  "title": "FiberPhotometry event analysis result v1",
+  "$id": "https://github.com/aeronjl/fipha/schemas/event-analysis-result-v1.schema.json",
+  "title": "fipha event analysis result v1",
   "type": "object",
   "additionalProperties": false,
   "required": [

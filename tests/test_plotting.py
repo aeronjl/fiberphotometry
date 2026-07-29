@@ -1,12 +1,12 @@
 import matplotlib
 import pytest
 
-from fiberphotometry.plotting import (
+from fipha.plotting import (
     SpecificationCurveEntry,
     plot_event_diagnostics,
     plot_specification_curve,
 )
-from fiberphotometry.simulate import simulate_recording
+from fipha.simulate import simulate_recording
 
 matplotlib.use("Agg")
 

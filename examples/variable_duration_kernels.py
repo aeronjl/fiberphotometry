@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
@@ -11,7 +11,7 @@ from fiberphotometry.encoding import (
     ProgressKernelSpec,
     fit_event_kernel_model,
 )
-from fiberphotometry.interoperability import BehaviorAnnotations, BehaviorInterval
+from fipha.interoperability import BehaviorAnnotations, BehaviorInterval
 
 rng = np.random.default_rng(2027)
 sessions = []

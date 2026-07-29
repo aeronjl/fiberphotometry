@@ -1,13 +1,13 @@
 # Archival deposition v0.1
 
-FiberPhotometry turns a complete, checksum-verified evidence directory into a
+fipha turns a complete, checksum-verified evidence directory into a
 deterministic ZIP suitable for repository or DOI deposition. Packaging is local:
 the command never uploads or publishes a record.
 
 ## Metadata contract
 
 The input `archive-metadata.json` is repository-neutral and validated against
-[`archive-metadata-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/archive-metadata-v1.schema.json).
+[`archive-metadata-v1.schema.json`](https://github.com/aeronjl/fipha/blob/main/schemas/archive-metadata-v1.schema.json).
 It requires a title, abstract-like description, at least one creator, publication
 date, publisher, license, language, and resource type. Creator ORCIDs are checked
 with the ISO 7064 checksum, not merely a text pattern. Keywords and related
@@ -29,11 +29,11 @@ canonical scientific record.
 ## Commands
 
 ```bash
-uv run fiberphotometry archive artifacts \
+uv run fipha archive artifacts \
   --metadata archive-metadata.json \
   --output reward-analysis-deposit.zip
 
-uv run fiberphotometry verify-archive reward-analysis-deposit.zip
+uv run fipha verify-archive reward-analysis-deposit.zip
 ```
 
 Existing output is never replaced without `--force`. Creation admits only a
@@ -59,7 +59,7 @@ After local review, upload the ZIP to a Zenodo sandbox draft:
 
 ```bash
 export ZENODO_SANDBOX_TOKEN="..."
-uv run fiberphotometry zenodo-draft reward-analysis-deposit.zip
+uv run fipha zenodo-draft reward-analysis-deposit.zip
 ```
 
 The token is read from `ZENODO_SANDBOX_TOKEN`, never accepted as a command-line

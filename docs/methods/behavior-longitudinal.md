@@ -1,6 +1,6 @@
 # Behavior and longitudinal integration
 
-FiberPhotometry consumes behavior; it does not duplicate pose estimation,
+fipha consumes behavior; it does not duplicate pose estimation,
 behavioral segmentation, or longitudinal learning models. This category makes
 those boundaries explicit and preserves enough provenance for the ecosystem to
 remain reproducible.

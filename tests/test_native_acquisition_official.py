@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from fiberphotometry import (
+from fipha import (
     DoricChannel,
     DoricSchema,
     DoricSeries,
@@ -16,11 +16,11 @@ from fiberphotometry import (
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not os.environ.get("FIBERPHOTOMETRY_DORIC_DEMO_FILE"),
-    reason="set FIBERPHOTOMETRY_DORIC_DEMO_FILE to Doric's Console_Acq_0000.doric",
+    not os.environ.get("FIPHA_DORIC_DEMO_FILE"),
+    reason="set FIPHA_DORIC_DEMO_FILE to Doric's Console_Acq_0000.doric",
 )
 def test_official_doric_console_file() -> None:
-    source = Path(os.environ["FIBERPHOTOMETRY_DORIC_DEMO_FILE"])
+    source = Path(os.environ["FIPHA_DORIC_DEMO_FILE"])
     base = "DataAcquisition/FPConsole/Signals/Series0003/AnalogIn"
     loaded = load_doric_input(
         source,
@@ -49,11 +49,11 @@ def test_official_doric_console_file() -> None:
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not os.environ.get("FIBERPHOTOMETRY_PPD_DEMO_FILE"),
-    reason="set FIBERPHOTOMETRY_PPD_DEMO_FILE to manuscript board-1/1.0V.ppd",
+    not os.environ.get("FIPHA_PPD_DEMO_FILE"),
+    reason="set FIPHA_PPD_DEMO_FILE to manuscript board-1/1.0V.ppd",
 )
 def test_official_legacy_pyphotometry_file() -> None:
-    source = Path(os.environ["FIBERPHOTOMETRY_PPD_DEMO_FILE"])
+    source = Path(os.environ["FIPHA_PPD_DEMO_FILE"])
     loaded = load_pyphotometry_input(
         source,
         PyPhotometrySchema((PyPhotometryChannel("analog_1", 1),)),

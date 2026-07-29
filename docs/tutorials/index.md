@@ -77,7 +77,7 @@ pooled coefficient shapes.
 
 ## Public IBL longitudinal neural–behavioral forecast
 
-Compose FiberPhotometry's checksum-verified session neural summaries with
+Compose fipha's checksum-verified session neural summaries with
 Unspool's cohort-forward behavioral validation. The retained result shows that the
 previous session's coarse DMS feedback contrast does not improve prediction in the
 declared future session.

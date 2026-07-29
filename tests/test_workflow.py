@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry import (
+from fipha import (
     EventAnalysis,
     EventSession,
     PeriEventInferenceSpec,

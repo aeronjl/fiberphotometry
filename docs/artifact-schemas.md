@@ -3,33 +3,33 @@
 The primary scientist-facing JSON now identifies itself with
 `artifact_type = "event_analysis_result"` and `schema_version = "1"`. Its normative
 top-level contract is
-[`schemas/event-analysis-result-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/event-analysis-result-v1.schema.json).
+[`schemas/event-analysis-result-v1.schema.json`](https://github.com/aeronjl/fipha/blob/main/schemas/event-analysis-result-v1.schema.json).
 
 Grouped robustness execution also emits `artifact_type =
 "multiverse_lane_summary"`, `schema_version = "1"`, governed by
-[`schemas/multiverse-lane-summary-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/multiverse-lane-summary-v1.schema.json).
+[`schemas/multiverse-lane-summary-v1.schema.json`](https://github.com/aeronjl/fipha/blob/main/schemas/multiverse-lane-summary-v1.schema.json).
 Its magnitudes and practical-effect thresholds are scoped to explicit unit lanes;
 it contains no pooled cross-unit median or range.
 
 Cross-bundle reports emit `artifact_type = "evidence_bundle_comparison"` and
 `schema_version = "1"`, governed by
-[`schemas/evidence-bundle-comparison-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/evidence-bundle-comparison-v1.schema.json).
+[`schemas/evidence-bundle-comparison-v1.schema.json`](https://github.com/aeronjl/fipha/blob/main/schemas/evidence-bundle-comparison-v1.schema.json).
 
 Publication signing emits `artifact_type = "publication_manifest_attestation"`
 and `schema_version = "1"`, governed by
-[`schemas/publication-manifest-attestation-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/publication-manifest-attestation-v1.schema.json).
+[`schemas/publication-manifest-attestation-v1.schema.json`](https://github.com/aeronjl/fipha/blob/main/schemas/publication-manifest-attestation-v1.schema.json).
 Its detached `.sig` file uses the OpenSSH SSHSIG format.
 
-Archival deposits use `artifact_type = "fiberphotometry_archive_metadata"` and
+Archival deposits use `artifact_type = "fipha_archive_metadata"` and
 `schema_version = "1"`, governed by
-[`schemas/archive-metadata-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/archive-metadata-v1.schema.json).
+[`schemas/archive-metadata-v1.schema.json`](https://github.com/aeronjl/fipha/blob/main/schemas/archive-metadata-v1.schema.json).
 One validated source record generates repository-specific `datacite.json` and
 `.zenodo.json` projections; the ZIP checksum inventory is recorded separately in
 `archive-manifest.json`.
 
 Successful repository handoff emits `artifact_type = "zenodo_draft_receipt"` and
 `schema_version = "1"`, governed by
-[`schemas/zenodo-draft-receipt-v1.schema.json`](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/zenodo-draft-receipt-v1.schema.json).
+[`schemas/zenodo-draft-receipt-v1.schema.json`](https://github.com/aeronjl/fipha/blob/main/schemas/zenodo-draft-receipt-v1.schema.json).
 The fixed `submitted = false` and `state = "unsubmitted"` fields make the safety
 boundary machine-checkable.
 

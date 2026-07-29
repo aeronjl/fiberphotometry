@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from fiberphotometry import (
+from fipha import (
     TDTBlockSchema,
     TDTEpocEvents,
     TDTEpocValue,
@@ -15,11 +15,11 @@ from fiberphotometry import (
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not os.environ.get("FIBERPHOTOMETRY_TDT_DEMO_BLOCK"),
-    reason="set FIBERPHOTOMETRY_TDT_DEMO_BLOCK to the official FiPho demo block",
+    not os.environ.get("FIPHA_TDT_DEMO_BLOCK"),
+    reason="set FIPHA_TDT_DEMO_BLOCK to the official FiPho demo block",
 )
 def test_official_tdt_fipho_block() -> None:
-    block = Path(os.environ["FIBERPHOTOMETRY_TDT_DEMO_BLOCK"])
+    block = Path(os.environ["FIPHA_TDT_DEMO_BLOCK"])
     schema = TDTBlockSchema(
         channels=(TDTStreamChannel("fiber", "4654", 1, "4054", 1),),
         events=TDTEpocEvents(

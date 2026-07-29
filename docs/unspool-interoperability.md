@@ -2,17 +2,17 @@
 
 *Applies to v0.1.*
 
-FiberPhotometry and [Unspool](https://github.com/aeronjl/unspool) have deliberately
+fipha and [Unspool](https://github.com/aeronjl/unspool) have deliberately
 different scientific responsibilities.
 
-| FiberPhotometry owns | Unspool owns |
+| fipha owns | Unspool owns |
 |---|---|
 | signal ingestion, channel identity and QC | explicit longitudinal clocks |
 | reference and baseline correction | behavioral and cognitive model families |
 | event alignment and neural summaries | forward-session and population holdouts |
 | photometry estimands and evidence bundles | parameter/model recovery and trajectory diagnostics |
 
-The boundary is a trial-level table. FiberPhotometry retains neural values and
+The boundary is a trial-level table. fipha retains neural values and
 provenance while adding the four explicit coordinates required by
 `unspool.Study`: subject, session, trial, and session order. Chronology is never
 inferred from row order or session names.
@@ -21,7 +21,7 @@ Pose trajectories and behavioral bouts enter through the separate
 [behavioral ecosystem contract](ecosystem-interoperability.md). They become
 declared neural predictors or summaries here only after confidence, clock and
 missingness decisions are recorded. Unspool does not replace DeepLabCut, SLEAP,
-Keypoint-MoSeq or BORIS, and FiberPhotometry does not duplicate Unspool's
+Keypoint-MoSeq or BORIS, and fipha does not duplicate Unspool's
 longitudinal model families.
 
 ## Preflight across-session comparability
@@ -31,7 +31,7 @@ session and logical neural series. The full contract and threshold meanings are 
 [Across-session comparability](session-comparability.md).
 
 ```python
-from fiberphotometry.comparability import (
+from fipha.comparability import (
     SessionComparabilityRecord,
     assess_session_comparability,
 )
@@ -61,8 +61,8 @@ comparability = assess_session_comparability(
 ## Build the handoff
 
 ```python
-from fiberphotometry import ObservationTable
-from fiberphotometry.unspool import prepare_unspool_study
+from fipha import ObservationTable
+from fipha.unspool import prepare_unspool_study
 
 events = ObservationTable.from_columns(
     {
@@ -106,7 +106,7 @@ used to define this contract:
 uv add "unspool @ git+https://github.com/aeronjl/unspool@1fca711574c3968cc5ff5b8609c6e40dbe99bf6c"
 ```
 
-The package remains separate and optional: installing FiberPhotometry does not
+The package remains separate and optional: installing fipha does not
 silently install a behavioral-modeling stack.
 
 ## Ask a prospective longitudinal question
@@ -142,7 +142,7 @@ not pretend that a scalar neural summary is equivalent to a functional response.
 This v0.1 increment validates schema composition, not a biological learning claim.
 The next public-data benchmark should freeze:
 
-1. the neural summary exported by FiberPhotometry;
+1. the neural summary exported by fipha;
 2. the behavioral outcome and clock modeled by Unspool;
 3. training-only transformations and forward-session folds;
 4. animal- and session-level denominators; and

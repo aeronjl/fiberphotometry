@@ -13,8 +13,8 @@ from typing import Any
 import numpy as np
 from pynwb import NWBHDF5IO
 
-from fiberphotometry import make_recording
-from fiberphotometry.transients import TransientDetectionSpec, detect_transients
+from fipha import make_recording
+from fipha.transients import TransientDetectionSpec, detect_transients
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "benchmarks/dandi-000251-transients-manifest-v0.1.json"
@@ -254,7 +254,7 @@ def main() -> None:
     parser.add_argument(
         "--cache",
         type=Path,
-        default=Path.home() / "Library/Caches/fiberphotometry/dandi-000251-transients",
+        default=Path.home() / "Library/Caches/fipha/dandi-000251-transients",
     )
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()

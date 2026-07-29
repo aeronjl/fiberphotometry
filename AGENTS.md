@@ -2,7 +2,7 @@
 
 ## Purpose
 
-FiberPhotometry is a Python library for fiber photometry analysis. Scientific validity
+fipha is a Python library for fiber photometry analysis. Scientific validity
 and a small stable API take priority over method count. The core path is:
 
     ingest -> preprocess -> dF/F -> align -> summarise -> infer
@@ -19,7 +19,7 @@ Everything else is optional and must justify its place against that path.
 
 ## Architecture
 
-- Keep reusable library code in `src/fiberphotometry/`.
+- Keep reusable library code in `src/fipha/`.
 - Keep acquisition adapters optional; NWB, TDT, Doric, DANDI and pose formats are extras,
   never core dependencies.
 - Prefer an established package over a reimplementation. Before writing pose handling,

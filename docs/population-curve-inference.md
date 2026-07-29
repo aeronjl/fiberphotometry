@@ -27,7 +27,7 @@ Single-signal PSD results do not contain experimental identities, so attach them
 explicitly:
 
 ```python
-from fiberphotometry.population_workflows import curve_session_from_psd
+from fipha.population_workflows import curve_session_from_psd
 
 session_curve = curve_session_from_psd(
     psd_result,
@@ -41,7 +41,7 @@ Lagged association and coherence results already contain subject, session, and p
 identity. Only the experimental level is added:
 
 ```python
-from fiberphotometry.population_workflows import (
+from fipha.population_workflows import (
     curve_session_from_coherence,
     curve_session_from_lagged,
 )
@@ -58,7 +58,7 @@ different channel/site pairs from being pooled accidentally.
 Externally supplied state outputs can be expanded without relabeling them:
 
 ```python
-from fiberphotometry.population_workflows import (
+from fipha.population_workflows import (
     curve_sessions_from_state_autocorrelation,
     curve_sessions_from_state_coherence,
     curve_sessions_from_state_psd,
@@ -79,8 +79,8 @@ merge, or reinterpret states.
 ## Materialize animal curves
 
 ```python
-from fiberphotometry.population import PopulationContrastSpec
-from fiberphotometry.population_workflows import materialize_curve_population
+from fipha.population import PopulationContrastSpec
+from fipha.population_workflows import materialize_curve_population
 
 materialized = materialize_curve_population(
     session_curves,

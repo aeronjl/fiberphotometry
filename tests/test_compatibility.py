@@ -1,6 +1,6 @@
 import numpy as np
 
-from fiberphotometry import (
+from fipha import (
     BaselineDFFOperation,
     Contrast,
     Estimand,
@@ -15,8 +15,8 @@ from fiberphotometry import (
     Unit,
     make_recording,
 )
-from fiberphotometry.compatibility import assess_pipeline_compatibility
-from fiberphotometry.planning import create_analysis_plan
+from fipha.compatibility import assess_pipeline_compatibility
+from fipha.planning import create_analysis_plan
 
 
 def _spec(table, design, estimand, operations):

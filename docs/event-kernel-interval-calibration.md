@@ -18,7 +18,7 @@ pointwise interval can behave reasonably at each position while failing to cover
 the complete generating curve. That distinction matters when scientists inspect a
 whole response shape or select its apparent peak.
 
-The [v0.1 protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-event-kernel-interval-coverage-v0.1.md)
+The [v0.1 protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-event-kernel-interval-coverage-v0.1.md)
 was committed before the 80-study aggregate execution. It evaluated the existing
 group-jackknife pointwise interval and a candidate Gaussian-multiplier max-*t*
 band. The multiplier family contained every evaluated position from every event
@@ -50,7 +50,7 @@ whole-family coverage over pointwise bands, especially for the ten-point
 overlapping-event family, but improvement is not the same as calibration.
 
 The complete study-level ledger is retained in
-[`event-kernel-interval-coverage-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/event-kernel-interval-coverage-v0.1.json).
+[`event-kernel-interval-coverage-v0.1.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/event-kernel-interval-coverage-v0.1.json).
 Reproduce it with:
 
 ```bash
@@ -63,7 +63,7 @@ uv run --group docs python scripts/plot_event_kernel_interval_calibration.py
 The default remains explicit and pointwise:
 
 ```python
-from fiberphotometry.encoding import EncodingModelSpec, KernelUncertaintySpec
+from fipha.encoding import EncodingModelSpec, KernelUncertaintySpec
 
 model = EncodingModelSpec(
     event_kernels=(cue,),
@@ -75,7 +75,7 @@ Researchers reproducing or developing the candidate can opt in without confusing
 it with the default:
 
 ```python
-from fiberphotometry.encoding import MultiplierSimultaneousBandSpec
+from fipha.encoding import MultiplierSimultaneousBandSpec
 
 model = EncodingModelSpec(
     event_kernels=(cue, reward),

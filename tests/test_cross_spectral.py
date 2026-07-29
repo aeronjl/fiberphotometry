@@ -1,13 +1,13 @@
 import numpy as np
 import pytest
 
-from fiberphotometry.cross_spectral import (
+from fipha.cross_spectral import (
     coherence_phase,
     state_conditioned_coherence,
     summarize_coherence_band,
 )
-from fiberphotometry.multisignal import ChannelIdentity, SignalPairMetadata
-from fiberphotometry.spectral import SpectralAnalysisSpec, StateEpoch
+from fipha.multisignal import ChannelIdentity, SignalPairMetadata
+from fipha.spectral import SpectralAnalysisSpec, StateEpoch
 
 
 def _pair(subject: str = "mouse-01", session: str = "session-01") -> SignalPairMetadata:

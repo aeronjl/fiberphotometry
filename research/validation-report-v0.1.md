@@ -22,13 +22,13 @@ comments inspected by the validator.
 Implications:
 
 - numerical reproduction requires provenance beyond variable names;
-- FiberPhotometry should represent zeroing as a separate transformation;
+- fipha should represent zeroing as a separate transformation;
 - additive zeroing does not alter within-channel event differences, but it does
   affect absolute baselines and cross-channel comparisons;
 - a high pooled correlation concealed a perfectly systematic discrepancy.
 
 Machine-readable result:
-[`dandi-dff-reproduction.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/dandi-dff-reproduction.json).
+[`dandi-dff-reproduction.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/dandi-dff-reproduction.json).
 
 ## IBL: real session and legacy-output reproduction
 
@@ -59,7 +59,7 @@ but it motivates channel-level fit diagnostics before reference correction is
 treated as routine.
 
 Machine-readable result:
-[`ibl-session-validation.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-session-validation.json).
+[`ibl-session-validation.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/ibl-session-validation.json).
 
 ## Scope limits
 

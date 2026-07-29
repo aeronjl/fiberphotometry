@@ -16,11 +16,11 @@ import pandas as pd
 from freeze_ibl_feedback_protocol_v32 import build_spec
 from one.api import ONE
 
-from fiberphotometry import ObservationTable, assess_signal_recording
-from fiberphotometry.events import summarize_event_windows
-from fiberphotometry.io.ibl import from_ibl_tables
-from fiberphotometry.planning import execute_analysis_plan
-from fiberphotometry.preprocess import baseline_dff
+from fipha import ObservationTable, assess_signal_recording
+from fipha.events import summarize_event_windows
+from fipha.io.ibl import from_ibl_tables
+from fipha.planning import execute_analysis_plan
+from fipha.preprocess import baseline_dff
 
 COHORT_SHA256 = "38197a26ab4804131423a9650a473a11e2b14f09ac2877875b574f2770d894e6"
 PROTOCOL_SHA256 = "237f2263a969cb52db71d771286aee093c0ef07fa151d74ae463decec2d3c44a"
@@ -117,7 +117,7 @@ def main() -> None:
                 processed = baseline_dff(
                     item.recording, method=method, normalization="both"
                 )
-                operation = json.loads(processed.attrs["fiberphotometry_baseline_dff"])
+                operation = json.loads(processed.attrs["fipha_baseline_dff"])
                 session_result["estimators"][estimator] = {
                     "status": "success",
                     "failed_short_runs": operation["failed_short_runs"],
@@ -339,7 +339,7 @@ def _load_session(one: ONE, row: dict[str, Any]):
     expected = row["usable_correct"] + row["usable_incorrect"]
     if len(selected) != expected:
         raise ValueError(f"frozen event count {expected} changed to {len(selected)}")
-    from fiberphotometry.pipeline import RecordingInput
+    from fipha.pipeline import RecordingInput
 
     item = RecordingInput(
         recording,
@@ -365,7 +365,7 @@ def _load_session(one: ONE, row: dict[str, Any]):
 
 
 def _materialized_by_choices(protocol: dict[str, Any], spec: Any):
-    from fiberphotometry.multiverse import materialize_multiverse
+    from fipha.multiverse import materialize_multiverse
 
     output = {}
     for universe in materialize_multiverse(spec):

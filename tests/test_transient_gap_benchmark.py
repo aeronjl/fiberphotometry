@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry.benchmark_resampling import TransientSpec, generate_transient
+from fipha.benchmark_resampling import TransientSpec, generate_transient
 
 
 def _verified(path: str, fingerprint_name: str) -> dict[str, object]:

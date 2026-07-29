@@ -9,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry.benchmark_control_free import run_control_free_benchmark
+from fipha.benchmark_control_free import run_control_free_benchmark
 
 SCENARIOS = (
     "single_exponential",

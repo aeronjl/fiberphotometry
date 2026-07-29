@@ -1,12 +1,12 @@
 import pytest
 
-from fiberphotometry.transient_inference import (
+from fipha.transient_inference import (
     SessionAggregation,
     TransientAnimalInferenceSpec,
     TransientStudySession,
     infer_transient_animals,
 )
-from fiberphotometry.transient_product import (
+from fipha.transient_product import (
     QuantifiedTransient,
     TransientQuantificationResult,
     TransientQuantificationSpec,

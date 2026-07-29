@@ -19,14 +19,14 @@ a narrower product test, not a reproduction of its principal claims.
 
 ## Why two packages?
 
-FiberPhotometry loads the 470-nm-only recordings, verifies source checksums, applies
+fipha loads the 470-nm-only recordings, verifies source checksums, applies
 the previously declared rolling divided-dF/F workflow, and calculates one feedback
 contrast per session. Its validated handoff retains every trial and attaches the
 previous session's neural summary.
 
 Unspool then owns the explicit session clock, within-session correctness history,
 cohort-forward split, model fits, audits, animal-balanced scoring, and paired animal
-bootstrap. No behavioral trajectory engine is duplicated inside FiberPhotometry.
+bootstrap. No behavioral trajectory engine is duplicated inside fipha.
 
 ## Frozen design
 
@@ -41,7 +41,7 @@ bootstrap. No behavioral trajectory engine is duplicated inside FiberPhotometry.
 - **Primary metric:** equally animal-weighted future-session log loss.
 - **Uncertainty:** 5,000 paired animal-bootstrap draws, seed `20260727`.
 
-Read the [frozen protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-unspool-longitudinal-v0.1.md)
+Read the [frozen protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-ibl-unspool-longitudinal-v0.1.md)
 before interpreting the result.
 
 ## Result
@@ -85,7 +85,7 @@ uv run --group ibl-validation \
   python scripts/run_ibl_unspool_longitudinal_v1.py
 ```
 
-The committed [machine-readable result](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-unspool-longitudinal-result-v0.1.json)
+The committed [machine-readable result](https://github.com/aeronjl/fipha/blob/main/benchmarks/ibl-unspool-longitudinal-result-v0.1.json)
 retains all source hashes, session neural summaries, the handoff fingerprint, exact
 fold membership, model signatures, fit audits, animal-level scores, bootstrap
 intervals, package versions, and the final result hash.

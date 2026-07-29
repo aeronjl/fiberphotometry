@@ -8,9 +8,9 @@ from pathlib import Path
 import numpy as np
 from one.api import ONE
 
-from fiberphotometry import EventAnalysisConfig, EventSession
-from fiberphotometry.events import summarize_event_windows
-from fiberphotometry.io.ibl import from_ibl_tables
+from fipha import EventAnalysisConfig, EventSession
+from fipha.events import summarize_event_windows
+from fipha.io.ibl import from_ibl_tables
 
 SESSIONS = (
     ("fip_13", "b6913f93-e7b1-4faf-ab4d-54261b0e31ea"),
@@ -28,7 +28,7 @@ def main() -> None:
     parser.add_argument(
         "--cache-dir",
         type=Path,
-        default=Path.home() / "Library/Caches/fiberphotometry/ibl-tutorial",
+        default=Path.home() / "Library/Caches/fipha/ibl-tutorial",
     )
     parser.add_argument("--output", type=Path, default=Path("ibl-feedback-report.html"))
     args = parser.parse_args()

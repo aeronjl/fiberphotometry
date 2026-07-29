@@ -21,7 +21,7 @@ are coded +0.5 and −0.5, so zero represents their midpoint. The first cue has 
 previous outcome and deliberately receives the declared unavailable value of zero.
 
 ```python
-from fiberphotometry.encoding import EncodingSession
+from fipha.encoding import EncodingSession
 
 session = EncodingSession.from_arrays(
     subject="mouse-1",
@@ -33,14 +33,14 @@ session = EncodingSession.from_arrays(
 )
 ```
 
-The values must be finite and match cue occurrences one-for-one. FiberPhotometry
+The values must be finite and match cue occurrences one-for-one. fipha
 does not guess trial order, carry history across sessions, or silently discard a
 trial with missing metadata.
 
 ## Fit a main kernel and a history kernel
 
 ```python
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelSpec,
     EventKernelSpec,
     EventModulationSpec,
@@ -81,7 +81,7 @@ pooled curve. Compare a cue-only model with a cue-plus-history model through
 the exact retained observations match; failures remain in the ledger.
 
 The executable simulation in
-[`examples/event_kernel_history.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/event_kernel_history.py)
+[`examples/event_kernel_history.py`](https://github.com/aeronjl/fipha/blob/main/examples/event_kernel_history.py)
 recovers a known previous-outcome curve while holding out complete animals.
 
 ## What this does not do

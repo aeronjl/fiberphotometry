@@ -23,7 +23,7 @@ build stable or promote experimental preprocessing methods.
 - Installed contents: `py.typed` and the result JSON Schema occur in both release
   formats.
 - Isolated wheel smoke test: import, installed version, packaged schema lookup, and
-  `fiberphotometry --help` all execute outside the repository environment.
+  `fipha --help` all execute outside the repository environment.
 - Repository checks: Ruff lint/format, strict mypy, and the full pytest suite.
 - Workflow syntax: `actionlint` passes.
 - Secret history scan: Gitleaks scanned 151 commits with no findings.

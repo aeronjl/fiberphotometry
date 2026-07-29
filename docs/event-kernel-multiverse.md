@@ -20,7 +20,7 @@ the presumed truth.
 ## Declare alternatives before fitting
 
 ```python
-from fiberphotometry.encoding_multiverse import (
+from fipha.encoding_multiverse import (
     EncodingModelAlternative,
     EncodingMultiverseSpec,
     run_encoding_multiverse,

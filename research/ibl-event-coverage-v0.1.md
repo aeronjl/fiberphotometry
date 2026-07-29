@@ -57,8 +57,8 @@ held-out real-data AsLS comparison; this audit does not promote AsLS or reopen t
 previously observed fluorescence outcomes.
 
 The governing contract is
-[`protocol-ibl-event-coverage-v0.1.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-event-coverage-v0.1.md),
+[`protocol-ibl-event-coverage-v0.1.md`](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-ibl-event-coverage-v0.1.md),
 the complete machine-readable output is
-[`ibl-event-coverage-results-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-event-coverage-results-v0.1.json),
+[`ibl-event-coverage-results-v0.1.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/ibl-event-coverage-results-v0.1.json),
 and the result fingerprint is
 `c63dbfe7bafee999f5ff00a2e3db2c22bb28f543a36ef80ccc6c6a08aa88bbef`.

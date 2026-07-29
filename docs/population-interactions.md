@@ -35,7 +35,7 @@ separate `PopulationGroupAssignment`, which prevents condition and assignment
 semantics from being compressed into one label.
 
 ```python
-from fiberphotometry.population import (
+from fipha.population import (
     PopulationGroupAssignment,
     PopulationInteractionSpec,
     infer_population_interaction,

@@ -20,8 +20,8 @@ share both a unit and a named space; millimetres in implant space cannot silentl
 mix with micrometres in an atlas space.
 
 ```python
-from fiberphotometry.multisignal import ChannelIdentity, SpatialCoordinate
-from fiberphotometry.spatial_network import SpatialArrayMetadata
+from fipha.multisignal import ChannelIdentity, SpatialCoordinate
+from fipha.spatial_network import SpatialArrayMetadata
 
 channels = tuple(
     ChannelIdentity(
@@ -62,8 +62,8 @@ resampling before this boundary when acquisition clocks differ.
 ## Estimate the session network
 
 ```python
-from fiberphotometry.multisignal import LaggedAssociationSpec
-from fiberphotometry.spatial_network import (
+from fipha.multisignal import LaggedAssociationSpec
+from fipha.spatial_network import (
     SpatialDistanceBin,
     SpatialNetworkSpec,
     SpatialNodePermutationSpec,
@@ -151,7 +151,7 @@ Arrays with too few retained edges or constant distances/values return a typed
 ## Contrast conditions at the mouse level
 
 ```python
-from fiberphotometry.spatial_network import (
+from fipha.spatial_network import (
     SpatialAnimalInferenceSpec,
     SpatialStudySession,
     infer_spatial_network_animals,

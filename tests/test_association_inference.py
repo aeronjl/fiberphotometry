@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from fiberphotometry.association_inference import (
+from fipha.association_inference import (
     AssociationAnimalInferenceSpec,
     AssociationSessionEstimate,
     infer_association_animals,

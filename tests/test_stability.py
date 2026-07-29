@@ -1,5 +1,5 @@
-import fiberphotometry
-from fiberphotometry.stability import (
+import fipha
+from fipha.stability import (
     ARTIFACT_SCHEMAS_V0_1,
     EXPERIMENTAL_API_V0_1,
     SUPPORTED_API_V0_1,
@@ -10,17 +10,17 @@ def test_declared_supported_and_experimental_names_are_exported() -> None:
     supported = set(SUPPORTED_API_V0_1)
     experimental = set(EXPERIMENTAL_API_V0_1)
     assert supported.isdisjoint(experimental)
-    assert supported <= set(fiberphotometry.__all__)
-    assert experimental <= set(fiberphotometry.__all__)
-    assert all(hasattr(fiberphotometry, name) for name in supported | experimental)
+    assert supported <= set(fipha.__all__)
+    assert experimental <= set(fipha.__all__)
+    assert all(hasattr(fipha, name) for name in supported | experimental)
 
 
 def test_every_public_export_is_classified_supported_or_experimental() -> None:
-    exported = set(fiberphotometry.__all__)
+    exported = set(fipha.__all__)
     classified = set(SUPPORTED_API_V0_1) | set(EXPERIMENTAL_API_V0_1)
 
     assert not exported - classified, (
-        "every name in fiberphotometry.__all__ must be declared in "
+        "every name in fipha.__all__ must be declared in "
         "SUPPORTED_API_V0_1 or EXPERIMENTAL_API_V0_1; unclassified: "
         f"{sorted(exported - classified)}"
     )
@@ -33,7 +33,7 @@ def test_every_public_export_is_classified_supported_or_experimental() -> None:
 def test_declared_names_are_unique_within_each_stability_tier() -> None:
     assert len(SUPPORTED_API_V0_1) == len(set(SUPPORTED_API_V0_1))
     assert len(EXPERIMENTAL_API_V0_1) == len(set(EXPERIMENTAL_API_V0_1))
-    assert len(fiberphotometry.__all__) == len(set(fiberphotometry.__all__))
+    assert len(fipha.__all__) == len(set(fipha.__all__))
 
 
 def test_the_scientific_core_path_is_supported_not_unclassified() -> None:
@@ -54,7 +54,7 @@ def test_the_scientific_core_path_is_supported_not_unclassified() -> None:
 
 def test_event_analysis_schema_fixes_the_complete_top_level_ledger() -> None:
     assert ARTIFACT_SCHEMAS_V0_1["event_analysis_result"].endswith(".schema.json")
-    schema = fiberphotometry.artifact_schema("event_analysis_result")
+    schema = fipha.artifact_schema("event_analysis_result")
     assert schema["$schema"].endswith("2020-12/schema")
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
@@ -63,7 +63,7 @@ def test_event_analysis_schema_fixes_the_complete_top_level_ledger() -> None:
 
 
 def test_multiverse_lane_summary_has_a_normative_schema() -> None:
-    schema = fiberphotometry.artifact_schema("multiverse_lane_summary")
+    schema = fipha.artifact_schema("multiverse_lane_summary")
 
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
@@ -71,7 +71,7 @@ def test_multiverse_lane_summary_has_a_normative_schema() -> None:
 
 
 def test_evidence_bundle_comparison_has_a_normative_schema() -> None:
-    schema = fiberphotometry.artifact_schema("evidence_bundle_comparison")
+    schema = fipha.artifact_schema("evidence_bundle_comparison")
 
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
@@ -81,7 +81,7 @@ def test_evidence_bundle_comparison_has_a_normative_schema() -> None:
 
 
 def test_publication_attestation_has_a_normative_schema() -> None:
-    schema = fiberphotometry.artifact_schema("publication_manifest_attestation")
+    schema = fipha.artifact_schema("publication_manifest_attestation")
 
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
@@ -89,17 +89,15 @@ def test_publication_attestation_has_a_normative_schema() -> None:
 
 
 def test_archive_metadata_has_a_normative_schema() -> None:
-    schema = fiberphotometry.artifact_schema("fiberphotometry_archive_metadata")
+    schema = fipha.artifact_schema("fipha_archive_metadata")
 
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == set(schema["properties"])
-    assert schema["properties"]["artifact_type"]["const"] == (
-        "fiberphotometry_archive_metadata"
-    )
+    assert schema["properties"]["artifact_type"]["const"] == ("fipha_archive_metadata")
 
 
 def test_zenodo_draft_receipt_has_a_normative_schema() -> None:
-    schema = fiberphotometry.artifact_schema("zenodo_draft_receipt")
+    schema = fipha.artifact_schema("zenodo_draft_receipt")
 
     assert schema["additionalProperties"] is False
     assert schema["properties"]["submitted"]["const"] is False
@@ -109,7 +107,7 @@ def test_zenodo_draft_receipt_has_a_normative_schema() -> None:
 def test_unknown_or_embedded_schema_is_not_guessed() -> None:
     for artifact_type in ("missing", "event_coverage"):
         try:
-            fiberphotometry.artifact_schema(artifact_type)
+            fipha.artifact_schema(artifact_type)
         except ValueError:
             pass
         else:
@@ -117,5 +115,5 @@ def test_unknown_or_embedded_schema_is_not_guessed() -> None:
 
 
 def test_package_exposes_installed_version() -> None:
-    assert fiberphotometry.__version__
-    assert fiberphotometry.__version__ != "0+unknown"
+    assert fipha.__version__
+    assert fipha.__version__ != "0+unknown"

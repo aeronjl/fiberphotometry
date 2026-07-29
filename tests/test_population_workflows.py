@@ -3,25 +3,25 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.association_inference import AssociationSessionEstimate
-from fiberphotometry.population import (
+from fipha.association_inference import AssociationSessionEstimate
+from fipha.population import (
     PopulationContrastSpec,
     PopulationGroupAssignment,
     PopulationInteractionSpec,
 )
-from fiberphotometry.population_workflows import (
+from fipha.population_workflows import (
     materialize_association_population,
     materialize_state_band_power_population,
     materialize_transient_population,
 )
-from fiberphotometry.spectral import (
+from fipha.spectral import (
     SpectralAnalysisSpec,
     StateEpoch,
     StatePSDSession,
     state_conditioned_psd,
 )
-from fiberphotometry.transient_inference import TransientStudySession
-from fiberphotometry.transient_product import (
+from fipha.transient_inference import TransientStudySession
+from fipha.transient_product import (
     TransientQuantificationResult,
     TransientQuantificationSpec,
     TransientQuantificationSummary,

@@ -1,4 +1,4 @@
-# FiberPhotometry interface system
+# fipha interface system
 
 ## Direction and intent
 

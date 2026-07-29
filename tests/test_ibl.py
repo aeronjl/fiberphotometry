@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from fiberphotometry.io.ibl import from_ibl_tables
+from fipha.io.ibl import from_ibl_tables
 
 
 def test_ibl_adapter_demultiplexes_interpolates_and_retains_mask() -> None:

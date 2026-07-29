@@ -30,7 +30,7 @@ save_figure(figure, output_path)
 ```
 
 The implementation lives in
-[`scripts/figure_style.py`](https://github.com/aeronjl/fiberphotometry/blob/main/scripts/figure_style.py).
+[`scripts/figure_style.py`](https://github.com/aeronjl/fipha/blob/main/scripts/figure_style.py).
 It fixes sans-serif mathematical text, PDF font embedding, SVG text preservation,
 300 dpi raster output, deterministic SVG hashing, and whitespace normalization.
 

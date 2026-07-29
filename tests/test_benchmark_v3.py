@@ -1,4 +1,4 @@
-from fiberphotometry.benchmark_v3 import run_benchmark_v3
+from fipha.benchmark_v3 import run_benchmark_v3
 
 
 def test_v3_detects_event_locked_motion() -> None:

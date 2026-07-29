@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pytest
 
-from fiberphotometry.archive import create_archive_package
-from fiberphotometry.cli import main
-from fiberphotometry.zenodo import create_zenodo_draft
+from fipha.archive import create_archive_package
+from fipha.cli import main
+from fipha.zenodo import create_zenodo_draft
 
 
 def _deposit(tmp_path: Path) -> Path:
@@ -16,7 +16,7 @@ def _deposit(tmp_path: Path) -> Path:
     (bundle / "analysis.json").write_bytes(analysis)
     manifest = {
         "schema_version": "1",
-        "fiberphotometry_version": "test",
+        "fipha_version": "test",
         "project": {"name": "project.toml", "sha256": "a" * 64},
         "status": "complete",
         "artifacts": {
@@ -28,7 +28,7 @@ def _deposit(tmp_path: Path) -> Path:
     metadata.write_text(
         json.dumps(
             {
-                "artifact_type": "fiberphotometry_archive_metadata",
+                "artifact_type": "fipha_archive_metadata",
                 "schema_version": "1",
                 "title": "Reward photometry evidence",
                 "description": "A reproducible analysis deposit.",
@@ -78,8 +78,8 @@ def test_creates_and_validates_unpublished_sandbox_draft(tmp_path, monkeypatch) 
         assert token == "secret-test-token"
         return {"filename": path.name, "filesize": path.stat().st_size}
 
-    monkeypatch.setattr("fiberphotometry.zenodo._request_json", request)
-    monkeypatch.setattr("fiberphotometry.zenodo._upload_file", upload)
+    monkeypatch.setattr("fipha.zenodo._request_json", request)
+    monkeypatch.setattr("fipha.zenodo._upload_file", upload)
 
     receipt = create_zenodo_draft(archive)
 
@@ -97,7 +97,7 @@ def test_rejects_untrusted_upload_link_before_sending_file(
     archive = _deposit(tmp_path)
     monkeypatch.setenv("ZENODO_SANDBOX_TOKEN", "secret-test-token")
     monkeypatch.setattr(
-        "fiberphotometry.zenodo._request_json",
+        "fipha.zenodo._request_json",
         lambda *args, **kwargs: {
             "id": 123,
             "links": {

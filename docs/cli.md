@@ -1,6 +1,6 @@
 # Command line
 
-The `fiberphotometry` command has two layers.
+The `fipha` command has two layers.
 
 **Analysis commands** take one recording file and produce a number. They need no
 project file, no schema, and no declared study design: `qc`, `dff`, `align`, and
@@ -53,7 +53,7 @@ place; nothing below is specific to CSV.
 ### `qc` — is this recording usable?
 
 ```bash
-fiberphotometry qc recording.csv
+fipha qc recording.csv
 ```
 
 The human summary goes to stderr and the machine-readable report to stdout:
@@ -84,13 +84,13 @@ omits the correlation and regression fields rather than inventing them.
 Write a per-channel table instead:
 
 ```bash
-fiberphotometry qc recording.csv --format csv --output qc.csv
+fipha qc recording.csv --format csv --output qc.csv
 ```
 
 ### `dff` — compute ΔF/F with its provenance
 
 ```bash
-fiberphotometry dff recording.csv --output dff.csv --format csv
+fipha dff recording.csv --output dff.csv --format csv
 ```
 
 `--method auto` (the default) fits the reference channel when one exists and
@@ -119,7 +119,7 @@ The default JSON output carries the same `provenance` list, per-channel summary
 statistics, and the samples themselves:
 
 ```bash
-fiberphotometry dff recording.csv --quiet | python -c "
+fipha dff recording.csv --quiet | python -c "
 import json, sys
 result = json.load(sys.stdin)
 print(result['units'], result['provenance'])
@@ -138,23 +138,23 @@ Writing NWB instead of CSV requires the session start time, because a valid NWB
 file records when the session began and this library does not invent metadata:
 
 ```bash
-fiberphotometry dff recording.csv \
+fipha dff recording.csv \
   --output session.nwb \
   --session-start-time 2026-01-01T12:00:00+00:00
 ```
 
 The file holds the raw signal, the raw reference, the processed series in a
-`fiberphotometry` processing module, and the operation list in a scratch
+`fipha` processing module, and the operation list in a scratch
 dataset. It can be read straight back:
 
 ```bash
-fiberphotometry qc session.nwb
+fipha qc session.nwb
 ```
 
 ### `align` — peri-event windows
 
 ```bash
-fiberphotometry align recording.csv \
+fipha align recording.csv \
   --events events.csv \
   --event-id-column event_id \
   --baseline -2 0 \
@@ -175,7 +175,7 @@ than an arbitrarily large number and is counted in
 `events.degenerate_baseline_count`.
 
 ```bash
-fiberphotometry align recording.csv \
+fipha align recording.csv \
   --events events.csv --event-id-column event_id \
   --baseline -2 0 --response 0 1 \
   --normalization baseline_z \
@@ -200,7 +200,7 @@ preprocessing entirely.
 ### `transients` — spontaneous events
 
 ```bash
-fiberphotometry transients recording.csv \
+fipha transients recording.csv \
   --detector absolute --threshold 0.1 \
   --baseline-duration 2 --baseline-gap 2 --min-distance 2
 ```
@@ -293,7 +293,7 @@ exit with status 2. The codes marked *shared* are the same stable identifiers th
 Each hint names the flag or file to change. For example:
 
 ```bash
-fiberphotometry dff recording.csv --channel absent
+fipha dff recording.csv --channel absent
 ```
 
 ```text
@@ -311,8 +311,8 @@ evidence. They do not accept inferential assumptions silently.
 The example project lives in the repository, so start from a checkout:
 
 ```bash
-git clone https://github.com/aeronjl/fiberphotometry.git
-cd fiberphotometry
+git clone https://github.com/aeronjl/fipha.git
+cd fipha
 uv sync --all-extras
 uv run python examples/tabular_project/make_data.py
 ```
@@ -321,26 +321,26 @@ Inspect schemas, file fingerprints, missingness, sampling, and event-clock
 coverage without fitting an analysis:
 
 ```bash
-uv run fiberphotometry inspect examples/tabular_project/project.toml
+uv run fipha inspect examples/tabular_project/project.toml
 ```
 
 Execute the declared workflow:
 
 ```bash
-uv run fiberphotometry run examples/tabular_project/project.toml
+uv run fipha run examples/tabular_project/project.toml
 ```
 
 Execute every explicitly declared robustness workflow:
 
 ```bash
-uv run fiberphotometry multiverse examples/tabular_project/project.toml
+uv run fipha multiverse examples/tabular_project/project.toml
 ```
 
 Install the `nwb` optional dependencies when the project declares NWB output
 (the package is not on PyPI; see [Install](getting-started/install.md)):
 
 ```bash
-pip install "fiberphotometry[nwb] @ git+https://github.com/aeronjl/fiberphotometry.git"
+pip install "fipha[nwb] @ git+https://github.com/aeronjl/fipha.git"
 ```
 
 The configured output directory receives:
@@ -368,7 +368,7 @@ artifacts are not fabricated.
 
 ### Project file
 
-[`examples/tabular_project/project.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/tabular_project/project.toml)
+[`examples/tabular_project/project.toml`](https://github.com/aeronjl/fipha/blob/main/examples/tabular_project/project.toml)
 contains four explicit layers:
 
 1. subject/session source files;
@@ -384,7 +384,7 @@ distinguishable provenance events.
 An optional `[timecourse]` table enables the same animal-level peri-event lane as
 the Python API. It declares `window`, `rate_hz`, `confidence`, `draws`, and `seed`;
 the resulting JSON and HTML keep pointwise and simultaneous bands distinct. See
-[`examples/feedback-analysis.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/feedback-analysis.toml) and the
+[`examples/feedback-analysis.toml`](https://github.com/aeronjl/fipha/blob/main/examples/feedback-analysis.toml) and the
 [peri-event inference contract](peri-event-inference.md).
 
 NWB export is opt-in because valid files require metadata the library must not
@@ -415,7 +415,7 @@ The supported Python API reads either a complete output directory or one exporte
 NWB file through the same normalized object:
 
 ```python
-from fiberphotometry.results import read_project_evidence
+from fipha.results import read_project_evidence
 
 bundle = read_project_evidence("artifacts")
 print(bundle.kind, bundle.status, bundle.manifest_verified)
@@ -435,8 +435,8 @@ See the [evidence reader contract](evidence-reader.md).
 Compare any two readable bundles from the command line:
 
 ```bash
-uv run fiberphotometry compare artifacts-a artifacts-b
-uv run fiberphotometry compare artifacts-a session.nwb \
+uv run fipha compare artifacts-a artifacts-b
+uv run fipha compare artifacts-a session.nwb \
   --absolute-tolerance 1e-8 --output reproducibility.json
 ```
 
@@ -612,7 +612,7 @@ These commands operate on a completed artifact directory, not on raw recordings.
 Sign only after a bundle is complete and its manifest verifies:
 
 ```bash
-uv run fiberphotometry sign artifacts \
+uv run fipha sign artifacts \
   --key ~/.ssh/id_ed25519 \
   --identity scientist@example.org
 ```
@@ -624,14 +624,14 @@ This creates `publication-attestation.json` and the detached
 Verifiers maintain an OpenSSH `allowed_signers` file outside the evidence bundle:
 
 ```text
-scientist@example.org namespaces="fiberphotometry-publication@aeronjl.github.io" ssh-ed25519 AAAA...
+scientist@example.org namespaces="fipha-publication@aeronjl.github.io" ssh-ed25519 AAAA...
 ```
 
 Then verify signer authorization, signature bytes, the exact manifest digest, and
 the project fingerprint:
 
 ```bash
-uv run fiberphotometry verify-signature artifacts \
+uv run fipha verify-signature artifacts \
   --allowed-signers allowed_signers
 ```
 
@@ -646,7 +646,7 @@ empty arrays or `null`):
 
 ```json
 {
-  "artifact_type": "fiberphotometry_archive_metadata",
+  "artifact_type": "fipha_archive_metadata",
   "schema_version": "1",
   "title": "Reward photometry analysis evidence",
   "description": "Analysis, provenance, QC, and robustness results.",
@@ -670,10 +670,10 @@ empty arrays or `null`):
 Then create and independently verify a deterministic deposit:
 
 ```bash
-uv run fiberphotometry archive artifacts \
+uv run fipha archive artifacts \
   --metadata archive-metadata.json \
   --output reward-analysis-deposit.zip
-uv run fiberphotometry verify-archive reward-analysis-deposit.zip
+uv run fipha verify-archive reward-analysis-deposit.zip
 ```
 
 The archive contains verified evidence, a checksum inventory, the neutral source
@@ -685,12 +685,12 @@ Upload the verified package as an unpublished sandbox draft:
 
 ```bash
 export ZENODO_SANDBOX_TOKEN="..."
-uv run fiberphotometry zenodo-draft reward-analysis-deposit.zip
+uv run fipha zenodo-draft reward-analysis-deposit.zip
 ```
 
 The JSON receipt records the environment, draft ID and URL, archive and project
 fingerprints, filename, byte size, and `submitted = false`; it contains no token.
-Production draft creation requires `--production`. FiberPhotometry exposes no DOI
+Production draft creation requires `--production`. fipha exposes no DOI
 publication action.
 
 ## Current boundary

@@ -4,7 +4,7 @@
 - Date: 2026-07-27
 - Decision owners: project maintainers
 - Related schema:
-  [multiverse lane summary v1](https://github.com/aeronjl/fiberphotometry/blob/main/schemas/multiverse-lane-summary-v1.schema.json)
+  [multiverse lane summary v1](https://github.com/aeronjl/fipha/blob/main/schemas/multiverse-lane-summary-v1.schema.json)
 
 ## Context
 

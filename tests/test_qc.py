@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from fiberphotometry import make_recording
-from fiberphotometry.qc import assess_recording, assess_signal_recording
+from fipha import make_recording
+from fipha.qc import assess_recording, assess_signal_recording
 
 
 def test_qc_reports_sampling_fit_and_missingness() -> None:

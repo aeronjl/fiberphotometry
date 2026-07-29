@@ -27,7 +27,7 @@ single-exponential fits or in-vivo impulse responses.
 Executable models therefore require a separate identity:
 
 ```python
-from fiberphotometry.sensor_kinetics import KineticModelIdentity
+from fipha.sensor_kinetics import KineticModelIdentity
 
 identity = KineticModelIdentity(
     model_id="lab-dlight13b-pulse-response",
@@ -58,7 +58,7 @@ actually identifies the gain and response in the relevant preparation.
 ### Difference of exponentials
 
 ```python
-from fiberphotometry.sensor_kinetics import DifferenceOfExponentialsModel
+from fipha.sensor_kinetics import DifferenceOfExponentialsModel
 
 model = DifferenceOfExponentialsModel(
     identity=identity,
@@ -81,7 +81,7 @@ unless the evidence defines them as the corresponding model time constants.
 ### Sampled empirical response
 
 ```python
-from fiberphotometry.sensor_kinetics import SampledImpulseResponseModel
+from fipha.sensor_kinetics import SampledImpulseResponseModel
 
 model = SampledImpulseResponseModel(
     identity=identity,
@@ -105,7 +105,7 @@ and finite support.
 ## Run the forward model first
 
 ```python
-from fiberphotometry.sensor_kinetics import KineticForwardSpec, predict_sensor_response
+from fipha.sensor_kinetics import KineticForwardSpec, predict_sensor_response
 
 prediction = predict_sensor_response(
     time_s,
@@ -130,7 +130,7 @@ state.
 ## Assess identifiability before looking at the inverse
 
 ```python
-from fiberphotometry.sensor_kinetics import (
+from fipha.sensor_kinetics import (
     KineticDeconvolutionSpec,
     assess_kinetic_identifiability,
 )
@@ -178,7 +178,7 @@ Run [sensor and reference validity](optical-validity.md) and any relevant
 ## Estimate a conditional latent input
 
 ```python
-from fiberphotometry.sensor_kinetics import deconvolve_sensor_response
+from fipha.sensor_kinetics import deconvolve_sensor_response
 
 result = deconvolve_sensor_response(
     time_s,

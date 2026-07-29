@@ -39,7 +39,7 @@ preserving the original behavior. A lower-dimensional smooth alternative is
 explicit:
 
 ```python
-from fiberphotometry.encoding import EventKernelSpec, RaisedCosineBasisSpec
+from fipha.encoding import EventKernelSpec, RaisedCosineBasisSpec
 
 cue = EventKernelSpec(
     "cue",
@@ -66,7 +66,7 @@ per-event value. Setting `lag_events=1` makes that value come from the immediate
 previous occurrence within the same session:
 
 ```python
-from fiberphotometry.encoding import EventKernelSpec, EventModulationSpec
+from fipha.encoding import EventKernelSpec, EventModulationSpec
 
 history = EventKernelSpec(
     "cue-by-previous-outcome",
@@ -82,7 +82,7 @@ history = EventKernelSpec(
 
 The session supplies one finite `outcome_code` per cue through `event_values`.
 History resets at recording boundaries and lagged events must be strictly ordered.
-FiberPhotometry neither guesses categorical coding nor standardizes these values;
+fipha neither guesses categorical coding nor standardizes these values;
 zero must therefore have the intended meaning. Include the unmodulated cue kernel
 to interpret the history kernel as a conditional difference around that reference.
 Use lag zero for a declared current-event amplitude or duration.
@@ -94,7 +94,7 @@ discarding the rest of the recording. A piecewise-linear basis maps samples insi
 each bout to normalized progress; all progress columns are zero outside bouts.
 
 ```python
-from fiberphotometry.encoding import LinearProgressBasisSpec, ProgressKernelSpec
+from fipha.encoding import LinearProgressBasisSpec, ProgressKernelSpec
 
 rear_progress = ProgressKernelSpec(
     "rear-progress",

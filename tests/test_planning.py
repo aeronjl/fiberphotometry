@@ -1,7 +1,7 @@
 import pytest
 from test_t_inference import paired_table
 
-from fiberphotometry.planning import (
+from fipha.planning import (
     AnalysisPlan,
     create_analysis_plan,
     execute_analysis_plan,

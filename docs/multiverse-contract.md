@@ -1,6 +1,6 @@
 # Multiverse scientific contract v0.1
 
-A FiberPhotometry multiverse evaluates multiple defensible workflows for one
+A fipha multiverse evaluates multiple defensible workflows for one
 fixed dataset, scientific estimand, and experimental-unit declaration. It is a
 robustness analysis, not a search over outcomes or a substitute for replication.
 

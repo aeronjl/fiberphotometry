@@ -5,7 +5,7 @@
   <figcaption><strong>Publication evidence is a verifiable chain.</strong> Schema validity, byte identity, scientific comparability, authorship attestation, and archival deposition remain separate checks.</figcaption>
 </figure>
 
-FiberPhotometry authenticates a completed evidence bundle with a detached OpenSSH
+fipha authenticates a completed evidence bundle with a detached OpenSSH
 signature. The signed payload is a canonical JSON attestation binding the exact
 `manifest.json` SHA-256, project fingerprint, signer identity, signing time,
 signature method, and a fixed application namespace.
@@ -23,7 +23,7 @@ refuses to replace existing files unless the caller explicitly requests overwrit
 ## OpenSSH trust model
 
 The namespace is fixed to
-`fiberphotometry-publication@aeronjl.github.io`, preventing a signature made for a
+`fipha-publication@aeronjl.github.io`, preventing a signature made for a
 different application from being accepted here. Verification supplies the signed
 identity to `ssh-keygen -Y verify` and requires a matching key in an independently
 maintained `allowed_signers` file. Restricting each entry with a `namespaces=`

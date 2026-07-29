@@ -2,7 +2,7 @@
 
 `ndx-pose` is the NWB extension used by tools including DeepLabCut, SLEAP,
 Keypoint-MoSeq, NeuroConv, and movement to exchange pose-estimation data. The
-FiberPhotometry adapter reads and writes the extension directly while keeping pose
+fipha adapter reads and writes the extension directly while keeping pose
 discovery in those upstream tools.
 
 <figure class="fp-figure">
@@ -13,7 +13,7 @@ discovery in those upstream tools.
 Install the NWB extra:
 
 ```bash
-uv add "fiberphotometry[nwb]"
+uv add "fipha[nwb]"
 ```
 
 The current contract is tested against `ndx-pose` 0.3.0 and PyNWB. It supports
@@ -26,7 +26,7 @@ source software, scorer metadata, and original/labeled video path arrays.
 An NWB file can contain several cameras or estimators. Inventory the file first:
 
 ```python
-from fiberphotometry.io.ndx_pose import inspect_ndx_pose_nwb
+from fipha.io.ndx_pose import inspect_ndx_pose_nwb
 
 inspection = inspect_ndx_pose_nwb("mouse-07-day-04.nwb")
 for item in inspection.pose_estimations:
@@ -45,7 +45,7 @@ and linked-device names without reading the full coordinate arrays.
 ## Read one declared estimator
 
 ```python
-from fiberphotometry.io.ndx_pose import poses_from_ndx_pose_nwb
+from fipha.io.ndx_pose import poses_from_ndx_pose_nwb
 
 result = poses_from_ndx_pose_nwb(
     "mouse-07-day-04.nwb",
@@ -77,7 +77,7 @@ steps touching a non-finite coordinate or insufficient confidence.
 ## Write native extension objects
 
 ```python
-from fiberphotometry.io.ndx_pose import NdxPoseMetadata, add_poses_to_nwb
+from fipha.io.ndx_pose import NdxPoseMetadata, add_poses_to_nwb
 
 metadata = NdxPoseMetadata(
     pose_estimation_name="TopCameraPose",
@@ -107,7 +107,7 @@ clock identity, unequal timestamps, mismatched skeleton order, invalid edges,
 missing reference frames, and confidence outside `[0, 1]`.
 
 The extension's Python constructor currently describes confidence as optional,
-while its 0.3.0 NWB schema validator requires the dataset. FiberPhotometry therefore
+while its 0.3.0 NWB schema validator requires the dataset. fipha therefore
 writes all-`NaN` confidence when it is unknown. This preserves missingness and keeps
 the generated NWB file schema-valid.
 
@@ -121,7 +121,7 @@ export. Video paths and dimensions are omitted when their linked camera devices 
 omitted, avoiding a structurally misleading partial container.
 
 Provide destination `devices`, `source_video`, and `labeled_video` objects when
-those relationships are known. FiberPhotometry will never invent camera hardware or
+those relationships are known. fipha will never invent camera hardware or
 claim that a path string is a formal NWB link.
 
 ## Continue into photometry analysis
@@ -140,7 +140,7 @@ aligned_speed = nose_speed.aligned_to(
 ```
 
 See the complete executable
-[`examples/ndx_pose_roundtrip.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/ndx_pose_roundtrip.py),
+[`examples/ndx_pose_roundtrip.py`](https://github.com/aeronjl/fipha/blob/main/examples/ndx_pose_roundtrip.py),
 the [behavior-tool composition tutorial](tutorials/behavior-tool-interoperability.md),
 and the upstream [`ndx-pose` format documentation](https://pypi.org/project/ndx-pose/).
 

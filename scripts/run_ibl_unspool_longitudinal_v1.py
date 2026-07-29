@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Execute the frozen FiberPhotometry-to-Unspool IBL benchmark."""
+"""Execute the frozen fipha-to-Unspool IBL benchmark."""
 
 from __future__ import annotations
 
@@ -20,10 +20,10 @@ from unspool import (
     compare_models,
 )
 
-from fiberphotometry import ObservationTable
-from fiberphotometry.events import summarize_event_windows
-from fiberphotometry.preprocess import baseline_dff
-from fiberphotometry.unspool import prepare_unspool_study
+from fipha import ObservationTable
+from fipha.events import summarize_event_windows
+from fipha.preprocess import baseline_dff
+from fipha.unspool import prepare_unspool_study
 
 PROTOCOL_SHA256 = "cf52883f2d65b495b2d6a0f3d99a757965916706e5e0c62494606798087b2de9"
 
@@ -177,7 +177,7 @@ def main() -> None:
         "schema_version": "ibl-unspool-longitudinal-result-v0.1",
         "protocol_sha256": protocol["protocol_sha256"],
         "executed_at_utc": datetime.now(UTC).isoformat(),
-        "fiberphotometry_version": version("fiberphotometry"),
+        "fipha_version": version("fipha"),
         "unspool_version": version("unspool"),
         "handoff_fingerprint": handoff.input_fingerprint,
         "observations": len(study),

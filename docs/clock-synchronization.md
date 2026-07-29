@@ -11,7 +11,7 @@
 Can timestamps produced by a camera or behavioral computer be mapped onto the
 photometry acquisition clock with enough evidence to support event alignment?
 
-FiberPhotometry models the target clock as
+fipha models the target clock as
 
 \[
 t_{target} = a + b t_{source},
@@ -25,7 +25,7 @@ decision and is never inferred from nearest timestamps.
 ## Fit an evidence-bearing transform
 
 ```python
-from fiberphotometry.interoperability import (
+from fipha.interoperability import (
     ClockPulseMatches,
     ClockSynchronizationSpec,
     fit_clock_synchronization,

@@ -17,7 +17,7 @@ selected block:
 
 ```bash
 uv run python scripts/fetch_tdt_demo.py
-FIBERPHOTOMETRY_TDT_DEMO_BLOCK=.cache/tdt-demo/extracted/FiPho-180416 \
+FIPHA_TDT_DEMO_BLOCK=.cache/tdt-demo/extracted/FiPho-180416 \
   uv run pytest tests/test_tdt_official_demo.py
 ```
 

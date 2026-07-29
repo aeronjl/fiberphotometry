@@ -13,12 +13,12 @@ positive-duration state annotations.
 
 A single generic event table would make integration easy only by discarding scorer
 identity, track identity, confidence, interval duration, clock evidence or units.
-Implementing pose or state discovery inside FiberPhotometry would instead duplicate
+Implementing pose or state discovery inside fipha would instead duplicate
 the source tools and blur responsibility for their validation.
 
 ## Decision
 
-FiberPhotometry will consume external behavior through separate typed pose,
+fipha will consume external behavior through separate typed pose,
 continuous-covariate, point-event and interval boundaries. Native adapters will be
 thin and dependency-light. They must require ambiguous identities and array axes to
 be declared, retain confidence-derived missingness, name clocks and units, and
@@ -44,7 +44,7 @@ the source tool. Longitudinal behavioral modelling remains in Unspool under
 ## Consequences
 
 - Scientists can compose familiar behavior tools with photometry without changing
-  the source tools or installing them as FiberPhotometry dependencies.
+  the source tools or installing them as fipha dependencies.
 - The initial API is experimental. Official SLEAP and BORIS files plus
   writer-contract DeepLabCut 3.0.0 and Keypoint-MoSeq 0.6.8 files now provide a
   complete one-version parity matrix without conflating fixture provenance.

@@ -10,7 +10,7 @@ from typing import Any
 
 import numpy as np
 
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelResult,
     EncodingModelSpec,
     EncodingSession,

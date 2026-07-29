@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 from one.api import ONE
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     EventSummarySpec,
@@ -24,16 +24,16 @@ from fiberphotometry import (
     StudyDesign,
     Unit,
 )
-from fiberphotometry.events import summarize_event_windows
-from fiberphotometry.io.ibl import from_ibl_tables
-from fiberphotometry.multiverse import (
+from fipha.events import summarize_event_windows
+from fipha.io.ibl import from_ibl_tables
+from fipha.multiverse import (
     ChoiceRef,
     DecisionAlternative,
     DecisionNode,
     MultiverseSpec,
     run_multiverse,
 )
-from fiberphotometry.planning import create_analysis_plan
+from fipha.planning import create_analysis_plan
 
 SESSIONS = (
     ("fip_13", "b6913f93-e7b1-4faf-ab4d-54261b0e31ea"),
@@ -209,7 +209,7 @@ def build_spec(inputs: tuple[RecordingInput, ...]) -> MultiverseSpec:
 
 
 def main() -> None:
-    with tempfile.TemporaryDirectory(prefix="fiberphotometry-ibl-multiverse-") as cache:
+    with tempfile.TemporaryDirectory(prefix="fipha-ibl-multiverse-") as cache:
         inputs = load_inputs(Path(cache))
         result = run_multiverse(build_spec(inputs), inputs)
     repository = Path(__file__).resolve().parents[1]

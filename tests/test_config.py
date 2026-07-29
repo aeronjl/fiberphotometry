@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from test_workflow import _sessions
 
-from fiberphotometry import EventAnalysisConfig
+from fipha import EventAnalysisConfig
 
 
 def test_toml_config_builds_and_runs_reproducibly() -> None:

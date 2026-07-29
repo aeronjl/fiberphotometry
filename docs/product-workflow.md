@@ -6,7 +6,7 @@ This is the main workflow: take labelled sessions to a dF/F event contrast
 between two named conditions, with the animal as the experimental unit.
 
 Scientists supply sessions, event times and categorical conditions.
-FiberPhotometry runs the reference-channel correction to dF/F, constructs the
+fipha runs the reference-channel correction to dF/F, constructs the
 animal/session/event hierarchy, exposes the required inferential assumptions
 before execution, and produces a self-contained HTML evidence report.
 
@@ -15,7 +15,7 @@ If you have not produced a dF/F trace yet, start with
 you already have `recording` objects and event times.
 
 ```python
-from fiberphotometry import EventAnalysis, EventSession, Preprocessing
+from fipha import EventAnalysis, EventSession, Preprocessing
 
 session = EventSession.from_arrays(
     recording,
@@ -103,7 +103,7 @@ time-series inference.
 `EventAnalysisConfig.from_toml(...)` validates a versioned analysis contract and
 binds its SHA-256 to the JSON and HTML artifacts. The file records preprocessing,
 windows, contrast, intent, randomization status, quality gates, and acknowledged
-assumptions. See [`feedback-analysis.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/feedback-analysis.toml).
+assumptions. See [`feedback-analysis.toml`](https://github.com/aeronjl/fipha/blob/main/examples/feedback-analysis.toml).
 
 The complete public-data path is documented in the
 [IBL import-to-report tutorial](tutorials/ibl-feedback-report.md).

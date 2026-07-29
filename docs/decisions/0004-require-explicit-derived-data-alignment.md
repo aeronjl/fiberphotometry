@@ -4,8 +4,8 @@
 - Date: 2026-07-26
 - Decision owners: project maintainers
 - Related protocol/report:
-  [DANDI:000351 v0.1](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000351-parity-v0.1.md),
-  [DANDI:000351 v0.2](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000351-parity-v0.2.md)
+  [DANDI:000351 v0.1](https://github.com/aeronjl/fipha/blob/main/research/dandi-000351-parity-v0.1.md),
+  [DANDI:000351 v0.2](https://github.com/aeronjl/fipha/blob/main/research/dandi-000351-parity-v0.2.md)
 
 ## Context
 

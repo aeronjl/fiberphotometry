@@ -9,7 +9,7 @@ from typing import Any
 
 from figure_style import apply_publication_style, save_figure
 
-from fiberphotometry.plotting import SpecificationCurveEntry, plot_specification_curve
+from fipha.plotting import SpecificationCurveEntry, plot_specification_curve
 
 
 def load_entries(payload: dict[str, Any]) -> tuple[SpecificationCurveEntry, ...]:

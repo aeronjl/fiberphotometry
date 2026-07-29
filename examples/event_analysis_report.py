@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry import EventAnalysis, EventSession, Preprocessing, make_recording
+from fipha import EventAnalysis, EventSession, Preprocessing, make_recording
 
 
 def main() -> None:

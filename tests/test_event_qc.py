@@ -1,5 +1,5 @@
-from fiberphotometry import assess_event_confounds
-from fiberphotometry.simulate import simulate_recording
+from fipha import assess_event_confounds
+from fipha.simulate import simulate_recording
 
 
 def test_event_qc_flags_event_correlated_reference() -> None:

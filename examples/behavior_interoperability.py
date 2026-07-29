@@ -6,9 +6,9 @@ from typing import Any
 
 import numpy as np
 
-from fiberphotometry import ObservationTable
-from fiberphotometry.encoding import EncodingSession
-from fiberphotometry.interoperability import (
+from fipha import ObservationTable
+from fipha.encoding import EncodingSession
+from fipha.interoperability import (
     ClockPulseMatches,
     ClockSynchronizationSpec,
     annotations_from_boris,
@@ -17,7 +17,7 @@ from fiberphotometry.interoperability import (
     pose_from_deeplabcut,
     pose_from_sleap,
 )
-from fiberphotometry.unspool import prepare_unspool_study
+from fipha.unspool import prepare_unspool_study
 
 
 class DLCResult:

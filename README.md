@@ -1,7 +1,8 @@
-# FiberPhotometry
+# fipha
 
-Composable, provenance-aware fiber photometry analysis in Python — from raw
-signals to dF/F to inference across animals, with every choice recorded.
+Auditable fiber photometry analysis in Python — dF/F, peri-event and transient
+analysis, and NWB provenance from raw signals to inference across animals, with
+every choice recorded.
 
 > **Status: pre-alpha.** Never released. `0.1.0.dev0`, installable only from Git.
 > The API and numerical methods are **not yet validated for scientific use**.
@@ -11,18 +12,18 @@ signals to dF/F to inference across animals, with every choice recorded.
 Not on PyPI. Install from the repository:
 
 ```bash
-pip install "fiberphotometry @ git+https://github.com/aeronjl/fiberphotometry.git"
+pip install "fipha @ git+https://github.com/aeronjl/fipha.git"
 ```
 
 Format readers, plotting, and statistics are opt-in extras (`acquisition`,
 `tdt`, `nwb`, `behavior`, `plots`, `stats`). See the
-[install guide](https://aeronjl.github.io/fiberphotometry/getting-started/install/).
+[install guide](https://aeronjl.github.io/fipha/getting-started/install/).
 
 ## Quick start
 
 ```python
 import numpy as np
-from fiberphotometry import (
+from fipha import (
     align_events,
     assess_recording,
     make_recording,
@@ -47,8 +48,8 @@ epochs = align_events(  # events remain a labelled dimension
 
 Runnable, self-contained versions using synthetic data:
 
-- [Your first dF/F trace](https://aeronjl.github.io/fiberphotometry/getting-started/first-dff-trace/)
-- [Your first peri-event plot](https://aeronjl.github.io/fiberphotometry/getting-started/first-peri-event-plot/)
+- [Your first dF/F trace](https://aeronjl.github.io/fipha/getting-started/first-dff-trace/)
+- [Your first peri-event plot](https://aeronjl.github.io/fipha/getting-started/first-peri-event-plot/)
 
 ## The product workflow
 
@@ -56,7 +57,7 @@ The scientist-facing API turns labelled sessions into an auditable event contras
 and a self-contained HTML evidence report:
 
 ```python
-from fiberphotometry import EventAnalysis, EventSession, Preprocessing
+from fipha import EventAnalysis, EventSession, Preprocessing
 
 session = EventSession.from_arrays(recording, event_times, conditions)
 study = EventAnalysis(
@@ -79,8 +80,8 @@ inferential assumptions on the scientist's behalf. See the
 The same analysis can be driven from a TOML project file rather than Python:
 
 ```bash
-fiberphotometry inspect project.toml
-fiberphotometry run project.toml
+fipha inspect project.toml
+fipha run project.toml
 ```
 
 See the [configuration-first CLI](docs/cli.md). Ordinary lab exports enter through
@@ -115,9 +116,9 @@ This project provides:
 - simulation and public-data benchmarks with known or independently checkable
   answers.
 
-**[Read the documentation](https://aeronjl.github.io/fiberphotometry/)** to choose
+**[Read the documentation](https://aeronjl.github.io/fipha/)** to choose
 a workflow by scientific question, browse the
-[capability matrix](https://aeronjl.github.io/fiberphotometry/methods/capability-matrix/),
+[capability matrix](https://aeronjl.github.io/fipha/methods/capability-matrix/),
 and run worked public-data examples.
 
 The prospective v0.1 compatibility boundary is documented in the
@@ -181,7 +182,7 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing scientific methods.
 
 ## Scientific position
 
-FiberPhotometry will not market a single correction or inferential method as
+fipha will not market a single correction or inferential method as
 universally correct. Defaults must be justified against simulations, controls,
 and public datasets; outputs must expose assumptions and diagnostics. Raw data is
 never silently overwritten.

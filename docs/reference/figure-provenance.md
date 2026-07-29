@@ -11,7 +11,7 @@ Worked examples separately declare their relationship to exact
 ## Generated conceptual figures
 
 The following SVGs are generated deterministically by
-[`scripts/plot_documentation_figures.py`](https://github.com/aeronjl/fiberphotometry/blob/main/scripts/plot_documentation_figures.py):
+[`scripts/plot_documentation_figures.py`](https://github.com/aeronjl/fipha/blob/main/scripts/plot_documentation_figures.py):
 
 | Figure | Purpose |
 |---|---|

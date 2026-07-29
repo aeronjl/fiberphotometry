@@ -31,7 +31,7 @@ session_start_time = 2026-01-04T12:00:00Z
 
 [nwb]
 session_description = "Synthetic CLI fiber-photometry session"
-identifier_prefix = "fiberphotometry-example"
+identifier_prefix = "fipha-example"
 
 [recording]
 time_column = "time"

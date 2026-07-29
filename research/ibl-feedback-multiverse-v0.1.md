@@ -6,9 +6,9 @@ Correctness was observed rather than randomized and can covary with stimulus,
 movement, expectation, and trial history.
 
 The protocol was frozen before aggregate multiverse execution in
-[`benchmarks/protocol-ibl-multiverse-v0.1.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-multiverse-v0.1.md).
+[`benchmarks/protocol-ibl-multiverse-v0.1.md`](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-ibl-multiverse-v0.1.md).
 The compact numerical artifact is
-[`benchmarks/ibl-feedback-multiverse-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-feedback-multiverse-v0.1.json),
+[`benchmarks/ibl-feedback-multiverse-v0.1.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/ibl-feedback-multiverse-v0.1.json),
 and `scripts/run_ibl_feedback_multiverse.py` recreates the complete materialized
 pipelines and provenance from public data.
 
@@ -66,6 +66,6 @@ that identifiability problem, the observational correctness contrast, or the
 four-animal sample size.
 
 The prospectively frozen expansion protocol is
-[`benchmarks/protocol-ibl-feedback-prospective-v0.2.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-feedback-prospective-v0.2.md).
+[`benchmarks/protocol-ibl-feedback-prospective-v0.2.md`](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-ibl-feedback-prospective-v0.2.md).
 It cannot be activated by counting the existing animals' repeated sessions as new
 replicates; it has an explicit new-animal readiness gate.

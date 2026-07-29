@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry import (
+from fipha import (
     TabularChannel,
     TabularEventColumn,
     TabularEventSchema,
@@ -14,7 +14,7 @@ from fiberphotometry import (
     load_tabular_input,
     load_tabular_recording,
 )
-from fiberphotometry.io.tabular import inspect_loaded_tabular_input
+from fipha.io.tabular import inspect_loaded_tabular_input
 
 
 def _write_sources(tmp_path):

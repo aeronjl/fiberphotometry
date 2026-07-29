@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.sensor_kinetics import (
+from fipha.sensor_kinetics import (
     DifferenceOfExponentialsModel,
     KineticDeconvolutionSpec,
     KineticForwardSpec,

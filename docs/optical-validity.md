@@ -12,7 +12,7 @@ Optical experiments need two safeguards that answer different questions:
 1. **Which samples were prospectively excluded because stimulation occurred?**
 2. **Does the recorded optical evidence support the intended interpretation?**
 
-FiberPhotometry keeps those questions separate. A pulse-derived mask cannot expand or
+fipha keeps those questions separate. A pulse-derived mask cannot expand or
 shrink after the signal is inspected, while recovery, saturation, wavelength, and
 reference-channel diagnostics remain visible evidence alongside the analysis.
 
@@ -31,7 +31,7 @@ Declare pulses in the same clock as the photometry samples, then choose the fixe
 pre/post exclusion policy before inspecting outcomes:
 
 ```python
-from fiberphotometry.optogenetics import (
+from fipha.optogenetics import (
     OptogeneticMaskSpec,
     StimulationPulse,
     build_optogenetic_artifact_mask,
@@ -73,7 +73,7 @@ Observed recovery is useful, but allowing it to determine the exclusion would ma
 the analyzed denominator depend on the outcome. Run it as a separate assessment:
 
 ```python
-from fiberphotometry.optogenetics import (
+from fipha.optogenetics import (
     OptogeneticRecoverySpec,
     assess_optogenetic_artifacts,
 )
@@ -118,7 +118,7 @@ context-specific. The package therefore provides an open registry rather than a
 closed enum or a silently updated table of built-in sensor facts.
 
 ```python
-from fiberphotometry.sensor_validity import (
+from fipha.sensor_validity import (
     SensorKinetics,
     SensorProfile,
     SensorRegistry,
@@ -160,8 +160,8 @@ interpretation contract.
 Pair the profile with explicit channel identity and preprocessing provenance:
 
 ```python
-from fiberphotometry.multisignal import ChannelIdentity
-from fiberphotometry.sensor_validity import (
+from fipha.multisignal import ChannelIdentity
+from fipha.sensor_validity import (
     SensorChannelAssignment,
     SensorValiditySpec,
     assess_sensor_validity,

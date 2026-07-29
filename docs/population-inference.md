@@ -1,6 +1,6 @@
 # Animal estimates and population contrasts v0.1
 
-FiberPhotometry separates the measurements used to estimate an animal from the
+fipha separates the measurements used to estimate an animal from the
 animals used to estimate a population. This boundary is reusable across scalar
 responses and vector outcomes such as peri-event curves.
 
@@ -41,7 +41,7 @@ are contrasted with a Welch standard error, while bootstrap draws resample anima
 separately within each group.
 
 ```python
-from fiberphotometry.population import (
+from fipha.population import (
     PopulationContrastSpec,
     PopulationUnitEstimate,
     infer_population_contrast,

@@ -1,6 +1,6 @@
 # Animal-level peri-event inference v0.1
 
-FiberPhotometry can add a time-resolved evidence lane to the existing scalar event
+fipha can add a time-resolved evidence lane to the existing scalar event
 contrast without treating events as independent replicates. The result retains the
 complete session-to-animal evidence chain rather than only the final population
 curve.
@@ -11,7 +11,7 @@ curve.
 </figure>
 
 ```python
-from fiberphotometry import EventAnalysis, PeriEventInferenceSpec
+from fipha import EventAnalysis, PeriEventInferenceSpec
 
 study = EventAnalysis(
     sessions,

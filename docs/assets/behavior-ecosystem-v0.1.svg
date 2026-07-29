@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="610" viewBox="0 0 1200 610" role="img" aria-labelledby="title desc">
   <title id="title">Behavior and photometry ecosystem boundaries</title>
-  <desc id="desc">DeepLabCut and SLEAP feed pose trajectories and covariates. Keypoint-MoSeq and BORIS feed point events and intervals. FiberPhotometry relates them to optical signals and passes summaries to Unspool.</desc>
+  <desc id="desc">DeepLabCut and SLEAP feed pose trajectories and covariates. Keypoint-MoSeq and BORIS feed point events and intervals. fipha relates them to optical signals and passes summaries to Unspool.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#f8f7ff"/>
@@ -75,7 +75,7 @@
 
   <g filter="url(#shadow)">
     <rect x="706" y="196" width="280" height="218" rx="22" class="core"/>
-    <text x="739" y="241" class="core-label">FiberPhotometry</text>
+    <text x="739" y="241" class="core-label">fipha</text>
     <text x="739" y="278" class="core-body">optical identity and QC</text>
     <text x="739" y="307" class="core-body">preprocessing provenance</text>
     <text x="739" y="336" class="core-body">neural event alignment</text>

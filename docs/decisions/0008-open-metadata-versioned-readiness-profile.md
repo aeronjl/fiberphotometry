@@ -16,7 +16,7 @@ Project files may contain an open `[metadata]` table. All TOML-native fields are
 retained in normalized project provenance, including fields the current package
 does not recognize.
 
-A separately versioned `fiberphotometry-metadata-v0.1` profile evaluates a small
+A separately versioned `fipha-metadata-v0.1` profile evaluates a small
 set of fields for three distinct targets: executable analysis, NWB export, and
 publication/reuse. Checks are explicit and actionable. Unrecognized top-level
 fields are reported but never discarded or treated as errors.

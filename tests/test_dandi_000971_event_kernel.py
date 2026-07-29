@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry.encoding import EncodingSession
+from fipha.encoding import EncodingSession
 
 
 def _module():

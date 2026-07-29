@@ -19,7 +19,7 @@ analysis result was written; preflight and metadata remain available.
 
 ## Standalone NWB trust boundary
 
-The reader recovers FiberPhotometry JSON scratch datasets through PyNWB and
+The reader recovers fipha JSON scratch datasets through PyNWB and
 requires project provenance plus either a primary analysis or multiverse result.
 It computes the file SHA-256 for identification, but cannot compare it with an
 external authority. Consequently `manifest_verified` and `EvidenceFile.verified`

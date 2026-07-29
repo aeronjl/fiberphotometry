@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry import (
+from fipha import (
     BaselineDFFOperation,
     Contrast,
     Estimand,
@@ -21,7 +21,7 @@ from fiberphotometry import (
     Unit,
     make_recording,
 )
-from fiberphotometry.multiverse import (
+from fipha.multiverse import (
     ChoiceRef,
     CompatibilityRule,
     DecisionAlternative,
@@ -33,7 +33,7 @@ from fiberphotometry.multiverse import (
     UniverseResult,
     materialize_multiverse,
 )
-from fiberphotometry.planning import create_analysis_plan
+from fipha.planning import create_analysis_plan
 
 
 def _inputs() -> tuple[RecordingInput, ...]:

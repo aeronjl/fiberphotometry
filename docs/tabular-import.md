@@ -1,6 +1,6 @@
 # Generic tabular import v0.1
 
-FiberPhotometry accepts ordinary wide CSV and TSV files without requiring pandas.
+fipha accepts ordinary wide CSV and TSV files without requiring pandas.
 Import is deliberately schema-first: filenames, column order, correlation, and
 alternation never establish which values are signal or reference measurements.
 
@@ -12,7 +12,7 @@ signal column. Reference correction is available only when every channel also ha
 an explicitly named reference column.
 
 ```python
-from fiberphotometry import (
+from fipha import (
     TabularChannel,
     TabularRecordingSchema,
     inspect_tabular_recording,
@@ -58,7 +58,7 @@ Event rows remain distinct from signal samples. Event identifiers must be unique
 within a session, and metadata conversion is declared rather than guessed.
 
 ```python
-from fiberphotometry import (
+from fipha import (
     TabularEventColumn,
     TabularEventSchema,
     inspect_tabular_input,

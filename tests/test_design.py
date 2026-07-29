@@ -1,6 +1,6 @@
 import pytest
 
-from fiberphotometry.design import (
+from fipha.design import (
     Factor,
     ObservationTable,
     StudyDesign,

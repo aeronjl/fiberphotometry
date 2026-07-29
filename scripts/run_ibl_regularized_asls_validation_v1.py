@@ -15,9 +15,9 @@ import numpy as np
 import pandas as pd
 from one.api import ONE
 
-from fiberphotometry.events import summarize_event_windows
-from fiberphotometry.io.ibl import from_ibl_tables
-from fiberphotometry.preprocess import baseline_dff, resample_recording
+from fipha.events import summarize_event_windows
+from fipha.io.ibl import from_ibl_tables
+from fipha.preprocess import baseline_dff, resample_recording
 
 PROTOCOL_SHA256 = "f7a448ee82779d1332dea86f748536bb36a3f1845d116dcd2b7f8f56ea9f7bcf"
 METHODS = (
@@ -144,7 +144,7 @@ def _run_session(
         reference_wavelength=None,
     )
     regularized = resample_recording(recording, rate_hz="median", max_gap_factor=1.5)
-    operation = json.loads(regularized.attrs["fiberphotometry_operations"])[-1]
+    operation = json.loads(regularized.attrs["fipha_operations"])[-1]
     event_times, conditions = _events(trials, row)
     processed: dict[str, Any] = {}
     method_records: dict[str, Any] = {}

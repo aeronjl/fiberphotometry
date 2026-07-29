@@ -12,9 +12,9 @@ from urllib.request import urlopen
 import numpy as np
 from scipy.signal import butter, sosfiltfilt
 
-from fiberphotometry.io.dandi import resolve_dandi_download_url
-from fiberphotometry.io.dandi_000971 import from_dandi_000971_nwb
-from fiberphotometry.preprocess import baseline_dff, reference_dff
+from fipha.io.dandi import resolve_dandi_download_url
+from fipha.io.dandi_000971 import from_dandi_000971_nwb
+from fipha.preprocess import baseline_dff, reference_dff
 
 
 def main() -> None:
@@ -27,7 +27,7 @@ def main() -> None:
     parser.add_argument(
         "--cache-dir",
         type=Path,
-        default=Path.home() / "Library/Caches/fiberphotometry/dandi-000971",
+        default=Path.home() / "Library/Caches/fipha/dandi-000971",
     )
     parser.add_argument(
         "--output",

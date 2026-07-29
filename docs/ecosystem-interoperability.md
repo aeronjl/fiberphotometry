@@ -1,6 +1,6 @@
 # Behavioral ecosystem interoperability
 
-FiberPhotometry does not need to rediscover behavior to relate behavior to neural
+fipha does not need to rediscover behavior to relate behavior to neural
 signals. It needs a loss-aware boundary to tools that already estimate pose,
 discover behavioral states, or record an ethogram.
 
@@ -8,23 +8,23 @@ discover behavioral states, or record an ethogram.
     Typed in-memory and file adapters are implemented. Checksum-pinned official
     SLEAP and BORIS fixtures pass; DeepLabCut and Keypoint-MoSeq currently have
     documented-schema fixtures only. See the
-    [validation matrix](https://github.com/aeronjl/fiberphotometry/blob/main/research/interoperability-validation-v0.1.md).
+    [validation matrix](https://github.com/aeronjl/fipha/blob/main/research/interoperability-validation-v0.1.md).
 
 <figure class="doc-figure doc-figure--wide">
-  <img src="../assets/behavior-ecosystem-v0.1.svg" alt="DeepLabCut and SLEAP pose trajectories, Keypoint-MoSeq state bouts, and BORIS annotations enter typed pose, covariate, point-event, and interval boundaries. FiberPhotometry relates them to neural signals and exports trial summaries to Unspool for longitudinal modelling.">
-  <figcaption><strong>Each package keeps the job it is good at.</strong> Pose estimators retain keypoints and confidence, behavior tools retain point-versus-state semantics, FiberPhotometry owns neural alignment and inference, and Unspool owns longitudinal clocks and models.</figcaption>
+  <img src="../assets/behavior-ecosystem-v0.1.svg" alt="DeepLabCut and SLEAP pose trajectories, Keypoint-MoSeq state bouts, and BORIS annotations enter typed pose, covariate, point-event, and interval boundaries. fipha relates them to neural signals and exports trial summaries to Unspool for longitudinal modelling.">
+  <figcaption><strong>Each package keeps the job it is good at.</strong> Pose estimators retain keypoints and confidence, behavior tools retain point-versus-state semantics, fipha owns neural alignment and inference, and Unspool owns longitudinal clocks and models.</figcaption>
 </figure>
 
 ## What each package owns
 
-| Package or tool | Owns | FiberPhotometry consumes |
+| Package or tool | Owns | fipha consumes |
 |---|---|---|
 | DeepLabCut | markerless pose inference, scorer and individual identity | keypoint coordinates and likelihood by video frame |
 | SLEAP | single- and multi-animal pose inference and tracking | node coordinates, track identity and point scores |
 | movement | pose input/output across tools, kinematics, regions of interest | its `poses` dataset, via `pose_from_movement()` |
 | Keypoint-MoSeq | unsupervised behavioral state discovery | frame-level syllable labels, run-length encoded as bouts |
 | BORIS | human ethogram annotation | distinct point events and state intervals |
-| FiberPhotometry | optical signal identity, QC, preprocessing, neural alignment and inference | the typed boundaries below |
+| fipha | optical signal identity, QC, preprocessing, neural alignment and inference | the typed boundaries below |
 | Unspool | longitudinal behavioral clocks, models and prospective validation | trial-level neural summaries with explicit subject/session/trial coordinates |
 
 This division follows the scientific capabilities of the source tools. DeepLabCut
@@ -98,7 +98,7 @@ x/y/likelihood triplet.
 ```python
 from importlib.metadata import version
 
-from fiberphotometry.interoperability import pose_from_deeplabcut_file
+from fipha.interoperability import pose_from_deeplabcut_file
 
 pose = pose_from_deeplabcut_file(
     "sessionDLC_resnet50.h5",
@@ -124,7 +124,7 @@ dimension attributes, so the caller must declare them; Python-native and
 MATLAB-compatible presets use different axis orders.
 
 ```python
-from fiberphotometry.interoperability import pose_from_sleap_analysis_h5
+from fipha.interoperability import pose_from_sleap_analysis_h5
 
 pose = pose_from_sleap_analysis_h5(
     "predictions.analysis.h5",
@@ -141,7 +141,7 @@ SLEAP point scores are confidence-like values, not guaranteed probabilities. An
 official legacy fixture contains scores above one, so only non-negativity is
 assumed; thresholds must be calibrated to the producing SLEAP version and model.
 
-SLEAP also exports NWB through `ndx-pose`. FiberPhotometry now provides native
+SLEAP also exports NWB through `ndx-pose`. fipha now provides native
 inspection, explicit estimator selection, 2D/3D import, schema-valid export, and a
 tested file round trip while reporting device/video links that cannot be recreated
 without destination objects. See the
@@ -152,12 +152,12 @@ without destination objects. See the
 [`movement`](https://github.com/neuroinformatics-unit/movement) is the maintained
 community package for pose input and output, built by the Neuroinformatics Unit on
 the same xarray substrate this package uses. It is BSD-3-Clause and actively
-released. FiberPhotometry consumes its output rather than competing with it:
+released. fipha consumes its output rather than competing with it:
 
 ```python
 from movement.io import load_poses
 
-from fiberphotometry.interoperability import pose_from_movement
+from fipha.interoperability import pose_from_movement
 
 dataset = load_poses.from_dlc_file("sessionDLC_resnet50.h5", fps=30.0)
 pose = pose_from_movement(
@@ -170,7 +170,7 @@ pose = pose_from_movement(
 speed = pose.speed(minimum_confidence=0.9)
 ```
 
-This gives access to `movement`'s readers that FiberPhotometry does not implement,
+This gives access to `movement`'s readers that fipha does not implement,
 including Anipose, Lightning Pose and its NWB path. `pose_from_movement()`
 duck-types on the xarray interface and never imports `movement`, so it adds no
 dependency and no Python version floor.
@@ -190,7 +190,7 @@ Python 3.12.13:
 Three things in this boundary have no counterpart in `movement`, and stay here:
 
 - **Ethogram and annotation types.** `movement` covers poses and bounding boxes;
-  point events and behavioral intervals are FiberPhotometry types.
+  point events and behavioral intervals are fipha types.
 - **Foreign-clock alignment.** `movement` interpolates gaps along a pose's own time
   axis. It has no clock identity, no synchronisation fit and no lineage, so
   `fit_clock_synchronization()` and `BehaviorCovariate.aligned_to()` remain here.
@@ -215,7 +215,7 @@ bit-for-bit. See
 directly. Each interval retains the full duration of one uninterrupted state.
 
 ```python
-from fiberphotometry.interoperability import annotations_from_moseq_results_h5
+from fipha.interoperability import annotations_from_moseq_results_h5
 
 states = annotations_from_moseq_results_h5(
     "moseq-project/model-a/results.h5",
@@ -261,7 +261,7 @@ handled directly. Invalid, unmatched or unknown rows are rejected.
 
 ## From behavior to neural and longitudinal questions
 
-The immediate FiberPhotometry composition is:
+The immediate fipha composition is:
 
 1. transform pose into a declared covariate, such as confidence-gated speed;
 2. synchronize it to the photometry clock from explicit matched pulses and retain
@@ -282,12 +282,12 @@ neural summaries and across-session comparability evidence exist.
 
 | Priority | Missing ecosystem capability | Likely home |
 |---|---|---|
-| P0 | extend the now-complete one-version fixture matrix across a second released version and one real camera-to-photometry synchronization record | adapter validation in FiberPhotometry |
-| P1 | bounded remote `ndx-pose` series access and a real camera-to-photometry synchronization fixture | FiberPhotometry I/O and validation |
-| P1 | broaden interval-policy fixtures to real multi-label annotations and a second source-tool version | FiberPhotometry interoperability validation |
-| P1 | multi-animal identity-switch diagnostics at the neural-alignment boundary | source-tool QC plus FiberPhotometry preflight |
+| P0 | extend the now-complete one-version fixture matrix across a second released version and one real camera-to-photometry synchronization record | adapter validation in fipha |
+| P1 | bounded remote `ndx-pose` series access and a real camera-to-photometry synchronization fixture | fipha I/O and validation |
+| P1 | broaden interval-policy fixtures to real multi-label annotations and a second source-tool version | fipha interoperability validation |
+| P1 | multi-animal identity-switch diagnostics at the neural-alignment boundary | source-tool QC plus fipha preflight |
 | P1 | versioned behavioral interchange artifact with hashes and confidence semantics | shared package after a second consumer adopts it |
-| P2 | adapters for SimBA, B-SOiD and user-supplied state probabilities | thin FiberPhotometry adapters |
+| P2 | adapters for SimBA, B-SOiD and user-supplied state probabilities | thin fipha adapters |
 
 A gap should become a separate library only when it has an independent object
 model, at least two consuming packages, and useful validation outside photometry.

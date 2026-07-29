@@ -18,7 +18,7 @@ normalized estimands.
 
 ## Decision
 
-FiberPhotometry owns a typed, outcome-blind across-session comparability preflight.
+fipha owns a typed, outcome-blind across-session comparability preflight.
 
 - Analysts declare one record per subject, session, and logical neural series.
 - Sensor, site, output-variable, and unit changes are refusal states.

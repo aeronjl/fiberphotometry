@@ -1,19 +1,19 @@
 # TDT import contract v0.1
 
-FiberPhotometry reads TDT blocks through the official Python SDK and maps only
+fipha reads TDT blocks through the official Python SDK and maps only
 declared data into the canonical recording/event boundary. Install the optional
 adapter with (the package is not on PyPI; see
 [Install](getting-started/install.md)):
 
 ```bash
-pip install "fiberphotometry[tdt] @ git+https://github.com/aeronjl/fiberphotometry.git"
+pip install "fipha[tdt] @ git+https://github.com/aeronjl/fipha.git"
 ```
 
 ## Mapping contract
 
 The official SDK represents continuous streams with `data`, `fs`, and
 `start_time`; multichannel arrays are selected with one-indexed channel numbers.
-Epoc stores provide `onset`, `offset`, and numeric `data` arrays. FiberPhotometry
+Epoc stores provide `onset`, `offset`, and numeric `data` arrays. fipha
 therefore requires these meanings to be explicit rather than assuming common
 store names such as `_465A` or `_405A`.
 
@@ -51,7 +51,7 @@ block = "data/Subject-Block-1"
 
 The remainder of the project file uses the same analysis, artifact, and optional
 NWB-export sections as a tabular project. See
-[`examples/tdt-project.template.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/tdt-project.template.toml) for
+[`examples/tdt-project.template.toml`](https://github.com/aeronjl/fipha/blob/main/examples/tdt-project.template.toml) for
 a fuller editable template.
 
 ## Validation and provenance
@@ -69,7 +69,7 @@ epoc arrays. Unselected stores are outside that fingerprint's stated scope.
 
 The implementation is covered by SDK-shaped fixtures and an opt-in,
 checksum-pinned integration against TDT's official `FiPho-180416` block. See the
-[validation record](https://github.com/aeronjl/fiberphotometry/blob/main/research/tdt-official-demo-validation.md). This validates a real SDK
+[validation record](https://github.com/aeronjl/fipha/blob/main/research/tdt-official-demo-validation.md). This validates a real SDK
 path, not every rig configuration or scientific store mapping.
 
 ## References

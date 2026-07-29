@@ -1,20 +1,20 @@
 import numpy as np
 import pytest
 
-from fiberphotometry.cross_spectral import coherence_phase, state_conditioned_coherence
-from fiberphotometry.multisignal import (
+from fipha.cross_spectral import coherence_phase, state_conditioned_coherence
+from fipha.multisignal import (
     ChannelIdentity,
     LaggedAssociationSpec,
     SignalPairMetadata,
     lagged_association,
 )
-from fiberphotometry.population import (
+from fipha.population import (
     PopulationContrastSpec,
     PopulationGroupAssignment,
     PopulationInteractionSpec,
     PopulationUnitEstimate,
 )
-from fiberphotometry.population_workflows import (
+from fipha.population_workflows import (
     curve_session_from_autocorrelation,
     curve_session_from_coherence,
     curve_session_from_lagged,
@@ -24,7 +24,7 @@ from fiberphotometry.population_workflows import (
     curve_sessions_from_state_psd,
     materialize_curve_population,
 )
-from fiberphotometry.spectral import (
+from fipha.spectral import (
     AutocorrelationSpec,
     SpectralAnalysisSpec,
     StateEpoch,

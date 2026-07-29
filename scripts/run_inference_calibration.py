@@ -6,7 +6,7 @@ import json
 
 import numpy as np
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     Factor,
@@ -15,7 +15,7 @@ from fiberphotometry import (
     Unit,
     hierarchical_bootstrap,
 )
-from fiberphotometry.inference import ResamplingPlan
+from fipha.inference import ResamplingPlan
 
 SCENARIOS = (
     "between_12_balanced",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/publication-manifest-attestation-v1.schema.json",
-  "title": "FiberPhotometry publication manifest attestation v1",
+  "$id": "https://github.com/aeronjl/fipha/schemas/publication-manifest-attestation-v1.schema.json",
+  "title": "fipha publication manifest attestation v1",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,7 +19,7 @@
     "project_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "signer_identity": {"type": "string", "minLength": 1, "pattern": "^\\S+$"},
     "signed_at_utc": {"type": "string", "format": "date-time"},
-    "namespace": {"const": "fiberphotometry-publication@aeronjl.github.io"},
+    "namespace": {"const": "fipha-publication@aeronjl.github.io"},
     "signature_method": {"const": "openssh"},
     "artifact_type": {"const": "publication_manifest_attestation"},
     "schema_version": {"const": "1"}

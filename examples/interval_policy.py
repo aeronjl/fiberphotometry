@@ -1,7 +1,7 @@
 """Apply an auditable bout policy before photometry encoding."""
 
-from fiberphotometry.interoperability import BehaviorAnnotations, BehaviorInterval
-from fiberphotometry.interval_policy import (
+from fipha.interoperability import BehaviorAnnotations, BehaviorInterval
+from fipha.interval_policy import (
     ContextualizeIntervals,
     FilterIntervals,
     IntervalPolicy,

@@ -5,16 +5,16 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from fiberphotometry import (
+from fipha import (
     TDTBlockSchema,
     TDTEpocEvents,
     TDTEpocValue,
     TDTStreamChannel,
     load_tdt_input,
 )
-from fiberphotometry.cli import run_project
-from fiberphotometry.io.tabular import inspect_loaded_tabular_input
-from fiberphotometry.project import TDTProjectConfig, load_project_config
+from fipha.cli import run_project
+from fipha.io.tabular import inspect_loaded_tabular_input
+from fipha.project import TDTProjectConfig, load_project_config
 
 
 def _schema() -> TDTBlockSchema:

@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,

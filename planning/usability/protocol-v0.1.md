@@ -4,7 +4,7 @@ Status: frozen before the first participant session.
 
 ## Question
 
-Can practicing fiber-photometry scientists use a standalone FiberPhotometry
+Can practicing fiber-photometry scientists use a standalone fipha
 robustness report to identify the scientific claim, unit boundaries, robustness,
 failures, and provenance accurately and without moderator assistance?
 

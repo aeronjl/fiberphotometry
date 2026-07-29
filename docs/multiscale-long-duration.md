@@ -30,7 +30,7 @@ inference.
 ## Declare scales and observables
 
 ```python
-from fiberphotometry.multiscale import (
+from fipha.multiscale import (
     MultiscaleContinuitySpec,
     MultiscaleSummarySpec,
     MultiscaleWindowSpec,
@@ -129,7 +129,7 @@ scales, metrics, and continuity policy.
 ## Condition on externally supplied states
 
 ```python
-from fiberphotometry.spectral import StateEpoch
+from fipha.spectral import StateEpoch
 
 epochs = (
     StateEpoch("exploration", 12.0, 48.5, epoch_id="bout-001"),
@@ -155,7 +155,7 @@ remain separate continuity runs. Samples outside supplied epochs are counted in
 Attach identity only after each session has been summarized:
 
 ```python
-from fiberphotometry.multiscale import (
+from fipha.multiscale import (
     MultiscaleAnimalInferenceSpec,
     MultiscaleStudySession,
     infer_multiscale_animals,

@@ -14,8 +14,8 @@ why the detector should be treated as a small multiverse rather than a button.
 ```python
 import numpy as np
 
-from fiberphotometry import make_recording
-from fiberphotometry.transients import TransientDetectionSpec, detect_transients
+from fipha import make_recording
+from fipha.transients import TransientDetectionSpec, detect_transients
 
 rng = np.random.default_rng(4)
 time = np.arange(0, 120, 0.02)
@@ -88,7 +88,7 @@ session. They remain **descriptive transient summaries**. Do not relabel them as
 tonic neurotransmitter concentration without an independently justified model.
 
 The first public-data pass is now complete. Read the
-[DANDI:000251 retained result](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000251-transient-results-v0.1.md): the
+[DANDI:000251 retained result](https://github.com/aeronjl/fipha/blob/main/research/dandi-000251-transient-results-v0.1.md): the
 universes disagree strongly, and only three of eight show enrichment in the
 pre-existing post-teleport response window. Because those files contain archived
 dF/F rather than raw reference channels, raw-preprocessing and manual-annotation

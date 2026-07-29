@@ -1,13 +1,13 @@
 # NWB data model
 
-FiberPhotometry reads and writes the community NWB data model for fiber
+fipha reads and writes the community NWB data model for fiber
 photometry: [`ndx-fiber-photometry`](https://github.com/catalystneuro/ndx-fiber-photometry)
 from CatalystNeuro, which is registered in the NWB Extensions Catalog, layered on
 [`ndx-ophys-devices`](https://github.com/catalystneuro/ndx-ophys-devices), and
 which deprecates the older `ndx-photometry`. The package does not define a private
 photometry schema and does not encode structured metadata into any free-text field.
 
-Install the optional dependencies with `pip install 'fiberphotometry[nwb]'`.
+Install the optional dependencies with `pip install 'fipha[nwb]'`.
 
 ## What is written
 
@@ -61,7 +61,7 @@ from datetime import datetime, timezone
 import numpy as np
 from pynwb import NWBFile
 
-from fiberphotometry import (
+from fipha import (
     NWBAcquisitionMetadata,
     NWBChannelMetadata,
     NWBDeviceMetadata,
@@ -150,10 +150,10 @@ Channel labels and preprocessing provenance are written to two scratch
 
 | Scratch table | Columns | Contents |
 |---|---|---|
-| `fiberphotometry_series_channels` | `series_name`, `channel_index`, `channel_name` | package channel labels, which are not the same thing as `location` when two wavelengths share one fiber |
-| `fiberphotometry_series_attributes` | `series_name`, `key`, `value` | recording attributes, including source hashes, `processing_stage`, the operation ledger and `source_variable` |
+| `fipha_series_channels` | `series_name`, `channel_index`, `channel_name` | package channel labels, which are not the same thing as `location` when two wavelengths share one fiber |
+| `fipha_series_attributes` | `series_name`, `key`, `value` | recording attributes, including source hashes, `processing_stage`, the operation ledger and `source_variable` |
 
-`fiberphotometry.io.nwb.series_provenance(nwbfile, series_name)` returns the second
+`fipha.io.nwb.series_provenance(nwbfile, series_name)` returns the second
 table as a dictionary. Subject and session are read from `NWBFile.subject` and
 `NWBFile.session_id` first, and only then from these tables.
 
@@ -161,21 +161,13 @@ table as a dictionary. Subject and session are read from `NWBFile.subject` and
 
 `from_nwb_series()` accepts an `ndx-fiber-photometry` response series or a core
 `TimeSeries`. Channel labels are resolved in this order: the
-`fiberphotometry_series_channels` scratch table, the legacy JSON comment document,
-the `location` column of the linked `FiberPhotometryTable`, then positional
-defaults. When a table region is present, the full row contents are retained on the
-returned dataset as `attrs["ndx_fiber_photometry_channels"]`.
+`fipha_series_channels` scratch table, the `location` column of the linked
+`FiberPhotometryTable`, then positional defaults. When a table region is present,
+the full row contents are retained on the returned dataset as
+`attrs["ndx_fiber_photometry_channels"]`.
 
-`fiberphotometry.io.dandi.validate_remote_nwb_asset()` discovers response series by
+`fipha.io.dandi.validate_remote_nwb_asset()` discovers response series by
 `isinstance` against the imported extension class, not by class name.
-
-!!! warning "Deprecated: `fiberphotometry-core-nwb-v1`"
-    Releases before this one wrote a private JSON document into the `comments`
-    field of a core `TimeSeries`, tagged `fiberphotometry-core-nwb-v1`. That schema
-    was not validated by NWB Inspector, not indexed by DANDI and not readable by
-    NeuroConv. It is no longer written. `from_nwb_series()` still reads it, so
-    existing files keep loading, and there is a regression test that proves it.
-    Re-export any file you intend to publish.
 
 ## Validation
 

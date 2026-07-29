@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     Factor,
@@ -17,7 +17,7 @@ from fiberphotometry import (
     Unit,
     hierarchical_bootstrap,
 )
-from fiberphotometry.inference import ResamplingPlan
+from fipha.inference import ResamplingPlan
 
 
 def main() -> None:
@@ -55,7 +55,7 @@ def main() -> None:
     print(
         json.dumps(
             {
-                "fiberphotometry": ours,
+                "fipha": ours,
                 "statsmodels": external,
                 "absolute_difference": abs(ours - external),
                 "pass": abs(ours - external) < 1e-10,

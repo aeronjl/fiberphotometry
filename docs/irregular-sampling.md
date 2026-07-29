@@ -17,7 +17,7 @@ percentile distance to a source sample. Original timestamps and values remain on
 the `source_time` dimension.
 
 The frozen smooth-signal benchmark is
-[`irregular-resampling-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/irregular-resampling-v0.1.json).
+[`irregular-resampling-v0.1.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/irregular-resampling-v0.1.json).
 Across 20 and 50 Hz sampling, three signal frequencies, and 0.5% timestamp jitter,
 all six scenarios passed the prospectively stated 1% normalized-RMSE threshold.
 The worst result was 0.248% at a 3 Hz signal sampled at 20 Hz.
@@ -28,6 +28,6 @@ coverage near protected gaps, and a new held-out real-data comparison remain
 required before regularized AsLS is promoted beyond experimental status.
 
 The subsequent sharp-transient and missing-run study is reported in
-[transient-gap results v0.1.1](https://github.com/aeronjl/fiberphotometry/blob/main/research/transient-gap-results-v0.1.1.md). It supports
+[transient-gap results v0.1.1](https://github.com/aeronjl/fipha/blob/main/research/transient-gap-results-v0.1.1.md). It supports
 median-rate linear jitter regularization but rejects silent interpolation across
 missing event-window samples.

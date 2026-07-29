@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     Factor,
@@ -9,7 +9,7 @@ from fiberphotometry import (
     StudyDesign,
     Unit,
 )
-from fiberphotometry.inference import (
+from fipha.inference import (
     ResamplingPlan,
     exact_sign_flip_test,
     hierarchical_bootstrap,

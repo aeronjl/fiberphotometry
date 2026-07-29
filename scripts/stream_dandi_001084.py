@@ -1,6 +1,6 @@
 """Run the bounded DANDI 001084 NWB integration validation."""
 
-from fiberphotometry.io.dandi import validate_remote_nwb_asset
+from fipha.io.dandi import validate_remote_nwb_asset
 
 ASSET_ID = "e766feb5-f2e6-449a-a960-9562bf60d498"
 

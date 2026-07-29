@@ -3,7 +3,7 @@ from dataclasses import replace
 
 import numpy as np
 
-from fiberphotometry import (
+from fipha import (
     BaselineDFFOperation,
     Contrast,
     Estimand,
@@ -22,7 +22,7 @@ from fiberphotometry import (
     make_recording,
     run_pipeline,
 )
-from fiberphotometry.planning import create_analysis_plan
+from fipha.planning import create_analysis_plan
 
 
 def _inputs(*, missing: bool = False) -> tuple[RecordingInput, ...]:
@@ -138,7 +138,7 @@ def test_schema_v2_executes_tagged_preprocessing_sequence() -> None:
     result = run_pipeline(spec, _inputs())
 
     assert result.inference_executed
-    operations = result.processed_recordings[0].attrs["fiberphotometry_operations"]
+    operations = result.processed_recordings[0].attrs["fipha_operations"]
     assert [item["kind"] for item in json.loads(operations)] == [
         "resample",
         "lowpass_filter",
@@ -162,9 +162,7 @@ def test_schema_v2_executes_signal_only_rolling_comparator() -> None:
     result = run_pipeline(spec, _inputs())
 
     assert result.inference_executed
-    operation = json.loads(
-        result.processed_recordings[0].attrs["fiberphotometry_baseline_dff"]
-    )
+    operation = json.loads(result.processed_recordings[0].attrs["fipha_baseline_dff"])
     assert operation["method"] == "rolling_mean"
     assert operation["window_s"] == 4
     assert operation["published_comparator"] == "Pan-Vazquez et al. 2024"

@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 from one.api import ONE
 
-from fiberphotometry.io.ibl import from_ibl_tables
+from fipha.io.ibl import from_ibl_tables
 
 SESSIONS = (
     ("fip_13", "b6913f93-e7b1-4faf-ab4d-54261b0e31ea"),
@@ -21,7 +21,7 @@ SESSIONS = (
 
 def main() -> None:
     rows = []
-    with tempfile.TemporaryDirectory(prefix="fiberphotometry-ibl-flat-") as cache:
+    with tempfile.TemporaryDirectory(prefix="fipha-ibl-flat-") as cache:
         one = ONE(
             base_url="https://openalyx.internationalbrainlab.org",
             password="international",

@@ -26,12 +26,12 @@ analysis. The package implements the comparison as a strict layer over an existi
 [encoding multiverse](event-kernel-multiverse.md), because silently rebuilding
 models would sever the result from its declared alternatives and failure ledger.
 See the motivating literature synthesis in the
-[capability audit](https://github.com/aeronjl/fiberphotometry/blob/main/planning/literature-capability-audit-v0.2.md#3-which-overlapping-events-and-behaviors-explain-the-continuous-signal).
+[capability audit](https://github.com/aeronjl/fipha/blob/main/planning/literature-capability-audit-v0.2.md#3-which-overlapping-events-and-behaviors-explain-the-continuous-signal).
 
 ## Declare literal drops
 
 ```python
-from fiberphotometry.encoding_contributions import (
+from fipha.encoding_contributions import (
     PredictorFamilyContributionSpec,
     PredictorFamilyDropSpec,
     assess_predictor_family_contributions,

@@ -1,6 +1,6 @@
 # Auditable interval and bout policies
 
-External behavior tools discover or annotate bouts. FiberPhotometry should not
+External behavior tools discover or annotate bouts. fipha should not
 repeat that discovery, but scientists still need to state which bouts enter a neural
 analysis and how adjacent, long, contextual, or overlapping bouts are treated.
 
@@ -27,7 +27,7 @@ rule. Point events are carried through unchanged.
 ## Define an ordered policy
 
 ```python
-from fiberphotometry.interval_policy import (
+from fipha.interval_policy import (
     ContextualizeIntervals,
     FilterIntervals,
     IntervalPolicy,
@@ -68,7 +68,7 @@ result = apply_interval_policy(
 
 The tuple is executed exactly in the order written. Merging two short bouts can
 make their combined interval pass a minimum-duration filter; filtering first can
-remove both. Neither order is universally correct, so FiberPhotometry does not
+remove both. Neither order is universally correct, so fipha does not
 reorder or optimize the operations.
 
 ## Inspect the evidence before fitting
@@ -142,7 +142,7 @@ session = EncodingSession.from_arrays(
 
 This supplies physical edges, duration modulation, and normalized-progress kernels
 without turning policy decisions into behavior discovery. See the complete
-[`examples/interval_policy.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/interval_policy.py)
+[`examples/interval_policy.py`](https://github.com/aeronjl/fipha/blob/main/examples/interval_policy.py)
 and the [behavior-tool interoperability tutorial](tutorials/behavior-tool-interoperability.md).
 
 ## Current limits

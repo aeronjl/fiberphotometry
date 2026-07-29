@@ -7,13 +7,13 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from fiberphotometry import cli
-from fiberphotometry.cli import main
-from fiberphotometry.comparison import compare_project_evidence
-from fiberphotometry.io.nwb import series_provenance
-from fiberphotometry.project import TabularProjectConfig
-from fiberphotometry.publication import PUBLICATION_NAMESPACE
-from fiberphotometry.results import read_project_evidence
+from fipha import cli
+from fipha.cli import main
+from fipha.comparison import compare_project_evidence
+from fipha.io.nwb import series_provenance
+from fipha.project import TabularProjectConfig
+from fipha.publication import PUBLICATION_NAMESPACE
+from fipha.results import read_project_evidence
 
 
 def _project(
@@ -517,7 +517,7 @@ def test_publication_verification_rejects_manifest_tampering(tmp_path, capsys) -
     )
     manifest_path = output / "manifest.json"
     manifest = json.loads(manifest_path.read_text())
-    manifest["fiberphotometry_version"] = "tampered"
+    manifest["fipha_version"] = "tampered"
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
 
     assert (
@@ -538,7 +538,7 @@ def _archive_metadata(path) -> None:
     path.write_text(
         json.dumps(
             {
-                "artifact_type": "fiberphotometry_archive_metadata",
+                "artifact_type": "fipha_archive_metadata",
                 "schema_version": "1",
                 "title": "Reproducible reward photometry analysis",
                 "description": "Analysis evidence, provenance, and results.",
@@ -900,21 +900,21 @@ def test_cli_exports_valid_provenance_complete_nwb(tmp_path) -> None:
         }
         assert (
             "ProcessedFiberPhotometrySignal"
-            in nwbfile.processing["fiberphotometry"].data_interfaces
+            in nwbfile.processing["fipha"].data_interfaces
         )
         assert len(nwbfile.trials) == 4
         assert set(nwbfile.trials.colnames) >= {"event_id", "condition"}
         assert set(nwbfile.scratch) == {
-            "fiberphotometry_analysis",
-            "fiberphotometry_metadata_completeness",
-            "fiberphotometry_project",
-            "fiberphotometry_series_attributes",
-            "fiberphotometry_series_channels",
-            "fiberphotometry_session_preflight",
-            "fiberphotometry_session_qc",
+            "fipha_analysis",
+            "fipha_metadata_completeness",
+            "fipha_project",
+            "fipha_series_attributes",
+            "fipha_series_channels",
+            "fipha_session_preflight",
+            "fipha_session_qc",
         }
         provenance = series_provenance(nwbfile, "ProcessedFiberPhotometrySignal")
-        assert json.loads(provenance["fiberphotometry_operations"])
+        assert json.loads(provenance["fipha_operations"])
         assert provenance["source_variable"] == "dff"
     manifest = json.loads((output / "manifest.json").read_text())
     for path in paths:
@@ -945,22 +945,20 @@ def test_cli_exports_multiverse_provenance_without_duplicate_signals(tmp_path) -
     assert not pynwb.validate(path=str(paths[0]))
     with pynwb.NWBHDF5IO(paths[0], "r") as io:
         nwbfile = io.read()
-        interfaces = nwbfile.processing["fiberphotometry"].data_interfaces
+        interfaces = nwbfile.processing["fipha"].data_interfaces
         assert set(interfaces) == {"ReferenceWorkflowProcessedFiberPhotometrySignal"}
         assert set(nwbfile.scratch) == {
-            "fiberphotometry_metadata_completeness",
-            "fiberphotometry_multiverse_result",
-            "fiberphotometry_project",
-            "fiberphotometry_robustness_summary",
-            "fiberphotometry_series_attributes",
-            "fiberphotometry_series_channels",
-            "fiberphotometry_session_preflight",
-            "fiberphotometry_session_qc",
+            "fipha_metadata_completeness",
+            "fipha_multiverse_result",
+            "fipha_project",
+            "fipha_robustness_summary",
+            "fipha_series_attributes",
+            "fipha_series_channels",
+            "fipha_session_preflight",
+            "fipha_session_qc",
         }
-        multiverse = json.loads(
-            nwbfile.scratch["fiberphotometry_multiverse_result"].data
-        )
-        summary = json.loads(nwbfile.scratch["fiberphotometry_robustness_summary"].data)
+        multiverse = json.loads(nwbfile.scratch["fipha_multiverse_result"].data)
+        summary = json.loads(nwbfile.scratch["fipha_robustness_summary"].data)
         assert multiverse["summary"]["total_universes"] == 4
         assert summary["artifact_type"] == "multiverse_lane_summary"
         assert sum(item["is_reference"] for item in multiverse["universes"]) == 1
@@ -1038,7 +1036,7 @@ def test_cli_writes_opt_in_scalar_mixed_model_summary(tmp_path) -> None:
     assert "Secondary sensitivity estimand" in (output / "mixed-model.html").read_text()
     nwb_path = next((output / "nwb").glob("*.nwb"))
     with pynwb.NWBHDF5IO(nwb_path, "r") as io:
-        assert "fiberphotometry_scalar_mixed_model" in io.read().scratch
+        assert "fipha_scalar_mixed_model" in io.read().scratch
 
 
 def test_nwb_export_rejects_timezone_free_session_metadata(tmp_path) -> None:

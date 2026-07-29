@@ -6,7 +6,7 @@ questions:
 - **Analysis:** can the declared computation be traced to identified sessions,
   fingerprinted inputs, and an explicit event factor?
 - **NWB:** is the metadata required by the current NWB writer present?
-- **Publication/reuse:** does the project satisfy FiberPhotometry's minimal v0.1
+- **Publication/reuse:** does the project satisfy fipha's minimal v0.1
   descriptive profile?
 
 The last status is not certification against a journal, repository, FAIR rubric,
@@ -41,7 +41,7 @@ they can vary and NWB requires a timezone-aware value.
 
 ## Output
 
-`fiberphotometry inspect project.toml` includes `metadata_completeness` in its
+`fipha inspect project.toml` includes `metadata_completeness` in its
 preflight JSON. A run additionally writes `metadata.json`, fingerprints it in the
 manifest, and embeds the same assessment in each exported NWB file.
 

@@ -3,8 +3,8 @@ import json
 import numpy as np
 import pytest
 
-from fiberphotometry.multisignal import ChannelIdentity
-from fiberphotometry.sensor_validity import (
+from fipha.multisignal import ChannelIdentity
+from fipha.sensor_validity import (
     SensorChannelAssignment,
     SensorKinetics,
     SensorProfile,

@@ -1,13 +1,13 @@
 # Security policy
 
-FiberPhotometry processes local scientific data and can download explicitly
+fipha processes local scientific data and can download explicitly
 requested public integration fixtures. It does not require credentials for its
 ordinary tabular workflow.
 
 ## Reporting a vulnerability
 
 Please report suspected vulnerabilities privately through the repository's
-[GitHub security advisory form](https://github.com/aeronjl/fiberphotometry/security/advisories/new).
+[GitHub security advisory form](https://github.com/aeronjl/fipha/security/advisories/new).
 Do not include private datasets, tokens, participant information, or unpublished
 scientific results in a public issue.
 

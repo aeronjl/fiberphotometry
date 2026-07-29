@@ -16,7 +16,7 @@ uv sync --extra plots --group ibl-validation
 
 ## Inspect the scientific contract
 
-[`examples/feedback-analysis.toml`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/feedback-analysis.toml) declares:
+[`examples/feedback-analysis.toml`](https://github.com/aeronjl/fipha/blob/main/examples/feedback-analysis.toml) declares:
 
 - DMS as the selected region;
 - correct minus incorrect feedback;
@@ -36,7 +36,7 @@ uv run --group ibl-validation python examples/ibl_feedback_report.py \
 ```
 
 The first run downloads the fixed public assets into
-`~/Library/Caches/fiberphotometry/ibl-tutorial`. It writes:
+`~/Library/Caches/fipha/ibl-tutorial`. It writes:
 
 - `ibl-feedback-report.html`, an offline report for inspection and sharing;
 - `ibl-feedback-report.json`, containing the configuration/specification, analysis

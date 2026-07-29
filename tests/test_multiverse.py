@@ -4,12 +4,12 @@ from dataclasses import replace
 import pytest
 from test_pipeline import _inputs, _spec
 
-from fiberphotometry import (
+from fipha import (
     EventSummarySpec,
     LowpassFilterOperation,
     ReferenceDFFOperation,
 )
-from fiberphotometry.multiverse import (
+from fipha.multiverse import (
     ChoiceRef,
     CompatibilityRule,
     DecisionAlternative,

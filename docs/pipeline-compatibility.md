@@ -30,7 +30,7 @@ These are reported as `error: <code>: <message>` on standard error with a
 following `hint:` line, and exit status 2. They are documented alongside their
 commands in [the command line reference](cli.md).
 
-`fiberphotometry inspect` includes the report in `preflight.json`. A structurally
+`fipha inspect` includes the report in `preflight.json`. A structurally
 incompatible project may be inspected but is stopped before `run` executes
 preprocessing. Multiverse preflight reports every materialized universe separately,
 including those already excluded by declared scientific compatibility rules.

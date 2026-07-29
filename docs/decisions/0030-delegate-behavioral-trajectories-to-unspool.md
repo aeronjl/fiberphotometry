@@ -7,7 +7,7 @@
 
 Longitudinal photometry studies combine signal processing with behavioral models,
 multiple time coordinates, repeated sessions, and animal-level generalization.
-FiberPhotometry already owns the optical and event-analysis layers. Unspool is a
+fipha already owns the optical and event-analysis layers. Unspool is a
 separate process-first package with explicit clocks, forward-session validation,
 hierarchical smooth trajectories, model recovery, and IBL/NWB adapters.
 
@@ -21,7 +21,7 @@ that trial-, session-, and animal-level variation must be represented explicitly
 
 ## Decision
 
-FiberPhotometry will export validated trial-level neural summaries and explicit
+fipha will export validated trial-level neural summaries and explicit
 subject/session/trial/session-order coordinates through a dependency-light bridge.
 Unspool will own behavioral trajectory models, longitudinal clocks, and prospective
 session validation.
@@ -33,7 +33,7 @@ protocol.
 
 ## Alternatives considered
 
-- **Add a linear mixed trajectory model to FiberPhotometry:** rejected because it
+- **Add a linear mixed trajectory model to fipha:** rejected because it
   duplicates only a small and misleading subset of Unspool's longitudinal contract.
 - **Make Unspool a mandatory dependency:** rejected because event-locked photometry
   users should not inherit a behavioral-modeling stack.
@@ -42,7 +42,7 @@ protocol.
 
 ## Consequences
 
-- FiberPhotometry gains a clear route into sophisticated learning analyses without
+- fipha gains a clear route into sophisticated learning analyses without
   claiming those models as native photometry methods.
 - Cross-package examples must pin both versions and define the handoff schema.
 - Functional photometry models remain an independent planned capability rather than

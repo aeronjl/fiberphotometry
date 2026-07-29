@@ -11,21 +11,21 @@ from typing import Any
 
 import numpy as np
 
-from fiberphotometry import lowpass_filter, reference_dff
-from fiberphotometry.encoding import (
+from fipha import lowpass_filter, reference_dff
+from fipha.encoding import (
     EncodingModelResult,
     EncodingModelSpec,
     EncodingSession,
     EventKernelSpec,
     fit_event_kernel_model,
 )
-from fiberphotometry.io.dandi_000971 import (
+from fipha.io.dandi_000971 import (
     from_dandi_000971_nwb,
     rewarded_unrewarded_nose_pokes,
 )
 
 DEFAULT_MANIFEST = Path("benchmarks/dandi-000971-tutorial-manifest-v0.1.json")
-DEFAULT_CACHE = Path.home() / "Library/Caches/fiberphotometry/dandi-000971-tutorial"
+DEFAULT_CACHE = Path.home() / "Library/Caches/fipha/dandi-000971-tutorial"
 DEFAULT_OUTPUT = Path("benchmarks/dandi-000971-event-kernel-v0.2")
 REGIONS = ("DMS", "DLS")
 
@@ -116,7 +116,7 @@ def evidence_payload(
     return {
         "schema_version": "dandi-000971-event-kernel-v0.2",
         "artifact_type": "public_event_kernel_reproduction",
-        "fiberphotometry_version": version("fiberphotometry"),
+        "fipha_version": version("fipha"),
         "scientific_protocol": (
             "protocol-dandi-000971-event-kernel-v0.1 + "
             "protocol-event-kernel-uncertainty-diagnostics-v0.1"

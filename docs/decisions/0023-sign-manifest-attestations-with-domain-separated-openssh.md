@@ -16,7 +16,7 @@ OpenSSH keys and agents.
 
 Sign a versioned JSON attestation containing the exact manifest digest, project
 fingerprint, signer identity, and signing time. Use OpenSSH SSHSIG with the fixed
-namespace `fiberphotometry-publication@aeronjl.github.io`. Keep the detached
+namespace `fipha-publication@aeronjl.github.io`. Keep the detached
 signature and attestation outside the manifest so signing does not mutate the
 evidence root.
 

@@ -10,9 +10,9 @@ from pathlib import Path
 import numpy as np
 from one.api import ONE
 
-from fiberphotometry import align_events, summarize_event_windows
-from fiberphotometry.io.ibl import from_ibl_tables
-from fiberphotometry.preprocess import reference_dff
+from fipha import align_events, summarize_event_windows
+from fipha.io.ibl import from_ibl_tables
+from fipha.preprocess import reference_dff
 
 EID = "7a867587-aba3-48da-ace9-3f4ac7082b6f"
 SUBJECT = "fip_13"
@@ -29,7 +29,7 @@ class RegionAlignment:
 
 
 def main() -> None:
-    with tempfile.TemporaryDirectory(prefix="fiberphotometry-ibl-") as cache:
+    with tempfile.TemporaryDirectory(prefix="fipha-ibl-") as cache:
         one = ONE(
             base_url="https://openalyx.internationalbrainlab.org",
             password="international",

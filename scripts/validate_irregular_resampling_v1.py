@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry import make_recording, resample_recording
+from fipha import make_recording, resample_recording
 
 
 def main() -> None:
@@ -30,7 +30,7 @@ def main() -> None:
             observed = result.signal.values[:, 0]
             rmse = float(np.sqrt(np.nanmean((observed - expected) ** 2)))
             peak = float(np.nanmax(np.abs(expected)))
-            operation = json.loads(result.attrs["fiberphotometry_operations"])[0]
+            operation = json.loads(result.attrs["fipha_operations"])[0]
             scenarios.append(
                 {
                     "source_rate_hz": rate_hz,

@@ -1,6 +1,6 @@
 # Choose a method
 
-FiberPhotometry is organized around the scientific question, not the name of an
+fipha is organized around the scientific question, not the name of an
 algorithm. Choose the row that describes what you want to learn; each category
 then separates supported workflows, experimental workflows, and known gaps.
 

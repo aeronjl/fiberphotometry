@@ -3,7 +3,7 @@
 Status: **superseded by the frozen protocol; not executed** (26 July 2026)
 
 The normative successor is the
-[frozen v0.3 protocol](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-feedback-signal-only-v0.3.md).
+[frozen v0.3 protocol](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-ibl-feedback-signal-only-v0.3.md).
 
 This document proposes a prospective use of the 18 held-out IBL animals that
 failed the paired-reference v0.2 readiness gate. It does not amend v0.2 and must

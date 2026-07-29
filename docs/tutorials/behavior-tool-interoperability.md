@@ -4,12 +4,12 @@
 
 How can a scientist ask whether a photometry signal relates to movement, an
 automatically discovered behavioral bout, or a manually annotated event without
-reimplementing behavior analysis inside FiberPhotometry?
+reimplementing behavior analysis inside fipha?
 
 This tutorial composes native-shaped outputs from DeepLabCut, SLEAP,
 Keypoint-MoSeq and BORIS with the photometry event-kernel and Unspool handoff
 boundaries. The complete executable synthetic example is
-[`examples/behavior_interoperability.py`](https://github.com/aeronjl/fiberphotometry/blob/main/examples/behavior_interoperability.py).
+[`examples/behavior_interoperability.py`](https://github.com/aeronjl/fipha/blob/main/examples/behavior_interoperability.py).
 
 !!! warning "Synchronisation is scientific evidence"
     The source snippets retain the `video` clock. Section 5 estimates and validates
@@ -21,10 +21,10 @@ boundaries. The complete executable synthetic example is
 DeepLabCut prediction CSV and pandas HDF5 files contain hierarchical columns.
 Select the scorer, individual and body part explicitly when more than one is
 present. Install the lightweight file dependencies with
-`uv add "fiberphotometry[behavior]"`.
+`uv add "fipha[behavior]"`.
 
 ```python
-from fiberphotometry.interoperability import pose_from_deeplabcut_file
+from fipha.interoperability import pose_from_deeplabcut_file
 
 nose = pose_from_deeplabcut_file(
     "mouse-07-day-04DLC.h5",
@@ -62,7 +62,7 @@ The file reader uses stored dimension metadata when present. Older files omit it
 so supply `dims` rather than guessing from array size.
 
 ```python
-from fiberphotometry.interoperability import pose_from_sleap_analysis_h5
+from fipha.interoperability import pose_from_sleap_analysis_h5
 
 nose = pose_from_sleap_analysis_h5(
     "mouse-07-day-04.analysis.h5",
@@ -91,7 +91,7 @@ Run-length encoding turns consecutive equal states into bouts without discarding
 duration.
 
 ```python
-from fiberphotometry.interoperability import annotations_from_moseq_results_h5
+from fipha.interoperability import annotations_from_moseq_results_h5
 
 moseq = annotations_from_moseq_results_h5(
     "moseq-project/model-a/results.h5",
@@ -114,7 +114,7 @@ If pose has already been standardized in NWB, inspect and load the native
 `ndx-pose` container instead of returning to a tool-specific export:
 
 ```python
-from fiberphotometry.io.ndx_pose import inspect_ndx_pose_nwb, poses_from_ndx_pose_nwb
+from fipha.io.ndx_pose import inspect_ndx_pose_nwb, poses_from_ndx_pose_nwb
 
 inspection = inspect_ndx_pose_nwb("mouse-07-day-04.nwb")
 poses = poses_from_ndx_pose_nwb(
@@ -151,7 +151,7 @@ For a BORIS tabular CSV, the file reader skips the observation metadata preamble
 selects one source subject, and pairs START/STOP rows.
 
 ```python
-from fiberphotometry.interoperability import annotations_from_boris_tabular_file
+from fipha.interoperability import annotations_from_boris_tabular_file
 
 boris = annotations_from_boris_tabular_file(
     "mouse-07-day-04-boris.csv",
@@ -167,7 +167,7 @@ intervals. Aggregated CSV/TSV files can be read directly without first building 
 column mapping:
 
 ```python
-from fiberphotometry.interoperability import annotations_from_boris_aggregated_file
+from fipha.interoperability import annotations_from_boris_aggregated_file
 
 aggregated = annotations_from_boris_aggregated_file(
     "mouse-07-day-04-aggregated.tsv",
@@ -184,7 +184,7 @@ Before projecting intervals into a neural model, declare any cleanup or contextu
 rules as an ordered policy. Do not edit adapter output in place:
 
 ```python
-from fiberphotometry.interval_policy import (
+from fipha.interval_policy import (
     ContextualizeIntervals,
     FilterIntervals,
     IntervalPolicy,
@@ -226,7 +226,7 @@ Fit the clock mapping before interpolation. Pulse correspondence is explicit: th
 function never guesses which pulses match.
 
 ```python
-from fiberphotometry.interoperability import (
+from fipha.interoperability import (
     ClockPulseMatches,
     ClockSynchronizationSpec,
     fit_clock_synchronization,
@@ -276,7 +276,7 @@ For a complete synthetic session, point/bout onsets, physical intervals, aligned
 duration values, and a continuous movement covariate compose directly:
 
 ```python
-from fiberphotometry.encoding import EncodingSession
+from fipha.encoding import EncodingSession
 
 moseq_inputs = moseq.interval_encoding_inputs(edge="onset")
 boris_inputs = boris.interval_encoding_inputs(edge="onset")
@@ -308,7 +308,7 @@ prospective coverage floor appropriate to the study rather than relying only on
 the default:
 
 ```python
-from fiberphotometry.encoding import (
+from fipha.encoding import (
     EncodingModelSpec,
     EventKernelSpec,
     fit_event_kernel_model,
@@ -330,12 +330,12 @@ validation and inference still follow the
 
 ## 6. Pass neural summaries to Unspool
 
-After FiberPhotometry estimates a declared trial- or session-level neural quantity,
+After fipha estimates a declared trial- or session-level neural quantity,
 attach it to explicit longitudinal coordinates.
 
 ```python
-from fiberphotometry import ObservationTable
-from fiberphotometry.unspool import prepare_unspool_study
+from fipha import ObservationTable
+from fipha.unspool import prepare_unspool_study
 
 summaries = ObservationTable.from_columns(
     {
@@ -355,7 +355,7 @@ handoff = prepare_unspool_study(
 study = handoff.to_study()
 ```
 
-FiberPhotometry owns how `rear_response` was extracted and audited. Unspool owns
+fipha owns how `rear_response` was extracted and audited. Unspool owns
 the learning clock, behavioral model and prospective session validation. See the
 [public cross-package IBL example](ibl-unspool-longitudinal.md).
 
@@ -371,4 +371,4 @@ known affine offset/drift recovery and refusal of
 bad pulse evidence, but a real synchronization record is still missing. None of
 this proves acquisition-specific clock accuracy, multi-animal identity stability,
 or a biological result. See the
-[validation matrix](https://github.com/aeronjl/fiberphotometry/blob/main/research/interoperability-validation-v0.1.md).
+[validation matrix](https://github.com/aeronjl/fipha/blob/main/research/interoperability-validation-v0.1.md).

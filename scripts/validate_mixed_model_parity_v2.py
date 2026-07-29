@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     Factor,
@@ -19,7 +19,7 @@ from fiberphotometry import (
     StudyDesign,
     Unit,
 )
-from fiberphotometry.mixed import ScalarMixedModelSpec, fit_scalar_mixed_model
+from fipha.mixed import ScalarMixedModelSpec, fit_scalar_mixed_model
 
 
 def main() -> None:
@@ -110,7 +110,7 @@ def _run_scenario(*, nested: bool) -> dict[str, object]:
         "sessions": int(frame["session"].nunique()),
         "observations": len(frame),
         "converged": ours.converged and bool(direct.converged),
-        "fiberphotometry": {
+        "fipha": {
             "estimate": ours.estimate,
             "standard_error": ours.standard_error,
             "confidence_interval": ours.confidence_interval,

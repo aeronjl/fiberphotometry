@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-27
 - Decision owners: project maintainers
-- Related evidence: [Literature and capability audit](https://github.com/aeronjl/fiberphotometry/blob/main/planning/literature-capability-audit-v0.2.md)
+- Related evidence: [Literature and capability audit](https://github.com/aeronjl/fipha/blob/main/planning/literature-capability-audit-v0.2.md)
 
 ## Context
 

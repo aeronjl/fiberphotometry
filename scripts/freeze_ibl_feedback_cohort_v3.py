@@ -39,7 +39,7 @@ def main() -> None:
     parser.add_argument(
         "--cache-dir",
         type=Path,
-        default=Path.home() / "Library/Caches/fiberphotometry/ibl-prospective-v0.2",
+        default=Path.home() / "Library/Caches/fipha/ibl-prospective-v0.2",
     )
     parser.add_argument(
         "--output",

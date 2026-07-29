@@ -1,7 +1,7 @@
 import numpy as np
 
-from fiberphotometry.design import Factor, ObservationTable, StudyDesign, Unit
-from fiberphotometry.inference import (
+from fipha.design import Factor, ObservationTable, StudyDesign, Unit
+from fipha.inference import (
     Contrast,
     Estimand,
     PermutationPlan,

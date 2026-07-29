@@ -18,7 +18,7 @@ answer, its experimental unit, and the limitation that controls interpretation.
 - **Do not conclude:** phenotype prevalence, source-study replication, or evidence for a nonzero population effect.
 
 [Run the raw-NWB tutorial](../tutorials/dandi-000971-reward-multiverse.md)
-or [read the frozen result](https://github.com/aeronjl/fiberphotometry/blob/main/research/dandi-000971-tutorial-results-v0.1.md).
+or [read the frozen result](https://github.com/aeronjl/fipha/blob/main/research/dandi-000971-tutorial-results-v0.1.md).
 
 ## Does a descriptive contrast survive a wider signal-only multiverse?
 
@@ -40,7 +40,7 @@ or [read the frozen result](https://github.com/aeronjl/fiberphotometry/blob/main
 - **Use it to learn:** compatible universes, structurally rejected workflows, separate unit lanes, and leave-one-animal-out diagnostics.
 - **Do not conclude:** causal effects of correctness or robustness to untested preprocessing families.
 
-[Read the complete frozen result and amendments](https://github.com/aeronjl/fiberphotometry/blob/main/research/ibl-feedback-signal-only-results-v0.3.2.md).
+[Read the complete frozen result and amendments](https://github.com/aeronjl/fipha/blob/main/research/ibl-feedback-signal-only-results-v0.3.2.md).
 
 ## Can overlapping behavioral events predict a new animal?
 
@@ -67,7 +67,7 @@ or [read the frozen result](https://github.com/aeronjl/fiberphotometry/blob/main
 - **Public source:** 216 checksum-verified sessions from the 18-animal IBL cohort.
 - **Question:** incremental prediction of correctness in one future session.
 - **Validation unit:** a common held-out session within each animal; scoring and bootstrap are animal-balanced.
-- **Use it to learn:** the FiberPhotometry-to-Unspool handoff, lagged predictors, and retained negative forecasts.
+- **Use it to learn:** the fipha-to-Unspool handoff, lagged predictors, and retained negative forecasts.
 - **Do not conclude:** that DMS dopamine is unrelated to learning or that alternative neural summaries would fail.
 
 [Read the longitudinal neural–behavioral forecast](../tutorials/ibl-unspool-longitudinal.md).

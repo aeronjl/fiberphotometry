@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from fiberphotometry import EventCoverageRecord, assess_event_coverage
+from fipha import EventCoverageRecord, assess_event_coverage
 
 
 def test_event_coverage_preserves_stages_and_hierarchical_imbalance() -> None:

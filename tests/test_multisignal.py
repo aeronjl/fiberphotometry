@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from scipy import signal
 
-from fiberphotometry.multisignal import (
+from fipha.multisignal import (
     BlockPermutationSpec,
     ChannelIdentity,
     CrosstalkDiagnosticSpec,

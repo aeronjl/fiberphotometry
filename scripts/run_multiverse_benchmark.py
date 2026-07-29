@@ -8,7 +8,7 @@ from dataclasses import asdict
 
 import numpy as np
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     EventSummarySpec,
@@ -23,7 +23,7 @@ from fiberphotometry import (
     Unit,
     make_recording,
 )
-from fiberphotometry.multiverse import (
+from fipha.multiverse import (
     ChoiceRef,
     CompatibilityRule,
     DecisionAlternative,
@@ -32,7 +32,7 @@ from fiberphotometry.multiverse import (
     materialize_multiverse,
     run_multiverse,
 )
-from fiberphotometry.planning import create_analysis_plan
+from fipha.planning import create_analysis_plan
 
 EVENTS = np.asarray([5.0, 10.0, 15.0, 20.0, 25.0, 30.0])
 CONDITIONS = ("control", "drug", "control", "drug", "control", "drug")

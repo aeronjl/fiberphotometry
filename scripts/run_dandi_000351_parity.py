@@ -11,9 +11,9 @@ from urllib.request import urlopen
 
 import numpy as np
 
-from fiberphotometry.io.dandi import resolve_dandi_download_url
-from fiberphotometry.io.dandi_000351 import from_dandi_000351_nwb
-from fiberphotometry.preprocess import reference_dff
+from fipha.io.dandi import resolve_dandi_download_url
+from fipha.io.dandi_000351 import from_dandi_000351_nwb
+from fipha.preprocess import reference_dff
 
 
 def main() -> None:
@@ -26,7 +26,7 @@ def main() -> None:
     parser.add_argument(
         "--cache-dir",
         type=Path,
-        default=Path.home() / "Library/Caches/fiberphotometry/dandi-000351",
+        default=Path.home() / "Library/Caches/fipha/dandi-000351",
     )
     parser.add_argument(
         "--output",

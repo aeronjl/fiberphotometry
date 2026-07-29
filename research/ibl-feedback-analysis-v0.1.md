@@ -20,9 +20,9 @@ aggregated within animal before a descriptive paired-t interval is calculated.
 
 The executable result, plan, package version, execution time, and input
 fingerprint are retained in
-[`benchmarks/ibl-feedback-analysis-v0.1.json`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/ibl-feedback-analysis-v0.1.json).
+[`benchmarks/ibl-feedback-analysis-v0.1.json`](https://github.com/aeronjl/fipha/blob/main/benchmarks/ibl-feedback-analysis-v0.1.json).
 The frozen specification is
-[`benchmarks/protocol-ibl-feedback-v0.1.md`](https://github.com/aeronjl/fiberphotometry/blob/main/benchmarks/protocol-ibl-feedback-v0.1.md).
+[`benchmarks/protocol-ibl-feedback-v0.1.md`](https://github.com/aeronjl/fipha/blob/main/benchmarks/protocol-ibl-feedback-v0.1.md).
 
 ## Interpretation boundary
 

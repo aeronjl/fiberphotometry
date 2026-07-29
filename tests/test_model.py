@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from fiberphotometry import make_recording
+from fipha import make_recording
 
 
 def test_make_recording_preserves_identity_and_shape() -> None:

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 
-from fiberphotometry.benchmark_control_free import (
+from fipha.benchmark_control_free import (
     run_baseline_fidelity_benchmark,
     run_normalization_benchmark,
 )

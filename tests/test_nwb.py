@@ -5,12 +5,12 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from fiberphotometry import make_recording
+from fipha import make_recording
 
 pynwb = pytest.importorskip("pynwb")
 ndx_fiber_photometry = pytest.importorskip("ndx_fiber_photometry")
 
-from fiberphotometry.io.nwb import (  # noqa: E402
+from fipha.io.nwb import (  # noqa: E402
     NWBAcquisitionMetadata,
     NWBChannelMetadata,
     NWBDeviceMetadata,
@@ -104,7 +104,6 @@ def test_recordings_are_written_as_community_response_series(tmp_path) -> None:
     assert isinstance(series, ndx_fiber_photometry.FiberPhotometryResponseSeries)
     assert series.fiber_photometry_table_region is None
     assert "no optical acquisition metadata was supplied" in series.description
-    assert "fiberphotometry-core-nwb-v1" not in str(series.comments)
 
     path = _write(nwbfile, tmp_path / "bare.nwb")
     assert pynwb.validate(path=str(path)) == []
@@ -184,7 +183,7 @@ def test_repeated_writes_reuse_identical_table_rows(tmp_path) -> None:
         name="RawFiberPhotometrySignal",
         acquisition_metadata=metadata,
     )
-    module = nwbfile.create_processing_module("fiberphotometry", "derived signals")
+    module = nwbfile.create_processing_module("fipha", "derived signals")
     processed = add_recording_to_nwb(
         recording,
         nwbfile,
@@ -306,37 +305,6 @@ def test_recording_provenance_is_stored_in_a_structured_scratch_table(
     assert restored.attrs["source_sha256"] == "abc123"
     assert restored.attrs["processing_stage"] == "baseline_corrected"
     assert restored.attrs["session"] == "session-1"
-
-
-def test_legacy_json_comment_files_still_load(tmp_path) -> None:
-    metadata = {
-        "schema": "fiberphotometry-core-nwb-v1",
-        "channels": ["DMS", "DLS"],
-        "subject": "mouse-legacy",
-        "session": "session-legacy",
-        "source_variable": "signal",
-        "recording_attrs": {"processing_stage": "raw"},
-    }
-    nwbfile = _nwbfile()
-    nwbfile.add_acquisition(
-        pynwb.TimeSeries(
-            name="FiberPhotometrySignal",
-            data=np.asarray([[1.0, 2.0], [1.5, 2.5], [2.0, 3.0]]),
-            timestamps=np.asarray([0.0, 0.1, 0.2]),
-            unit="a.u.",
-            description="Fiber photometry signal exported by fiberphotometry",
-            comments=json.dumps(metadata, sort_keys=True),
-        )
-    )
-
-    path = _write(nwbfile, tmp_path / "legacy.nwb")
-    with pynwb.NWBHDF5IO(path, "r") as io:
-        restored = from_nwb_series(io.read().acquisition["FiberPhotometrySignal"])
-
-    assert restored.channel.values.tolist() == ["DMS", "DLS"]
-    assert restored.attrs["subject"] == "mouse-legacy"
-    assert restored.attrs["session"] == "session-legacy"
-    assert restored.attrs["nwb_neurodata_type"] == "TimeSeries"
 
 
 def test_written_files_pass_the_nwb_inspector(tmp_path) -> None:

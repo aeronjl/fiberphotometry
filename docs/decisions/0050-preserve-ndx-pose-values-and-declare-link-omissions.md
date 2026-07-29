@@ -12,7 +12,7 @@ SLEAP, Keypoint-MoSeq, NeuroConv, movement, and other tools. Its series can stor
 offset, reference frames, skeletons, source software, camera devices, and formal
 video links.
 
-FiberPhotometry's initial pose boundary stored only x/y and admitted only two source
+fipha's initial pose boundary stored only x/y and admitted only two source
 literals. Reading extension data through it would silently discard z and could
 confuse raw stored values with coordinates in the declared unit. Recreating formal
 NWB links from a device name or video path would encode relationships not present in

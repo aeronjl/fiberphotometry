@@ -17,7 +17,7 @@ missing-channel assumptions, and reuse of the outcome to define its own correcti
 
 ## Decision
 
-FiberPhotometry separates matrix identification from matrix application.
+fipha separates matrix identification from matrix application.
 
 - Components, roles, units, measured channels, excitation/emission wavelengths,
   coefficients, offsets, calibration identity, and design version are typed.

@@ -9,7 +9,7 @@
 
 Photometry responses can depend on trial outcome, choice, elapsed time, or prior
 events. A single pooled event kernel cannot represent those conditional changes.
-Encoding every behavioral sequence inside FiberPhotometry would, however, duplicate
+Encoding every behavioral sequence inside fipha would, however, duplicate
 the longitudinal modeling owned by Unspool and make trial ordering easy to infer
 incorrectly.
 

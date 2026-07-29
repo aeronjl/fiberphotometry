@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/aeronjl/fiberphotometry/schemas/zenodo-draft-receipt-v1.schema.json",
-  "title": "FiberPhotometry Zenodo draft receipt v1",
+  "$id": "https://github.com/aeronjl/fipha/schemas/zenodo-draft-receipt-v1.schema.json",
+  "title": "fipha Zenodo draft receipt v1",
   "type": "object",
   "additionalProperties": false,
   "required": ["deposition_id", "environment", "filename", "file_size", "archive_sha256", "project_sha256", "html_url", "submitted", "state", "artifact_type", "schema_version"],

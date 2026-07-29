@@ -7,7 +7,7 @@ import json
 import numpy as np
 from scipy.stats import ttest_ind, ttest_rel
 
-from fiberphotometry import (
+from fipha import (
     Contrast,
     Estimand,
     Factor,

@@ -1,7 +1,7 @@
 # Upstream interoperability fixtures
 
 These files are retained only for format-parity tests and are not included in the
-FiberPhotometry package wheel. `manifest.json` records their exact upstream path,
+fipha package wheel. `manifest.json` records their exact upstream path,
 commit, checksum and license.
 
 - `sleap-small-robot.analysis.h5` comes from the SLEAP test suite and retains its

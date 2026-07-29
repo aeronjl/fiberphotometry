@@ -4,7 +4,7 @@
 - Date: 2026-07-26
 - Decision owners: project maintainers
 - Related protocol/report:
-  [prospective IBL v0.2](https://github.com/aeronjl/fiberphotometry/blob/main/research/ibl-feedback-prospective-v0.2.md)
+  [prospective IBL v0.2](https://github.com/aeronjl/fipha/blob/main/research/ibl-feedback-prospective-v0.2.md)
 
 ## Context
 
@@ -54,4 +54,4 @@ ON”, and the associated study methods describe 470-nm-only acquisition with no
 isosbestic channel. The public archive does not expose the raw channel-map files,
 but the two independent primary sources agree. The paired-reference route is
 therefore closed unless new raw or corrected metadata appear. See the
-[channel-provenance audit](https://github.com/aeronjl/fiberphotometry/blob/main/research/ibl-new-cohort-channel-provenance-v0.1.md).
+[channel-provenance audit](https://github.com/aeronjl/fipha/blob/main/research/ibl-new-cohort-channel-provenance-v0.1.md).

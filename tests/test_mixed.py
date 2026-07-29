@@ -7,9 +7,9 @@ import pandas as pd
 import pytest
 import statsmodels.formula.api as smf
 
-from fiberphotometry.design import Factor, ObservationTable, StudyDesign, Unit
-from fiberphotometry.inference import Contrast, Estimand
-from fiberphotometry.mixed import ScalarMixedModelSpec, fit_scalar_mixed_model
+from fipha.design import Factor, ObservationTable, StudyDesign, Unit
+from fipha.inference import Contrast, Estimand
+from fipha.mixed import ScalarMixedModelSpec, fit_scalar_mixed_model
 
 
 def _unbalanced_nested_fixture():

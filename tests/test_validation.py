@@ -1,6 +1,6 @@
 import numpy as np
 
-from fiberphotometry.validation import compare_fitted_baseline_dff
+from fipha.validation import compare_fitted_baseline_dff
 
 
 def test_dff_comparison_detects_channelwise_zeroing() -> None:

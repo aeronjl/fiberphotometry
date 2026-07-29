@@ -1,12 +1,12 @@
 # Literature and capability audit v0.2
 
 **Audit date:** 2026-07-27
-**Question:** Does FiberPhotometry cover the analyses contemporary
+**Question:** Does fipha cover the analyses contemporary
 neuroscientists actually use and need?
 
 ## Executive conclusion
 
-**Not yet.** FiberPhotometry already has a differentiated and unusually rigorous
+**Not yet.** fipha already has a differentiated and unusually rigorous
 core for event-locked, multi-animal analysis: labelled identity, gap-aware
 preprocessing, animal-level inference, whole-waveform uncertainty, multiverse
 robustness, NWB provenance, and publication evidence. That remains the right
@@ -215,9 +215,9 @@ stationarity, common-driver, and model-identification assumptions can be defende
 **Status: interoperable, with a photometry-specific gap.**
 
 The validated Unspool handoff is the right boundary for longitudinal behavioral
-and learning models. FiberPhotometry should not duplicate that package.
+and learning models. fipha should not duplicate that package.
 
-FiberPhotometry must still own:
+fipha must still own:
 
 - session/channel identity and acquisition comparability;
 - expression, illumination, coupling, and baseline-normalization diagnostics;

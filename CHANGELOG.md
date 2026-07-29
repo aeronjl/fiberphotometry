@@ -52,6 +52,33 @@ development versions until the first public release.
   through an explicit experimental opt-in while pointwise sensitivity remains the
   default.
 
+### Changed
+
+- **The package is renamed from `fiberphotometry` to `fipha`.** The distribution,
+  the importable package (`import fipha as fp`), the console script, the
+  documentation site and the repository URL all move; no public API symbol and no
+  CLI subcommand changes. The old name claimed the name of the field itself, which
+  is both unsearchable and discourteous to the established tools in it.
+- Identifiers the package writes into data move with it: the NWB scratch tables
+  `fipha_series_channels` and `fipha_series_attributes`, the NWB scratch evidence
+  keys and JSON `artifact_type` values (`fipha_analysis`, `fipha_archive_metadata`
+  and the rest), the xarray provenance attributes `fipha_operations`,
+  `fipha_baseline_dff` and `fipha_reference_dff`, the manifest key `fipha_version`,
+  the readiness profile `fipha-metadata-v0.1`, the `ndx-pose` document schema
+  `fipha-ndx-pose-v1`, the publication signing namespace
+  `fipha-publication@aeronjl.github.io`, and the `FIPHA_*` test environment
+  variables. Nothing has been released, so no file, manifest or signature in
+  existence carries the former names.
+
+### Removed
+
+- The pre-extension NWB compatibility reader. Recordings are written as
+  `ndx-fiber-photometry` objects with two documented scratch tables; the reader no
+  longer parses the private `fiberphotometry-core-nwb-v1` JSON document that older
+  development builds wrote into a core `TimeSeries` `comments` field, and the CLI
+  no longer sniffs that document when choosing a series. The package was never
+  released, so no such file can exist outside a developer's working tree.
+
 ### Scientific status
 
 - Signal-only double-exponential and AsLS baselines remain experimental.
@@ -60,4 +87,4 @@ development versions until the first public release.
 - Simultaneous event-kernel bands remain opt-in after the v0.1 progress-kernel
   calibration gate failed.
 
-[Unreleased]: https://github.com/aeronjl/fiberphotometry/compare/main...HEAD
+[Unreleased]: https://github.com/aeronjl/fipha/compare/main...HEAD

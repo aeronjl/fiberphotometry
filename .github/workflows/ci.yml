@@ -21,13 +21,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
       - run: uv sync --all-extras --locked
-      - run: uv run pytest --cov=fiberphotometry --cov-report=term-missing
+      - run: uv run pytest --cov=fipha --cov-report=term-missing
       - if: matrix.python-version == '3.12'
         run: uv run ruff check . && uv run ruff format --check . && uv run mypy
       - if: matrix.python-version == '3.12'
         run: |
           uv build
-          uv venv /tmp/fiberphotometry-wheel
-          uv pip install --python /tmp/fiberphotometry-wheel/bin/python dist/*.whl
-          /tmp/fiberphotometry-wheel/bin/python -c "import fiberphotometry; print(fiberphotometry.__version__)"
-          /tmp/fiberphotometry-wheel/bin/fiberphotometry --help
+          uv venv /tmp/fipha-wheel
+          uv pip install --python /tmp/fipha-wheel/bin/python dist/*.whl
+          /tmp/fipha-wheel/bin/python -c "import fipha; print(fipha.__version__)"
+          /tmp/fipha-wheel/bin/fipha --help

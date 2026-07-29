@@ -3,8 +3,8 @@ from types import ModuleType
 
 import pytest
 
-from fiberphotometry.design import ObservationTable
-from fiberphotometry.unspool import prepare_unspool_study
+from fipha.design import ObservationTable
+from fipha.unspool import prepare_unspool_study
 
 
 def _table() -> ObservationTable:

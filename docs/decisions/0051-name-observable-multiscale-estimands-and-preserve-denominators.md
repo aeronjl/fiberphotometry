@@ -18,7 +18,7 @@ boundaries, overlap, and the experimental unit used for uncertainty.
 
 ## Decision
 
-FiberPhotometry provides typed, observable multiscale summaries with a complete
+fipha provides typed, observable multiscale summaries with a complete
 acceptance ledger.
 
 - Every scale has a name, physical duration, physical step, minimum temporal

@@ -1,12 +1,12 @@
 # Native acquisition import v0.1
 
-FiberPhotometry reads Doric, Neurophotometrics, and pyPhotometry acquisition
+fipha reads Doric, Neurophotometrics, and pyPhotometry acquisition
 outputs into the same labelled recording boundary used by TDT, NWB, and tabular
 projects. Install file-format dependencies with (the package is not on PyPI;
 see [Install](getting-started/install.md)):
 
 ```bash
-pip install "fiberphotometry[acquisition] @ git+https://github.com/aeronjl/fiberphotometry.git"
+pip install "fipha[acquisition] @ git+https://github.com/aeronjl/fipha.git"
 ```
 
 The importer discovers structure, not biological meaning. Inspect a file first,
@@ -17,7 +17,7 @@ of the complete source file.
 ## Identify a source
 
 ```python
-from fiberphotometry import detect_acquisition_format
+from fipha import detect_acquisition_format
 
 detect_acquisition_format("session.doric")  # "doric"
 detect_acquisition_format("subject.ppd")  # "pyphotometry"
@@ -34,7 +34,7 @@ vary with the hardware and acquisition mode, so inspect the real tree and map
 the selected series:
 
 ```python
-from fiberphotometry import (
+from fipha import (
     DoricChannel,
     DoricSchema,
     DoricSeries,
@@ -82,7 +82,7 @@ The adapter supports the established column layouts:
 - `SystemTimestamp` plus `LedState`, including IBL-style parquet exports.
 
 ```python
-from fiberphotometry import (
+from fipha import (
     NeurophotometricsChannel,
     NeurophotometricsSchema,
     load_neurophotometrics_input,
@@ -119,7 +119,7 @@ analog inputs, and digital states. Biological channel identity is not stored
 authoritatively, so the analog mapping is explicit:
 
 ```python
-from fiberphotometry import (
+from fipha import (
     PyPhotometryChannel,
     PyPhotometryDigitalEvents,
     PyPhotometrySchema,
