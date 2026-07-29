@@ -24,7 +24,7 @@ the previously declared rolling divided-dF/F workflow, and calculates one feedba
 contrast per session. Its validated handoff retains every trial and attaches the
 previous session's neural summary.
 
-Unspool then owns the explicit session clock, within-session correctness history,
+Behavio then owns the explicit session clock, within-session correctness history,
 cohort-forward split, model fits, audits, animal-balanced scoring, and paired animal
 bootstrap. No behavioral trajectory engine is duplicated inside fipha.
 
@@ -81,7 +81,7 @@ With the cached IBL data and both repositories available:
 
 ```bash
 uv run --group ibl-validation \
-  --with "unspool @ git+https://github.com/aeronjl/unspool@1fca711574c3968cc5ff5b8609c6e40dbe99bf6c" \
+  --with "behavio @ git+https://github.com/aeronjl/behavio@a784883" \
   python scripts/run_ibl_unspool_longitudinal_v1.py
 ```
 

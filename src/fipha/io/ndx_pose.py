@@ -1,4 +1,12 @@
-"""Native ndx-pose inspection, import, and export boundaries."""
+"""Native ndx-pose inspection, import, and export boundaries.
+
+``PoseTrajectory`` is behavio's type, not a photometry one: this module reads
+and writes it inside NWB files that also carry photometry. The import is
+therefore deferred into the call path so that ``import fipha`` and
+``import fipha.io`` keep working without the behaviour package installed, and
+so that a caller who reaches a pose boundary without it is told which extra to
+install rather than meeting a bare ``ModuleNotFoundError``.
+"""
 
 from __future__ import annotations
 
@@ -6,12 +14,14 @@ import json
 from collections.abc import Iterator, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 
-from fipha.interoperability import PoseTrajectory
 from fipha.io.acquisition import file_sha256
+
+if TYPE_CHECKING:
+    from behavio.pose import PoseTrajectory
 
 
 @dataclass(frozen=True)
@@ -164,6 +174,7 @@ def poses_from_ndx_pose(
 ) -> NdxPoseImportResult:
     """Copy one in-memory PoseEstimation into typed physical trajectories."""
 
+    _pose_trajectory()
     for value, name in (
         (subject, "subject"),
         (session, "session"),
@@ -278,6 +289,7 @@ def add_poses_to_nwb(
     """Write compatible trajectories to a behavior processing module."""
 
     _require_dependencies()
+    _pose_trajectory()
     from ndx_pose import (  # type: ignore[import-untyped]
         PoseEstimation,
         PoseEstimationSeries,
@@ -416,6 +428,7 @@ def _trajectory_from_series(
     source_version: str | None,
     source_artifact: str | None,
 ) -> PoseTrajectory:
+    pose_trajectory = _pose_trajectory()
     raw = np.asarray(series.data[:], dtype=float)
     if raw.ndim != 2 or raw.shape[1] not in {2, 3}:
         raise ValueError(
@@ -457,7 +470,7 @@ def _trajectory_from_series(
         str(value) for value in comments.get("clock_synchronization_ids", [])
     )
     individual = comments.get("individual")
-    return PoseTrajectory(
+    return pose_trajectory(
         subject=subject,
         session=session,
         keypoint=str(series.name),
@@ -727,3 +740,17 @@ def _require_dependencies() -> None:
         raise ImportError(
             "ndx-pose interoperability requires the 'nwb' optional dependency"
         ) from error
+
+
+def _pose_trajectory() -> type[PoseTrajectory]:
+    """Import behavio's pose type, naming the extra when it is absent."""
+
+    try:
+        from behavio.pose import PoseTrajectory
+    except ImportError as error:  # pragma: no cover - optional dependency
+        raise ImportError(
+            "ndx-pose interoperability reads and writes behavio's PoseTrajectory; "
+            "install the 'behavior' optional dependency "
+            "(pip install 'fipha[behavior]')"
+        ) from error
+    return PoseTrajectory

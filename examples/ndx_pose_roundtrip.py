@@ -5,10 +5,10 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import numpy as np
+from behavio.pose import PoseTrajectory
 from pynwb import NWBHDF5IO, NWBFile
 from pynwb.file import Subject
 
-from fipha.interoperability import PoseTrajectory
 from fipha.io.ndx_pose import (
     NdxPoseMetadata,
     add_poses_to_nwb,

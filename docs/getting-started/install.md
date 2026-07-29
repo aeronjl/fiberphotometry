@@ -47,10 +47,22 @@ pip install "fipha[acquisition,plots] @ git+https://github.com/aeronjl/fipha.git
 |---|---|---|
 | `acquisition` | `h5py`, `pandas`, `pyarrow` | [Tabular import](../tabular-import.md) and [native Doric / Neurophotometrics / pyPhotometry readers](../native-acquisition-import.md) |
 | `tdt` | `tdt` | [TDT block import](../tdt-import.md) |
-| `nwb` | `pynwb`, `ndx-fiber-photometry`, `ndx-pose`, `remfile` | Reading and writing the [community NWB data model](../nwb-data-model.md), DANDI streaming, [ndx-pose round trips](../ndx-pose-interoperability.md) |
-| `behavior` | `h5py`, `pandas`, `tables` | DeepLabCut, SLEAP, Keypoint-MoSeq, and BORIS adapters |
+| `nwb` | `pynwb`, `ndx-fiber-photometry`, `ndx-pose`, `remfile` | Reading and writing the [community NWB data model](../nwb-data-model.md), DANDI streaming |
+| `behavior` | `behavio[readers]` (from Git; not yet on PyPI) | Pose, ethogram, clock-synchronization and interval-policy types owned by [Behavio](https://github.com/aeronjl/behavio), plus the [longitudinal handoff](../behavio-interoperability.md) |
 | `plots` | `matplotlib` | `plot_event_diagnostics` and `plot_specification_curve`, including [your first peri-event plot](first-peri-event-plot.md) |
 | `stats` | `pandas`, `statsmodels` | [Scalar mixed-model sensitivity summaries](../scalar-mixed-model.md) |
+
+[ndx-pose round trips](../ndx-pose-interoperability.md) need **both** `nwb` and
+`behavior`: `nwb` supplies the NWB extension, `behavior` supplies the
+`behavio.pose.PoseTrajectory` values the adapter reads and writes.
+
+```bash
+pip install "fipha[nwb,behavior] @ git+https://github.com/aeronjl/fipha.git"
+```
+
+Because Behavio has not been released either, the `behavior` extra resolves it from
+a pinned Git revision (`behavio[readers] @ git+https://github.com/aeronjl/behavio@a784883`).
+That pin will become an ordinary version range once Behavio is published.
 
 Missing extras fail at import of the specific reader, not at
 `import fipha`, so a base install stays usable for signal work.

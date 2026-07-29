@@ -1,11 +1,11 @@
-# Longitudinal behavior with Unspool
+# Longitudinal behavior with Behavio
 
 *Applies to v0.1.*
 
-fipha and [Unspool](https://github.com/aeronjl/unspool) have deliberately
+fipha and [Behavio](https://github.com/aeronjl/behavio) have deliberately
 different scientific responsibilities.
 
-| fipha owns | Unspool owns |
+| fipha owns | Behavio owns |
 |---|---|
 | signal ingestion, channel identity and QC | explicit longitudinal clocks |
 | reference and baseline correction | behavioral and cognitive model families |
@@ -14,15 +14,16 @@ different scientific responsibilities.
 
 The boundary is a trial-level table. fipha retains neural values and
 provenance while adding the four explicit coordinates required by
-`unspool.Study`: subject, session, trial, and session order. Chronology is never
+`behavio.Study`: subject, session, trial, and session order. Chronology is never
 inferred from row order or session names.
 
-Pose trajectories and behavioral bouts enter through the separate
-[behavioral ecosystem contract](ecosystem-interoperability.md). They become
+Pose trajectories and behavioral bouts are not read by fipha at all. They enter
+through Behavio's separate
+[observed-behaviour contract](https://aeronjl.github.io/behavio/observed-behaviour/) and become
 declared neural predictors or summaries here only after confidence, clock and
-missingness decisions are recorded. Unspool does not replace DeepLabCut, SLEAP,
-Keypoint-MoSeq or BORIS, and fipha does not duplicate Unspool's
-longitudinal model families.
+missingness decisions are recorded. Behavio does not replace DeepLabCut, SLEAP,
+Keypoint-MoSeq or BORIS, and fipha does not duplicate Behavio's pose and
+ethogram adapters or longitudinal model families.
 
 ## Preflight across-session comparability
 
@@ -62,7 +63,7 @@ comparability = assess_session_comparability(
 
 ```python
 from fipha import ObservationTable
-from fipha.unspool import prepare_unspool_study
+from fipha.behavio import prepare_behavio_study
 
 events = ObservationTable.from_columns(
     {
@@ -75,7 +76,7 @@ events = ObservationTable.from_columns(
     }
 )
 
-handoff = prepare_unspool_study(
+handoff = prepare_behavio_study(
     events,
     subject="animal",
     session="recording",
@@ -93,18 +94,20 @@ duplicate trial keys, ambiguous session chronology, missing coordinates, acciden
 replacement of an existing canonical column, failed comparability, and exported
 sessions absent from the preflight.
 
-With Unspool installed, construct its immutable study directly:
+With Behavio installed, construct its immutable study directly:
 
 ```python
 study = handoff.to_study()
 ```
 
-For a fully reproducible development environment, pin the current Unspool revision
-used to define this contract:
+Behavio is not on PyPI yet. For a fully reproducible development environment, pin
+the revision used to define this contract:
 
 ```bash
-uv add "unspool @ git+https://github.com/aeronjl/unspool@1fca711574c3968cc5ff5b8609c6e40dbe99bf6c"
+uv add "behavio @ git+https://github.com/aeronjl/behavio@a784883"
 ```
+
+Installing `fipha[behavior]` pulls in the same pinned revision.
 
 The package remains separate and optional: installing fipha does not
 silently install a behavioral-modeling stack.
@@ -112,12 +115,12 @@ silently install a behavioral-modeling stack.
 ## Ask a prospective longitudinal question
 
 ```python
-from unspool import forward_session_splits
+from behavio import forward_session_splits
 
 splits = forward_session_splits(study, min_train_sessions=3)
 ```
 
-Unspool can then compare stationary, smoothly varying, partially pooled, latent-
+Behavio can then compare stationary, smoothly varying, partially pooled, latent-
 state, reinforcement-learning, or drift-diffusion accounts using folds that train
 only on earlier complete sessions. Neural event summaries can enter as declared
 covariates or targets, depending on the scientific question. Any learning landmark
@@ -134,7 +137,7 @@ longitudinal behavioral model.
 
 Loewinger et al.'s functional mixed-model framework similarly distinguishes
 trial-, session-, and animal-level covariates in photometry experiments. That method
-remains a separate planned time-resolved inference route; the Unspool handoff does
+remains a separate planned time-resolved inference route; the Behavio handoff does
 not pretend that a scalar neural summary is equivalent to a functional response.
 
 ## Evidence boundary
@@ -143,7 +146,7 @@ This v0.1 increment validates schema composition, not a biological learning clai
 The next public-data benchmark should freeze:
 
 1. the neural summary exported by fipha;
-2. the behavioral outcome and clock modeled by Unspool;
+2. the behavioral outcome and clock modeled by Behavio;
 3. training-only transformations and forward-session folds;
 4. animal- and session-level denominators; and
 5. stationary and smooth alternative models before outcomes are compared.
@@ -152,4 +155,4 @@ Sources:
 
 - [Pan-Vazquez, Sanchez Araujo et al. (2024)](https://doi.org/10.1016/j.cub.2024.09.045)
 - [Loewinger et al. (2023)](https://doi.org/10.1523/ENEURO.0094-23.2023)
-- [Unspool longitudinal data and validation contract](https://github.com/aeronjl/unspool)
+- [Behavio longitudinal data and validation contract](https://github.com/aeronjl/behavio)

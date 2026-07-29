@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Freeze the first fipha-to-Unspool public IBL benchmark."""
+"""Freeze the first fipha-to-Behavio public IBL benchmark.
+
+The behaviour package was called ``unspool`` at freeze time; the pinned commit
+and field names below are part of the frozen artifact and are left unchanged.
+"""
 
 from __future__ import annotations
 

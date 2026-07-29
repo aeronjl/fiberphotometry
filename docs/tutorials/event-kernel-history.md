@@ -12,7 +12,7 @@ trial outcome, after retaining the average cue response?
 
 This is an event-wise interaction. It is not a longitudinal learning model: the
 history resets at every session boundary, while cross-session trajectories remain
-the responsibility of [Unspool](../unspool-interoperability.md).
+the responsibility of [Behavio](../behavio-interoperability.md).
 
 ## Declare rather than infer the history
 

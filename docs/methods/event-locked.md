@@ -14,7 +14,7 @@ a jointly estimated response to overlapping predictors, or predictive value.
 | Does the result survive plausible design choices? | [Event-kernel model multiverses](../event-kernel-multiverse.md) | paired design alternatives and failure ledger |
 | Does one predictor family add held-out information? | [Predictor-family contributions](../predictor-family-contributions.md) | paired full-minus-reduced held-out score |
 | Are time-course intervals calibrated? | [Interval calibration](../event-kernel-interval-calibration.md) | scenario-wise coverage evidence |
-| How should bouts be filtered, merged, split, or overlapped? | [Interval and bout policies](../interval-policy.md) | transformed intervals and lineage ledger |
+| How should bouts be filtered, merged, split, or overlapped? | [Behavio interval and bout policies](https://aeronjl.github.io/behavio/interval-policy/) | transformed intervals and lineage ledger, produced upstream in Behavio |
 
 ## Interpretation boundaries
 

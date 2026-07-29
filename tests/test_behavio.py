@@ -1,10 +1,9 @@
 import sys
-from types import ModuleType
 
 import pytest
 
+from fipha.behavio import prepare_behavio_study
 from fipha.design import ObservationTable
-from fipha.unspool import prepare_unspool_study
 
 
 def _table() -> ObservationTable:
@@ -20,8 +19,8 @@ def _table() -> ObservationTable:
     )
 
 
-def test_prepare_unspool_study_retains_neural_and_behavioral_columns() -> None:
-    export = prepare_unspool_study(
+def test_prepare_behavio_study_retains_neural_and_behavioral_columns() -> None:
+    export = prepare_behavio_study(
         _table(),
         subject="animal",
         session="recording",
@@ -37,7 +36,7 @@ def test_prepare_unspool_study_retains_neural_and_behavioral_columns() -> None:
     assert len(export.input_fingerprint) == 64
 
 
-def test_prepare_unspool_study_rejects_ambiguous_chronology() -> None:
+def test_prepare_behavio_study_rejects_ambiguous_chronology() -> None:
     table = ObservationTable.from_columns(
         {
             "animal": ["a", "a"],
@@ -48,7 +47,7 @@ def test_prepare_unspool_study_rejects_ambiguous_chronology() -> None:
     )
 
     with pytest.raises(ValueError, match="constant within session"):
-        prepare_unspool_study(
+        prepare_behavio_study(
             table,
             subject="animal",
             session="recording",
@@ -57,16 +56,31 @@ def test_prepare_unspool_study_rejects_ambiguous_chronology() -> None:
         )
 
 
-def test_unspool_export_constructs_optional_study(monkeypatch) -> None:
-    class FakeStudy:
-        @classmethod
-        def from_columns(cls, columns):
-            return columns
+def test_behavio_export_constructs_a_real_study() -> None:
+    """Exercise the genuine dependency rather than a stubbed module."""
 
-    module = ModuleType("unspool")
-    module.Study = FakeStudy  # type: ignore[attr-defined]
-    monkeypatch.setitem(sys.modules, "unspool", module)
-    export = prepare_unspool_study(
+    behavio = pytest.importorskip("behavio")
+    export = prepare_behavio_study(
+        _table(),
+        subject="animal",
+        session="recording",
+        trial="event_index",
+        session_order="day",
+    )
+    study = export.to_study()
+
+    assert isinstance(study, behavio.Study)
+    assert set(export.columns) <= set(study.columns)
+    assert tuple(study["neural_response"]) == (0.1, 0.2, 0.4, 0.3)
+    assert tuple(study["session_order"]) == (0, 0, 1, 1)
+    assert study.subjects == ("a",)
+
+
+def test_behavio_export_names_the_extra_when_behavio_is_absent(monkeypatch) -> None:
+    """Without behavio installed the handoff must say which extra to install."""
+
+    monkeypatch.setitem(sys.modules, "behavio", None)
+    export = prepare_behavio_study(
         _table(),
         subject="animal",
         session="recording",
@@ -74,4 +88,5 @@ def test_unspool_export_constructs_optional_study(monkeypatch) -> None:
         session_order="day",
     )
 
-    assert export.to_study()["neural_response"] == (0.1, 0.2, 0.4, 0.3)
+    with pytest.raises(ValueError, match=r"fipha\[behavior\]"):
+        export.to_study()

@@ -20,14 +20,24 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
+      # The `behavior` extra depends on behavio, which is not on PyPI yet, so
+      # [tool.uv.sources] resolves it from a sibling checkout. Remove this step
+      # and the source override together once behavio is published.
+      - run: git clone --depth 1 https://github.com/aeronjl/behavio.git ../behavio
       - run: uv sync --all-extras --locked
       - run: uv run pytest --cov=fipha --cov-report=term-missing
       - if: matrix.python-version == '3.12'
         run: uv run ruff check . && uv run ruff format --check . && uv run mypy
+      # A base wheel install must stay importable with no behaviour package
+      # present: photometry does not depend on behavio.
       - if: matrix.python-version == '3.12'
         run: |
           uv build
           uv venv /tmp/fipha-wheel
           uv pip install --python /tmp/fipha-wheel/bin/python dist/*.whl
-          /tmp/fipha-wheel/bin/python -c "import fipha; print(fipha.__version__)"
+          /tmp/fipha-wheel/bin/python -c "import fipha, fipha.io; print(fipha.__version__)"
+          /tmp/fipha-wheel/bin/python -c "
+          import importlib.util, sys
+          assert importlib.util.find_spec('behavio') is None, 'behavio must not be a core dependency'
+          "
           /tmp/fipha-wheel/bin/fipha --help

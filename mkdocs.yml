@@ -110,7 +110,6 @@ nav:
           - Event-kernel model multiverses: event-kernel-multiverse.md
           - Predictor-family contributions: predictor-family-contributions.md
           - Event-kernel interval calibration: event-kernel-interval-calibration.md
-          - Auditable interval and bout policies: interval-policy.md
       - Spontaneous and continuous dynamics:
           - Category guide: methods/continuous-dynamics.md
           - Spontaneous transients: spontaneous-transients.md
@@ -132,11 +131,9 @@ nav:
           - Scalar mixed models: scalar-mixed-model.md
       - Behavior and longitudinal integration:
           - Category guide: methods/behavior-longitudinal.md
-          - Behavioral ecosystem interoperability: ecosystem-interoperability.md
           - Native ndx-pose interoperability: ndx-pose-interoperability.md
-          - Clock synchronization: clock-synchronization.md
           - Across-session comparability: session-comparability.md
-          - Longitudinal behavior with Unspool: unspool-interoperability.md
+          - Longitudinal behavior with Behavio: behavio-interoperability.md
   - Worked examples:
       - Examples overview: tutorials/index.md
       - Public IBL event report: tutorials/ibl-feedback-report.md
@@ -146,7 +143,6 @@ nav:
       - Variable-duration behavior kernels: tutorials/variable-duration-kernels.md
       - Public event-kernel reanalysis: tutorials/dandi-000971-event-kernel.md
       - Spontaneous-transient sensitivity: tutorials/spontaneous-transients.md
-      - Pose and behavior-tool interoperability: tutorials/behavior-tool-interoperability.md
       - IBL longitudinal neural-behavioral forecast: tutorials/ibl-unspool-longitudinal.md
       - Paper-figure correspondence: tutorials/paper-figure-roadmap.md
   - Data and provenance:

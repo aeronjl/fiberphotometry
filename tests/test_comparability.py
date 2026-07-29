@@ -5,12 +5,12 @@ from dataclasses import replace
 import pytest
 
 from fipha import ObservationTable
+from fipha.behavio import prepare_behavio_study
 from fipha.comparability import (
     SessionComparabilityRecord,
     SessionComparabilitySpec,
     assess_session_comparability,
 )
-from fipha.unspool import prepare_unspool_study
 
 
 def _records() -> tuple[SessionComparabilityRecord, ...]:
@@ -145,9 +145,9 @@ def test_comparability_missing_metrics_follow_prospective_spec() -> None:
     }
 
 
-def test_unspool_handoff_carries_and_enforces_comparability() -> None:
+def test_behavio_handoff_carries_and_enforces_comparability() -> None:
     report = assess_session_comparability(_records())
-    export = prepare_unspool_study(
+    export = prepare_behavio_study(
         _table(),
         subject="animal",
         session="recording",
@@ -162,7 +162,7 @@ def test_unspool_handoff_carries_and_enforces_comparability() -> None:
     assert export.schema_version == "2"
 
     with pytest.raises(ValueError, match="requires a session comparability"):
-        prepare_unspool_study(
+        prepare_behavio_study(
             _table(),
             subject="animal",
             session="recording",
@@ -172,11 +172,11 @@ def test_unspool_handoff_carries_and_enforces_comparability() -> None:
         )
 
 
-def test_unspool_handoff_rejects_failed_or_incomplete_preflight() -> None:
+def test_behavio_handoff_rejects_failed_or_incomplete_preflight() -> None:
     first, second = _records()
     failed = assess_session_comparability((first, replace(second, unit="z-score")))
     with pytest.raises(ValueError, match="session comparability failed"):
-        prepare_unspool_study(
+        prepare_behavio_study(
             _table(),
             subject="animal",
             session="recording",
@@ -186,8 +186,8 @@ def test_unspool_handoff_rejects_failed_or_incomplete_preflight() -> None:
         )
 
     passed = assess_session_comparability(_records())
-    with pytest.raises(ValueError, match="does not cover Unspool sessions"):
-        prepare_unspool_study(
+    with pytest.raises(ValueError, match="does not cover Behavio sessions"):
+        prepare_behavio_study(
             _table("day-3"),
             subject="animal",
             session="recording",

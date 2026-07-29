@@ -12,7 +12,7 @@ example to an exact source panel, or states that no such claim is intended.
 | [DANDI 000971 event kernels](dandi-000971-event-kernel.md) | no source panel; methodological extension of the same event data | **Adapted reanalysis** | public cohort, events, regions | joint regularized kernels and held-out prediction were not source-paper analyses |
 | [DANDI 000251 transient validation](https://github.com/aeronjl/fipha/blob/main/research/dandi-000251-transient-results-v0.1.md) | Kim et al. (2020), Figure 2E–H, especially teleport-aligned traces and normalized peaks | **Adapted construct-validation analysis** | public standard/three-teleport sessions and the prespecified 0.6–2.1 s response interval | detects peaks across continuous traces; event enrichment tests detector behavior and does not reproduce the source RPE/value model or normalized-peak statistic |
 | [Public IBL feedback report](ibl-feedback-report.md) | none | **Product demonstration** | public observations and animal-level report | no source-paper panel is claimed |
-| [IBL–Unspool longitudinal forecast](ibl-unspool-longitudinal.md) | none | **Cross-package reanalysis** | public sessions and prospective held-out comparison | new coarse neural summary and forecasting question |
+| [IBL–Behavio longitudinal forecast](ibl-unspool-longitudinal.md) | none | **Cross-package reanalysis** | public sessions and prospective held-out comparison | new coarse neural summary and forecasting question |
 | Simulation tutorials | none | **Method illustration** | known generating truth | synthetic data are implementation evidence, not biological evidence |
 
 The Seiler source figures plot rewarded and unrewarded peri-stimulus time courses

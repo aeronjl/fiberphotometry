@@ -53,7 +53,7 @@ the exact same retained timestamps, and failed designs remain in the ledger.
 
 Fit an average cue kernel together with an explicitly coded previous-outcome
 modulation. The simulation demonstrates recovery, session-boundary resets, and the
-separation between within-session neural encoding and Unspool's longitudinal
+separation between within-session neural encoding and Behavio's longitudinal
 behavior models.
 
 [Open the event-history tutorial](event-kernel-history.md)
@@ -78,20 +78,22 @@ pooled coefficient shapes.
 ## Public IBL longitudinal neural–behavioral forecast
 
 Compose fipha's checksum-verified session neural summaries with
-Unspool's cohort-forward behavioral validation. The retained result shows that the
+Behavio's cohort-forward behavioral validation. The retained result shows that the
 previous session's coarse DMS feedback contrast does not improve prediction in the
 declared future session.
 
 [Open the cross-package longitudinal tutorial](ibl-unspool-longitudinal.md)
 
-## Pose and behavior-tool interoperability
+## Pose and behavior-tool interoperability (in Behavio)
 
-Compose DeepLabCut or SLEAP pose confidence, Keypoint-MoSeq bouts, and BORIS
-point/state annotations with photometry covariates and events. The tutorial then
-passes declared neural summaries to Unspool without duplicating longitudinal
-behavior models.
+Composing DeepLabCut or SLEAP pose confidence, Keypoint-MoSeq bouts, and BORIS
+point/state annotations with photometry now starts in the peer package
+[Behavio](https://github.com/aeronjl/behavio), which owns those adapters, clock
+synchronization, and interval policies. Its tutorial ends by handing declared
+covariates and events to fipha's encoding models, and declared neural summaries
+back to Behavio's longitudinal models.
 
-[Open the ecosystem interoperability tutorial](behavior-tool-interoperability.md)
+[Open Behavio's ecosystem interoperability tutorial](https://aeronjl.github.io/behavio/tutorials/behavior-tool-interoperability/)
 
 ## Literature reproductions to add
 

@@ -10,6 +10,9 @@ decision is permanent.
 - **Accepted:** current project policy.
 - **Rejected:** considered but not adopted.
 - **Superseded:** replaced by a later numbered record, which must link back.
+- **Moved:** the decision still stands, but the surface it governs now lives in
+  another package. The record is maintained there and the row below links to it.
+  The identifier is retired here and never reused.
 
 Decision records state their date, evidence available at that date, alternatives,
 consequences and an explicit revisit trigger. Later evidence is appended or linked;
@@ -57,11 +60,11 @@ the original reasoning is not silently rewritten.
 | [SDR-0027](0027-hold-out-complete-groups-for-event-kernel-models.md) | Accepted | Hold out complete groups for event-kernel models |
 | [SDR-0028](0028-retain-weak-event-kernel-validation.md) | Accepted | Retain weak event-kernel validation and keep the API experimental |
 | [SDR-0029](0029-treat-event-kernel-intervals-as-conditional-sensitivity.md) | Accepted | Treat grouped event-kernel intervals as conditional sensitivity |
-| [SDR-0030](0030-delegate-behavioral-trajectories-to-unspool.md) | Accepted | Delegate behavioral learning trajectories to Unspool |
+| [SDR-0030](0030-delegate-behavioral-trajectories-to-behavio.md) | Accepted | Delegate behavioral learning trajectories to Behavio |
 | [SDR-0031](0031-treat-spontaneous-transients-as-a-method-family.md) | Accepted | Treat spontaneous transients as a method family |
-| [SDR-0032](0032-preserve-external-behavior-semantics.md) | Accepted | Preserve external behavior semantics at typed boundaries |
+| [SDR-0032](https://github.com/aeronjl/behavio/blob/main/docs/decisions/0032-preserve-external-behavior-semantics.md) | Moved | Preserve external behavior semantics at typed boundaries; the behavior-tool adapters it governs are now `behavio.pose` and `behavio.ethograms` |
 | [SDR-0033](0033-retain-validity-masks-without-compressing-time.md) | Accepted | Retain validity masks without compressing time |
-| [SDR-0034](0034-fit-only-explicit-matched-pulse-clock-transforms.md) | Accepted | Fit only explicit matched-pulse clock transforms |
+| [SDR-0034](https://github.com/aeronjl/behavio/blob/main/docs/decisions/0034-fit-only-explicit-matched-pulse-clock-transforms.md) | Moved | Fit only explicit matched-pulse clock transforms; clock synchronization is now Behavio's |
 | [SDR-0035](0035-compare-event-kernel-models-only-on-common-evidence.md) | Accepted | Compare event-kernel models only on common evidence |
 | [SDR-0036](0036-reconstruct-kernels-from-explicit-typed-bases.md) | Accepted | Reconstruct kernels from explicit typed bases |
 | [SDR-0037](0037-model-event-history-as-explicit-within-session-modulation.md) | Accepted | Model event history as explicit within-session modulation |
@@ -76,7 +79,7 @@ the original reasoning is not silently rewritten.
 | [SDR-0046](0046-require-explicit-pairs-and-shared-evidence-for-multisignal-analysis.md) | Accepted | Require explicit pairs and shared evidence for multisignal analysis |
 | [SDR-0047](0047-separate-prospective-optical-masks-from-observed-validity.md) | Accepted | Separate prospective optical masks from observed validity |
 | [SDR-0048](0048-freeze-transient-thresholds-and-retain-waveform-qc.md) | Accepted | Freeze transient thresholds and retain waveform QC |
-| [SDR-0049](0049-make-interval-policy-order-explicit-and-auditable.md) | Accepted | Make interval-policy order explicit and auditable |
+| [SDR-0049](https://github.com/aeronjl/behavio/blob/main/docs/decisions/0049-make-interval-policy-order-explicit-and-auditable.md) | Moved | Make interval-policy order explicit and auditable; the policy engine is now `behavio.interval_policy` |
 | [SDR-0050](0050-preserve-ndx-pose-values-and-declare-link-omissions.md) | Accepted | Preserve ndx-pose values and declare link omissions |
 | [SDR-0051](0051-name-observable-multiscale-estimands-and-preserve-denominators.md) | Accepted | Name observable multiscale estimands and preserve denominators |
 | [SDR-0052](0052-require-independent-identification-for-optical-unmixing.md) | Accepted | Require independent identification for optical unmixing |
@@ -86,7 +89,12 @@ the original reasoning is not silently rewritten.
 | [SDR-0056](0056-form-interactions-from-animal-condition-contrasts.md) | Accepted | Form interactions from animal-condition contrasts |
 | [SDR-0057](0057-preserve-domain-denominators-at-one-population-boundary.md) | Accepted | Preserve domain denominators at one population boundary |
 | [SDR-0058](0058-require-explicit-axes-and-pointwise-support-for-population-curves.md) | Accepted | Require explicit axes and pointwise support for population curves |
-| [SDR-0059](0059-consume-movement-datasets-without-depending-on-movement.md) | Accepted | Consume movement datasets without depending on movement |
+| [SDR-0059](https://github.com/aeronjl/behavio/blob/main/docs/decisions/0059-consume-movement-datasets-without-depending-on-movement.md) | Moved | Consume movement datasets without depending on movement; the adapter is now Behavio's |
+
+Records marked **Moved** left this repository when the general behaviour surface
+became the separate [Behavio](https://github.com/aeronjl/behavio) package. Their
+rows are kept so that older reports, protocols, and artifacts citing SDR-0032,
+SDR-0034, SDR-0049, or SDR-0059 still resolve.
 
 Use four-digit monotonically increasing identifiers. Copy the structure of the most
 recent accepted record — a `# SDR-NNNN: <decision>` title, then `## Context`,

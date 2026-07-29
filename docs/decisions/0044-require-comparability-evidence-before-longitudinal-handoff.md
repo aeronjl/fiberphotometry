@@ -8,7 +8,7 @@
 A trial table can be structurally valid while its neural column changes meaning
 across sessions. Sensor, implant site, units, normalization, preprocessing, data
 coverage, hardware, reference coupling, or raw fluorescence scale may differ.
-Unspool can model a trajectory through those values but cannot determine whether
+Behavio can model a trajectory through those values but cannot determine whether
 they still represent the same photometry measurement.
 
 Automatically harmonizing sessions would hide measurement changes. Rejecting every
@@ -28,7 +28,7 @@ fipha owns a typed, outcome-blind across-session comparability preflight.
 - Raw-baseline fold change, reference-correlation range, and sampling-rate ratio
   receive explicit warning and refusal thresholds.
 - Missing diagnostics remain visible and can be made mandatory prospectively.
-- The complete report is fingerprinted and can be required by the Unspool export.
+- The complete report is fingerprinted and can be required by the Behavio export.
 - Export refuses failed evidence and sessions absent from the report. Warnings are
   retained and may be allowed or refused explicitly.
 
@@ -36,7 +36,7 @@ No neural outcomes enter the assessment.
 
 ## Alternatives considered
 
-- **Let Unspool diagnose measurement drift.** Rejected because longitudinal model
+- **Let Behavio diagnose measurement drift.** Rejected because longitudinal model
   fit cannot distinguish biological change from an altered optical measurement.
 - **Silently normalize each session.** Rejected because it changes the estimand and
   can erase real longitudinal variation.

@@ -25,10 +25,26 @@ bout into the same physical process.
 
 ## Convert typed annotations without losing duration
 
-Adapters for Keypoint-MoSeq and BORIS produce `BehaviorAnnotations`. Convert only
-the intervals needed for encoding:
+Keypoint-MoSeq and BORIS annotations are imported by the peer package
+[Behavio](https://github.com/aeronjl/behavio), which produces
+`BehaviorAnnotations`. Install it with `pip install 'fipha[behavior]'`. Convert
+only the intervals needed for encoding:
 
 ```python
+from behavio.ethograms import BehaviorAnnotations, BehaviorInterval
+
+annotations = BehaviorAnnotations(
+    subject="mouse-1",
+    session="day-1",
+    point_events={},
+    intervals=(
+        BehaviorInterval("rear", 12.4, 14.1),
+        BehaviorInterval("rear", 31.0, 31.6),
+    ),
+    source="simulated-bouts",
+    clock_id="photometry",
+)
+
 inputs = annotations.interval_encoding_inputs(edge="onset")
 
 session = EncodingSession.from_arrays(
@@ -45,7 +61,12 @@ session = EncodingSession.from_arrays(
 The bundle keeps onset times and `duration_s` aligned one-for-one and retains every
 physical `(start_s, stop_s)` pair. Choose `edge="offset"` explicitly when offset is
 the scientific reference. The helper does not synchronize clocks: transform the
-annotations to the photometry clock first and retain that synchronization evidence.
+annotations to the photometry clock first with Behavio's
+[clock synchronization](https://aeronjl.github.io/behavio/clock-synchronization/)
+and retain that synchronization evidence. Filtering, merging, or splitting bouts
+before encoding belongs to Behavio's
+[interval policies](https://aeronjl.github.io/behavio/interval-policy/), which
+retain a lineage ledger.
 
 ## Declare edge, duration, and progress terms
 
@@ -116,5 +137,6 @@ Run the complete simulation:
 uv run python examples/variable_duration_kernels.py
 ```
 
-See the [behavior-tool tutorial](behavior-tool-interoperability.md) for
-DeepLabCut, SLEAP, Keypoint-MoSeq, and BORIS inputs.
+See Behavio's
+[behavior-tool tutorial](https://aeronjl.github.io/behavio/tutorials/behavior-tool-interoperability/)
+for DeepLabCut, SLEAP, Keypoint-MoSeq, and BORIS inputs.

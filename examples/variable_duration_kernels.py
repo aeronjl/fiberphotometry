@@ -1,6 +1,7 @@
 """Fit onset, duration-modulated and normalized-progress behavior kernels."""
 
 import numpy as np
+from behavio.ethograms import BehaviorAnnotations, BehaviorInterval
 
 from fipha.encoding import (
     EncodingModelSpec,
@@ -11,7 +12,6 @@ from fipha.encoding import (
     ProgressKernelSpec,
     fit_event_kernel_model,
 )
-from fipha.interoperability import BehaviorAnnotations, BehaviorInterval
 
 rng = np.random.default_rng(2027)
 sessions = []

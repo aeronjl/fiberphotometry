@@ -79,8 +79,9 @@ Every analysis accepts one timestamp vector. `alignment_policy` can be:
 - `explicitly_resampled` after a separately documented synchronization and
   resampling operation.
 
-The functions do not align two clocks implicitly. Use
-[matched-pulse clock synchronization](clock-synchronization.md) first.
+The functions do not align two clocks implicitly. Use Behavio's
+[matched-pulse clock synchronization](https://aeronjl.github.io/behavio/clock-synchronization/)
+first.
 
 ## Joint continuity is the denominator
 
@@ -264,8 +265,8 @@ by_state = state_conditioned_coherence(
 
 State labels are user supplied and half-open. Overlap is refused. Separate epochs
 remain separate joint continuity runs even when they share a label or touch in
-time. fipha does not discover behavior states; use the
-[behavioral interoperability boundary](ecosystem-interoperability.md) and
+time. fipha does not discover behavior states; use Behavio's
+[observed-behaviour boundary](https://aeronjl.github.io/behavio/observed-behaviour/) and
 bring the resulting intervals onto the declared photometry clock.
 
 ## Infer across animals

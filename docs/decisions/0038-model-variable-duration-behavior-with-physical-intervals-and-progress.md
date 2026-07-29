@@ -77,4 +77,8 @@ identifiable estimand are specified.
 
 ## Evidence added later
 
-None.
+`BehaviorAnnotations` and its `interval_encoding_inputs()` helper moved out of
+fipha with the rest of the general behaviour surface and are now
+[`behavio.ethograms`](https://aeronjl.github.io/behavio/ethograms/). The bundle
+contract described above is unchanged; fipha's encoding models consume it, and
+`pip install 'fipha[behavior]'` supplies the package that produces it.

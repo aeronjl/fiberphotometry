@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-07-28
-- **Related decisions:** [SDR-0006](0006-require-explicit-nwb-session-metadata.md), [SDR-0032](0032-preserve-external-behavior-semantics.md)
+- **Related decisions:** [SDR-0006](0006-require-explicit-nwb-session-metadata.md), [SDR-0032](https://github.com/aeronjl/behavio/blob/main/docs/decisions/0032-preserve-external-behavior-semantics.md)
 
 ## Context
 
@@ -76,3 +76,13 @@ Add bounded remote series access when a public DANDI workflow needs it. Revisit
 multi-individual files only if the extension standard changes its single-subject
 design or a community convention supplies explicit identity semantics. Add training
 objects only if a neural-analysis use case requires them.
+
+## Evidence added later
+
+`PoseTrajectory` — including the optional z, reference-frame, and
+confidence-definition fields added by this record — moved out of fipha with the
+rest of the general behaviour surface and is now
+[`behavio.pose.PoseTrajectory`](https://aeronjl.github.io/behavio/pose/).
+`fipha.io.ndx_pose` stays here and imports the type lazily behind the `behavior`
+extra, so the inspection, import, export, and link-omission rules decided above are
+unchanged; only the package that owns the value type has changed.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot the frozen IBL-Unspool future-session comparison."""
+"""Plot the frozen IBL-Behavio future-session comparison."""
 
 from __future__ import annotations
 

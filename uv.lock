@@ -251,6 +251,59 @@ wheels = [
 ]
 
 [[package]]
+name = "behavio"
+version = "0.1.0"
+source = { editable = "../behavio" }
+dependencies = [
+    { name = "numpy" },
+    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+
+[package.optional-dependencies]
+readers = [
+    { name = "h5py" },
+    { name = "pandas" },
+    { name = "tables" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "arviz", marker = "python_full_version >= '3.12' and extra == 'probabilistic'", specifier = ">=1.2,<2" },
+    { name = "arviz", marker = "python_full_version < '3.12' and extra == 'probabilistic'", specifier = ">=0.22,<1.2" },
+    { name = "h5py", marker = "extra == 'dandi'", specifier = ">=3.11" },
+    { name = "h5py", marker = "extra == 'nwb'", specifier = ">=3.11" },
+    { name = "h5py", marker = "extra == 'readers'", specifier = ">=3.11" },
+    { name = "numpy", specifier = ">=2.0" },
+    { name = "one-api", marker = "extra == 'ibl'", specifier = ">=3.5,<4" },
+    { name = "pandas", marker = "extra == 'readers'", specifier = ">=2.2" },
+    { name = "pybads", marker = "extra == 'optimization'", specifier = ">=1.0.6,<2" },
+    { name = "pymc", marker = "python_full_version >= '3.12' and extra == 'bayesian'", specifier = ">=6.1,<7" },
+    { name = "pymc", marker = "python_full_version < '3.12' and extra == 'bayesian'", specifier = ">=5.28,<6" },
+    { name = "pynwb", marker = "extra == 'dandi'", specifier = ">=3.1" },
+    { name = "pynwb", marker = "extra == 'nwb'", specifier = ">=3.1" },
+    { name = "remfile", marker = "extra == 'dandi'", specifier = ">=0.1" },
+    { name = "scipy", specifier = ">=1.15" },
+    { name = "tables", marker = "extra == 'readers'", specifier = ">=3.10" },
+]
+provides-extras = ["readers", "nwb", "dandi", "ibl", "optimization", "probabilistic", "bayesian"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "h5py", specifier = ">=3.11" },
+    { name = "pandas", specifier = ">=2.2" },
+    { name = "pytest", specifier = ">=8.4.0" },
+    { name = "ruff", specifier = ">=0.12.0" },
+    { name = "tables", specifier = ">=3.10" },
+    { name = "xarray", specifier = ">=2025.1" },
+]
+docs = [
+    { name = "matplotlib", specifier = ">=3.9" },
+    { name = "mkdocs-material", specifier = ">=9.6" },
+    { name = "mkdocstrings", extras = ["python"], specifier = ">=0.29" },
+]
+
+[[package]]
 name = "blosc2"
 version = "4.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -637,9 +690,7 @@ acquisition = [
     { name = "pyarrow" },
 ]
 behavior = [
-    { name = "h5py" },
-    { name = "pandas" },
-    { name = "tables" },
+    { name = "behavio", extra = ["readers"] },
 ]
 nwb = [
     { name = "ndx-fiber-photometry" },
@@ -683,21 +734,19 @@ stats-validation = [
 
 [package.metadata]
 requires-dist = [
+    { name = "behavio", extras = ["readers"], marker = "extra == 'behavior'", editable = "../behavio" },
     { name = "h5py", marker = "extra == 'acquisition'", specifier = ">=3.11" },
-    { name = "h5py", marker = "extra == 'behavior'", specifier = ">=3.11" },
     { name = "matplotlib", marker = "extra == 'plots'", specifier = ">=3.9" },
     { name = "ndx-fiber-photometry", marker = "extra == 'nwb'", specifier = ">=0.2.3" },
     { name = "ndx-pose", marker = "extra == 'nwb'", specifier = ">=0.3.0" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", marker = "extra == 'acquisition'", specifier = ">=2.2" },
-    { name = "pandas", marker = "extra == 'behavior'", specifier = ">=2.2" },
     { name = "pandas", marker = "extra == 'stats'", specifier = ">=2.2" },
     { name = "pyarrow", marker = "extra == 'acquisition'", specifier = ">=18" },
     { name = "pynwb", marker = "extra == 'nwb'", specifier = ">=3.0" },
     { name = "remfile", marker = "extra == 'nwb'", specifier = ">=0.1.13" },
     { name = "scipy", specifier = ">=1.14" },
     { name = "statsmodels", marker = "extra == 'stats'", specifier = ">=0.14.5" },
-    { name = "tables", marker = "extra == 'behavior'", specifier = ">=3.10" },
     { name = "tdt", marker = "extra == 'tdt'", specifier = ">=0.7.3" },
     { name = "xarray", specifier = ">=2025.1" },
 ]

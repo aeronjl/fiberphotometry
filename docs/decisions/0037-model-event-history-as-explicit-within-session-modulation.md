@@ -10,7 +10,7 @@
 Photometry responses can depend on trial outcome, choice, elapsed time, or prior
 events. A single pooled event kernel cannot represent those conditional changes.
 Encoding every behavioral sequence inside fipha would, however, duplicate
-the longitudinal modeling owned by Unspool and make trial ordering easy to infer
+the longitudinal modeling owned by Behavio and make trial ordering easy to infer
 incorrectly.
 
 The design also needs one extensible mechanism for current-event amplitude or
@@ -48,7 +48,7 @@ events.
 
 This is a within-session neural encoding predictor, not a behavioral learning
 trajectory. Cross-session history and evolving behavioral parameters remain in
-Unspool under [SDR-0030](0030-delegate-behavioral-trajectories-to-unspool.md).
+Behavio under [SDR-0030](0030-delegate-behavioral-trajectories-to-behavio.md).
 
 The event-kernel fit artifact advances to schema v6 and stores each fitted kernel's
 source event and complete modulation specification.
@@ -61,7 +61,7 @@ source event and complete modulation specification.
 - **Accept pre-weighted event trains only:** rejected because the lag, source value,
   and unavailable-history rule would disappear from the result artifact.
 - **Infer trial order from a cross-session table:** rejected because it risks
-  crossing session boundaries and duplicates Unspool's chronology contract.
+  crossing session boundaries and duplicates Behavio's chronology contract.
 - **Automatically center or standardize event values:** deferred because fold-safe
   transformations need their own typed policy and change coefficient and ridge
   interpretations.

@@ -160,7 +160,7 @@ class SessionComparabilityGroup:
 
 @dataclass(frozen=True)
 class SessionComparabilityReport:
-    """Fingerprintable preflight evidence for an Unspool handoff."""
+    """Fingerprintable preflight evidence for a Behavio handoff."""
 
     records: tuple[SessionComparabilityRecord, ...]
     spec: SessionComparabilitySpec

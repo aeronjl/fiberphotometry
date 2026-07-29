@@ -105,8 +105,11 @@ rear_progress = ProgressKernelSpec(
 
 The result reconstructs the trajectory and grouped uncertainty on an explicit
 progress grid from zero to one while retaining the physical interval source and
-bout count. `BehaviorAnnotations.interval_encoding_inputs()` provides aligned
-edge events, `duration_s` values, and interval bounds from MoSeq or BORIS inputs.
+bout count. Behavio's
+[`BehaviorAnnotations.interval_encoding_inputs()`](https://aeronjl.github.io/behavio/ethograms/)
+provides aligned edge events, `duration_s` values, and interval bounds from MoSeq
+or BORIS inputs in exactly this shape; fipha consumes the bundle but does not
+read annotation files itself.
 Onset/offset kernels, duration-modulated kernels, and progress kernels remain
 separate declared predictors and should be compared as named alternatives.
 

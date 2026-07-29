@@ -76,12 +76,12 @@ fipha keeps those choices explicit and attached to the result:
 | Analyze CSV/TSV exports without rewriting code | [Configuration-first CLI](cli.md) |
 | Import a TDT block | [TDT import](tdt-import.md) |
 | Work from public NWB data | [DANDI tutorial](tutorials/dandi-000971-reward-multiverse.md) |
-| Combine DeepLabCut, SLEAP, MoSeq or BORIS with photometry | [Behavioral ecosystem tutorial](tutorials/behavior-tool-interoperability.md) |
+| Combine DeepLabCut, SLEAP, MoSeq or BORIS with photometry | [Behavio ecosystem tutorial](https://aeronjl.github.io/behavio/tutorials/behavior-tool-interoperability/) |
 | Detect spontaneous transients | [Spontaneous transients](spontaneous-transients.md) |
 | Separate calibrated optical contributions | [Wavelength-aware optical unmixing](optical-unmixing.md) |
 | Test or invert a declared sensor response | [Sensor-kinetic modeling](sensor-kinetic-modeling.md) |
 | Analyze a coordinate-mapped multi-fiber array | [Coordinate-aware dense arrays](spatial-network.md) |
-| Model neural summaries across learning | [Unspool interoperability](unspool-interoperability.md) |
+| Model neural summaries across learning | [Behavio interoperability](behavio-interoperability.md) |
 | Describe a long recording at several time scales | [Multiscale long-duration summaries](multiscale-long-duration.md) |
 | Compare reasonable preprocessing choices | [Robustness multiverses](multiverse-contract.md) |
 | Understand a refusal or error code | [Compatibility and error codes](pipeline-compatibility.md) |

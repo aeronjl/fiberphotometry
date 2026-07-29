@@ -16,7 +16,7 @@ then separates supported workflows, experimental workflows, and known gaps.
 | What events, rhythms, or states occur without a supplied event clock? | [Spontaneous and continuous dynamics](continuous-dynamics.md) | transient ledger, PSD, autocorrelation, spectrogram, state contrast |
 | How do sites, colors, or spatially arranged fibers relate? | [Multi-signal and spatial analysis](multisignal-spatial.md) | association, coherence, crosstalk review, spatial summary |
 | Does an effect generalize across animals and analytic choices? | [Population inference and robustness](inference-robustness.md) | animal-level interval, mixed-model sensitivity, multiverse ledger |
-| How do pose, behavior, sessions, and learning trajectories connect? | [Behavior and longitudinal integration](behavior-longitudinal.md) | synchronized annotations, comparable session summaries, Unspool handoff |
+| How do pose, behavior, sessions, and learning trajectories connect? | [Behavior and longitudinal integration](behavior-longitudinal.md) | comparable session summaries, ndx-pose round trips, Behavio handoff |
 
 ## Two maps with different jobs
 

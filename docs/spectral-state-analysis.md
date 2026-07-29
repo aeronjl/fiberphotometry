@@ -173,10 +173,11 @@ same boundary behavior is available through `state_conditioned_autocorrelation`
 and `state_conditioned_spectrogram`.
 
 Behavior-state discovery belongs in tools such as Keypoint-MoSeq, SLEAP, or a
-declared annotation workflow. Use the
-[behavioral interoperability contract](ecosystem-interoperability.md) and
-[clock synchronization](clock-synchronization.md) before converting those
-outputs to `StateEpoch` objects.
+declared annotation workflow. Import and synchronize those outputs in the peer
+package Behavio — its
+[observed-behaviour boundary](https://aeronjl.github.io/behavio/observed-behaviour/) and
+[matched-pulse clock synchronization](https://aeronjl.github.io/behavio/clock-synchronization/)
+— before converting the resulting intervals to `StateEpoch` objects here.
 
 ## Compare a frequency band across animals
 

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Execute the frozen fipha-to-Unspool IBL benchmark."""
+"""Execute the frozen fipha-to-Behavio IBL benchmark.
+
+The behaviour package was called ``unspool`` when this benchmark was frozen and
+is now ``behavio``. The imports below follow the rename so the script still
+runs; the frozen protocol and result schemas keep their original ``unspool``
+field names so the committed artifact stays byte-comparable.
+"""
 
 from __future__ import annotations
 
@@ -12,18 +18,18 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-from one.api import ONE
-from run_ibl_feedback_signal_only_v32 import _load_session
-from unspool import (
+from behavio import (
     BernoulliHistoryGLM,
     cohort_forward_session_splits,
     compare_models,
 )
+from one.api import ONE
+from run_ibl_feedback_signal_only_v32 import _load_session
 
 from fipha import ObservationTable
+from fipha.behavio import prepare_behavio_study
 from fipha.events import summarize_event_windows
 from fipha.preprocess import baseline_dff
-from fipha.unspool import prepare_unspool_study
 
 PROTOCOL_SHA256 = "cf52883f2d65b495b2d6a0f3d99a757965916706e5e0c62494606798087b2de9"
 
@@ -139,7 +145,7 @@ def main() -> None:
             columns["prior_dms_contrast_per_0_01"].append(prior)
 
     table = ObservationTable.from_columns(columns)
-    handoff = prepare_unspool_study(
+    handoff = prepare_behavio_study(
         table,
         subject="animal",
         session="recording",
@@ -178,7 +184,7 @@ def main() -> None:
         "protocol_sha256": protocol["protocol_sha256"],
         "executed_at_utc": datetime.now(UTC).isoformat(),
         "fipha_version": version("fipha"),
-        "unspool_version": version("unspool"),
+        "unspool_version": version("behavio"),
         "handoff_fingerprint": handoff.input_fingerprint,
         "observations": len(study),
         "animals": len(study.subjects),

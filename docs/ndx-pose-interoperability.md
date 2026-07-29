@@ -5,16 +5,25 @@ Keypoint-MoSeq, NeuroConv, and movement to exchange pose-estimation data. The
 fipha adapter reads and writes the extension directly while keeping pose
 discovery in those upstream tools.
 
+The values it exchanges are `behavio.pose.PoseTrajectory` objects: the pose
+type belongs to the peer package [Behavio](https://github.com/aeronjl/behavio),
+not to fipha. This adapter therefore needs both the `nwb` and `behavior` extras.
+
 <figure class="fp-figure">
   <img src="../assets/ndx-pose-roundtrip-v0.1.svg" alt="A native ndx-pose NWB file is first inspected, then an explicitly selected PoseEstimation container is copied into two- or three-dimensional PoseTrajectory objects. Those trajectories feed gap-safe covariates or can be written back with skeleton and provenance metadata. Unsupported device or video links remain named omissions.">
   <figcaption>Figure 1. The adapter preserves scientific arrays and declares structural omissions instead of pretending that a file path is a camera or video link.</figcaption>
 </figure>
 
-Install the NWB extra:
+Install both extras:
 
 ```bash
-uv add "fipha[nwb]"
+uv add "fipha[nwb,behavior]"
 ```
+
+`nwb` supplies PyNWB and `ndx-pose`; `behavior` supplies Behavio, whose
+`PoseTrajectory` type this module imports lazily. Reaching a pose entry point
+without it raises an `ImportError` naming the missing extra rather than failing at
+`import fipha`.
 
 The current contract is tested against `ndx-pose` 0.3.0 and PyNWB. It supports
 explicit timestamps and regular `starting_time`/`rate`, 2D and 3D coordinates,
@@ -126,8 +135,10 @@ claim that a path string is a formal NWB link.
 
 ## Continue into photometry analysis
 
-The restored trajectories use the same type as the existing DeepLabCut and SLEAP
-adapters:
+The restored trajectories are ordinary `behavio.pose.PoseTrajectory` objects,
+so they are the same type Behavio's DeepLabCut, SLEAP, and movement adapters
+produce. Everything Behavio can do with a trajectory — speed, confidence gating,
+clock synchronization, resampling onto the photometry clock — applies unchanged:
 
 ```python
 nose_speed = nose.speed(minimum_confidence=0.9)
@@ -139,9 +150,16 @@ aligned_speed = nose_speed.aligned_to(
 )
 ```
 
+`synchronization` here is a `behavio.sync.ClockSynchronization` fitted from
+explicit matched pulses; `synchronize_covariate` and `aligned_to` are Behavio
+methods, documented under
+[clock synchronization](https://aeronjl.github.io/behavio/clock-synchronization/).
+fipha never infers that a camera clock and a photometry clock agree.
+
 See the complete executable
 [`examples/ndx_pose_roundtrip.py`](https://github.com/aeronjl/fipha/blob/main/examples/ndx_pose_roundtrip.py),
-the [behavior-tool composition tutorial](tutorials/behavior-tool-interoperability.md),
+Behavio's
+[behavior-tool composition tutorial](https://aeronjl.github.io/behavio/tutorials/behavior-tool-interoperability/),
 and the upstream [`ndx-pose` format documentation](https://pypi.org/project/ndx-pose/).
 
 ## Current limits

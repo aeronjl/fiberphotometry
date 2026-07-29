@@ -2,8 +2,8 @@ from datetime import UTC, datetime
 
 import numpy as np
 import pytest
+from behavio.pose import PoseTrajectory
 
-from fipha.interoperability import PoseTrajectory
 from fipha.io.ndx_pose import (
     NdxPoseMetadata,
     add_poses_to_nwb,

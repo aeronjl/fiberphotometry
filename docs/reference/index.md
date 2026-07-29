@@ -38,8 +38,7 @@ deprecation cycle.
 | `fipha.io.dandi_000351`, `fipha.io.dandi_000971` | Pinned dataset-specific adapters |
 | `fipha.io.ibl` | International Brain Laboratory photometry tables |
 | `fipha.io.ndx_pose` | Native ndx-pose inspection, import, and export |
-| `fipha.interoperability` | [Pose and behavior tool boundaries](../ecosystem-interoperability.md), [clock synchronization](../clock-synchronization.md) |
-| `fipha.unspool` | [Unspool study export](../unspool-interoperability.md) |
+| `fipha.behavio` | [Behavio study export](../behavio-interoperability.md) |
 
 ### Signal and method families
 
@@ -55,7 +54,14 @@ deprecation cycle.
 | `fipha.optogenetics` | [Artifact masks and recovery diagnostics](../optical-validity.md) |
 | `fipha.multiscale` | [Multiscale long-duration summaries](../multiscale-long-duration.md) |
 | `fipha.transients`, `fipha.transient_product` | [Spontaneous transient detection and quantification](../spontaneous-transients.md) |
-| `fipha.interval_policy` | [Interval policies for external behavior intervals](../interval-policy.md) |
+
+`fipha.interoperability` and `fipha.interval_policy` no longer exist. The pose,
+ethogram, clock-synchronization, and interval-policy surface is now
+[`behavio.pose`](https://aeronjl.github.io/behavio/pose/), [`behavio.ethograms`](https://aeronjl.github.io/behavio/ethograms/),
+[`behavio.covariates`](https://aeronjl.github.io/behavio/covariates/), [`behavio.sync`](https://aeronjl.github.io/behavio/clock-synchronization/) and
+[`behavio.interval_policy`](https://aeronjl.github.io/behavio/interval-policy/),
+installed through `fipha[behavior]`. `fipha.io.ndx_pose` still lives here and
+imports Behavio's `PoseTrajectory` lazily.
 
 ### Encoding and multiverse
 

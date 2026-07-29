@@ -67,7 +67,7 @@ or [read the frozen result](https://github.com/aeronjl/fipha/blob/main/research/
 - **Public source:** 216 checksum-verified sessions from the 18-animal IBL cohort.
 - **Question:** incremental prediction of correctness in one future session.
 - **Validation unit:** a common held-out session within each animal; scoring and bootstrap are animal-balanced.
-- **Use it to learn:** the fipha-to-Unspool handoff, lagged predictors, and retained negative forecasts.
+- **Use it to learn:** the fipha-to-Behavio handoff, lagged predictors, and retained negative forecasts.
 - **Do not conclude:** that DMS dopamine is unrelated to learning or that alternative neural summaries would fail.
 
 [Read the longitudinal neural–behavioral forecast](../tutorials/ibl-unspool-longitudinal.md).

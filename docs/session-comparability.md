@@ -4,7 +4,7 @@
 
 Longitudinal modeling is only meaningful when a declared neural series still
 refers to the same measurement across sessions. fipha now performs an
-outcome-blind preflight before the trial table crosses into Unspool.
+outcome-blind preflight before the trial table crosses into Behavio.
 
 This is an operational QC contract, not a test that two sessions are biologically
 identical. It answers a narrower question: are signal identity, units, processing,
@@ -93,10 +93,10 @@ make any missing event-coverage, baseline, reference, or sampling-rate metric a
 refusal. Thresholds belong in the analysis configuration before longitudinal
 outcomes are inspected.
 
-## Bind the evidence into the Unspool handoff
+## Bind the evidence into the Behavio handoff
 
 ```python
-handoff = prepare_unspool_study(
+handoff = prepare_behavio_study(
     trial_table,
     subject="animal",
     session="recording",
@@ -110,7 +110,7 @@ handoff = prepare_unspool_study(
 The handoff refuses a failed report and verifies that every exported
 subject/session pair is covered. By default warnings may proceed and remain visible;
 set `allow_comparability_warnings=False` to require a clean pass. The report
-fingerprint and status are included in the Unspool export fingerprint, so replacing
+fingerprint and status are included in the Behavio export fingerprint, so replacing
 the preflight changes the handoff identity.
 
 ## Result structure
@@ -135,5 +135,5 @@ does not replace visual trace review, histology, sensor/isobestic validity check
 or an explicit model for measurement error. Those remain separate product work.
 
 It also does not fit trajectories. fipha owns the measurement and its
-comparability evidence; Unspool owns longitudinal clocks, validation folds, and
+comparability evidence; Behavio owns longitudinal clocks, validation folds, and
 behavioral or cognitive model families.

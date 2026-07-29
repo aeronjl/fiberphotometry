@@ -205,7 +205,7 @@ independent replicates.
 - Run [across-session comparability](session-comparability.md) before treating
   a change in scale summaries as longitudinal biology.
 - Pass declared, comparable session summaries to
-  [Unspool](unspool-interoperability.md) for learning trajectories rather than
+  [Behavio](behavio-interoperability.md) for learning trajectories rather than
   rebuilding behavioral longitudinal models here.
 
 ## Boundaries and open validation
